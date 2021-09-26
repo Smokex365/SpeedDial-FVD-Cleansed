@@ -5,5 +5,3 @@ Current Modifications:
 * Removed Ad redirects
 * Changed default search to Google
 * Started on adding on-dial search for more sites
-
-test if sc is working
