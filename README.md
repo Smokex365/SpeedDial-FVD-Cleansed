@@ -10,5 +10,6 @@ To-do:
 * Remove data collection
 * Improve general transparency of the extension - lots of suspect code
 * Remove Russian connections - Yandex, several Russian sites
+  *  where it feels neccessary
 * Add new search providers : DuckDuckGo, Youtube, Reddit, etc.
 * Add ability to export settings to file and re-import from file instead of text string - maybe
