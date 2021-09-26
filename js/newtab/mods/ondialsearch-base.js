@@ -130,61 +130,61 @@ var Autocomplete = {
         return items;
       }
     },
-    lamoda: {
-      url: "https://www.lamoda.ru/catalogsearch/suggest/?i&l=7&s=y&q={query}",
-      parse: function(xhr) {
-        var r = JSON.parse(xhr.responseText);
-        var items = [];
-        if(r.suggest) {
-          items = r.suggest;
-        }
-        return items;
-      }
-    },
-    mvideo: {
-      url: "https://www.mvideo.ru/sitebuilder/blocks/search/search.json.jsp?N=0&Ntk=All&Nty=1&includePath=%2Fservices%2Fdimensionsearch&Ntt={query}*",
-      parse: function(xhr) {
-        var r = JSON.parse(xhr.responseText);
-        var items = [];
-        if(r.dimensionSearchResults) {
-          r.dimensionSearchResults.dimensionSearchGroups.forEach(function(group) {
-            group.dimensionSearchValues.forEach(function(value) {
-              items.push(value.label);
-            });
-          });
-        }
-        return items;
-      }
-    },
-    mediamarkt: {
-      url: "https://www.mediamarkt.ru/search/suggestions?q={query}",
-      parse: function(xhr) {
-        var r = JSON.parse(xhr.responseText);
-        var items = [];
-        if(r.search_query) {
-          r.search_query.forEach(function(item) {
-            items.push(item.search_query);
-          });
-        }
-        return items;
-      }
-    },
-    ulmart: {
-      url: "https://www.ulmart.ru/search/autocomplete",
-      data: "name_startsWith={query}&rootCategory=",
-      parse: function(xhr) {
-        var r = JSON.parse(xhr.responseText);
-        var items = []
-        if(r) {
-          r.forEach(function(item) {
-            if(item.url && item.url.indexOf("/goods/") === 0) {
-              items.push(item.name);
-            }
-          });
-        }
-        return items;
-      }
-    },
+    //lamoda: {
+    //  url: "https://www.lamoda.ru/catalogsearch/suggest/?i&l=7&s=y&q={query}",
+    //  parse: function(xhr) {
+    //    var r = JSON.parse(xhr.responseText);
+    //    var items = [];
+    //    if(r.suggest) {
+    //      items = r.suggest;
+    //    }
+    //    return items;
+    //  }
+    //},
+    //mvideo: {
+    //  url: "https://www.mvideo.ru/sitebuilder/blocks/search/search.json.jsp?N=0&Ntk=All&Nty=1&includePath=%2Fservices%2Fdimensionsearch&Ntt={query}*",
+    //  parse: function(xhr) {
+    //    var r = JSON.parse(xhr.responseText);
+    //    var items = [];
+    //    if(r.dimensionSearchResults) {
+    //      r.dimensionSearchResults.dimensionSearchGroups.forEach(function(group) {
+    //        group.dimensionSearchValues.forEach(function(value) {
+    //          items.push(value.label);
+    //        });
+    //      });
+    //    }
+    //    return items;
+    //  }
+    //},
+    //mediamarkt: {
+    //  url: "https://www.mediamarkt.ru/search/suggestions?q={query}",
+    //  parse: function(xhr) {
+    //    var r = JSON.parse(xhr.responseText);
+    //    var items = [];
+    //    if(r.search_query) {
+    //      r.search_query.forEach(function(item) {
+    //        items.push(item.search_query);
+    //      });
+    //    }
+    //    return items;
+    //  }
+    //},
+    //ulmart: {
+    //  url: "https://www.ulmart.ru/search/autocomplete",
+    //  data: "name_startsWith={query}&rootCategory=",
+    //  parse: function(xhr) {
+    //    var r = JSON.parse(xhr.responseText);
+    //    var items = []
+    //    if(r) {
+    //      r.forEach(function(item) {
+    //        if(item.url && item.url.indexOf("/goods/") === 0) {
+    //          items.push(item.name);
+    //        }
+    //      });
+    //    }
+    //    return items;
+    //  }
+    //},
     wayfair: {
       url: "https://www.wayfair.com/a/search/suggestions?v=2&q={query}",
       parse: function(xhr) {
