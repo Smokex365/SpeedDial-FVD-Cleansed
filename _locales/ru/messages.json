@@ -1,0 +1,1936 @@
+{
+  "extension_locale": {
+    "message": "ru",
+    "description": "For internal usage"
+  },
+  "newtab_title": {
+    "message": "FVD Speed Dial",
+    "description": "Title of a new tab"
+  },
+  "newtab_introduction_title": {
+    "message": "Добро пожаловать в FVD Speed Dial!"
+  },
+  "newtab_introduction_button_next": {
+    "message": "Далее"
+  },
+  "newtab_introduction_button_prev": {
+    "message": "Предыдущий"
+  },
+  "newtab_introduction_button_start": {
+    "message": "Начать использовать!"
+  },
+  "newtab_introduction_slide1_title": {
+    "message": "Доступны 3D и Стандартный Режимы."
+  },
+  "newtab_introduction_slide1_text": {
+    "message": "Вы можете переключаться между режимами <b>Правый Клик > Вид</b> или <b>Опции > Основные Настройки > Внешний Вид > Вид</b>.<br><br><img src=\"images/newtab/introduction/slide1_img.png\">"
+  },
+  "newtab_introduction_slide2_title": {
+    "message": "Ваши Виджеты и Приложения"
+  },
+  "newtab_introduction_slide2_text": {
+    "message": "Кликните на левой или нижней панели, чтобы активировать Приложения или Виджеты.<br><br><b>Подсказка:</b> Используйте Пробел на клавиатуре, чтобы быстро активировать панель виджетов."
+  },
+  "newtab_introduction_slide3_title": {
+    "message": "Какой телефон вы используете?"
+  },
+  "newtab_introduction_slide3_text": {
+    "message": "Вам нужно сделать выбор только один раз, мы сохраним данный выбор в настройках"
+  },
+  "newtab_introduction_slide_configure_title":{
+    "message": "Настройте Speed Dial"
+  },
+  "newtab_introduction_slide_configure_text":{
+    "message": "Вы можете сконфигурировать все эти опции позднее в настройках FVD Speed Dial."
+  },
+  "newtab_introduction_slide_configure_text_bottom":{
+    "message": "<h3>Политика конфиденциальности:</h3><p>Это расширение заменяет Вашу стартовую вкладку и изменяет поисковую систему внутри  SpeedDial.</p><p>Это расширение может использовать историю посещений при создании закладок (дилов). Данное расширение обменивается данными с сервером для синхронизации закладок и других настроек. Вы можете отключить синхронизацию и закладки здесь либо в настройках расширения.</p><p>Это расширение имеет встроенную монетизацию для поддержки разработки.</p>"
+  },
+  "newtab_introduction_slide_configure_checkbox_speed_dial": {
+    "message": "Показывать дилы (закладки)"
+  },
+  "newtab_introduction_slide_configure_checkbox_most_visited": {
+    "message": "Показывать самые популярные"
+  },
+  "newtab_introduction_slide_configure_checkbox_recently_closed": {
+    "message": "Показывать недавно закрытые вкладки"
+  },
+  "newtab_introduction_last_step": {
+    "message": "Последний шаг"
+  },
+  "newtab_initialization_message": {
+    "message": "Инициализация... Подождите немного..."
+  },
+  "newtab_offer_theme_bg": {
+    "message": "SpeedDial может применить фон текущей темы"
+  },
+  "newtab_apply_theme_bg": {
+    "message": "Применить фон темы"
+  },
+  "newtab_cancel_theme_bg": {
+    "message": "Отменить замену фона"
+  },
+  "newtab_offer_theme_download": {
+    "message": "Скачивание фона..."
+  },
+  "newtab_instant_seach_preview": {
+    "message": "Powered by Yahoo Search"
+  },
+  "newtab_enable_speed_dial": {
+    "message": "Разрешить FVD Speed Dial"
+  },
+  "newtab_sure": {
+    "message": "Вы уверенеы ?"
+  },
+  "newtab_yes": {
+    "message": "Да"
+  },
+  "newtab_no": {
+    "message": "Нет"
+  },
+  "newtab_none": {
+    "message": "нет"
+  },
+  "newtab_default": {
+    "message": "По умолчанию"
+  },
+  "newtab_max_groups": {
+    "message": "Макс. количество дилов Популярных:"
+  },
+  "newtab_thumbnails": {
+    "message": "Отображение"
+  },
+  "newtab_big": {
+    "message": "Большой"
+  },
+  "newtab_medium": {
+    "message": "Средний"
+  },
+  "newtab_small": {
+    "message": "Маленький"
+  },
+  "newtab_custom": {
+    "message": "Custom"
+  },
+  "newtab_preview": {
+    "message": "Превью"
+  },
+  "newtab_list": {
+    "message": "Список"
+  },
+  "newtab_number_of_columns": {
+    "message": "Число столбцов"
+  },
+  "newtab_number_of_rows": {
+    "message": "Число строк"
+  },
+  "newtab_columns_auto": {
+    "message": "Авто"
+  },
+  "newtab_groups": {
+    "message": "Группы"
+  },
+  "newtab_default_group": {
+    "message": "Группа по умолчанию"
+  },
+  "newtab_manage_groups": {
+    "message": "Управление группами"
+  },
+  "newtab_import_available": {
+    "message": "Импорт включен"
+  },
+  "newtab_enable_most_visited": {
+    "message": "Разрешить Самые популярные"
+  },
+  "newtab_show_last": {
+    "message": "Количество для показа"
+  },
+  "newtab_synchronization": {
+    "message": "Синхронизация"
+  },
+  "newtab_cache_life_time": {
+    "message": "Время жизни кеша"
+  },
+  "newtab_hours": {
+    "message": "Часов"
+  },
+  "newtab_done": {
+    "message": "Готово"
+  },
+  "newtab_sync_now": {
+    "message": "Синхронизовать сейчас!"
+  },
+  "newtab_restore_removed": {
+    "message": "Восстановить удаленные"
+  },
+  "newtab_enable_recently_closed": {
+    "message": "Разрешить Недавно закрытые"
+  },
+  "newtab_migrate_message": {
+    "message": "Импортировать данные с других аддонов"
+  },
+  "newtab_start_migrate": {
+    "message": "Начать импорт"
+  },
+  "newtab_cancel_migrate": {
+    "message": "Закрыть"
+  },
+  "newtab_do_not_display_migrate": {
+    "message": "Не показывать больше"
+  },
+  "newtab_rate_fvd_speed_dial": {
+    "message": "FVD Speed Dial"
+  },
+  "newtab_rate_text": {
+    "message": "Понравился аддон ? Напишите об этом!"
+  },
+  "newtab_rate_appreciate": {
+    "message": "Спасибо!"
+  },
+  "newtab_expand_all": {
+    "message": "Раскрыть Все"
+  },
+  "newtab_hide_all": {
+    "message": "Скрыть Все"
+  },
+  "newtab_options": {
+    "message": "Настройки"
+  },
+  "newtab_restore_previous_session": {
+    "message": "Восстановить предыдущую сессию"
+  },
+  "newtab_global_options": {
+    "message": "Основные настройки"
+  },
+  "newtab_sync_button": {
+    "message": "Синхронизировать"
+  },
+  "newtab_all_group_title": {
+    "message": "Имя группы"
+  },
+  "newtab_make_as_homepage": {
+    "message": "Поставить домашней страницой"
+  },
+  "newtab_change_background": {
+    "message": "Сменить фон"
+  },
+  "newtab_speeddial_label": {
+    "message": "Speed Dial (%count%)"
+  },
+  "newtab_most_visited_label": {
+    "message": "Самые популярные (%count%)"
+  },
+  "newtab_recently_closed_label": {
+    "message": "Недавно закрытые (%count%)"
+  },
+  "newtab_dial_clicks": {
+    "message": "Клики"
+  },
+  "newtab_popular_group_title": {
+    "message": "Популярные"
+  },
+  "newtab_mostvisited_interval_all_time": {
+    "message": "За всё время"
+  },
+  "newtab_mostvisited_interval_month": {
+    "message": "Последний месяц"
+  },
+  "newtab_mostvisited_interval_week": {
+    "message": "Последняя неделя"
+  },
+  "newtab_mostvisited_views": {
+    "message": "Views"
+  },
+  "newtab_mostvisited_views_small": {
+    "message": "V"
+  },
+  "newtab_mostvisited_ingroup": {
+    "message": "In Group"
+  },
+  "newtab_mostvisited_ingroup_small": {
+    "message": "G"
+  },
+  "newtab_listview_title": {
+    "message": "Имя"
+  },
+  "newtab_listview_url": {
+    "message": "URL"
+  },
+  "newtab_listviewmenu_add_dial": {
+    "message": "Добавить Дил"
+  },
+  "newtab_listviewmenu_open_all": {
+    "message": "Открыть все сайты"
+  },
+  "newtab_listviewmenu_delete_all": {
+    "message": "Удалить все сайты"
+  },
+  "newtab_listview_noitems": {
+    "message": "No Items To Display"
+  },
+  "newtab_dblclick_to_expand": {
+    "message": "Двойной клик, чтобы показать Speed Dial (или нажмите Ctrl + Enter)"
+  },
+  "newtab_click_to_get_title": {
+    "message": "Кликните, чтобы увидеть имя"
+  },
+  "newtab_getting_title": {
+    "message": "Получение заголовка..."
+  },
+  "newtab_last_used_group": {
+    "message": "Последняя использованная группа"
+  },
+  "newtab_can_turn_off_newtab_msg": {
+    "message": "Note: You can disable FVD Speed Dial in a New Tab Page and launch only by pressing button."
+  },
+  "newtab_can_turn_off_newtab_opt_app": {
+    "message": "Настройки > Оформление"
+  },
+  "newtab_can_turn_off_newtab_got_it": {
+    "message": "I've got it. Thanks."
+  },
+  "newtab_ops_3d_unavailable": {
+    "message": "Упс, проблема с 3D режимом"
+  },
+  "newtab_switch_to_standard": {
+    "message": "Мне не нравится этот классный режим. Хочу \"Стандартный\" вид!"
+  },
+  "newtab_3d_how_to_fix": {
+    "message": "Как это починить:"
+  },
+  "newtab_3d_open_new_tab": {
+    "message": "Открыть новое окно"
+  },
+  "newtab_3d_type_flags": {
+    "message": "Type \"chrome://flags\""
+  },
+  "newtab_3d_without_quotes": {
+    "message": "Without quotes"
+  },
+  "newtab_3d_find_override": {
+    "message": "Find \"Override Software Rendering List\" and click Enable"
+  },
+  "newtab_3d_note_dont_afraid": {
+    "message": "Note: Don't afraid to turn on this feature. Nothing bad won't happen."
+  },
+  "newtab_3d_restart": {
+    "message": "Перезапустите"
+  },
+  "newtab_3d_restart_continue": {
+    "message": " ваш браузер."
+  },
+  "newtab_3d_if_not_works": {
+    "message": "Если это не помогло - попробуйте обновить Драйвер Видеокарты"
+  },
+  "newtab_3d_install_new_drivers": {
+    "message": "Установите последние драйвера для вашей видеокарты"
+  },
+  "newtab_3d_last_step": {
+    "message": "Если вы все еще видите данную страницу, то ваша видеокарта не поддерживается браузером, используйте стандартный режим."
+  },
+  "newtab_search_on_google": {
+    "message": "Найти"
+  },
+  "newtab_search": {
+    "message": "Найти"
+  },
+  "newtab_search_on_yandex": {
+    "message": "Найти"
+  },
+  "newtab_poweroff_desc": {
+    "message": "Узнайте, как можно защитить вашу информацию от других пользователей"
+  },
+  "newtab_poweroff_feature": {
+    "message": "PowerOff функция"
+  },
+  "newtab_poweroff_dont_show_again": {
+    "message": "Не показывать"
+  },
+  "newtab_powerof_wrong_passcode_title": {
+    "message": "Неверный пароль"
+  },
+  "newtab_powerof_wrong_passcode_text": {
+    "message": "Вы ввели неверный пароль. Вы можете восстановить пароль через E-Mail."
+  },
+  "newtab_poweroff_enterpasscode": {
+    "message": "Введите пароль"
+  },
+  "newtab_poweroff": {
+    "message": "PowerOff"
+  },
+  "newtab_show_hide": {
+    "message": "Показать/Скрыть"
+  },
+  "newtab_instant_seach_preview_google": {
+    "message": "Instant Search"
+  },
+  "newtab_widgets_panel_move_or_delete": {
+    "message": "Переместить или Удалить виджеты"
+  },
+  "newtab_apps_panel_open_desc": {
+    "message": "Нажмите \"Ctrl + Пробел\", чтобы открыть/закрыть панель аппов"
+  },
+  "newtab_widgets_panel_open_desc": {
+    "message": "Нажмите \"Пробел\", чтобы открыть/закрыть панель виджетов"
+  },
+  "newtab_widgets_panel_not_found": {
+    "message": "Нажмите кнопку +, чтобы добавить виджеты!"
+  },
+  "newtab_themes_message_head": {
+    "message": "Доступны специальные темы!"
+  },
+  "newtab_themes_message_text": {
+    "message": "Установите темы для FVD Speed Dial"
+  },
+  "newtab_themes_message_install": {
+    "message": "Загрузить темы!"
+  },
+  "newtab_quicksitemap_text": {
+    "message": "Улучшите навигацию по сайтам!"
+  },
+  "newtab_ad_install_text": {
+    "message": "Просмотреть приложение"
+  },
+  "newtab_search_on_ebay": {
+    "message": "Искать на Ebay"
+  },
+  "newtab_cant_move_dials_in_popular": {
+    "message": "Вы не можете перемещать сайты внутри группы <b>Популярные</b>. В данной группе сайты сортируются по количеству кликов."
+  },
+  "newtab_or": {
+    "message": "или"
+  },
+  "newtab_voice_search": {
+    "message": "Голосовой Набор"
+  },
+  "bg_default_group_name": {
+    "message": "По умолчанию"
+  },
+  "bg_default_group_products": {
+    "message": "Наши продукты"
+  },
+  "bg_default_dial_google": {
+    "message": "Google"
+  },
+  "bg_write_review_dial_title": {
+    "message": "Написать ревью"
+  },
+  "bg_default_dial_facebook": {
+    "message": "FaceBook"
+  },
+  "bg_default_dial_twitter": {
+    "message": "Twitter"
+  },
+  "bg_default_dial_fvdsyncchrome": {
+    "message": "EverSync"
+  },
+  "bg_default_dial_fvdsdff": {
+    "message": "FVD SpeedDial для FireFox"
+  },
+  "bg_write_review_dial_chromedownloader": {
+    "message": "FVD Video Downloader"
+  },
+  "bg_default_dial_betterchrome": {
+    "message": "BetterChrome"
+  },
+  "bg_default_dial_amazon": {
+    "message": "Amazon"
+  },
+  "bg_default_dial_ebay": {
+    "message": "EBay"
+  },
+  "bg_default_dial_webstore": {
+    "message": "Chrome Web Store"
+  },
+  "bg_dialog_loading": {
+    "message": "Загружается..."
+  },
+  "bg_dialog_import_export_eversync_1": {
+    "message": "Данный тип бэкапа не сохранит ваши картинки<br>(созданные вручную)!!!"
+  },
+  "bg_dialog_import_export_eversync_2": {
+    "message": "Если вам нужен полный бэкап, используйте наше расширение:"
+  },
+  "bg_dialog_import_export_eversync_clickhere": {
+    "message": "Нажмите, чтобы установить..."
+  },
+  "bg_dialog_adddial_title": {
+    "message": "Имя"
+  },
+  "bg_dialog_adddial_click_to_get_title": {
+    "message": "Кликните, чтобы получить имя"
+  },
+  "bg_dialog_adddial_pic_local_file": {
+    "message": "Локальный файл?"
+  },
+  "bg_dialog_adddial_custom_preview_updated": {
+    "message": " (Обновлено!)"
+  },
+  "bg_dialog_adddial_pick_user_pic": {
+    "message": "Пользовательские изображения"
+  },
+  "bg_dialog_adddial_url": {
+    "message": "URL"
+  },
+  "bg_dialog_adddial_pick_url_from": {
+    "message": "Выбрать из:"
+  },
+  "bg_dialog_adddial_pick_url_from_opened_tabs": {
+    "message": "Открытых вкладок"
+  },
+  "bg_dialog_adddial_pick_url_from_or": {
+    "message": "или"
+  },
+  "bg_dialog_adddial_pick_url_from_most_visited": {
+    "message": "Часто посещаемых"
+  },
+  "bg_dialog_adddial_pick_url_from_most_popular": {
+    "message": "Популярных"
+  },
+  "bg_dialog_adddial_image_url": {
+    "message": "Превью"
+  },
+  "bg_dialog_adddial_default_preview": {
+    "message": "Готовые логотипы"
+  },
+  "bg_dialog_adddial_group": {
+    "message": "Группа"
+  },
+  "bg_dialog_adddial_group_name": {
+    "message": "Имя группы"
+  },
+  "bg_dialog_adddial_enable_autoupdate_preview": {
+    "message": "Автообновление"
+  },
+  "bg_dialog_adddial_autoupdate_minutes": {
+    "message": "Минуты"
+  },
+  "bg_dialog_adddial_autoupdate_hours": {
+    "message": "Часы"
+  },
+  "bg_dialog_adddial_autoupdate_days": {
+    "message": "Дни"
+  },
+  "bg_dialog_adddial_autoupdate_every": {
+    "message": "Каждые"
+  },
+  "bg_dialog_adddial_top10pics_title": {
+    "message": "ТОП 10 Изображений"
+  },
+  "bg_dialog_adddial_top10pics_showmore": {
+    "message": "Показать Больше"
+  },
+  "bg_dialog_adddial_pick_local_file_desc": {
+    "message": "Чтобы добавить локальный файл в Speed Dial нужно указать URL в верном формате:<br>{examples}<br>Либо вы можете перетянуть нужный файл в браузер и в адресной строке будет его URL."
+  },
+  "bg_dialog_adddial_pick_local_file_desc_linux": {
+    "message": "file://{full path to file}<br>Пример: <b>file:///home/user/page.html</b>"
+  },
+  "bg_dialog_adddial_pick_local_file_desc_win": {
+    "message": "file:///{full path to file where \\ replaced by /}<br>Пример: <b>file:///C:\\user\\pic.jpg</b>"
+  },
+  "bg_dialog_addgroup_name": {
+    "message": "Имя"
+  },
+  "bg_dialog_addgroup_sync": {
+    "message": "Синхронизировать эту группу"
+  },
+  "bg_dialog_managegroups_groups": {
+    "message": "Группы"
+  },
+  "bg_dialog_deny_type": {
+    "message": "Тип"
+  },
+  "bg_dialog_deny_type_domain": {
+    "message": "Домен"
+  },
+  "bg_dialog_deny_type_url": {
+    "message": "URL"
+  },
+  "bg_dialog_deny_sign": {
+    "message": "Признак"
+  },
+  "bg_dialog_deny_address":{
+    "message": "Адрес"
+  },
+  "bg_dialog_view_group_title": {
+    "message": "Имя"
+  },
+  "bg_dialog_view_group_url": {
+    "message": "Url"
+  },
+  "bg_dialog_manage_deny_sign": {
+    "message": "Признак"
+  },
+  "bg_dialog_manage_deny_type": {
+    "message": "Тип"
+  },
+  "dialog_add_dial_dynamic_title": {
+    "message": "Получить автоматически"
+  },
+  "dialog_add_dial_enter_image_url": {
+    "message": "Введите адрес картинки"
+  },
+  "bg_dialog_adddial_use_auto_preview": {
+    "message": "Авто-создание превью"
+  },
+  "bg_dialog_adddial_use_manual_preview": {
+    "message": "Создать превью вручную"
+  },
+  "bg_dialog_adddial_use_custom_preview": {
+    "message": "Своё превью"
+  },
+  "bg_dialog_adddial_preview_creation_delay": {
+    "message": "Preview Creation Delay (ms):"
+  },
+  "bg_dialog_adddial_refresh_preview": {
+    "message": "Обновить изображение"
+  },
+  "options_title": {
+    "message": "Настройки"
+  },
+  "options_enable_surfcanyon": {
+    "message": "Включить поисковые предложения"
+  },
+  "options_display_superfish": {
+    "message": "Superfish Подсазки"
+  },
+  "options_global_options": {
+    "message": "Основные настройки"
+  },
+  "options_global_tabs_main": {
+    "message": "Главные"
+  },
+  "options_global_tabs_appearance": {
+    "message": "Внешний Вид"
+  },
+  "options_show_urls_under_dials": {
+    "message": "Показывать URL под дилом"
+  },
+  "options_show_icons_and_titles_above_dials": {
+    "message": "Показывать название над дилом"
+  },
+  "options_disable_custom_search": {
+    "message": "Не показывать поиск"
+  },
+  "options_default_dial": {
+    "message": "Дил по умолчанию"
+  },
+  "options_speed_dial": {
+    "message": "Speed Dial"
+  },
+  "options_most_visited": {
+    "message": "Самые популярные"
+  },
+  "options_recently_closed": {
+    "message": "Недавно закрытые"
+  },
+  "options_enable": {
+    "message": "Разрешить"
+  },
+  "options_blocked_domains": {
+    "message": "Блокированные домены"
+  },
+  "options_dials_opening": {
+    "message": "Режим открытия дилов по клику"
+  },
+  "options_current_tab": {
+    "message": "Текущая вкладка"
+  },
+  "options_new_tab": {
+    "message": "Новая вкладка"
+  },
+  "options_new_tab_background": {
+    "message": "Новая вкладка (в фоне)"
+  },
+  "options_dials_opacity": {
+    "message": "Прозрачность кнопок"
+  },
+  "options_speed_dial_options": {
+    "message": "Настройки"
+  },
+  "options_display_plus_cells": {
+    "message": "Показывать пустые ячейки"
+  },
+  "options_groups": {
+    "message": "Группы"
+  },
+  "options_default_group": {
+    "message": "По умолчанию:"
+  },
+  "options_max_dials_in_popular_group": {
+    "message": "Максимальное количество дилов в группе Популярные"
+  },
+  "options_most_visited_options": {
+    "message": "Настройки группы Самые Популярные"
+  },
+  "options_show_last": {
+    "message": "Показывать последние:"
+  },
+  "options_sort_by": {
+    "message": "Сортировать по"
+  },
+  "options_last_week": {
+    "message": "Прошлая неделя"
+  },
+  "options_last_month": {
+    "message": "Прошлый месяц"
+  },
+  "options_all_time": {
+    "message": "За всё время"
+  },
+  "options_recently_closed_options": {
+    "message": "Настройки группы Недавно Закрытые"
+  },
+  "options_background_options": {
+    "message": "Настройки Фона"
+  },
+  "options_refresh": {
+    "message": "Обновить"
+  },
+  "options_background_color": {
+    "message": "Цвет фона"
+  },
+  "options_bg_color_enabled": {
+    "message": "Включен"
+  },
+  "options_bg_install_themes": {
+    "message": "Новинка! Установка тем!"
+  },
+  "options_reset_speed_dial_clicks": {
+    "message": "Сброс кликов по дилам"
+  },
+  "options_reset_clicks": {
+    "message": "Сбросить клики"
+  },
+  "options_confirm_reset_clicks_title": {
+    "message": "Подтвердите ваш выбор"
+  },
+  "options_confirm_reset_clicks_text": {
+    "message": "Вы действительно хотите сбросить клики?"
+  },
+  "options_success_reset_clicks_title": {
+    "message": "Выполнено!"
+  },
+  "options_success_reset_clicks_text": {
+    "message": "Клики были успешно сброшены!"
+  },
+  "options_bg_from_url": {
+    "message": "URL"
+  },
+  "options_bg_from_theme": {
+    "message": "From Active Theme"
+  },
+  "options_image_url": {
+    "message": "Локальный файл"
+  },
+  "options_bg_image_type": {
+    "message": "Тип:"
+  },
+  "options_noimage": {
+    "message": "Изображения нет"
+  },
+  "options_fill": {
+    "message": "Заполнить"
+  },
+  "options_fit": {
+    "message": "Подогнать по размеру"
+  },
+  "options_stretch": {
+    "message": "Растянуть"
+  },
+  "options_tile": {
+    "message": "Плитка"
+  },
+  "options_center": {
+    "message": "По центру"
+  },
+  "options_load_and_preview": {
+    "message": "Загрузить изображение"
+  },
+  "options_fonts_options": {
+    "message": "Настройки шрифта"
+  },
+  "options_title_for_dials": {
+    "message": "Заголовок (для дилов)"
+  },
+  "options_font_color": {
+    "message": "Цвет:"
+  },
+  "options_font_bolder": {
+    "message": "Жирный"
+  },
+  "options_font_size": {
+    "message": "Размер:"
+  },
+  "options_url_for_dials": {
+    "message": "URL (для дилов)"
+  },
+  "options_text_in_list_mode": {
+    "message": "Текст в режиме списка"
+  },
+  "options_show_title_url_list_mode": {
+    "message": "Показывать название/URL (режим списка)"
+  },
+  "options_list_links": {
+    "message": "Режим списка"
+  },
+  "options_other_texts": {
+    "message": "Другой текст"
+  },
+  "options_restore_default": {
+    "message": "Вернуться к настройкам по умолчанию"
+  },
+  "options_apply_changes": {
+    "message": "Применить изменения"
+  },
+  "options_manage_blocked": {
+    "message": "Управление"
+  },
+  "options_last_selected": {
+    "message": "Последние выбранные"
+  },
+  "options_close": {
+    "message": "Закрыть"
+  },
+  "options_recently_closed_max_show_last": {
+    "message": "(100 макс.)"
+  },
+  "options_recently_closed_max_most_visited": {
+    "message": "(75 макс.)"
+  },
+  "options_speeddial_max_in_popular": {
+    "message": "(50 макс.)"
+  },
+  "options_manage_groups": {
+    "message": "Управление группами"
+  },
+  "options_back_to_speeddial": {
+    "message": "Вернуться в FVD Speed Dial"
+  },
+  "options_default_screen_delay": {
+    "message": "Задержка (в секундах):"
+  },
+  "options_display_in_new_tab": {
+    "message": "Показывать в новом окне"
+  },
+  "options_display_dial_background": {
+    "message": "Показывать фон у дилов"
+  },
+  "options_import_export": {
+    "message": "Импорт/Экспорт"
+  },
+  "options_export": {
+    "message": "Экспорт"
+  },
+  "options_import": {
+    "message": "Импорт"
+  },
+  "options_display_popular_group": {
+    "message": "Показывать группу 'Популярные'"
+  },
+  "options_display_quick_menu_and_clicks": {
+    "message": "Показывать быстрое меню"
+  },
+  "options_cdsize_limits": {
+    "message": "150 мин, 364px макс."
+  },
+  "options_cdsize_title": {
+    "message": "Собственный размер дилов"
+  },
+  "options_submit_suggestion": {
+    "message": "Отправить пожелание"
+  },
+  "options_submit_bug": {
+    "message": "Отправить сообщение об ошибке"
+  },
+  "options_show_in_context_menu": {
+    "message": "Показывать в контекстном меню"
+  },
+  "options_donate_message": {
+    "message": "Thank you for your interest in donating! Your donation will help ensure that we can continue to make great software, and keep as much of it free as possible. HowвЂ™s it free if weвЂ™re asking you to donate? ThatвЂ™s the great partвЂ”if you canвЂ™t afford it or youвЂ™re not sure itвЂ™s worth it, youвЂ™re welcome to keep using our software free of charge. \n\nBuilding, improving and extending our FVD Speed dial Addon do cost a lot of money.\n\nWe truly hope that satisfied users or users who like our initiative are willing to donate some money (of they can afford it) enabling us to reach as many people as possible in the entire world.\n\nReceived donations will NOT be used to pay salaries or any indirect costs that is not directly related to keeping the service on the Internet."
+  },
+  "options_sync_need_install": {
+    "message": "Необходимо установить аддон EverSync"
+  },
+  "options_sync_need_install_desc": {
+    "message": "Для того, чтобы использовать синхронизацию вам нужно установить аддон EverSync:"
+  },
+  "options_sync_need_install_fvd_speeddial": {
+    "message": "FVD SpeedDial:"
+  },
+  "options_sync_need_install_fvd_sync": {
+    "message": "EverSync:"
+  },
+  "options_sync_need_install_ability_6": {
+    "message": "Синхронизация закладок для Chrome, Firefox, Opera и мобильных устройств"
+  },
+  "options_sync_need_install_ability_7": {
+    "message": "Синхронизация ваших папок"
+  },
+  "options_sync_need_install_everhelper": {
+    "message": "EverHelper панель пользователя:"
+  },
+  "options_sync_need_install_ability_8": {
+    "message": "Копирование Закладок в Fvd SpeedDial и из FVD Speed Dial в Закладки"
+  },
+  "options_sync_need_install_ability_9": {
+    "message": "Корзина / Лучшие / Приватные / Архив / Расширенный поиск и другие возможности"
+  },
+  "options_sync_need_install_ability_10": {
+    "message": "Управление Закладками и Дилами"
+  },
+  "options_sync_need_install_ability_11": {
+    "message": "Автоматический бэкап и восстановление данных."
+  },
+  "options_sync_need_install_ability_1": {
+    "message": "Синхронизовать ваши дилы"
+  },
+  "options_sync_need_install_ability_2": {
+    "message": "Синхронизовать ваши группы"
+  },
+  "options_sync_need_install_ability_4": {
+    "message": "Синхронизовать между браузерами Firefox, Chrome, Opera а также разными компьютерами"
+  },
+  "options_sync_need_install_ability_5": {
+    "message": "Больше возможностей (Синхронизация букмарков, истории, заметок)"
+  },
+  "options_sync_need_install_ability_5_1":{
+    "message": "Бэкап настроек и кастомизаций."
+  },
+  "options_sync_link": {
+    "message": "Установить из Chrome WebStore"
+  },
+  "options_sync_warning_line_1": {
+    "message": "Данный аддон требует разрешение на \"Доступ ко всем данным на компьютере\""
+  },
+  "options_sync_warning_line_2": {
+    "message": "Это не значит что данный аддон будет иметь доступ ко всем вашим файлам!"
+  },
+  "options_sync_warning_line_3": {
+    "message": "Ему нужен только один файл из браузера."
+  },
+  "options_sync_warning_line_4": {
+    "message": "Право на чтение одного файла, Хром называет \"Полный доступ\"."
+  },
+  "options_sync_warning_line_5": {
+    "message": "Магазин Хрома проводит полную ручную проверку расширений данного типа!!!"
+  },
+  "options_enable_search": {
+    "message": "Показывать панель поиска"
+  },
+  "options_poweroff_options": {
+    "message": "PowerOff"
+  },
+  "options_poweroff_tab_main_title": {
+    "message": "Главные"
+  },
+  "options_poweroff_tab_change_pass_title": {
+    "message": "Изменить"
+  },
+  "options_poweroff_tab_restore_title": {
+    "message": "Восстановить"
+  },
+  "options_poweroff_tab_desc_1": {
+    "message": "Создай свой пароль для разблокировки Speed Dial"
+  },
+  "options_poweroff_tab_desc_2": {
+    "message": "После нажатия PowerOff Speed Dial становится недоступен тем, кто не знает пароль"
+  },
+  "options_poweroff_tab_desc_3": {
+    "message": "Эта опция поможет скрыть ваши данные от нежелательного просмотра"
+  },
+  "options_poweroff_error_empty_passcode": {
+    "message": "Пароль пуст"
+  },
+  "options_poweroff_error_passcode_dont_match": {
+    "message": "Пароли не совпалают"
+  },
+  "options_poweroff_error_email_wrong_format": {
+    "message": "E-mail в не верном формате"
+  },
+  "options_poweroff_idle_timeout_enable": {
+    "message": "Включить PowerOff при простое более:"
+  },
+  "options_poweroff_error_wrong_pass_code": {
+    "message": "Неверный пароль"
+  },
+  "options_poweroff_passcode_changed_title": {
+    "message": "Пароль изменен"
+  },
+  "options_poweroff_passcode_changed_text": {
+    "message": "Пароль успешно изменен"
+  },
+  "options_powerof_password_restore_title": {
+    "message": "Пароль восстановлен"
+  },
+  "options_powerof_password_restore_text": {
+    "message": "Пароль выслан на ваш E-Mail"
+  },
+  "options_poweroff_create_passcode_button": {
+    "message": "Создать пароль"
+  },
+  "options_poweroff_passcode_setuped": {
+    "message": "Пароль настроен"
+  },
+  "options_poweroff_old_passcode": {
+    "message": "Старый пароль:"
+  },
+  "options_poweroff_change_passcode": {
+    "message": "Изменение пароля"
+  },
+  "options_poweroff_new_passcode": {
+    "message": "Новый пароль *:"
+  },
+  "options_poweroff_change_passcode_button": {
+    "message": "Изменить пароль"
+  },
+  "options_poweroff_star_desc": {
+    "message": "* Чтобы убрать пароль, оставте поле Новый Пароль пустым"
+  },
+  "options_poweroff_restore_button": {
+    "message": "Отправить пароль на E-Mail"
+  },
+  "options_poweroff_create_passcode": {
+    "message": "Создание пароля"
+  },
+  "options_poweroff_passcode": {
+    "message": "Пароль:"
+  },
+  "options_poweroff_repeat_passcode": {
+    "message": "Повтор пароля:"
+  },
+  "options_poweroff_email": {
+    "message": "E-Mail:"
+  },
+  "options_poweroff_3min": {
+    "message": "3мин"
+  },
+  "options_poweroff_5min": {
+    "message": "5мин"
+  },
+  "options_poweroff_10min": {
+    "message": "10мин"
+  },
+  "options_poweroff_15min": {
+    "message": "15мин"
+  },
+  "options_poweroff_30min": {
+    "message": "30мин"
+  },
+  "options_poweroff_60min": {
+    "message": "60мин"
+  },
+  "options_display_mirror": {
+    "message": "Показывать отражение"
+  },
+  "options_scrolling": {
+    "message": "Скроллинг"
+  },
+  "options_scrolling_horizontal": {
+    "message": "Горизонтальный"
+  },
+  "options_scrolling_vertical": {
+    "message": "Вертикальный"
+  },
+  "options_widgets_options": {
+    "message": "Виджеты"
+  },
+  "options_widgets_enabled_title": {
+    "message": "Включить виджеты"
+  },
+  "options_widgets_opacity_title": {
+    "message": "Непрозраность панели виджетов"
+  },
+  "options_widgets_bgcolor_title": {
+    "message": "Фон панели виджетов"
+  },
+  "options_enable_widgets_autoscroll": {
+    "message": "Включить АвтоСкролл"
+  },
+  "options_widgets_autoscroll_speed": {
+    "message": "Скорость Автоскролла"
+  },
+  "options_set_auto_preview": {
+    "message": "Установить Авто-Превью для всех дилов"
+  },
+  "options_set_auto_preview_title":{
+    "message": "Все локальные превью дилов будут преобразованы в авто превью"
+  },
+  "options_set_auto_preview_button": {
+    "message": "Установить Авто-Превью"
+  },
+  "options_set_dials_to_auto_update_title": {
+    "message": "Установить интервал обновления для всех дилов с авто превью"
+  },
+  "options_turn_off_dials_auto_update_title": {
+    "message": "Выключить автообновление для всех дилов с авто превью"
+  },
+  "options_display_dial_borders": {
+    "message": "Показывать рамки для дилов"
+  },
+  "cropper_click_to_make_preview": {
+    "message": "Кликните для создания превью"
+  },
+  "options_enable_search_preview": {
+    "message": "Предварительный просмотр поиска"
+  },
+  "options_premium_for_share": {
+    "message": "Получить премиум бесплатно!"
+  },
+  "cropper_message_wait": {
+    "message": "Создание превью... Пожалуйста подождите..."
+  },
+  "cropper_your_url": {
+    "message": "Ваш URL"
+  },
+  "cropper_last_page_url": {
+    "message": "Последний открытый URL"
+  },
+  "cropper_pick_this": {
+    "message": "Pick this"
+  },
+  "dialog_pick_user_pics_not_found": {
+    "message": "По вашему запросу ничего не найдено."
+  },
+  "dialog_pick_user_pics_not_found_title": {
+    "message": "Вы можете искать логотип для {host} на данных ресурсах и добавлять их в нашу галерею."
+  },
+  "dialog_pick_user_pics_not_found_enter_in": {
+    "message": "Когда вы найдете изображение, скопируйте его URL и вставте в данную форму:"
+  },
+  "dialog_pick_user_pics_bottom_desc_1": {
+    "message": "Используйте"
+  },
+  "dialog_pick_user_pics_bottom_desc_2": {
+    "message": "чтобы сообщить об ошибочном изображении."
+  },
+  "dialog_pick_user_pics_order_best": {
+    "message": "Лучшие"
+  },
+  "dialog_pick_user_pics_order_new": {
+    "message": "Новые"
+  },
+  "dialog_pick_user_pics_order": {
+    "message": "Сортировка: "
+  },
+  "dialog_pick_user_pics_report": {
+    "message": "Пожаловатся на изображение"
+  },
+  "dialog_pick_user_pics_report_thanks": {
+    "message": "Спасибо!"
+  },
+  "dialog_pick_user_pics_report_innop": {
+    "message": "Не подходящее"
+  },
+  "dialog_pick_user_pics_report_duplicate": {
+    "message": "Дубликат"
+  },
+  "dialog_title_add_dial": {
+    "message": "Добавить сайт"
+  },
+  "dialog_title_modify_dial": {
+    "message": "Редактировать"
+  },
+  "dialog_title_add_group": {
+    "message": "Добавить группу"
+  },
+  "dialog_title_modify_group": {
+    "message": "Изменить группу"
+  },
+  "dialog_title_manage_groups": {
+    "message": "Управление группами"
+  },
+  "dialog_title_deny": {
+    "message": "Блокировать"
+  },
+  "dialog_title_view_group": {
+    "message": "View Group"
+  },
+  "dialog_title_pick_user_images": {
+    "message": "Выберите пользовательское изображение"
+  },
+  "dialog_title_manage_deny": {
+    "message": "Управление"
+  },
+  "dialog_title_edit_deny": {
+    "message": "Редактировать"
+  },
+  "dialog_title_export": {
+    "message": "Экспорт"
+  },
+  "dialog_title_import": {
+    "message": "Импорт"
+  },
+  "dialog_title_install_fvd_sync": {
+    "message": "Установить FVD Synchronizer"
+  },
+  "dlg_button_close": {
+    "message": "Закрыть"
+  },
+  "dlg_button_deny": {
+    "message": "Заблокировать"
+  },
+  "dlg_button_add_dial": {
+    "message": "Добавить сайт"
+  },
+  "dlg_button_cancel": {
+    "message": "Отмена"
+  },
+  "dlg_button_save": {
+    "message": "Сохранить"
+  },
+  "dlg_button_modify_dial": {
+    "message": "Сохранить"
+  },
+  "dlg_button_add_group": {
+    "message": "Добавить группу"
+  },
+  "dlg_button_modify_group": {
+    "message": "Редактировать группу"
+  },
+  "dlg_button_add_deny_rule": {
+    "message": "Добавить"
+  },
+  "dlg_button_copy_to_clipboard": {
+    "message": "Сохранить в Буфер Обмена"
+  },
+  "dlg_button_import": {
+    "message": "Импорт"
+  },
+  "dlg_alert_release_left_button": {
+    "message": "Для создания скриншота необходимо, чтобы Вы отпустили кнопку мыши!"
+  },
+  "dlg_alert_ok": {
+    "message": " OK "
+  },
+  "dlg_alert_cannot_remove_group_title": {
+    "message": "Отменить удаление группы"
+  },
+  "dlg_alert_cannot_remove_group_text": {
+    "message": "Нельзя удалять последнюю группу"
+  },
+  "dlg_alert_wait_importing_title": {
+    "message": "Пожайлуста подождите"
+  },
+  "dlg_alert_wait_importing_text": {
+    "message": "Пожалуйста подождите, пока происходит импортирование"
+  },
+  "dlg_alert_sd_locked_action_title": {
+    "message": "Отказано в доступе"
+  },
+  "dlg_alert_sd_locked_action_text": {
+    "message": "Speed Dial заблокирован. Для того, чтобы выполнить данное дествие - сначало разблокируйте его"
+  },
+  "dlg_alert_fail_obtain_user_pics_title": {
+    "message": "Изображения пользователей недоступны"
+  },
+  "dlg_alert_fail_obtain_user_pics_text": {
+    "message": "На данный момент база пользовательских изображений недоступна, пожалуйста, попробуйте позже."
+  },
+  "dlg_confirm_ok": {
+    "message": "OK"
+  },
+  "dlg_confirm_cancel": {
+    "message": "Отмена"
+  },
+  "dlg_confirm_remove_links_all_title": {
+    "message": "Вы уверены ?"
+  },
+  "dlg_confirm_remove_links_all_text": {
+    "message": "Удалить эти ссылки ?"
+  },
+  "dlg_confirm_dial_exists_title": {
+    "message": "Уже существуют ?"
+  },
+  "dlg_confirm_dial_exists_text": {
+    "message": "Дил с этим адресом уже существует. Продолжить ?"
+  },
+  "dlg_confirm_remove_dial_title": {
+    "message": "Вы уверены ?"
+  },
+  "dlg_confirm_remove_dial_text": {
+    "message": "Удалить этот элемент?"
+  },
+  "dlg_confirm_remove_group_title": {
+    "message": "Вы уверены ?"
+  },
+  "dlg_confirm_remove_group_text": {
+    "message": "Внимание! Данная группа не пуста и содержит следующие данные:<br>Дилы: %count%"
+  },
+  "dlg_confirm_import_title": {
+    "message": "Пожалуйста потвердите импортирование"
+  },
+  "dlg_confirm_import_text": {
+    "message": "При импортировании будут удалены существующие сайты, которые будут заменены сайтами из файла импорта. Продолжить ?"
+  },
+  "dlg_confirm_set_auto_preview_global_title": {
+    "message": "Дилы будут сброшены"
+  },
+  "dlg_confirm_set_auto_preview_global_text": {
+    "message": "Все ваши локальные или сделанные вручную изображения будут сброшены, Вы подтверждаете это?"
+  },
+  "dlg_alert_set_auto_preview_global_title": {
+    "message": "Готово!"
+  },
+  "dlg_alert_set_auto_preview_global_text": {
+    "message": "Все ваши локальные или сделанные вручную изображения сброшены."
+  },
+  "dlg_adddial_create_group": {
+    "message": "Создать новую группу..."
+  },
+  "dlg_adddial_set_file": {
+    "message": "Локальный файл"
+  },
+  "dlg_adddial_help_us_user_pics": {
+    "message": "Помогите нам расширить базу изображений. Каждый раз, когда Вы вводите Адрес изображения или выбираете изображение из локальных файлов, они появляются в пользовательской галерее"
+  },
+  "dlg_importing_step1": {
+    "message": "Step 1: Удаление старых данных"
+  },
+  "dlg_importing_step2": {
+    "message": "Step 2: Импортир настроек"
+  },
+  "dlg_importing_step3": {
+    "message": "Step 3: Импорт блокированных Доменов/Сайтов"
+  },
+  "dlg_importing_step4": {
+    "message": "Step 4: Импорт групп"
+  },
+  "dlg_importing_step5": {
+    "message": "Step 5: Импорт сайтов"
+  },
+  "dlg_importing_finished": {
+    "message": "Готово! Импортировано %groups% Групп и %dials% Сайтов"
+  },
+  "dlg_manage_groups_add_group": {
+    "message": "Добавить группу"
+  },
+  "dlg_move_to_nosync_group_title": {
+    "message": "Переместить сайт несинхронизируемую группу"
+  },
+  "dlg_move_to_nosync_group_text": {
+    "message": "Вы собираетесь переместить сайт в <b>несинхронизируемую</b> группу.<br/>Этот сайт будет виден только на вашем компьютере."
+  },
+  "dlg_nosync_group_title": {
+    "message": "Сделать группу несинхронизируемой"
+  },
+  "dlg_nosync_group_text": {
+    "message": "Вы собираетесь сделать группу <b>несинхронизируемой</b>. Эта группу будет видна только на вашем компьютере."
+  },
+  "dlg_dont_show_it_again": {
+    "message": "Не показывать снова"
+  },
+  "sah_copied": {
+    "message": "Скопировано!"
+  },
+  "error_must_be_filled": {
+    "message": "Должно быть заполнено"
+  },
+  "error_invalid_url": {
+    "message": "Неправильный URL"
+  },
+  "error_url_deny": {
+    "message": "URL заблокирован, проверьте ваш список заблокированных сайтов"
+  },
+  "error_url_deny_host": {
+    "message": "Домен заблокирован, проверьте ваш список заблокированных сайтов"
+  },
+  "error_url_deny_url": {
+    "message": "URL заблокирован, проверьте ваш список заблокированных сайтов"
+  },
+  "error_fail_get_title_dinamically": {
+    "message": "Невозможно получить название сайта"
+  },
+  "error_already_exists": {
+    "message": "Уже существует"
+  },
+  "error_wrong_import_data": {
+    "message": "Неправильные данные импорта"
+  },
+  "error_not_image": {
+    "message": "Выбранный файл не является изображением"
+  },
+  "cm_speeddial_cell_open_tab": {
+    "message": "Открыть в текущей вкладке"
+  },
+  "cm_speeddial_cell_open_new_tab": {
+    "message": "Открыть в новой вкладке"
+  },
+  "cm_speeddial_cell_open_bg_tab": {
+    "message": "Открыть в фоновой вкладке"
+  },
+  "cm_speeddial_cell_edit": {
+    "message": "Изменить"
+  },
+  "cm_speeddial_cell_remove": {
+    "message": "Удалить дил"
+  },
+  "cm_speeddial_cell_copy_url": {
+    "message": "Копировать URL"
+  },
+  "cm_speeddial_cell_move_to": {
+    "message": "Переместить в группу"
+  },
+  "cm_speeddial_cell_refresh": {
+    "message": "Обновить"
+  },
+  "cm_speeddial_cell_refresh_manual": {
+    "message": "Обновить вручную"
+  },
+  "cm_speeddial_group_edit": {
+    "message": "Изменить"
+  },
+  "cm_speeddial_group_remove": {
+    "message": "Удалить"
+  },
+  "cm_speeddial_group_default": {
+    "message": "По умолчанию"
+  },
+  "cm_speeddial_group_sync_this_group": {
+    "message": "Синхронизовать эту группу"
+  },
+  "cm_speeddial_group_open_all": {
+    "message": "Открыть все сайты"
+  },
+  "cm_speeddial_group_manage": {
+    "message": "Управление группами"
+  },
+  "cm_speeddial_global_add_dial": {
+    "message": "Добавить сайт"
+  },
+  "cm_speeddial_global_open_all": {
+    "message": "Открыть все сайты"
+  },
+  "cm_speeddial_global_style": {
+    "message": "Вид"
+  },
+  "cm_speeddial_global_style_fancy": {
+    "message": "Fancy"
+  },
+  "cm_speeddial_global_style_standard": {
+    "message": "Стандартный"
+  },
+  "cm_speeddial_global_view": {
+    "message": "Отображение"
+  },
+  "cm_speeddial_global_preview": {
+    "message": "Превью"
+  },
+  "cm_speeddial_global_change_size": {
+    "message": "Изменить размер..."
+  },
+  "cm_speeddial_global_number_of_columns": {
+    "message": "Количество столбцов"
+  },
+  "cm_speeddial_global_number_of_rows": {
+    "message": "Число строк"
+  },
+  "cm_speeddial_global_view_big": {
+    "message": "Большой"
+  },
+  "cm_speeddial_global_view_medium": {
+    "message": "Средний"
+  },
+  "cm_speeddial_global_view_small": {
+    "message": "Маленький"
+  },
+  "cm_speeddial_global_view_custom": {
+    "message": "Свой размер"
+  },
+  "cm_speeddial_global_view_list": {
+    "message": "Список"
+  },
+  "cm_scrolling_type": {
+    "message": "Тип скроллинга"
+  },
+  "cm_mostvisited_cell_add_to_speeddial": {
+    "message": "Добавить в FVD Speed Dial"
+  },
+  "cm_mostvisited_cell_block": {
+    "message": "Блокировать"
+  },
+  "cm_apps_open": {
+    "message": "Открыть"
+  },
+  "cm_apps_remove": {
+    "message": "Удалить"
+  },
+  "cm_main_title": {
+    "message": "FVD Speed Dial"
+  },
+  "cm_add_to": {
+    "message": "Добавить в "
+  },
+  "cm_refresh_all": {
+    "message": "Обновить все"
+  },
+  "popup_speed_dial": {
+    "message": "Speed Dial"
+  },
+  "popup_options": {
+    "message": "Настройки"
+  },
+  "cs_dial_added": {
+    "message": "Дил добавлен"
+  },
+  "options_sd_preview_settings": {
+    "message": "Настройки превью дилов"
+  },
+  "options_set_dials_to_auto_update": {
+    "message": "Автообновление"
+  },
+  "options_turn_off_dials_auto_update": {
+    "message": "Выкл. Автообновлен."
+  },
+  "dlg_confirm_turn_off_autoupdate_globally_title": {
+    "message": "Подтвердите действие"
+  },
+  "dlg_confirm_turn_off_autoupdate_globally_text": {
+    "message": "Настройки автообновления всех дилов будут выключены"
+  },
+  "dlg_alert_dials_autoupdate_updated_title": {
+    "message": "Завершено!"
+  },
+  "dlg_alert_dials_autoupdate_updated_text": {
+    "message": "Дилы успешно обновлены."
+  },
+  "dialog_title_set_autoupdate_batch": {
+    "message": "Установить автообновление"
+  },
+  "bg_dialog_setautoupdate_autoupdate_every": {
+    "message": "Обновлять дилы каждые"
+  },
+  "options_sync_need_install_ability_3": {
+    "message": "Sync your Custom Images."
+  },
+  "dlg_alert_sync_on_another_driver_title": {
+    "message": "Синхронизация в процессе"
+  },
+  "dlg_alert_sync_on_another_driver_text": {
+    "message": "В данный момент синхронозируются другие данные. Пожалуйста дождитесь окончания синхронизации."
+  },
+  "options_available_in_standard_theme_only": {
+    "message": "Доступно при исользовании стандартной темы."
+  },
+  "newtab_search_input_placeholder": {
+    "message": "Введите Ваш поиск... "
+  },
+  "options_parallax_option": {
+    "message": "Параллакс"
+  },
+  "options_parallax_strength": {
+    "message": "Параллакс: "
+  },
+  "newtab_offer_parallax_title": {
+    "message": "Сделайте Ваш фон динамичным с Параллакс эффектом."
+  },
+  "newtab_offer_parallax_try_parallax": {
+    "message": "Попробовать Параллакс"
+  },
+  "newtab_offer_parallax_cancel": {
+    "message": "Закрыть"
+  },
+  "newtab_offer_parallax_description": {
+    "message": "Перейдите в FVD Speed Dial > Настройки > Фон > Выберите Параллакс в меню Тип."
+  },
+  "newtab_offer_parallax_note": {
+    "message": "Внимание: Параллакс может замедлить работу Speed Dial. Если это случится, мы рекомендуем отключить функцию"
+  },
+  "newtab_light_collapsed_message_text": {
+    "message": "Double click to show Speed Dial"
+  },
+  "bg_default_dial_nimbus": {
+    "message": "Nimbus Note"
+  },
+  "options_backup_via_eversync_suggestion": {
+    "message": "<b>Важно!</b> Не забудьте сделать бэкап ваших дилов, чтобы восстановить их в любой момент!"
+  },
+  "options_backup_via_eversync_suggestion_button": {
+    "message": "Сделать Бэкап"
+  },
+  "newtab_search_on_amazon": {
+    "message": "Искать на Amazon"
+  },
+  "bg_default_dial_half_com": {
+    "message": "Half.com"
+  },
+  "bg_default_dial_tripadvizor": {
+    "message": "TripAdvisor"
+  },
+  "bg_default_dial_booking": {
+    "message": "Booking.com"
+  },
+  "bg_default_dial_aliexpress": {
+    "message": "AliExpress"
+  },
+  "newtab_dials_search_input_placeholder": {
+    "message": "Поиск в Speed Dial"
+  },
+  "newtab_dials_search_no_match": {
+    "message": "Ничего не найдено"
+  },
+  "newtab_dials_search_try_on_web": {
+    "message": "Попробуйте в Веб? Или нажмите Enter."
+  },
+  "newtab_dials_search_no_match_query": {
+    "message": "По запросу <strong></strong> дилы не найдены."
+  },
+  "options_enable_dials_search": {
+    "message": "Поиск в Speed Dial"
+  },
+  "newtab_search_on_aliexpress": {
+    "message": "Search on AliExpress"
+  },
+  "bg_default_dial_wayfair": {
+    "message": "Wayfair"
+  },
+  "bg_default_dial_groupon": {
+    "message": "Groupon"
+  },
+  "options_start_donate": {
+    "message": "Пожертвовать"
+  },
+  "newtab_search_on_billiger": {
+    "message": "Search on Billiger"
+  },
+  "bg_default_dial_billiger": {
+    "message": "Billiger"
+  },
+  "newtab_restore_corrupted_files_title": {
+    "message": "Идет восстановление дилов"
+  },
+  "newtab_restore_corrupted_files_msg1": {
+    "message": "В результате неизвестных причин/действий других программ некоторые дилы повредились и идет их восстановление. Это займет некоторое время."
+  },
+  "newtab_restore_corrupted_files_msg2": {
+    "message": "Но не беспокойтесь! Сейчас всё будет работать!"
+  },
+  "options_enable_ondial_search": {
+    "message": "Показывать поиск на дилах"
+  },
+  "newtab_ondialsearch_placeholder": {
+    "message": "введите поиск.."
+  },
+  "newtab_disable_page_mod": {
+    "message": "выключить этот виджет"
+  },
+  "options_quick_preview": {
+    "message": "Виджет \"Быстрый просмотр\""
+  },
+  "dlg_confirm_disable_quick_preview_title": {
+    "message": "Подтвердите ваше действие."
+  },
+  "dlg_confirm_disable_quick_preview_text": {
+    "message": "Вы действительно хотите отключить виджет \"Быстрый просмотр\"?"
+  },
+  "cm_speeddial_cell_open_incognito_tab": {
+    "message": "Открыть в \"Инкогнито\" окне"
+  },
+  "newtab_introduction_opera_how_to_newtab": {
+    "message": "Как сделать, чтобы FVD Speed Dial автоматически открывался в новой странице?"
+  },
+  "newtab_introduction_opera_how_to_newtab_step1": {
+    "message": "1) Установите приложение Custom new tab page"
+  },
+  "newtab_introduction_opera_how_to_newtab_step2": {
+    "message": "2) Введите следующую ссылку в форму в окне приложения "
+  },
+  "options_sync_link_opera": {
+    "message": "Установить из Opera WebStore"
+  },
+  "bg_dialog_addgroup_position": {
+    "message": "Позиция:"
+  },
+  "bg_dialog_addgroup_position_top": {
+    "message": "Начало"
+  },
+  "bg_dialog_addgroup_position_bottom": {
+    "message": "Конец"
+  },
+  "options_help": {
+    "message": "Инструкция"
+  },
+  "options_help_url": {
+    "message": "https://s.nimbusweb.me/share/3624529/bp7c936pxnugst31ihmb"
+  },
+  "options_main_button_action": {
+    "message": "При нажатии на кнопку FVD Speed Dial"
+  },
+  "options_main_button_action_sd_in_new_tab": {
+    "message": "Открывать FVD Speed Dial в новом окне"
+  },
+  "options_main_button_action_sd_in_active_tab": {
+    "message": "Открывать FVD Speed Dial в текущем окне"
+  },
+  "options_main_button_action_add_site_to_sd": {
+    "message": "Добавлять текущий открытый сайт в FVD Speed Dial"
+  },
+  "newtab_bottom_text_terms_of_use": {
+    "message": "Условия использования"
+  },
+  "newtab_bottom_text_privacy_policy": {
+    "message": "Политика приватности"
+  },
+  "options_release_notes": {
+    "message": "История изменений"
+  },
+  "options_release_notes_url": {
+    "message": "https://everhelper.me/release-notes-ru.php"
+  },
+  "booking_widget_quick_search": {
+    "message": "Поиск"
+  },
+  "booking_widget_reset": {
+    "message": "сбросить"
+  },
+  "booking_widget_destination_title": {
+    "message": "Город/Отель:"
+  },
+  "booking_widget_destination_empty_error": {
+    "message": "Введите направление путешествия чтобы нажать поиск."
+  },
+  "booking_widget_are_you_travelling_for_work": {
+    "message": "Вы путешествуете по работе?"
+  },
+  "booking_widget_yes": {
+    "message": "Да"
+  },
+  "booking_widget_no": {
+    "message": "Нет"
+  },
+  "booking_widget_checkin": {
+    "message": "Прибытие:"
+  },
+  "booking_widget_checkin_date": {
+    "message": "Дата прибытия"
+  },
+  "booking_widget_reservation_too_long": {
+    "message": "Резервация длиннее чем 30 ночей не возможна."
+  },
+  "booking_widget_checkout": {
+    "message": "Выселение:"
+  },
+  "booking_widget_checkout_date": {
+    "message": "Дата выселения"
+  },
+  "booking_widget_dont_have_dates": {
+    "message": "Я не знаю даты"
+  },
+  "booking_widget_rooms": {
+    "message": "Комнат"
+  },
+  "booking_widget_adults": {
+    "message": "Взрослых"
+  },
+  "booking_widget_children": {
+    "message": "Детей<br>(до 18)"
+  },
+  "booking_widget_close": {
+    "message": "закрыть"
+  },
+  "booking_widget_search": {
+    "message": "поиск"
+  },
+  "booking_widget_night_stay": {
+    "message": " ночей"
+  },
+  "booking_widget_children_ages_on": {
+    "message": "Возраст детей на"
+  },
+  "booking_widget_children_ages_at_checkout": {
+    "message": "Возраст детей на дату выселения"
+  },
+  "booking_widget_previous_month": {
+    "message": "Предидущий месяц"
+  },
+  "booking_widget_next_month": {
+    "message": "Следующий месяц"
+  },
+  "month_0": {
+    "message": "Январь"
+  },
+  "month_1": {
+    "message": "Февраль"
+  },
+  "month_2": {
+    "message": "Март"
+  },
+  "month_3": {
+    "message": "Апрель"
+  },
+  "month_4": {
+    "message": "Май"
+  },
+  "month_5": {
+    "message": "Июнь"
+  },
+  "month_6": {
+    "message": "Июль"
+  },
+  "month_7": {
+    "message": "Август"
+  },
+  "month_8": {
+    "message": "Сентябрь"
+  },
+  "month_9": {
+    "message": "Октябрь"
+  },
+  "month_10": {
+    "message": "Ноябрь"
+  },
+  "month_11": {
+    "message": "Декабрь"
+  },
+  "dow_0": {
+    "message": "Воскресенье"
+  },
+  "dow_1": {
+    "message": "Понедельник"
+  },
+  "dow_2": {
+    "message": "Вторник"
+  },
+  "dow_3": {
+    "message": "Среда"
+  },
+  "dow_4": {
+    "message": "Четверг"
+  },
+  "dow_5": {
+    "message": "Пятница"
+  },
+  "dow_6": {
+    "message": "Суббота"
+  },
+  "booking_widget_from": {
+    "message": "с"
+  },
+  "booking_widget_to": {
+    "message": "по"
+  },
+  "booking_widget_travel_for_work_hint": {
+    "message": "Для улучшения качества поиска"
+  },
+  "dow_short_0": {
+    "message": "Вс"
+  },
+  "dow_short_1": {
+    "message": "Пн"
+  },
+  "dow_short_2": {
+    "message": "Вт"
+  },
+  "dow_short_3": {
+    "message": "Ср"
+  },
+  "dow_short_4": {
+    "message": "Чт"
+  },
+  "dow_short_5": {
+    "message": "Пт"
+  },
+  "dow_short_6": {
+    "message": "Сб"
+  },
+  "options_preload_search_items": {
+    "message": "Pre-load related search results"
+  },
+    "popup_locked":{
+        "message": "Заблокированно"
+    },
+    "locked":{
+        "message": "Заблокированно"
+    },
+    "options_bg_dark": {
+        "message": "Темный фон"
+    },
+    "options_bg_white": {
+        "message": "Светлый фон"
+    },
+    "backup_confirm_create_title": {
+        "message": "Как сохранить резервную копию? <br><br><b>Внимание!</b><br>Если в новой версии Вы не можете сохранить или восстановить дилы, свяжитесь с нами по адресу <a href='mailto:team@nimbusweb.co' target=_blank>team@nimbusweb.co</a><br>Пожалуйста, приложите Ваш файл бэкапа (*.sd) для проверки и внесения исправлений в аддон."
+    },
+    "backup_confirm_create_btn_db": {
+        "message": "Экспорт в БД"
+    },
+    "backup_confirm_create_btn_file": {
+        "message": "Экспорт в файл"
+    },
+    "backup_confirm_recovery_title": {
+        "message": "Какую копию Вы хотите восстановить?"
+    },
+    "backup_confirm_recovery_btn_db": {
+        "message": "Из БД аддона"
+    },
+    "backup_confirm_recovery_btn_file": {
+        "message": "Восстановить из файла (*.sd)"
+    },
+    "backup_popup_button": {
+        "message": "Сохранить/Восстановить в фаил"
+    },
+    "broken_nohistory_title": {
+        "message": "Необходимо отредактировать настройки Firefox"
+    },
+    "broken_nohistory_text": {
+        "message": "<p class='nohistory-message nohistory-image-ru'>Привет пользователь Speed Dial,<br><br>Это сообщение от команды FVD Speed Dial.<br><br>Новый FireFox 57 перестанет поддерживать расширения старого формата, их требуется перевести на новую технологию Web Extensions. Мы сделали это, иначе расширение будет автоматически заблокировано.<br><br>Вы используете опцию браузера <b>\"Firefox не будет запоминать историю\"</b>. Вам необходимо <b>добавить</b> FVD Speed Dial в список <b>исключений</b>, иначе аддон не сможет работать.<br>Пожалуйста, перейдите по ссылке ниже, чтобы прочитать инструкцию как это сделать. Сделать это нужно единожды, это <b>просто</b>. <button class='read-quick-guide guide-ru fvdButton green'>Прочитать Инструкцию</button>Если Вы не включали опицию \"Firefox не будет запоминать историю\" или уже добавили FVD Speed Dial в список исключений, но все еще видите это сообщение при открытии страницы, пожалуйста напишите нам: <a href='mailto:team@nimbusweb.co' target='_blank'>team@nimbusweb.co</a>"
+    },
+    "options_enable_dials_counter": {
+        "message": "Счетчик дилов в группе"
+    },
+    "options_group_font": {
+        "message": "Группы"
+    },
+    "options_group_color": {
+        "message": "Цвет:"
+    },
+    "options_group_background_color": {
+        "message": "Фон:"
+    },
+    "error_getting_title": {
+        "message": "Упс, Нет заголовка"
+    },
+    "local_file_dial_title": {
+        "message": "Невозможно открыть ссылку"
+    },
+    "local_file_dial_message": {
+        "message": "В новом FireFox эта функция недоступна. По соображениям безопасности, Firefox не открывает ссылки на локальные файлы."
+    },
+    "active": {
+        "message": "Активная"
+    },
+    "passive": {
+        "message": "Не активная"
+    },
+    "options_display_clicks": {
+        "message": "Показывать клики"
+    },
+    "deny":{
+        "message": "Блокировать"
+    },
+    "remove":{
+        "message": "Удалить"
+    },
+    "add":{
+        "message": "Сохранить"
+    },
+    "edit":{
+        "message": "Редактирвать"
+    },
+    "restore_previous_session":{
+        "message": "Восстановить сессию"
+    },
+    "options_restore_previous_session":{
+        "message": "Кнопка восстановления предыдущей сессии"
+    },
+    "newtab_introduction_slide_es_title":{
+        "message": "Синхронизируйте свои закладки"
+    },
+    "newtab_introduction_slide_es_text":{
+        "message": "Получите доступ к своим любимым сайтам и закладкам с любого компьютера. Сохраняйте закладки и настройки."
+    },
+    "options_show_gray_line": {
+      "message": "Серая линия сверху"
+    }
+}

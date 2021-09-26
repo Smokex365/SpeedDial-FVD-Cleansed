@@ -1,0 +1,879 @@
+<html>
+
+<head>
+
+  <title msg="options_title"></title>
+
+  <script src="js/_external/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/_external/broadcaster.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/options/namespace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/log.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/debug.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/_external/aes.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/_external/parallax.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/poweroff.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/tooltip.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/storage/tab.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/dialogs.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/localizer.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/templates.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/prefs.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/historycomplete.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/thumbmaker/tab.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/sync/tab.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/runtimestore.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/premiumforshare.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/options/roller.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/options/options.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/options/poweroff.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/background.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/speeddial.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/contextmenus.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/draglists.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/css.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/options/script.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/dialogs/simple-dialog.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/colorpicker/jscolor.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/contextmenu/dhtmlxcommon.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/contextmenu/dhtmlxmenu.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/newtab/contextmenu/ext/dhtmlxmenu_ext.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/importtranslators.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/_external/qtip/jquery.qtip.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/_external/fix_input_number.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/donate/tab.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" href="styles/icons.css">
+  <link rel="stylesheet" href="styles/tooltip.css">
+  <link rel="stylesheet" href="styles/historycomplete.css">
+  <link rel="stylesheet" href="styles/sd_icons.css">
+  <link rel="stylesheet" href="styles/options/style.css">
+  <link rel="stylesheet" href="styles/newtab/buttons.css">
+  <link rel="stylesheet" href="styles/dialogs.css">
+  <link rel="stylesheet" href="js/newtab/dialogs/simple-dialog.css">
+  <link rel="stylesheet" href="js/newtab/contextmenu/skins/dhtmlxmenu_dhx_skyblue.css">
+  <link rel="stylesheet" href="js/_external/qtip/jquery.qtip.min.css">
+</head>
+
+
+
+<body>
+
+  <div id="linkToSD" msg="options_back_to_speeddial" msg_target="title">
+
+  </div>
+
+  <div id="getSatisfactionSuggestSelect">
+    <a href="https://nimbusweb.co/contact.php" target="_blank" msg="options_submit_suggestion"></a>
+    
+    <a href="https://nimbusweb.co/contact.php" target="_blank" msg="options_submit_bug"></a>
+	
+      
+    <a msg="options_help_url" target="_blank" msg_target="href"><span msg="options_help"></span></a>
+    <!--<a msg="options_release_notes_url" target="_blank" msg_target="href"><span msg="options_release_notes"></span></a>-->
+  </div>
+
+  <div id="mainContainer">
+    <div id="donate-container">
+      <div class="close-donate"></div>
+      <iframe></iframe>
+    </div>
+    <div id="mainMenu">
+
+      <div msg="options_global_options" msg_target="title" id="buttonBigSettings" class="buttonBig settings" active="1"></div>
+      <div msg="options_speed_dial_options" msg_target="title" id="buttonBigSpeedDial" class="buttonBig speedDial"></div>
+      <div msg="options_most_visited_options" msg_target="title" id="buttonBigMostVisited" class="buttonBig mostVisited"></div>
+      <div msg="options_recently_closed_options" msg_target="title" id="buttonBigRecentlyClosed" class="buttonBig recentlyClosed"></div>
+      <div msg="options_background_options" msg_target="title" id="buttonBigBackground" class="buttonBig sdBackground"></div>
+      <div msg="options_fonts_options" msg_target="title" id="buttonBigSdFontColors" class="buttonBig sdFontColors"></div>
+      <div msg="options_sync_need_install" msg_target="title" id="buttonBigSdSync" class="buttonBig sdSync"></div>
+      <div msg="options_poweroff_options" msg_target="title" id="buttonBigSdPowerOff" class="buttonBig sdPowerOff"></div>
+      <!--<div msg="options_widgets_options" msg_target="title" id="buttonBigSdWidgets" class="buttonBig sdWidgets"></div>-->
+      <div msg_target="title" id="buttonBigSdGetSatisfaction" class="buttonBig sdGetSatisfaction"></div>
+      <div msg_target="title" id="buttonBigSdDonate" class="buttonBig sdDonate" style="display:none"></div>
+
+    </div>
+
+    <div id="settingsContent">
+      <div class="backupViaEversyncSuggestion">
+        <div class="backupSuggestionText" msg="options_backup_via_eversync_suggestion"></div>
+        <button class="fvdButton main" msg="options_backup_via_eversync_suggestion_button"></button>
+      </div>
+      <div id="rollerContent">
+
+        <div class="settingsPage" id="globalSettings">
+
+          <div class="pageTitle"><span msg="options_global_options"></span></div>
+
+          <div class="tabs">
+
+            <div class="tabsHead">
+              <span class="tabHead" msg="options_global_tabs_main"></span>
+              <span class="tabHead" msg="options_global_tabs_appearance"></span>
+            </div>
+            <div class="tabsData">
+
+              <div class="tabContent">
+
+                <div class="setsLine">
+                  <!--
+                  <fieldset class="subSet">
+
+                    <legend msg="options_global_options"></legend>
+
+
+                    <label>
+                      <span msg="options_default_screen_delay"></span> <input min="0" id="defaultScreenDelay" type="number" sname="sd.preview_creation_delay_default"/>
+                    </label><br/>
+
+
+                  </fieldset>
+                  -->
+
+                  <fieldset class="subSet" id="importExportContainer">
+
+                    <legend msg="options_import_export"></legend>
+                    <div align="center">
+                      <button id="importExport_export" class="fvdButton" msg="options_export"></button>
+                      <button id="importExport_import" class="fvdButton" msg="options_import"></button>
+                    </div>
+
+                  </fieldset>
+
+                  <fieldset class="subSet">
+
+                    <legend msg="options_default_dial"></legend>
+
+                    <label><input type="radio" name="global_defaultDial" sname="sd.display_type" value="speeddial"/><span msg="options_speed_dial"></span></label><br>
+                    <label><input type="radio" name="global_defaultDial" sname="sd.display_type" value="mostvisited"/><span msg="options_most_visited"></span></label><br>
+                    <label><input type="radio" name="global_defaultDial" sname="sd.display_type" value="recentlyclosed"/><span msg="options_recently_closed"></span></label><br>
+                    <label><input type="radio" name="global_defaultDial" sname="sd.display_type" value="last_selected"/><span msg="options_last_selected"></span></label><br>
+
+                  </fieldset>
+
+                </div>
+
+                <div class="setsLine">
+
+                  <fieldset class="subSet">
+
+                    <legend msg="options_enable">Enable</legend>
+
+                    <label><input type="checkbox" sname="sd.enable_top_sites" id="enableSpeedDial"/><span msg="options_speed_dial"></span></label><br/>
+                    <label><input type="checkbox" sname="sd.enable_most_visited" id="enableMostVisited"/><span msg="options_most_visited"></span></label><br/>
+                    <label><input type="checkbox" sname="sd.enable_recently_closed" id="enableRecentlyClosed"/><span msg="options_recently_closed"></span></label><br/>
+                    <label><input type="checkbox" sname="sd.restore_previous_session" id="enableRestoreSession"/><span msg="options_restore_previous_session"></span></label><br/>
+
+                  </fieldset>
+
+                  <fieldset class="subSet" id="blockedDomainContainer">
+
+                    <legend msg="options_blocked_domains"></legend>
+
+                    <button id="sdButtonManageDeny" class="fvdButton" msg="options_manage_blocked"></button>
+
+                  </fieldset>
+
+                </div>
+
+                <div class="setsLine">
+
+                  <fieldset class="subSet">
+
+                    <legend msg="options_dials_opening"></legend>
+
+                    <label><input type="radio" name="global_dialsOpening" sname="sd.default_open_in" value="current" /><span msg="options_current_tab"></span></label><br>
+                    <label><input type="radio" name="global_dialsOpening" sname="sd.default_open_in" value="new" /><span msg="options_new_tab"></span></label><br>
+                    <label><input type="radio" name="global_dialsOpening" sname="sd.default_open_in" value="background"/><span msg="options_new_tab_background"></span></label><br>
+
+                  </fieldset>
+
+                  <fieldset class="subSet" id="setAutoScreenPreview">
+
+                    <legend msg="options_sd_preview_settings"></legend>
+                    <div align="center">
+                      <button id="setAuthoPreview_setPreview" class="fvdButton" msg="options_set_auto_preview_title" msg_target="title"><span msg="options_set_auto_preview"></span></button>
+                      <br>
+                        <button id="sdPreviewSettings_setAutoUpdate" class="fvdButton" msg="options_set_dials_to_auto_update_title" msg_target="title"><span msg="options_set_dials_to_auto_update"></span></button>
+                        <button id="sdPreviewSettings_turnOffAutoUpdate" class="fvdButton" msg="options_turn_off_dials_auto_update_title" msg_target="title"><span msg="options_turn_off_dials_auto_update"></span></button>
+                    </div>
+
+                  </fieldset>
+
+                </div>
+
+
+              </div>
+
+              <div class="tabContent">
+                <div class="setsLine">
+                  <fieldset class="subSet higher-145">
+                    <label style="display:none" class="bold" id="displayInNewTabLabel"><input type="checkbox" sname="sd.display_in_new_tab"> <span msg="options_display_in_new_tab"></span></label>
+                    <span class="activeInStandard">
+                        <label data-only-in-standard="1">
+                            <input type="checkbox" id="show_urls_under_dials" sname="sd.show_urls_under_dials" /><span msg="options_show_urls_under_dials"></span></label>
+                        <br/>
+                        <label data-only-in-standard="1">
+                            <input type="checkbox" id="show_icons_and_titles_above_dials" sname="sd.show_icons_and_titles_above_dials" /><span msg="options_show_icons_and_titles_above_dials"></span></label>
+                        <br/>
+                    </span>
+                      
+                      
+                    <label><input id="display_plus_cells" type="checkbox" sname="sd.display_plus_cells"/><span msg="options_display_plus_cells"></span></label> <div id="displayPlusCellsHelp" class="sdIcon question clickable"></div><br>
+                    <label><input type="checkbox" sname="sd.enable_search"/><span msg="options_enable_search"></span></label><br>
+                    <label><input type="checkbox" sname="sd.enable_dials_search"/><span msg="options_enable_dials_search"></span></label><br>
+                    <label><input id="enable_ondial_search" type="checkbox" sname="sd.enable_ondial_search"/><span msg="options_enable_ondial_search"></span></label><br>
+                      
+
+                      
+                      <label><input type="checkbox" sname="sd.show_gray_line"/><span msg="options_show_gray_line"></span></label> 
+                      <div id="displayShowGrayLineHelp" class="sdIcon question clickable"></div><br>
+                  </fieldset>
+
+                  <fieldset class="subSet higher-145">
+                    <label style="display:none"><input type="checkbox" sname="sd.disable_custom_search"/><span msg="options_disable_custom_search"></span></label>
+                    <label><input type="checkbox" sname="sd.display_dial_background"/><span msg="options_display_dial_background"></span></label> <div id="displayDialBackgroundHelp" class="sdIcon question clickable"></div><br/>
+                    
+                    <div id="display_dial_background_color">
+                        <label><input type="radio" name="global_display_dial_background_color" sname="sd.display_dial_background_color" value="white"/><span msg="options_bg_white">White Bg</span></label>
+                        <label><input type="radio" name="global_display_dial_background_color" sname="sd.display_dial_background_color" value="dark"/><span msg="options_bg_dark">Dark Bg</span></label>
+                    </div>
+                      
+                    <div id="display_dial_borders_container">
+                      <label><input type="checkbox" sname="sd.display_dial_borders"/><span msg="options_display_dial_borders"></span></label>
+                    </div>
+                      
+                      <span class="activeInStandard">
+                        <label data-only-in-standard="1"><input type="checkbox" id="display_quick_menu_and_clicks" sname="sd.display_quick_menu_and_clicks"/><span msg="options_display_quick_menu_and_clicks"></span></label> <div id="displayQuickMenuHelp" class="sdIcon question clickable"></div><br/>
+                      
+                        <label data-only-in-standard="1"><input type="checkbox" id="display_clicks" sname="sd.display_clicks"/><span msg="options_display_clicks"></span></label> 
+                          <div id="displayClicksHelp" class="sdIcon question clickable"></div><br/>                      
+                      </span>
+                      
+                    <label><input type="checkbox" sname="sd.show_in_context_menu"/><span msg="options_show_in_context_menu"></span></label> <div id="displayShowInContextMenuHelp" class="sdIcon question clickable"></div><br>
+                      
+                      
+                    <!--<label><input type="checkbox" sname="sd.enable_search_preview"/><span msg="options_enable_search_preview"></span></label><br>-->
+                    <!--<label><input type="checkbox" sname="sd.display_superfish"/><span msg="options_display_superfish"></span></label>-->
+                    <label><input id="display_mirror" type="checkbox" sname="sd.display_mirror"/><span msg="options_display_mirror"></span></label><br>
+                    <!--
+                    <label><input type="checkbox" sname="quick-preview.enabled"/><span msg="options_quick_preview"></span></label><br>-->
+                    <label style="display:none"><input type="checkbox" sname="surfcanyon.enabled"/><span msg="options_enable_surfcanyon"></span></label>
+                      
+                      <label><input type="checkbox" sname="sd.enable_dials_counter"/><span msg="options_enable_dials_counter"></span></label>
+                      <div id="displayEnableDialsCounter" class="sdIcon question clickable"></div><br>
+                      
+                  </fieldset>
+                </div>
+
+                <div class="singleSet">
+
+                  <fieldset id="customDialSizeWrapper">
+
+                    <legend msg="options_cdsize_title"></legend>
+
+                    <input type="range" sname="sd.custom_dial_size" min="150" max="364" id="cdSizeRange_standard">
+                    <input type="range" sname="sd.custom_dial_size_fancy" min="150" max="364" id="cdSizeRange_fancy" hidden="true">
+
+                    <span id="customDialSizePreview">
+
+                    </span>
+                    <span class="littleGray" msg="options_cdsize_limits">
+
+                    </span>
+
+                  </fieldset>
+
+
+
+                </div>
+
+                <div class="singleSet">
+
+                  <fieldset>
+
+                    <legend msg="options_dials_opacity"></legend>
+
+                    <input type="range" sname="sd.dials_opacity" min="0" max="100" class="dialsOpacityRange">
+
+                    <div id="opacityMarks"><span class="left">0%</span><span class="center">50%</span><span class="right">100%</span></div>
+
+                  </fieldset>
+
+                </div>
+
+                <div class="singleSet">
+
+                  <fieldset>
+
+                    <legend msg="cm_speeddial_global_style"></legend>
+
+                    <select sname="sd.display_mode" id="themeSelect">
+                      <option value="standard" msg="cm_speeddial_global_style_standard"></option>
+                      <option value="fancy" msg="cm_speeddial_global_style_fancy"></option>
+                    </select>
+
+                    <div class="select-theme" style="display:none">
+                      <a class="theme theme-standard" data-theme="standard"></a>
+                      <a class="theme theme-fancy" data-theme="fancy"></a>
+                    </div>
+
+                  </fieldset>
+
+                </div>
+
+                <div class="setsLine">
+                    <fieldset id="numberOfColumns" class="subSet higher-50" hidden="true">
+                        <legend msg="newtab_number_of_columns"></legend>
+                        <select class="full-width" sname="sd.top_sites_columns" id="columnsSelect">
+                            <option value="auto" msg="newtab_columns_auto"></option>
+                        </select>
+                    </fieldset>
+                    
+                    <fieldset id="numberOfRows" class="subSet higher-50" hidden="true">
+                        <legend msg="newtab_number_of_rows"></legend>
+                        <select class="full-width" sname="sd.top_sites_columns" id="rowsSelect">
+                            <option value="auto" msg="newtab_columns_auto"></option>
+                        </select>
+                    </fieldset>
+                    <span class="activeInStandard">
+                        <fieldset class="subSet higher-50">
+                            <legend msg="options_scrolling"></legend>
+                            <select sname="sd.scrolling" id="scrollSelect">
+                                <option value="vertical" msg="options_scrolling_vertical"></option>
+                                <option value="horizontal" msg="options_scrolling_horizontal"></option>
+                            </select>
+                        </fieldset>
+                    </span>
+                </div>
+                  
+                  
+
+                <!--
+                <div class="singleSet">
+
+                  <fieldset>
+
+                    <legend>Rotate max angle</legend>
+
+                    <input type="text" sname="sd.rotate_angle_max">
+
+                  </fieldset>
+
+                </div>
+                -->
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+        </div><div class="settingsPage" id="speeddialSettings">
+
+          <div class="pageTitle" msg="options_speed_dial_options"></div>
+
+          <div>
+            <label><input type="checkbox" sname="sd.display_popular_group"/><span msg="options_display_popular_group"></span></label><br/>
+          </div>
+
+          <fieldset>
+
+            <legend msg="options_groups"></legend>
+
+            <label><span msg="options_default_group"></span> <select id="speeddial_defaultGroup" sname="sd.default_group"></select></label><button class="fvdButton" id="buttonManageGroups" msg="options_manage_groups"></button>
+
+          </fieldset>
+
+          <fieldset>
+
+            <legend msg="options_max_dials_in_popular_group"></legend>
+
+            <label><input type="number" min="0" max="50" sname="sd.all_groups_limit_dials"/> <span class="littleGray" msg="options_speeddial_max_in_popular"></span></label>
+
+          </fieldset>
+
+          <fieldset>
+            <legend msg="options_reset_speed_dial_clicks"></legend>
+            <div class="text-center">
+              <button class="fvdButton" id="buttonResetSDClicks" msg="options_reset_clicks"></button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="legend-with-help-icon">
+              <span msg="options_main_button_action"></span>
+              <div id="mainButtonActionHelp" class="sdIcon question clickable"></div>
+            </legend>
+            <div>
+              <label><input type="radio" value="sd_in_new_tab" name="sd_mainButtonAction" sname="sd.main_button_action"><span msg="options_main_button_action_sd_in_new_tab"></span></label><br>
+              <label><input type="radio" value="sd_in_active_tab" name="sd_mainButtonAction" sname="sd.main_button_action"><span msg="options_main_button_action_sd_in_active_tab"></span></label><br>
+              <label><input type="radio" value="add_site_to_sd" name="sd_mainButtonAction" sname="sd.main_button_action"><span msg="options_main_button_action_add_site_to_sd"></span></label>
+            </div>
+          </fieldset>
+
+        </div><div class="settingsPage" id="mostvisitedSettings">
+
+          <div class="pageTitle" msg="options_most_visited_options"></div>
+
+          <div class="noFieldSet">
+            <label><span msg="options_show_last"></span> <input type="number" min="0" max="75" class="countItemsInput" sname="sd.max_most_visited_records"/><span class="littleGray" msg="options_recently_closed_max_most_visited"></span></label>
+          </div>
+
+          <fieldset>
+
+            <legend msg="options_sort_by"></legend>
+
+            <label><input type="radio" name="global_mostVisitedSort" sname="sd.most_visited_interval" value="week"/><span msg="options_last_week">Last week</span></label><br>
+            <label><input type="radio" name="global_mostVisitedSort" sname="sd.most_visited_interval" value="month"/><span msg="options_last_month">Last month</span></label><br>
+            <label><input type="radio" name="global_mostVisitedSort" sname="sd.most_visited_interval" value="all_time"/><span msg="options_all_time">All time</span></label><br>
+
+          </fieldset>
+
+        </div><div class="settingsPage" id="recentlyclosedSettings">
+          <div class="pageTitle" msg="options_recently_closed_options"></div>
+          <div class="noFieldSet">
+            <label><span msg="options_show_last"></span> <input type="number" min="0" max="100" class="countItemsInput" sname="sd.max_recently_closed_records"/><span class="littleGray" msg="options_recently_closed_max_show_last"></span></label>
+          </div>
+        </div><div class="settingsPage" id="bgSettings">
+
+          <div class="pageTitle" msg="options_background_options"></div>
+
+          <div id="backgroundPreview"></div>
+          <div id="currentDimension"></div>
+
+          <fieldset>
+
+            <legend msg="options_background_color"></legend>
+
+            <input type="text" class="color" sname="sd.background_color" id="bg_color" /><label><input type="checkbox" sname="sd.background_color_enabled" id="bg_useColor"/><span msg="options_bg_color_enabled">Enabled</span></label>
+
+          </fieldset>
+
+          <fieldset>
+
+            <legend msg="options_image_url"></legend>
+
+            <label><span msg="options_bg_image_type"></span> <select id="bg_imageType" sname="sd.background_url_type">
+
+              <option value="noimage" msg="options_noimage"></option>
+              <option value="fill" msg="options_fill"></option>
+              <option value="fit" msg="options_fit"></option>
+              <option value="stretch" msg="options_stretch"></option>
+              <option value="tile" msg="options_tile"></option>
+              <option value="center" msg="options_center"></option>
+              <option value="parallax" msg="options_parallax_option"></option>
+
+            </select></label>
+
+            <div id="bg_parallaxDepthContainer">
+              <label>
+                <span msg="options_parallax_strength"></span>
+                <input type="range" sname="sd.background_parallax_depth" min="0" max="100" id="bg_parallaxDepth">
+                <span class="value"></span>
+              </label>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div id="bg_UrlContainer">
+
+              <div class="backgroundSourceType">
+                <!--<label><input type="radio" onclick="fvdSpeedDial.Options.refreshBgSource();fvdSpeedDial.Options.bgLoadAndPreview()" name="backgroundSource" value="url" sname="sd.background_source"><span msg="options_bg_from_url"></span></label><br/>-->
+                <input type="text" sname="sd.background_url" id="bg_imageURL"/>
+
+                <div id="backgroundUploadButton" class="uploadButton" msg_target="title" msg="dlg_adddial_set_file">
+                  <input id="uploadBackgroundFile" type="file"/>
+                </div>
+
+                <br/>
+              </div>
+              <div class="backgroundSourceType">
+                <!--<label><input type="radio" onclick="fvdSpeedDial.Options.refreshBgSource();fvdSpeedDial.Options.bgLoadAndPreview()" sname="sd.background_source"  name="backgroundSource" value="theme"><span msg="options_bg_from_theme"></span></label>-->
+              </div>
+              <div id="containerBtnLoadAndPreview">
+                <button class="fvdButton withLoading" id="btnLoadAndPreview" loading="0"><span class="text" msg="options_load_and_preview"></span><div class="image"></div></button>
+              </div>
+
+            </div>
+
+
+          </fieldset>
+
+          <div id="bgRestoreDefaultContainer">
+            <button id="backgroundButtonRestoreDefault" class="fvdButton" msg="options_restore_default"></button>
+            <!--<button id="installThemesForChrome" class="fvdButton green" msg="options_bg_install_themes"></button>-->
+          </div>
+
+        </div><div class="settingsPage" id="fontsSettings">
+
+          <div class="pageTitle" msg="options_fonts_options"></div>
+
+          <div class="setsLine">
+
+            <fieldset class="subSet subSetMini">
+
+              <legend msg="options_title_for_dials"></legend>
+
+              <label><span msg="options_font_color"></span> <input type="text" class="color" sname="sd.text.cell_title.color"/></label><br/>
+              <label><span msg="options_font_size"></span> <select sname="sd.text.cell_title.size">
+              <option value="8">8px</option>
+              <option value="9">9px</option>
+              <option value="10">10px</option>
+              <option value="11">11px</option>
+              <option value="12">12px</option>
+              <option value="13">13px</option>
+              <option value="14">14px</option>
+              </select></label>
+              <label><input type="checkbox" sname="sd.text.cell_title.bolder"/><span msg="options_font_bolder"></span></label>
+
+
+            </fieldset>
+
+
+            <fieldset class="subSet subSetMini">
+
+              <legend msg="options_url_for_dials"></legend>
+
+              <label><span msg="options_font_color"></span> <input type="text" class="color" sname="sd.text.cell_url.color"/></label><br/>
+              <label><span msg="options_font_size"></span> <select sname="sd.text.cell_url.size">
+              <option value="8">8px</option>
+              <option value="9">9px</option>
+              <option value="10">10px</option>
+              <option value="11">11px</option>
+              <option value="12">12px</option>
+              <option value="13">13px</option>
+              <option value="14">14px</option>
+              </select></label>
+              <label><input type="checkbox" sname="sd.text.cell_url.bolder"/><span msg="options_font_bolder"></span></label>
+
+
+            </fieldset>
+
+          </div>
+
+
+          <div class="setsLine">
+
+            <fieldset class="subSet subSetMini">
+
+              <legend msg="options_text_in_list_mode"></legend>
+
+              <label><span msg="options_font_color"></span> <input type="text" class="color" sname="sd.text.list_elem.color"/></label> <div id="helpListElemColor" class="sdIcon question clickable"></div><br/>
+              <label><span msg="options_font_size"></span> <select sname="sd.text.list_elem.size">
+              <option value="8">8px</option>
+              <option value="9">9px</option>
+              <option value="10">10px</option>
+              <option value="11">11px</option>
+              <option value="12">12px</option>
+              <option value="13">13px</option>
+              <option value="14">14px</option>
+              </select></label>
+              <label><input type="checkbox" sname="sd.text.list_elem.bolder"/><span msg="options_font_bolder"></span></label>
+
+
+            </fieldset>
+
+
+            <fieldset class="subSet subSetMini">
+
+              <legend msg="options_show_title_url_list_mode"></legend>
+
+              <label><span msg="options_font_color"></span> <input type="text" class="color" sname="sd.text.list_show_url_title.color"/></label> <div id="helpShowUrlTitleColor" class="sdIcon question clickable"></div><br/>
+              <label><span msg="options_font_size"></span> <select sname="sd.text.list_show_url_title.size">
+              <option value="8">8px</option>
+              <option value="9">9px</option>
+              <option value="10">10px</option>
+              <option value="11">11px</option>
+              <option value="12">12px</option>
+              <option value="13">13px</option>
+              <option value="14">14px</option>
+              </select></label>
+              <label><input type="checkbox" sname="sd.text.list_show_url_title.bolder"/><span msg="options_font_bolder"></span></label>
+
+
+            </fieldset>
+
+          </div>
+
+
+          <div class="setsLine">
+              
+            <fieldset class="subSet">
+                <legend msg="options_group_font"></legend>
+                
+                <span class="color-column-1" msg="active"></span>
+                <span class="color-column-2" msg="passive"></span>
+                <br/>
+                
+                <label> <span msg="options_group_background_color" class="color-width"></span>
+                    <input type="text" id="groupActiveBgColor" class="color color-two" sname="sd.text.group_active_bg.color" />
+                </label>
+                <label>
+                    <input type="text" id="groupBgColor" class="color color-two" sname="sd.text.group_bg.color" />
+                </label>
+                <br/>
+                <label><span msg="options_group_color"></span>
+                    <input type="text" id="groupActiveFontColor" class="color color-two" sname="sd.text.group_active_font.color" />
+                </label>
+                <label>
+                    <input type="text" id="groupFontColor" class="color color-two" sname="sd.text.group_font.color" />
+                </label>
+                <br/>
+              <label class="label-size"><span msg="options_font_size"></span> <select sname="sd.text.group_font.size">
+              <option value="8">8px</option>
+              <option value="9">9px</option>
+              <option value="10">10px</option>
+              <option value="11">11px</option>
+              <option value="12">12px</option>
+              <option value="13">13px</option>
+              <option value="14">14px</option>
+              </select></label>
+              <label class="label-bolder"><input type="checkbox" sname="sd.text.group_font.bolder"/><span msg="options_font_bolder"></span></label>
+
+
+            </fieldset>
+
+            <fieldset class="subSet subSetMini">
+
+              <legend msg="options_list_links"></legend>
+
+              <label><span msg="options_font_color"></span> <input type="text" class="color" sname="sd.text.list_link.color"/></label> <div id="helpTextListLinkColor" class="sdIcon question clickable"></div><br/>
+              <label><span msg="options_font_size"></span> <select sname="sd.text.list_link.size">
+              <option value="8">8px</option>
+              <option value="9">9px</option>
+              <option value="10">10px</option>
+              <option value="11">11px</option>
+              <option value="12">12px</option>
+              <option value="13">13px</option>
+              <option value="14">14px</option>
+              </select></label>
+                <label><input type="checkbox" sname="sd.text.list_link.bolder"/><span msg="options_font_bolder"></span></label>
+
+            </fieldset>
+
+          </div>
+
+
+          <br clear="all"/>
+
+          <div id="restoreDefaultFontsContainer">
+
+            <button id="fontsButtonRestoreDefault" class="fvdButton" msg="options_restore_default"></button>
+
+          </div>
+
+        </div><div data-no-buttons="1" class="settingsPage" id="syncSettings">
+          <iframe src="/install-eversync/index.html" class="eversync-install-frame"></iframe>
+        </div><div class="settingsPage" id="poweroffSettings">
+
+          <div class="pageTitle" msg="options_poweroff_options"></div>
+
+          <div class="poweroffDesc" >
+            <div msg="options_poweroff_tab_desc_1"></div>
+            <div msg="options_poweroff_tab_desc_2"></div>
+            <div msg="options_poweroff_tab_desc_3" class="small"></div>
+          </div>
+
+          <div class="tabs" id="powerOffTabs">
+
+            <div class="tabsHead">
+              <span class="tabHead" msg="options_poweroff_tab_main_title"></span>
+              <span class="tabHead" id="poweroffTabChangePassCode" msg="options_poweroff_tab_change_pass_title"></span>
+              <span class="tabHead" id="poweroffTabRestorePassCode" msg="options_poweroff_tab_restore_title"></span>
+            </div>
+            <div class="tabsData">
+
+              <div class="tabContent tabCreate">
+
+                <fieldset class="createPassCode">
+                  <legend msg="options_poweroff_create_passcode"></legend>
+
+                  <div class="error" id="createPassCodeError"></div>
+
+                  <table>
+
+                    <tr>
+                      <td msg="options_poweroff_passcode"></td>
+                      <td><input enteron="createPassCode" type="password" id="passcodeValue"></td>
+                    </tr>
+
+                    <tr>
+                      <td msg="options_poweroff_repeat_passcode"></td>
+                      <td><input enteron="createPassCode" type="password" id="repeatPasscodeValue"></td>
+                    </tr>
+
+                    <tr>
+                      <td msg="options_poweroff_email"></td>
+                      <td><input enteron="createPassCode" type="text" id="reserveEmailValue"></td>
+                    </tr>
+
+                    <tr>
+                      <td></td>
+                      <td>
+                        <button class="fvdButton" id="createPassCode" msg="options_poweroff_create_passcode_button"></button>
+                      </td>
+                    </tr>
+
+                  </table>
+
+                </fieldset>
+
+                <div class="setuped">
+
+                  <div id="currentPassCodeEmail"></div>
+
+                  <span msg="options_poweroff_passcode_setuped"></span>
+
+                  <div>
+                    <span msg="options_poweroff_idle_timeout_enable"></span>
+                    <select sname="poweroff.idle.interval" id="poweroff_idle_timeout">
+                      <option value="0" msg="newtab_none"></option>
+                      <option value="180" msg="options_poweroff_3min"></option>
+                      <option value="300" msg="options_poweroff_5min"></option>
+                      <option value="600" msg="options_poweroff_10min"></option>
+                      <option value="900" msg="options_poweroff_15min"></option>
+                      <option value="1800" msg="options_poweroff_30min"></option>
+                      <option value="3600" msg="options_poweroff_60min"></option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="tabContent">
+
+                <fieldset>
+                  <legend msg="options_poweroff_change_passcode"></legend>
+
+                  <div class="error" id="changePassCodeError"></div>
+
+                  <table>
+
+                    <tr>
+                      <td msg="options_poweroff_old_passcode"></td>
+                      <td><input enteron="changePassCode" type="password" id="oldPasscodeValue"></td>
+                    </tr>
+
+                    <tr>
+                      <td msg="options_poweroff_new_passcode"></td>
+                      <td><input enteron="changePassCode" type="password" id="newPasscodeValue"></td>
+                    </tr>
+
+                    <tr>
+                      <td></td>
+                      <td>
+                        <button class="fvdButton" id="changePassCode" msg="options_poweroff_change_passcode_button"></button>
+                      </td>
+                    </tr>
+
+                  </table>
+
+                  <div>
+                    <span msg="options_poweroff_star_desc"></span>
+                  </div>
+
+                </fieldset>
+
+              </div>
+
+              <div class="tabContent restorePassCode">
+
+                <button class="fvdButton" id="resorePassCode" msg="options_poweroff_restore_button"></button>
+
+              </div>
+
+            </div>
+          </div>
+
+          <div class="poweroffHelpMessage">
+
+            <img src="/images/options/poweroff_help.png">
+
+          </div>
+
+        </div><div class="settingsPage" id="widgetsSettings">
+
+          <div class="pageTitle" msg="options_widgets_options"></div>
+
+          <div>
+            <label class="bold">
+              <input type="checkbox" sname="widgets.enabled">
+              <span msg="options_widgets_enabled_title"></span>
+            </label>
+          </div>
+
+          <fieldset>
+
+            <legend msg="options_widgets_opacity_title"></legend>
+
+            <input type="range" sname="widgets.opacity" min="0" max="100" id="widgetsPanelOpacity">
+
+            <div id="opacityMarks"><span class="left">0%</span><span class="center">50%</span><span class="right">100%</span></div>
+
+          </fieldset>
+
+          <fieldset>
+
+            <legend msg="options_widgets_bgcolor_title"></legend>
+
+            <input type="text" class="color" sname="widgets.bgcolor"/>
+
+          </fieldset>
+
+          <fieldset id="widgetsAutoScrollSpeedFieldset">
+
+            <legend>
+
+              <label class="cbLabel">
+                <input type="checkbox" id="enableWidgetsAutoscroll" sname="widgets.autoscroll">
+                <b msg="options_enable_widgets_autoscroll"></b>
+              </label>
+
+            </legend>
+
+            <div class="content">
+
+              <div msg="options_widgets_autoscroll_speed"></div>
+
+              <input type="range" sname="widgets.autoscroll.speed" min="1" max="10" id="widgetsAutoScrollSpeed">
+
+              <div id="opacityMarks"><span class="left">1</span><span class="center">5</span><span class="right">10</span></div>
+
+            </div>
+
+          </fieldset>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+    <div class="bottomButtons">
+      <div id="applyButton">
+        <button class="fvdButton main withLoading" loading="0" id="applyChangesButton"><span class="text" msg="options_apply_changes"></span><div class="image"></div></button>
+      </div>
+
+      <div id="closeButton" active="1">
+        <button class="fvdButton" id="buttonCloseButton"><span class="text" msg="options_close"></span></button>
+      </div>
+    </div>
+
+    <div id="premiumForShareButton">
+      <button class="fvdButton green" id="buttonpremiumForShareButton"><i></i><span class="text" msg="options_premium_for_share"></span></button>
+    </div>
+
+    <div id="startDonateButton">
+      <button class="fvdButton green" id="buttonStartDonateButton"><i></i><span class="text" msg="options_start_donate"></span></button>
+    </div>
+
+  </div>
+
+
+</body>
+
+</html>

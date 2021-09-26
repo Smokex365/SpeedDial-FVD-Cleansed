@@ -1,0 +1,725 @@
+<!doctype html>
+<html>
+
+  <head>
+    <script src="extras/log.js"></script>
+
+    <title msg="newtab_title"></title>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+    <link rel="stylesheet" href="themes/css.css">
+    <link rel="stylesheet" href="styles/sd_icons.css">
+    <link rel="stylesheet" href="styles/biginfodialog.css">
+    <link rel="stylesheet" href="styles/historycomplete.css">
+    <link rel="stylesheet" href="styles/newtab/style.css">
+    <link rel="stylesheet" href="styles/newtab/speeddial.css">
+    <link rel="stylesheet" href="styles/newtab/buttons.css">
+    <link rel="stylesheet" href="styles/newtab/appspanel.css">
+    <link rel="stylesheet" href="styles/newtab/widgetspanel.css">
+    <link rel="stylesheet" href="styles/newtab/introduction.css">
+    <link rel="stylesheet" href="styles/dialogs.css">
+    <link rel="stylesheet" href="styles/tooltip.css">
+    <link rel="stylesheet" href="styles/newtab/mods/parallax-offer-message.css">
+    <link rel="stylesheet" href="styles/newtab/mods/ondialsearch.css">
+    <link rel="stylesheet" href="styles/newtab/mods/dial-search.css">
+    <link rel="stylesheet" href="styles/newtab/mods/amazon-info.css">
+    <link rel="stylesheet" href="styles/newtab/mods/bottom-text.css">
+    <link rel="stylesheet" href="fonts/pacifico.css">
+    <link rel="stylesheet" href="js/newtab/dialogs/simple-dialog.css">
+    <link rel="stylesheet" href="js/newtab/contextmenu/skins/dhtmlxmenu_dhx_skyblue.css">
+    <link rel="stylesheet" href="styles/controls/scroll.css">
+    <link rel="stylesheet" href="" id="themeCSS">
+    <script src="js/_external/broadcaster.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/namespace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/log.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/debug.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/draggability.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/packery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/parallax.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/uniclick.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/const.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/storage/tab.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/config.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/tooltip.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/thumbmaker/tab.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/dialogs.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/historycomplete.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/localizer.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/prefs.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/sync/tab.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/poweroff.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/userinfo.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/premiumforshare.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/capture/tab.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/apps.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/introduction.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/widgets.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/widgets/builder.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/speeddial.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/speeddial/draganddrop.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/speeddial/builder.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/speeddial_misc.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/dropdown.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/autocompleteplus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/contextmenus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/script.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/draglists.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/background.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/css.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/poweroffclient.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/scrolling.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/premiumforshare.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/searchoverlay.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/thumbmanager/tab.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/dialogs/simple-dialog.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/contextmenu/dhtmlxcommon.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/contextmenu/dhtmlxmenu.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/contextmenu/ext/dhtmlxmenu_ext.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/controls/index.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/controls/scroll.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/shortcut.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/ad.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/ondialsearch-base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/ondialsearch.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/parallax-offer-message.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/dial-search.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/amazon-info.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/gearbest-url.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/amazon-url.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/mods/bottom-text.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/light_collapsed_message.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/search.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/newtab/remotead.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/aes.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/speechify.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/_external/fix_input_number.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/templates.js" type="text/javascript" charset="utf-8"></script>  </head>
+
+  <body loaded="0">
+
+    <div id="test3d"></div>
+
+    <div id="center-screen-notification">
+      <div class="notification-message">
+
+      </div>
+    </div>
+
+    <div class="popupOptions" id="speedDialOptions">
+      <div class="content">
+        <div>
+          <input type="checkbox" id="enableSpeedDial" value="1" class="setting" stype="bool" sname="sd.enable_top_sites" confirm="1" />
+          <label for="enableSpeedDial">
+            <span msg="newtab_enable_speed_dial"></span>
+          </label>
+          <span for="enableSpeedDial" class="confirm">
+            <span msg="newtab_sure"></span>
+            <span msg="newtab_yes" id="enableSpeedDial_yes" class="option"></span> /
+            <span msg="newtab_no" id="enableSpeedDial_no" class="option"></span>
+          </span>
+        </div>
+        <div>
+          <input type="checkbox" id="defaultSpeedDial" value="1"/> <label for="defaultSpeedDial"><span msg="newtab_default"></span></label>
+        </div>
+        <div>
+          <span msg="newtab_max_groups"></span> <input type="text" class="setting" id="maxGroupsSpeedDial" stype="int" sname="sd.all_groups_limit_dials" value="" max="50"/>
+        </div>
+        <div>
+          <fieldset>
+            <legend><span msg="newtab_thumbnails"></span></legend>
+            <!--
+            <div><input type="radio" name="thumbsSpeedDial" id="thumbsSpeedDialBig" value="big" class="setting" stype="string" sname="sd.thumbs_type"/> <label for="thumbsSpeedDialBig"><span msg="newtab_big"></span></label></div>
+            <div><input type="radio" name="thumbsSpeedDial" id="thumbsSpeedDialMedium" value="medium" class="setting" stype="string" sname="sd.thumbs_type"/> <label for="thumbsSpeedDialMedium"><span msg="newtab_medium"></span></label></div>
+            <div><input type="radio" name="thumbsSpeedDial" id="thumbsSpeedDialSmall" value="small" class="setting" stype="string" sname="sd.thumbs_type"/> <label for="thumbsSpeedDialSmall"><span msg="newtab_small"></span></label></div>-->
+            <div><input type="radio" name="thumbsSpeedDial" id="thumbsSpeedDialCustom" value="custom" class="setting" stype="string" sname="sd.thumbs_type"/> <label for="thumbsSpeedDialCustom"><span msg="newtab_preview"></span></label></div>
+            <div><input type="radio" name="thumbsSpeedDial" id="thumbsSpeedDialList" value="list" class="setting" stype="string" sname="sd.thumbs_type"/> <label for="thumbsSpeedDialList"><span msg="newtab_list"></span></label></div>
+            <div>
+              <label for="speedDialColumns" id="speedDialColumnsTitle" msg="newtab_number_of_columns"></label>
+              <select id="speedDialColumns" class="setting" stype="string" sname="sd.top_sites_columns">
+              <option value="auto" msg="newtab_columns_auto"></option>
+              </select>
+            </div>
+          </fieldset>
+        </div>
+        <div>
+          <fieldset class="centered">
+            <legend><span msg="newtab_groups"></span></legend>
+            <div><label for="defaultGroupSpeedDial"><span msg="newtab_default_group"></span></label><select id="defaultGroupSpeedDial" class="setting" stype="string" sname="sd.default_group"></select></div>
+            <br/>
+            <div><button id="sdButtonManageGroups" class="fvdButton"><span msg="newtab_manage_groups"></span></button></div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="popupOptions" id="mostVisitedOptions">
+      <div class="content">
+        <div>
+          <input type="checkbox" id="enableMostVisited" value="1" class="setting" stype="bool" confirm="1" sname="sd.enable_most_visited"/> <label for="enableMostVisited"><span msg="newtab_enable_most_visited"></span></label>
+
+          <span for="enableMostVisited" class="confirm">
+            <span msg="newtab_sure"></span>
+            <span msg="newtab_yes" id="enableMostVisited_yes" class="option"></span> /
+            <span msg="newtab_no" id="enableMostVisited_no" class="option"></span>
+          </span>
+        </div>
+        <div>
+          <input type="checkbox" id="defaultMostVisited" value="1"/> <label for="defaultMostVisited"><span msg="newtab_default"></span></label>
+        </div>
+        <div>
+          <span msg="newtab_show_last"></span><input type="text" id="showLastMostVisited" value="" class="setting" stype="int" sname="sd.max_most_visited_records"  max="100" maxlength="3" />
+        </div>
+        <div>
+          <fieldset>
+            <legend><span msg="newtab_thumbnails"></span></legend>
+            <!--
+            <div><input type="radio" name="thumbsMostVisited" id="thumbsMostVisitedBig" value="big" class="setting" stype="string" sname="sd.thumbs_type_most_visited"/> <label for="thumbsMostVisitedBig"><span msg="newtab_big"></span></label></div>
+            <div><input type="radio" name="thumbsMostVisited" id="thumbsMostVisitedMedium" value="medium" class="setting" stype="string" sname="sd.thumbs_type_most_visited"/> <label for="thumbsMostVisitedMedium"><span msg="newtab_medium"></span></label></div>
+            <div><input type="radio" name="thumbsMostVisited" id="thumbsMostVisitedSmall" value="small" class="setting" stype="string" sname="sd.thumbs_type_most_visited"/> <label for="thumbsMostVisitedSmall"><span msg="newtab_small"></span></label></div>-->
+            <div><input type="radio" name="thumbsMostVisited" id="thumbsMostVisitedCustom" value="custom" class="setting" stype="string" sname="sd.thumbs_type_most_visited"/> <label for="thumbsMostVisitedCustom"><span msg="newtab_preview"></span></label></div>
+            <div><input type="radio" name="thumbsMostVisited" id="thumbsMostVisitedList" value="list" class="setting" stype="string" sname="sd.thumbs_type_most_visited"/> <label for="thumbsMostVisitedList"><span msg="newtab_list"></span></label></div>
+
+            <div>
+              <label for="mostVisitedColumns" id="mostVisitedColumnsTitle" msg="newtab_number_of_columns"></label>
+              <select id="mostVisitedColumns" class="setting" stype="string" sname="sd.most_visited_columns">
+              <option value="auto" msg="newtab_columns_auto"></option>
+              </select>
+            </div>
+          </fieldset>
+        </div>
+        <div>
+          <fieldset>
+            <legend><span msg="newtab_synchronization"></span></legend>
+            <div align="center"><span  msg="newtab_cache_life_time"></span><select class="setting" stype="string" sname="sd.most_visited_cache_life_time" id="cacheLifeTimeMostVisited">
+              <option value="3600000">1</option>
+              <option value="7200000">2</option>
+              <option value="18000000">5</option>
+              <option value="36000000">10</option>
+            </select>&nbsp;<span msg="newtab_hours"></span>
+            </div>
+
+            <div id="doneflushMostVisitedCache" class="operationDone"><span msg="newtab_done"></span></div>
+
+            <div align="center"><button id="mostvisitedButtonSync" class="fvdButton" msg="newtab_sync_now"></button></div>
+          </fieldset>
+        </div>
+        <div id="doneRestoreDeleted" class="operationDone"><span msg="newtab_done"></span></div>
+        <div class="restoreDeleted"><button id="mostvisitedButtonRestoreRemoved" class="fvdButton"><span msg="newtab_restore_removed"></span></button></div>
+
+      </div>
+    </div>
+
+    <div class="popupOptions" id="recentlyClosedOptions">
+      <div class="content">
+        <div>
+          <input type="checkbox" id="enableRecentlyClosed" value="1" class="setting" confirm="1" stype="bool" sname="sd.enable_recently_closed"/> <label for="enableRecentlyClosed"><span msg="newtab_enable_recently_closed"></span></label>
+
+          <span for="enableRecentlyClosed" class="confirm">
+            <span msg="newtab_sure"></span>
+            <span msg="newtab_yes" id="enableRecentlyClosed_yes" class="option"></span> /
+            <span msg="newtab_no" id="enableRecentlyClosed_no" class="option"></span>
+          </span>
+        </div>
+        <div>
+          <input type="checkbox" id="defaultRecentlyClosed" value="1"/> <label for="defaultRecentlyClosed"><span msg="newtab_default"></span></label>
+        </div>
+        <div>
+          <span msg="newtab_show_last"></span><input type="text" id="showLastRecentlyClosed" value="" class="setting" stype="int" sname="sd.max_recently_closed_records"  max="100"  maxlength="3"/>
+        </div>
+        <div>
+          <label for="recentlyClosedColumns" id="recentlyClosedColumnsTitle" msg="newtab_number_of_columns"></label>
+          <select id="recentlyClosedColumns" class="setting" stype="string" sname="sd.recentlyclosed_columns">
+          <option value="auto" msg="newtab_columns_auto"></option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="popupOptions" id="canTurnOfNewTabPopup">
+      <div class="content">
+        <div><span msg="newtab_can_turn_off_newtab_msg"></span> (<a href="/options.html#display-in-new-tab" msg="newtab_can_turn_off_newtab_opt_app"></a>)</div>
+
+        <div class="center cbContainer">
+          <label><input id="sdCbCanTurnOffNewTabPopup" type="checkbox"><span msg="newtab_can_turn_off_newtab_got_it"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="popupOptions" id="offerAdjustBgToTheme">
+      <div class="content">
+        <div><span msg="newtab_offer_theme_bg"></span></div>
+
+        <div id="themeBackgroundAdjustPreviewContainer">
+          <img id="themeBackgroundAdjustPreview" src=""/>
+          <div class="loading">
+            <div class="squaresLoading"></div>
+            <span msg="newtab_offer_theme_download"></span>
+          </div>
+        </div>
+
+        <div class="center">
+          <button id="applyThemeBg" class="fvdButton green"><span msg="newtab_apply_theme_bg"></button>
+          <button id="cancelThemeBg" class="fvdButton"><span msg="newtab_cancel_theme_bg"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- rate message -->
+    <div class="popupOptions" id="rateMessage">
+      <div class="content">
+        <div class="click linkedText bold center" msg="newtab_rate_fvd_speed_dial"></div>
+        <div class="click linkedText" msg="newtab_rate_text"></div>
+        <div class="click linkedText center" msg="newtab_rate_appreciate"></div>
+        <div class="click stars"></div>
+        <div class="migrateDontShowMessage"><label><span msg="newtab_do_not_display_migrate"></span><input type="checkbox" id="sdCBDontDisplayMigrateMessage"/></label></div>
+      </div>
+    </div>
+
+    <!-- themes message -->
+    <div class="popupOptions mainPopupMessage" id="themesInstallMessage">
+      <div class="content">
+        <div class=" bold center" msg="newtab_themes_message_head"></div>
+        <div class="center desc" msg="newtab_themes_message_text"></div>
+        <div class="center buttonContainer">
+          <!--<a class="fvdButton green" msg="newtab_themes_message_install" target="_blank" href="https://fvdmedia.com/to/s/chrome_thm/"></a>-->
+        </div>
+        <div class="migrateDontShowMessage"><label><span msg="newtab_do_not_display_migrate"></span><input type="checkbox" id="sdDontDisplayThemesMessage"/></label></div>
+      </div>
+    </div>
+
+    <div id="speedDialTop">
+
+
+      <div id="searchBar">
+        <div class="activeContent">
+          <!--
+          <svg width="380" height="95" class="active-content-background">
+            <linearGradient id="active-content-fill" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="black" stop-opacity="1"/>
+              <stop offset="100%" stop-color="black" stop-opacity="0.8"/>
+            </linearGradient>
+            <path d="M2 2
+                     h 375 v 82 q 0 5 -5 5 h -25 q -5 0 -5 -5 v -12 q 0 -3 -3 -3 h -322 q -15 0 -15 -15 Z" fill="url(#active-content-fill)"
+               stroke="#e4e4e4" stroke-width="3"/>
+          </svg>
+          -->
+          <div class="dialIcons">
+            <div id="buttonSpeedDial" class="buttonBlock" expanded="1" active="0">
+              <div id="sdSetDisplayTypeSpeedDial" class="buttonBig speedDial rise" ></div>
+              <div class="buttonBig speedDial fade"></div>
+              <div class="smallButtons">
+                <div id="speedDialExpand" class="buttonSmall expand" msg="newtab_expand_all" msg_target="title"></div>
+                <div id="speedDialHide" class="buttonSmall unexpand" msg="newtab_hide_all" msg_target="title"></div>
+
+                <div id="sdOpenFastOptions" class="buttonSmall options" msg="newtab_options" msg_target="title"></div>
+              </div>
+              <div class="subText"></div>
+            </div>
+            <div id="buttonMostVisited" class="buttonBlock" expanded="1" active="0">
+              <div id="sdSetDisplayTypeMostVisited" class="buttonBig mostVisited rise"></div>
+              <div class="buttonBig mostVisited fade"></div>
+              <div class="smallButtons">
+                <div id="mostVisitedExpand" class="buttonSmall expand" msg="newtab_expand_all" msg_target="title"></div>
+                <div id="mostVisitedHide" class="buttonSmall unexpand" msg="newtab_hide_all" msg_target="title"></div>
+
+                <div id="mostVisitedOpenFastOptions" class="buttonSmall options" msg="newtab_options" msg_target="title"></div>
+              </div>
+              <div class="subText"></div>
+            </div>
+            <div id="buttonRecentlyClosed" class="buttonBlock" expanded="1" active="0">
+              <div class="buttonBig recentlyClosed fade"></div>
+              <div id="sdSetDisplayTypeRecentlyClosed" class="buttonBig recentlyClosed rise"></div>
+              <div class="smallButtons">
+                <div id="recentlyClosedExpand" class="buttonSmall expand" msg="newtab_expand_all" msg_target="title"></div>
+                <div id="recentlyClosedHide" class="buttonSmall unexpand" msg="newtab_hide_all" msg_target="title"></div>
+                <div id="recentlyClosedOpenFastOptions" class="buttonSmall options" msg="newtab_options" msg_target="title"></div>
+              </div>
+              <div class="subText"></div>
+            </div>
+
+            <div msg="newtab_sync_button" msg_target="title" class="buttonBlock" id="buttonSync" active="0">
+              <div class="buttonBig sync fade"></div>
+              <div class="buttonBig sync rise"></div>
+            </div>
+
+            <div msg="newtab_global_options" msg_target="title" class="buttonBlock" id="buttonSettings" active="0">
+              <div class="buttonBig settings fade"></div>
+              <div class="buttonBig settings rise"></div>
+            </div>
+          </div>
+
+          <div class="rightMenu">
+
+            <div class="powerOff" msg="newtab_poweroff" msg_target="title"></div>
+            <div class="showHide" msg="newtab_show_hide" msg_target="title"></div>
+
+          </div>
+
+          <div class="menuBottom">
+            <div class="button" id="fastMenuToggleButton">
+              <span class="text active">
+              ›
+              </span>
+              <span class="text passive">
+              ‹
+              </span
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <div id="cursorScrollTopHint" active="0">
+    </div>
+
+    <div id="speedDialWrapper">
+      <!-- light collapsed message appears if other messages in speedDialCollapsedContent is disabled -->
+      <div id="lightCollapsedMessage">
+        <div class="round-close-button close-button"></div>
+        <span msg="newtab_light_collapsed_message_text"></span>
+      </div>
+
+      <div id="speedDialCollapsedContent">
+
+        <div class="collapsedMessagePoweroffDisabled collapsedMessageContainer">
+
+          <span msg="newtab_dblclick_to_expand"></span>
+
+          <div class="aboutPowerOff">
+            <span class="aboutPowerOffDesc" msg="newtab_poweroff_desc"></span>
+            ( <span  class="aboutPowerOffFeature" msg="newtab_poweroff_feature"></span> )
+          </div>
+
+          <div class="dontShowAgain">
+            <label><input id="cbNotDisplayCollapsedWithPowerOff" type="checkbox"><b msg="newtab_poweroff_dont_show_again"></b></label>
+          </div>
+
+        </div>
+
+        <div class="collapsedMessagePoweroffEnabled collapsedMessageContainer">
+
+          <span msg="newtab_dblclick_to_expand"></span>
+
+          <div class="dontShowAgain">
+            <label><input id="cbNotDisplayCollapsedWithoutPowerOff" type="checkbox"><b msg="newtab_poweroff_dont_show_again"></b></label>
+          </div>
+
+        </div>
+
+        <div class="collapsedMessagePoweroffForm collapsedMessageContainer">
+
+          <input type="password" id="poweroffPassCode">
+
+          <div>
+            <button msg="newtab_poweroff_enterpasscode" id="enterPowerOffPassCode" class="fvdButton"></button>
+          </div>
+
+
+        </div>
+
+      </div>
+
+      <div id="speedDialGroupsWrapper">
+
+        <div id="groupsWidthSetter">
+          <div id="groupsBoxContainer">
+            <div id="groupsBox">
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="dial-search-container" active="1">
+        <div class="dial-search-input-container">
+          <div class="dial-search-input">
+            <div class="dial-search-icon"></div>
+            <input type="text" id="dial-search-query" msg_target="placeholder" msg="newtab_dials_search_input_placeholder">
+            <div class="dial-search-reset-icon"></div>
+          </div>
+        </div>
+        <div class="dial-search-not-found">
+          <div class="dial-search-not-found-block">
+            <div msg="newtab_dials_search_no_match" class="dial-search-no-match-message"></div>
+            <div>
+              <a href="" msg="newtab_dials_search_try_on_web"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="searchFormContainer" class="highlight">
+
+        <form style="display:none" class="searchForm" id="cse-search-box">
+          <table>
+            <tr>
+              <td>
+                <div id="searchLogo" class="searchLogo"></div>
+                <div id="searchMenu" class="searchMenu">
+                  <ul id="searchList"></ul>
+                </div>
+              </td>
+              <td>
+                <div class="searchField">
+                  <input msg="newtab_search_input_placeholder" msg_target="placeholder" type="fvdTextBar" id="q" name="q" google="true" autocomplete="off"/>
+                  <input type="hidden" name="cx" id="cx" />
+                  <input name="cof" value="FORID:10" type="hidden" />
+                  <input name="ie" value="UTF-8" type="hidden" />
+                </div>
+              </td>
+              <td>
+                <div class="search-button">
+                  <button>
+                    <span msg="newtab_search_on_google"></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </form>
+
+      </div>
+
+
+      <div id="speedDialContent">
+        <div id="listViewTypeSelector" hidden="true">
+          <label><input id="sdCbSetListViewTypeTitle" type="radio" name="listViewType" value="title"/><span msg="newtab_listview_title"/></label>
+          <label><input id="sdCbSetListViewTypeUrl" type="radio" name="listViewType" value="url"/><span msg="newtab_listview_url"/></label>
+        </div>
+
+        <!--DIALS GOES HERE-->
+
+        <div id="cellsContainer" class="dataContainer">
+
+        </div>
+
+        <div id="listContainerParent">
+
+          <div id="listNoItemsToDisplay" msg="newtab_listview_noitems" hidden="true" class="textother"></div>
+
+          <div id="listContainer" class="dataContainer">
+          </div>
+
+          <div id="speeddialListViewMenu" class="listViewMenu" hidden="true">
+            <span id="sdListMenuAddDial" msg="newtab_listviewmenu_add_dial" class="link"></span>
+          </div>
+
+          <div id="mostvisitedListViewMenu" class="listViewMenu" hidden="true">
+            <span id="mostVisitedListMenuOpenAllLinks" msg="newtab_listviewmenu_open_all" class="link"></span>
+            <span id="mostVisitedListMenuRemoveAllLinks" msg="newtab_listviewmenu_delete_all" class="link delete"></span>
+          </div>
+
+          <div id="recentlyclosedListViewMenu" class="listViewMenu" hidden="true">
+            <span id="recentlyClosedListMenuOpenAllLinks" msg="newtab_listviewmenu_open_all" class="link"></span>
+            <span id="recentlyClosedListMenuRemoveAllLinks" msg="newtab_listviewmenu_delete_all" class="link delete"></span>
+          </div>
+
+        </div>
+
+        <div id="no3dmessage" hidden="true">
+          <div class="title" msg="newtab_ops_3d_unavailable"></div>
+          <img src="/images/3dexample.png">
+
+          <div class="manual">
+            <div class="title" msg="newtab_3d_how_to_fix"></div>
+
+            <ol>
+
+              <li>
+                <span msg="newtab_3d_install_new_drivers"></span>
+              </li>
+              <li>
+                <span>
+                  <span class="title" msg="newtab_3d_restart"></span>
+                  <span msg="newtab_3d_restart_continue"></span>
+                </span>
+              </li>
+              <li>
+                <span msg="newtab_3d_last_step"></span>
+              </li>
+
+            </ol>
+
+          </div>
+
+          <div class="buttonContainer">
+            <button id="no3dSwtichToStandard" msg="newtab_switch_to_standard" class="fvdButton main"></button>
+          </div>
+        </div>
+
+        <!--DIALS END-->
+
+
+      </div>
+
+    </div>
+
+    <span style="display:none">
+      <span msg="newtab_all_group_title"></span>
+    </span>
+
+    <div id="changeBackgroundBlock" class="textColorOther" msg="newtab_change_background"></div>
+
+    <div class="movingPanel" id="appsPanel">
+
+      <button class="scrollButton top">
+         ›
+      </button>
+
+      <button class="scrollButton bottom">
+        ‹
+      </button>
+
+      <div class="preAppsContainer">
+
+        <div class="appsContainer">
+
+        </div>
+
+      </div>
+
+      <button id="appsPanelOpenButton" class="openButton" msg="newtab_apps_panel_open_desc" msg_target="title">
+        ›
+      </button>
+
+    </div>
+
+    <div class="movingPanel" id="widgetsPanel">
+
+      <div class="preWidgetsContainer">
+
+        <div class="widgetsContainer">
+
+        </div>
+
+        <div class="widgetsNotFoundMessage">
+
+          <div class="test" msg="newtab_widgets_panel_not_found"></div>
+          <img src="images/newtab/widgets/curved_arrow.png">
+
+        </div>
+
+      </div>
+        
+        <!--
+      <button msg="newtab_widgets_panel_open_desc" msg_target="title" id="widgetsPanelOpenButton" class="openButton">
+        <span></span>
+      </button>
+        -->
+      <div class="actionButtons emboss">
+
+        <div class="add"></div>
+        <div class="lock" msg_target="title" msg="newtab_widgets_panel_move_or_delete"></div>
+        <div class="settings"></div>
+
+      </div>
+
+    </div>
+
+    <div id="widgetPanelBgOverlay">
+
+      <div class="bg"></div>
+      <div class="bg2"></div>
+
+      <div class="content">
+      </div>
+
+    </div>
+
+    <div id="bottomTextContainer">
+      <div>
+        <a href="https://nimbusweb.me/terms-and-conditions.php" target="_blank" msg="newtab_bottom_text_terms_of_use"></a>
+        &nbsp;
+        <a href="https://nimbusweb.me/privacy.php" target="_blank" msg="newtab_bottom_text_privacy_policy"></a>
+      </div>
+    </div>
+
+    <div id="introductionOverlay" class="bigInfoDialogOverlay">
+
+      <div id="initializationDialog">
+        <div class="init-dialog-content" msg="newtab_initialization_message">
+
+        </div>
+      </div>
+
+      <div id="introductionDialog" class="bigInfoDialog">
+
+        <div class="header">
+          <span msg="newtab_introduction_title"></span>
+          <div class="close"></div>
+        </div>
+
+        <div class="body">
+          <div class="left">
+            <div class="slideTitle"></div>
+            <div class="slideText"></div>
+            <div class="slideCheck disabled"></div>
+            <div class="slideBottom disabled"></div>
+          </div>
+          <div class="right">
+            <div class="imageContainer"></div>
+            <div class="step-content" step="2">
+              <div class="step-content-title" msg="newtab_introduction_slide3_title"></div>
+              <div class="mobile-stores-select">
+                <a class="app-store" value="appstore"></a>
+                <div msg="newtab_or"></div>
+                <a class="android-store" value="playstore"></a>
+                <a class="other" value="other"></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="buttons">
+          <button class="fvdButton prev" msg="newtab_introduction_button_prev"></button>
+          <button class="fvdButton next" msg="newtab_introduction_button_next"></button>
+          <button class="fvdButton start green" msg="newtab_introduction_button_start"></button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="searchOverlay" hidden="1">
+      <div id="searchOverlayForm">
+        <div class="logo-container">
+          <div class="searchOverlay-logo"></div>
+        </div>
+        <div class="searchField">
+          <input type="text" autocomplete="off" data-autocomplete-source="ebay">
+        </div>
+        <div class="search-button">
+          <button>
+            <span msg="newtab_search"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="premiumforshareOverflay">
+      <div id="premiumforshareDialog">
+        <iframe></iframe>
+      </div>
+    </div>
+
+    <div id="restoreCorruptedFilesOverlay" hidden="1">
+      <div class="restoreCorruptedFilesDialog">
+        <div class="restore-corrupted-icon"></div>
+        <div class="restore-corrupted-title" msg="newtab_restore_corrupted_files_title"></div>
+        <div class="restore-corrupted-msg" msg="newtab_restore_corrupted_files_msg1"></div>
+        <div class="restore-corrupted-msg" msg="newtab_restore_corrupted_files_msg2"></div>
+      </div>
+    </div>
+  </body>
+
+</html>

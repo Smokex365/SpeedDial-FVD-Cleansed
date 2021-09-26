@@ -1,0 +1,1180 @@
+*{
+  -webkit-user-select: none;
+}
+
+:focus {
+  outline:none;
+}
+
+html{
+  height: 100%;
+}
+
+body{
+  overflow-x: hidden;
+  margin: 0px;
+  height: 100%;
+}
+
+input{
+  -webkit-user-select: auto;
+}
+
+#speedDialWrapper{
+    
+}
+
+#speedDialContent{
+  font-size: 12px;
+  /*font-family: Tahoma;*/
+  -webkit-transition: 200ms ease opacity;
+
+  /*margin-top: 35px;*/
+}
+
+.dataContainer{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  position: relative;
+}
+
+#listContainerParent{
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+#listContainer{
+
+}
+
+
+#cellsContainer{
+
+
+
+}
+
+
+
+
+.newtabCell{
+
+  -webkit-transition-duration: 200ms;
+
+  position: absolute;
+  cursor: pointer;
+
+}
+
+
+#speedDialContent[enablemirrors="1"] .newtabCell[lastrow="1"] .body{
+  overflow: visible;
+  -webkit-box-reflect: below 30px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(48%, transparent), to(rgba(255,255,255,0.20)));
+}
+
+#speedDialContent .newtabCell[dragovergroup="1"]{
+  opacity: 0.2 !important;
+}
+
+.newtabCell[dragon="1"]{
+  z-index: 2;
+}
+
+.newtabCell[dragon="1"][insert_type="before"]{
+  margin-left: 50px;
+}
+
+.newtabCell[dragon="1"][insert_type="after"]{
+  margin-left: -50px;
+}
+
+/*
+.newtabCell[dragon="1"][origleft="1"]{
+  margin-left: -50px;
+}
+.newtabCell[dragon="1"][origleft="0"]{
+  margin-left: 50px;
+}
+.newtabCell[dragon="1"][origtop="1"]{
+  margin-top: -50px;
+}
+.newtabCell[dragon="1"][origtop="0"]{
+  margin-top: 50px;
+}
+*/
+
+.newtabCell[indrag="1"]{
+  -webkit-transition: 0ms;
+  /*-webkit-transform: none !important;*/
+  z-index: 3;
+  opacity: 1;
+}
+
+
+.newtabCell[flyAfterDrag="1"]{
+  z-index: 3;
+}
+
+
+.newtabCell[type="preview"]{
+  position: static;
+  margin-bottom: 40px;
+  cursor: auto;
+  opacity: 1;
+
+  margin-left:auto;
+  margin-right: auto;
+  width: 210px;
+  height: 131px;
+}
+
+.newtabCell[type="preview"] .body {
+  width: 210px;
+  height: 131px;
+}
+
+#cellsContainer > .newtabCell:hover{
+  opacity: 1;
+}
+
+#cellsContainer > .newtabCell[displayDialBg="false"]:hover{
+  margin-top: -5px;
+}
+
+
+
+
+.newtabCell .head {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 18px;
+  -webkit-transition-duration: 200ms;
+  max-width: 95%;
+    
+        
+    text-align: center; /* Task 1351 */
+}
+
+.newtabCell[notitle="1"] .head{
+  font-style:italic;
+}
+
+.newtabCell[indrag="1"] .head, .newtabCell[dragon="1"] .head{
+  opacity: 0;
+}
+
+.newtabCell .head img{
+  position: absolute;
+  max-width: 16px;
+  max-height: 16px;
+}
+
+.newtabCell .head span{
+  margin-left: 20px;
+    display: inline-block;
+}
+
+.newtabCell .body{
+  border-radius: 7px;
+  /*border: 1px solid #999;*/
+  background-color: #fff; 
+  /*background-color: rgba(50, 50, 50, 0.3); // Task #1387*/
+
+  overflow:hidden;
+  position: relative;
+}
+
+
+
+.newtabCell[type="mostvisited"] .body{
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-property: padding-bottom;
+}
+
+#cellsContainer > .newtabCell[type="mostvisited"]:hover .body{
+  padding-bottom: 30px;
+}
+
+#speedDialContent #cellsContainer > .newtabCell:hover .body, #speedDialContent .newtabCell[indrag="1"] .body{
+  /*background: -webkit-linear-gradient(top, #649ed4, #3676ac);*/
+  /*background-color: #3e7db3;*/
+
+}
+
+#speedDialContent #cellsContainer > .newtabCell:hover .body .screenParent, #speedDialContent .newtabCell[indrag="1"] .body .screenParent{
+  box-shadow: inset 0px 0px 0px 5px #3e7db3;
+  border-color: #2e6290;
+  border-width: 0px;
+}
+
+#speedDialContent #cellsContainer > .newtabCell[type="plus"]:hover .body .screenParent,
+#speedDialContent .newtabCell[type="preview"]:hover .body .screenParent{
+  /*background: -webkit-linear-gradient(top, #649ed4, #3676ac);*/
+  /*background-color: #fff;*/
+  box-shadow: none;
+  border: 1px solid #999;
+}
+
+
+
+.newtabCell .body .screenParent{
+  border-radius: 7px;
+  border: 1px solid #999;
+  background-color: none;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  padding: 5px;
+}
+
+.newtabCell .body .preview-image-screen {
+    /*outline: 1px solid red;*/
+    background-position: top left!important;
+}
+.newtabCell .body .preview-image-undefined {
+    background-size: contain!important;
+    background-repeat: no-repeat!important;
+    background-position: center center!important;
+}
+
+.newtabCell .body .preview-image {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  right: 2px;
+  bottom: 2px;
+  border-radius: 5px;
+}
+
+#speedDialContent .newtabCell[type="plus"] .body .preview-image{
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  top: 5px;
+  background: -webkit-linear-gradient(top, #fff, #ededed);
+  border-radius: 3px;
+}
+
+#speedDialContent #cellsContainer > .newtabCell[type="plus"]:hover .body .preview-image{
+  background: -webkit-linear-gradient(top, #fff, #e0e0e0);
+}
+
+#speedDialContent .newtabCell[type="plus"] .body .screenParent{
+
+}
+
+
+
+
+.newtabCell[type="preview"][filled="0"] .body .screenParent{
+  background: -webkit-linear-gradient(top, #fff, #ededed);
+}
+
+
+
+.newtabCell .body .screen{
+  border: 0px solid transparent;
+  border-radius: 3px;
+
+  height: 100%;
+  width: 100%;
+
+  position: relative;
+}
+
+/*special padding for thumb source type url and local_file*/
+.newtabCell[thumb-source-type="url"] .preview-image,
+.newtabCell[thumb-source-type="local_file"] .preview-image {
+  left: 5px;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+}
+
+.newtabCell[type="plus"] .body .screen{
+  background: url(/images/newtab/plus.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+#speedDialContent #cellsContainer >  .newtabCell[type="plus"]:hover .body .screen{
+  background: url(/images/newtab/plus_hover.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.newtabCell[noscreen="1"] .body .screen{
+  background: url(/images/newtab/noscreen.png);
+  background-size: 100% 100%;
+}
+
+.newtabCell[loadscreen="1"] .body .screen{
+  background: url(/images/newtab/sd_loading.gif) no-repeat;
+  background-position: center center;
+  background-color: #fff;
+}
+
+.newtabCell[loadscreen="1"] .head{
+  opacity: 0;
+}
+
+.newtabCell .menuOverlay{
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background-color: rgba( 62, 125, 179, 1 );
+  opacity: 0;
+}
+
+.newtabCell[type="mostvisited"] .menuOverlay {
+  padding-bottom: 20px;
+}
+
+.newtabCell:hover .menuOverlay{
+  opacity: 1;
+}
+
+#cellsContainer > .newtabCell[type="plus"]:hover .menuOverlay, .newtabCell[type="preview"]:hover .menuOverlay{
+  opacity: 0;
+}
+
+.newtabCell .menuOverlay .text{
+  float: left;
+  color: #FFF;
+  margin-top: 4px;
+}
+
+.newtabCell .mostVisitedMenu {
+  color: #FFF;
+  clear:both;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+
+
+.newtabCell .mostVisitedMenu > .views{
+  float: left;
+}
+
+.newtabCell .mostVisitedMenu > .ingroup{
+  float: right;
+  text-decoration: underline;
+}
+
+.newtabCell .imgShadow{
+  width: 100%;
+}
+
+
+.newtabCell .footer{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  -webkit-transition-duration: 200ms;
+    
+    margin-top: -15px; /* Task #1323 */
+    
+    text-align: center; /* Task #1351 */
+    padding-right: 10px;
+}
+
+.newtabCell .footer span{
+    position: relative;
+    display: inline-block; /*Task #1417*/
+}
+
+.newtabCell[type="mostvisited"]:hover .footer{
+  opacity: 0;
+}
+
+.newtabCell[indrag="1"] .footer, .newtabCell[dragon="1"] .footer{
+  opacity: 0;
+}
+
+/* List Elem */
+
+/*
+.listCol{
+  border: 1px solid red;
+  width: 200px;
+  display: inline-block;
+  vertical-align: top;
+}
+*/
+
+.newtabListElem{
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+
+  overflow: hidden;
+
+  /*position: absolute;*/
+
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-property: margin, -webkit-transform, opacity, height, left, top;
+
+  width: 510px;
+}
+
+.newtabListElem:hover{
+  background: -webkit-linear-gradient(top, rgba(151, 227, 253, 1), rgba(255,255,255,1));
+  border-color: #53cdf6;
+  opacity: 1;
+}
+
+
+.newtabListElem[indrag="1"]{
+  -webkit-transition-duration: 0ms;
+  z-index: 3;
+}
+
+.newtabListElem[dragon="1"]{
+  background: -webkit-linear-gradient(top, rgba(151, 227, 253, 1), rgba(255,255,255,1));
+  border-color: #53cdf6;
+  margin-left: -20px;
+  z-index:2;
+  opacity: 1;
+}
+
+.newtabListElem[dragon="1"][insert_type="before"]{
+  margin-top: 30px;
+}
+
+.newtabListElem[dragon="1"][insert_type="after"]{
+  margin-top: -30px;
+}
+
+.newtabListElem .leftData{
+  float: left;
+}
+
+.newtabListElem .leftData img{
+  position: absolute;
+  max-width: 16px;
+}
+
+.newtabListElem .text{
+  margin-left: 19px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
+.newtabListElem[notitle="1"] .text{
+  font-style:italic;
+}
+
+
+.newtabListElem[dragon="1"] .text{
+
+}
+
+.newtabListElem:hover .text{
+
+}
+
+.newtabListElem .speedDialIcons{
+  float: right;
+  margin-top: -4px;
+  visibility: hidden;
+}
+
+.newtabListElem:hover .speedDialIcons{
+  visibility: visible;
+    position: relative;
+}
+
+.newtabListElem .bottomData{
+  color: #555;
+  margin-top: 17px;
+  margin-left: 19px;
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.newtabListElem:hover .bottomData{
+  opacity: 1;
+}
+
+.newtabListElem .bottomData div{
+  float: left;
+  margin-right: 8px;
+}
+
+.newtabListElem .bottomData .ingroup:hover{
+  text-decoration: underline;
+}
+
+
+/* ListView type selector */
+
+#listViewTypeSelector{
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 130px;
+    white-space: nowrap;
+
+  opacity: 0.5;
+}
+
+#listViewTypeSelector:hover{
+  opacity: 1;
+}
+
+#listViewTypeSelector input{
+  margin-right: 5px;
+}
+
+#listViewTypeSelector label{
+    margin: auto;
+    padding: 0 5px;
+}
+
+/* ListView Menu */
+
+.listViewMenu{
+  margin-top: 15px;
+  text-align:center;
+}
+
+.listViewMenu .link{
+    display: inline-block;
+}
+
+#speeddialListViewMenu{
+      margin-top: 25px;
+}
+
+#mostvisitedListViewMenu > .delete, #recentlyclosedListViewMenu > .delete{
+    /* Task #1391
+  right: 0px;
+  position: absolute;
+    */
+    
+    padding-left: 35px;
+}
+
+/* ListView no items */
+
+#listNoItemsToDisplay{
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* groups box */
+
+#speedDialGroupsWrapper{
+  text-align: center;
+  height: 30px;
+  margin-left: 20px;
+
+  overflow: hidden;
+  /*
+  width: 100%;
+  position: fixed;
+  top: 2px;
+  z-index: 2;
+  */
+    
+}
+
+body[scrollingtype=horizontal] #speedDialGroupsWrapper{
+    overflow: visible;
+    z-index: 7!important;
+    
+}
+
+#speedDialGroupsWrapper[type="speeddial"]{
+  text-align: left !important;
+}
+
+#groupsBoxContainer{
+
+  text-align: center;
+  z-index: 0;
+
+  overflow: visible;
+  display: inline-block;
+
+}
+
+
+#groupsBoxContainer::-webkit-scrollbar {
+  height: 10px;
+}
+#groupsBoxContainer::-webkit-scrollbar-button{
+
+}
+#groupsBoxContainer::-webkit-scrollbar-track{
+
+}
+#groupsBoxContainer::-webkit-scrollbar-track-piece{
+
+}
+#groupsBoxContainer::-webkit-scrollbar-thumb{
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#groupsBoxContainer::-webkit-scrollbar-thumb:hover{
+  cursor: pointer;
+  box-shadow: inset 0px 0px 5px -2px #000;
+}
+
+
+#groupsWidthSetter{
+  display: inline-block;
+}
+
+#groupsBox {
+  -webkit-transition-duration: 100ms;
+    -webkit-transition-timing-function: ease-in-out;
+
+  display: inline-block;
+
+  white-space: nowrap;
+
+}
+
+
+#groupsBox > .group{
+  cursor: pointer;
+
+  font-size: 12px;
+
+  float: left;
+
+  /*border: 1px solid rgba(0,0,0,0.1);*/
+  border-radius: 5px;
+  padding: 5px;
+  background: -webkit-linear-gradient(top, rgba(230,230,230,0.8), rgba(248,248,248,0.7));
+  background-clip: padding-box;
+  color: #333;
+  margin-top: -5px;
+  margin-right: 5px;
+  max-height: 20px;
+  max-width: 150px;
+
+  -webkit-transition-duration: 100ms;
+    -webkit-transition-timing-function: ease-in-out;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+#groupsBox > .group[dragDialTo="1"]{
+  box-shadow: 0px 0px 0px 2px rgba(255,255,255,0.3), 0px 0px 5px 2px rgba(0,255,0,0.9);
+}
+
+#groupsBox > div:hover{
+  opacity: 1;
+}
+
+#groupsBox > .group[current="0"]:hover{
+  max-height: 40px;
+  padding-top: 10px;
+}
+
+#groupsBox > .group[current="1"]{
+  background: -webkit-linear-gradient(top, rgba(86,132,73,0.6), rgba(117,173,102,0.7));
+  color: #ffffff;
+  padding-top: 10px;
+  max-height: 40px;
+  margin-bottom: 3px;
+  opacity: 1;
+}
+
+#groupsBox > .group .groupName{
+  max-width: 120px;/*Task #1391*/
+  display: inline-block;/*Task #1391*/
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+    
+#groupsBox > .restore-session .groupName{/*Task #1189*/
+    max-width: none;
+    padding-right: 23px;
+    background-image: url(/images/restore_session.png);
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+
+#groupsBox > .group.add{
+  margin-left: 10px;
+  background: -webkit-linear-gradient(top, rgba(213,213,213,0.7), rgba(236,236,236,0.6));
+}
+
+#groupsBox > .group.add .image{
+  /*background: url(/images/newtab/dial_icons.png);*/
+  width: 8px;
+  height: 8px;
+    
+  -webkit-mask-image: url(/images/newtab/dial_icons.png);
+  /*mask-position: 0px 1px;*/
+    background: #fff;
+}
+
+#groupsBox > .group.add:hover{
+  max-height: 20px;
+  padding-top: 8px;
+}
+
+
+
+
+
+/* additional groups */
+
+#speedDialGroupsWrapper .additionalGroupsButton{
+  border: 1px solid #CCC;
+  float: left;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: -webkit-linear-gradient(top, #e6e6e6, #ffffff);
+  cursor: pointer;
+}
+
+#speedDialGroupsWrapper .additionalGroupsButton .img{
+  /*background: url(/images/newtab/dial_icons.png);*/
+  background-position: -20px -12px;
+  width: 5px;
+  height: 9px;
+  margin-left: 8px;
+  margin-top: 5px;
+    
+  -webkit-mask-image: url(/images/newtab/dial_icons.png);
+  -webkit-mask-position: -20px -12px;
+    background: #fff;
+}
+
+/*
+#speedDialGroupsWrapper .additionalGroupsList{
+  position: absolute;
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-property: opacity;
+  z-index: 3;
+
+  width: 170px;
+
+  max-height: 80vh;
+  overflow:auto;
+}
+*/
+
+#speedDialGroupsWrapper .additionalGroupsList{/*outline: 1px dashed yellow;*/
+  position: absolute;
+  /*border: 1px solid #ccc;*/
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-property: opacity;
+  z-index: 5;
+
+  max-width: 170px;
+
+  max-height: 85vh; /*85%;*/
+
+  overflow-y:hidden;
+  overflow-x:hidden;
+
+  padding-bottom: 24px;
+}
+
+#speedDialGroupsWrapper .additionalGroupsElemList{/*outline: 1px dashed blue;*/
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    max-height: 85vh;
+    
+    /*margin-top: -28px;*/
+}
+
+.additionalGroupsElemList [current="1"] *{ /* Task #1317 */
+    color: white!important;
+}
+
+
+#speedDialGroupsWrapper .additionalGroupsElemList::-webkit-scrollbar {
+    background: rgba(255,255,255,0.95); /* Task #1317 */
+}
+
+#speedDialGroupsWrapper .additionalGroupsList[disableanim="1"]{
+  -webkit-transition-duration: 0ms;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+#speedDialGroupsWrapper .additionalGroupsList::-webkit-scrollbar-button{
+
+}
+#speedDialGroupsWrapper .additionalGroupsList::-webkit-scrollbar-track{
+
+}
+#speedDialGroupsWrapper .additionalGroupsList::-webkit-scrollbar-track-piece{
+
+}
+#speedDialGroupsWrapper .additionalGroupsList::-webkit-scrollbar-thumb{
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #EEE;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList::-webkit-scrollbar-thumb:hover{
+  cursor: pointer;
+  box-shadow: inset 0px 0px 5px -2px #000;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList[active="0"]{
+  opacity: 0;
+  left: -10000px;
+  top: -10000px;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList[active="1"]{
+  opacity: 1;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList  .group{
+  border-bottom: 1px solid #e5e5e5;
+  border-left: 2px solid transparent;
+
+  white-space: nowrap;
+  overflow: hidden;
+  /*text-overflow: ellipsis; Task #1391 */
+  width: 150px;
+
+  padding: 3px;
+  background: #FFF!important; /* Task #1317 */
+  color: #7b7b7b!important; /* Task #1317 */
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList  .group[dragdialto="1"] {
+  color: #548C43;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList  .group span{
+  display: inline-block;
+  overflow: hidden;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList  .group:hover{
+  /*background: -webkit-linear-gradient(top, #ccc, #ffffff);*/
+  color: #000!important;
+  cursor: pointer;
+  border-left-color: #4e90f0;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList  .group[current="1"]{
+  background: -webkit-linear-gradient(top, #568449, #75ad66)!important;
+  color: #FFF!important;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList  .group[current="1"] span{
+  color: #FFF!important;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList .group{
+    /*
+    white-space: nowrap;
+    width: 100%!important;
+    */
+    position: relative;
+}
+
+#speedDialGroupsWrapper .group .groupName{/*Task #1391*/
+    vertical-align: middle;
+}
+
+#speedDialGroupsWrapper .groupCount{ /*Task #1391*/
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 2px;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList  .group .groupName{
+  max-width: 110px;
+  display: inline-block;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+#speedDialGroupsWrapper .additionalGroupsList .groupCount{
+    /*outline: 1px dashed red;*/
+    
+    /*width: 29px;*/
+    display: inline-block;
+    
+    font-size: 12px;
+    
+    position: absolute;
+    top: 3px; right: 0;
+    padding-right: 4px;
+}
+
+#speedDialGroupsWrapper .additionalGroupsList hr{
+  /*width: 156px;*/
+}
+
+#speedDialGroupsWrapper .additionalGroupsList .manageGroups{
+  cursor: pointer;
+  background: -webkit-linear-gradient( 90deg, #5b8b4d, #73aa64 );
+  color: #fff;
+  padding: 2px;
+
+  /*width: 154px;*/
+}
+
+/* expand maker */
+
+#speedDialGroupsWrapper .expandMaker{
+  float: right;
+  cursor: pointer;
+
+  font-size: 12px;
+
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding: 5px;
+  background: -webkit-linear-gradient(top, #e6e6e6, #ffffff);
+  color: #7d7c7c;
+  margin-top: -5px;
+  margin-right: 5px;
+  max-height: 20px;
+  max-width: 150px;
+
+  -webkit-transition-duration: 100ms;
+    -webkit-transition-timing-function: ease-in-out;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#speedDialGroupsWrapper .expandMaker .image{
+  width: 10px;
+  height: 10px;
+}
+
+#speedDialGroupsWrapper .expandMaker[expanded="1"] .image{
+  background: url(/images/newtab/dial_icons.png);
+  background-position: 0px -10px;
+}
+
+#speedDialGroupsWrapper .expandMaker[expanded="0"] .image{
+  background: url(/images/newtab/dial_icons.png);
+  background-position: 0px -21px;
+}
+
+#speedDialGroupsWrapper .expandMaker:hover{
+  max-height: 20px;
+  padding-top: 8px;
+  cursor: pointer;
+}
+
+
+/* Some dialog styles */
+
+option.createNewGroup{
+  color: #aaa;
+}
+
+
+
+
+/* links */
+.link{
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link:hover{
+  text-decoration: underline;
+}
+
+/* expand/collapse */
+#speedDialWrapper[expanded="0"] > div#speedDialContent,
+#speedDialWrapper[expanded="0"] div#groupsWidthSetter{
+
+  display: none;
+
+}
+
+#speedDialWrapper[expanded="0"] > #speedDialCollapsedContent{
+  display: block;
+}
+
+#speedDialWrapper[expanded="1"] > #speedDialCollapsedContent{
+  display: none;
+}
+
+#speedDialCollapsedContent{
+  text-align: center;
+  top: 40%;
+  position: absolute;
+  width: 100%;
+
+  color: #000;
+}
+
+/* mirror */
+
+div.mirror{
+  position: absolute;
+  width: 1000%;
+  height: 200px;
+
+  overflow: hidden;
+
+  -webkit-transition: 200ms opacity;
+
+  -webkit-mask-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.5, transparent), color-stop(1, rgba(255, 255, 255, 0.5)) );
+  -webkit-filter: grayscale(0.5);
+
+}
+
+div.mirror[fade="1"]{
+  opacity: 0;
+}
+
+div.mirror > div{
+  cursor: auto;
+}
+
+div.mirror > div[mirrordrag="1"]{
+  -webkit-transition-duration: 0ms;
+}
+
+.clickScreen{
+  position: absolute;
+  z-index: 2;
+  -webkit-transition-duration: 700ms;
+}
+
+/* no 3d message */
+
+#no3dmessage{
+  width: 600px;
+  margin: auto;
+  text-align: center;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 9px;
+
+  background: rgba(255,255,255,0.3);
+  background-clip: padding-box;
+
+  color: #fff;
+
+  margin-top: 50px;
+}
+
+#no3dmessage > img{
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  box-shadow: 0px 0px 35px 0px #000;
+}
+
+#no3dmessage .title{
+  font-weight: bold;
+  color: rgba(255,0,0,0.8);
+  text-shadow: 1px 1px 0px #333;
+}
+
+#no3dmessage .manual{
+  text-align: left;
+
+  padding: 5px;
+
+  background: rgba( 255,255,255, 0.3 );
+
+  border-radius: 5px;
+  border: 1px solid #777;
+
+  box-shadow: inset 0px 0px 25px 0px #000;
+}
+
+#no3dmessage ol{
+  margin-left: 20px;
+}
+
+#no3dmessage ol li{
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+#no3dmessage ol li > span{
+  font-weight: normal;
+
+}
+
+#no3dmessage ol li div{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#no3dmessage .buttonContainer{
+  margin-top: 15px;
+}
+
+#no3dmessage .gray{
+  color: #222;
+}
+
+#no3dmessage .italic{
+  font-style: italic;
+}
+
+#no3dmessage .bold{
+  font-weight: bold;
+}
+
+@media (transform-3d), (-webkit-transform-3d){
+
+  #test3d{
+
+    position: absolute;
+    visibility: hidden;
+    left: 5px;
+
+  }
+
+}
+
+
+html[scrollingtype="horizontal"] #cellsContainer{
+
+  margin-left: 0;
+
+}
+
+button.btn-no-style {
+  padding: 0px;
+  background: none;
+  border: none;
+}

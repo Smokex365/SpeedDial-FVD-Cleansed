@@ -1,0 +1,1804 @@
+{
+  "extension_locale": {
+    "message": "zh_CN",
+    "description": "供内部使用"
+  },
+  "newtab_title": {
+    "message": "FVD快速拨号",
+    "description": "一个新标签页的标题"
+  },
+  "newtab_introduction_title": {
+    "message": "欢迎查看FVD快速拨号指南！"
+  },
+  "newtab_introduction_button_next": {
+    "message": "下一页"
+  },
+  "newtab_introduction_button_prev": {
+    "message": "上一页"
+  },
+  "newtab_introduction_button_start": {
+    "message": "让我们开始吧！"
+  },
+  "newtab_introduction_slide1_title": {
+    "message": "选择3D或常规速度拨号方式"
+  },
+  "newtab_introduction_slide1_text": {
+    "message": "您可以随时切换外观，通过 <b>右键 > 方式</b>或者 <b>选项 > 外观> 方式</b>.<br><br><img src=\"images/newtab/introduction/slide1_img.png\">"
+  },
+  "newtab_introduction_slide2_title": {
+    "message": "您的应用和控件"
+  },
+  "newtab_introduction_slide2_text": {
+    "message": "请点击面板左侧或下方来激活应用或控件工具条。<br><br><b>Hint:</b> 使用键盘上的空格键来显示/隐藏控件"
+  },
+  "newtab_offer_theme_bg": {
+    "message": "快速拨号可以应用当前主题背景"
+  },
+  "newtab_apply_theme_bg": {
+    "message": "应用主题背景"
+  },
+  "newtab_cancel_theme_bg": {
+    "message": "取消主题背景"
+  },
+  "newtab_offer_theme_download": {
+    "message": "背景下载中..."
+  },
+  "newtab_instant_seach_preview": {
+    "message": "雅虎搜索技术支持"
+  },
+  "newtab_enable_speed_dial": {
+    "message": "启用快速拨号"
+  },
+  "newtab_sure": {
+    "message": "确定吗？"
+  },
+  "newtab_yes": {
+    "message": "是"
+  },
+  "newtab_no": {
+    "message": "否"
+  },
+  "newtab_none": {
+    "message": "none"
+  },
+  "newtab_default": {
+    "message": "默认"
+  },
+  "newtab_max_groups": {
+    "message": "流行组中最多拨号数："
+  },
+  "newtab_thumbnails": {
+    "message": "缩略图"
+  },
+  "newtab_big": {
+    "message": "大"
+  },
+  "newtab_medium": {
+    "message": "中等"
+  },
+  "newtab_small": {
+    "message": "小"
+  },
+  "newtab_custom": {
+    "message": "自定义"
+  },
+  "newtab_preview": {
+    "message": "预览"
+  },
+  "newtab_list": {
+    "message": "列表"
+  },
+  "newtab_number_of_columns": {
+    "message": "列数"
+  },
+  "newtab_number_of_rows": {
+    "message": "行数"
+  },
+  "newtab_columns_auto": {
+    "message": "自动"
+  },
+  "newtab_groups": {
+    "message": "组"
+  },
+  "newtab_default_group": {
+    "message": "默认组"
+  },
+  "newtab_manage_groups": {
+    "message": "管理组"
+  },
+  "newtab_import_available": {
+    "message": "导入可用"
+  },
+  "newtab_enable_most_visited": {
+    "message": "启用访问最多的"
+  },
+  "newtab_show_last": {
+    "message": "显示上一个"
+  },
+  "newtab_synchronization": {
+    "message": "同步"
+  },
+  "newtab_cache_life_time": {
+    "message": "缓存有效期"
+  },
+  "newtab_hours": {
+    "message": "小时"
+  },
+  "newtab_done": {
+    "message": "完成"
+  },
+  "newtab_sync_now": {
+    "message": "更新统计"
+  },
+  "newtab_restore_removed": {
+    "message": "恢复已移除"
+  },
+  "newtab_enable_recently_closed": {
+    "message": "启用最近关闭的"
+  },
+  "newtab_migrate_message": {
+    "message": "从另一个插件中导入数据"
+  },
+  "newtab_start_migrate": {
+    "message": "开始导入"
+  },
+  "newtab_cancel_migrate": {
+    "message": "取消"
+  },
+  "newtab_do_not_display_migrate": {
+    "message": "不再显示。"
+  },
+  "newtab_rate_fvd_speed_dial": {
+    "message": "FVD快速拨号"
+  },
+  "newtab_rate_text": {
+    "message": "请写下您的评论并给我们打分。"
+  },
+  "newtab_rate_appreciate": {
+    "message": "非常感谢您的帮助"
+  },
+  "newtab_expand_all": {
+    "message": "展开全部"
+  },
+  "newtab_hide_all": {
+    "message": "隐藏全部"
+  },
+  "newtab_options": {
+    "message": "选项"
+  },
+  "newtab_restore_previous_session": {
+    "message": "恢复上一次会话"
+  },
+  "newtab_global_options": {
+    "message": "全局选项"
+  },
+  "newtab_sync_button": {
+    "message": "同步"
+  },
+  "newtab_all_group_title": {
+    "message": "流行"
+  },
+  "newtab_make_as_homepage": {
+    "message": "设为首页"
+  },
+  "newtab_change_background": {
+    "message": "更换背景"
+  },
+  "newtab_speeddial_label": {
+    "message": "快速拨号(%count%)"
+  },
+  "newtab_most_visited_label": {
+    "message": "访问最多 (%count%)"
+  },
+  "newtab_recently_closed_label": {
+    "message": "最近关闭 (%count%)"
+  },
+  "newtab_dial_clicks": {
+    "message": "点击量"
+  },
+  "newtab_popular_group_title": {
+    "message": "流行"
+  },
+  "newtab_mostvisited_interval_all_time": {
+    "message": "全部时间"
+  },
+  "newtab_mostvisited_interval_month": {
+    "message": "上个月"
+  },
+  "newtab_mostvisited_interval_week": {
+    "message": "上个星期"
+  },
+  "newtab_mostvisited_views": {
+    "message": "浏览量"
+  },
+  "newtab_mostvisited_views_small": {
+    "message": "V"
+  },
+  "newtab_mostvisited_ingroup": {
+    "message": "在组中"
+  },
+  "newtab_mostvisited_ingroup_small": {
+    "message": "G"
+  },
+  "newtab_listview_title": {
+    "message": "标题"
+  },
+  "newtab_listview_url": {
+    "message": "URL"
+  },
+  "newtab_listviewmenu_add_dial": {
+    "message": "增加拨号"
+  },
+  "newtab_listviewmenu_open_all": {
+    "message": "打开所有链接"
+  },
+  "newtab_listviewmenu_delete_all": {
+    "message": "删除所有链接"
+  },
+  "newtab_listview_noitems": {
+    "message": "没有可显示的项目"
+  },
+  "newtab_dblclick_to_expand": {
+    "message": "双击展开"
+  },
+  "newtab_click_to_get_title": {
+    "message": "点击获取标题"
+  },
+  "newtab_getting_title": {
+    "message": "获取标题中..."
+  },
+  "newtab_last_used_group": {
+    "message": "最后使用的组"
+  },
+  "newtab_can_turn_off_newtab_msg": {
+    "message": "注意：您可以在新标签页中禁止FVD快速拨号，只有按下按钮才运行。"
+  },
+  "newtab_can_turn_off_newtab_opt_app": {
+    "message": "选项 > 外观"
+  },
+  "newtab_can_turn_off_newtab_got_it": {
+    "message": "我已经明白了，谢谢。"
+  },
+  "newtab_ops_3d_unavailable": {
+    "message": "哎呀，3D功能出现问题。"
+  },
+  "newtab_switch_to_standard": {
+    "message": "点击此处使用标准模式"
+  },
+  "newtab_3d_how_to_fix": {
+    "message": "如何修复："
+  },
+  "newtab_3d_if_not_works": {
+    "message": "如果没用——请尝试更新您的显卡驱动程序"
+  },
+  "newtab_3d_open_new_tab": {
+    "message": "打开新标签页"
+  },
+  "newtab_3d_type_flags": {
+    "message": "键入 \"chrome://flags\""
+  },
+  "newtab_3d_without_quotes": {
+    "message": "不要引号"
+  },
+  "newtab_3d_find_override": {
+    "message": "找到 \"覆盖软件渲染列表\"并点击启用"
+  },
+  "newtab_3d_note_dont_afraid": {
+    "message": "注意：不用担心打开该功能。没什么可怕的事情会发生。"
+  },
+  "newtab_3d_restart": {
+    "message": "重新启动"
+  },
+  "newtab_3d_restart_continue": {
+    "message": "您的浏览器，享受新的奇特3D 外观。"
+  },
+  "newtab_3d_install_new_drivers": {
+    "message": "要启用3D模式，您需要更新您的显卡驱动程序"
+  },
+  "newtab_3d_last_step": {
+    "message": "如果您再次看到该信息，意味着浏览器不支持您的显卡用3D视图显示FVD快速拨号。"
+  },
+  "newtab_search_on_google": {
+    "message": "搜索"
+  },
+  "newtab_search_on_yandex": {
+    "message": "Yandex搜索"
+  },
+  "newtab_poweroff_desc": {
+    "message": "学习如何保护您的快速拨号远离不想要的浏览者"
+  },
+  "newtab_poweroff_feature": {
+    "message": "关闭功能"
+  },
+  "newtab_poweroff_dont_show_again": {
+    "message": "不再显示"
+  },
+  "newtab_poweroff_enterpasscode": {
+    "message": "输入密码"
+  },
+  "newtab_powerof_wrong_passcode_title": {
+    "message": "密码错误"
+  },
+  "newtab_powerof_wrong_passcode_text": {
+    "message": "您输入的密码是错误的"
+  },
+  "newtab_poweroff": {
+    "message": "关闭"
+  },
+  "newtab_show_hide": {
+    "message": "显示/隐藏"
+  },
+  "newtab_instant_seach_preview_google": {
+    "message": "即时搜索"
+  },
+  "newtab_widgets_panel_move_or_delete": {
+    "message": "移动或删除控件"
+  },
+  "newtab_apps_panel_open_desc": {
+    "message": "按 \"Ctrl + Space\" 来隐藏/取消隐藏应用面板。"
+  },
+  "newtab_widgets_panel_open_desc": {
+    "message": "按 \"Space\" 来隐藏/取消隐藏控件面板。"
+  },
+  "newtab_widgets_panel_not_found": {
+    "message": "点击 + 按钮来增加一些控件！"
+  },
+  "newtab_themes_message_head": {
+    "message": "哇！ 有可用的主题！"
+  },
+  "newtab_themes_message_text": {
+    "message": "为FVD快速拨号安装主题"
+  },
+  "newtab_themes_message_install": {
+    "message": "获取主题！"
+  },
+  "newtab_quicksitemap_text": {
+    "message": "增加网站导航！"
+  },
+  "newtab_ad_install_text": {
+    "message": "查看应用"
+  },
+  "bg_default_group_name": {
+    "message": "默认"
+  },
+  "bg_default_group_products": {
+    "message": "我们的产品"
+  },
+  "bg_default_dial_google": {
+    "message": "谷歌"
+  },
+  "bg_write_review_dial_title": {
+    "message": "写下您的评论"
+  },
+  "bg_default_dial_facebook": {
+    "message": "FaceBook"
+  },
+  "bg_default_dial_twitter": {
+    "message": "Twitter"
+  },
+  "bg_default_dial_fvdsyncchrome": {
+    "message": "EverSync"
+  },
+  "bg_default_dial_fvdsdff": {
+    "message": "Firefox FVD快速拨号"
+  },
+  "bg_write_review_dial_chromedownloader": {
+    "message": "FVD视频下载器"
+  },
+  "bg_default_dial_betterchrome": {
+    "message": "BetterChrome"
+  },
+  "bg_default_dial_amazon": {
+    "message": "Amazon"
+  },
+  "bg_default_dial_ebay": {
+    "message": "EBay"
+  },
+  "bg_default_dial_webstore": {
+    "message": "Chrome应用商店"
+  },
+  "bg_dialog_loading": {
+    "message": "加载中..."
+  },
+  "bg_dialog_import_export_eversync_1": {
+    "message": "这种备份类型不会保存您的自定义图片！！！"
+  },
+  "bg_dialog_import_export_eversync_2": {
+    "message": "如果您需要完全备份，请使用我们的在线备份扩展："
+  },
+  "bg_dialog_import_export_eversync_clickhere": {
+    "message": "点击此处安装扩展..."
+  },
+  "bg_dialog_adddial_title": {
+    "message": "标题"
+  },
+  "bg_dialog_adddial_click_to_get_title": {
+    "message": "点击获取标题"
+  },
+  "bg_dialog_adddial_url": {
+    "message": "URL"
+  },
+  "bg_dialog_adddial_pick_user_pic": {
+    "message": "浏览用户相册"
+  },
+  "bg_dialog_adddial_pick_url_from": {
+    "message": "选定URL，从："
+  },
+  "bg_dialog_adddial_pick_url_from_opened_tabs": {
+    "message": "已打开的标签"
+  },
+  "bg_dialog_adddial_pick_url_from_or": {
+    "message": "或者"
+  },
+  "bg_dialog_adddial_pick_url_from_most_visited": {
+    "message": "访问最多的"
+  },
+  "bg_dialog_adddial_pick_url_from_most_popular": {
+    "message": "最流行的"
+  },
+  "bg_dialog_adddial_custom_preview_updated": {
+    "message": " (已更新！)"
+  },
+  "bg_dialog_adddial_image_url": {
+    "message": "预览URL"
+  },
+  "bg_dialog_adddial_default_preview": {
+    "message": "预定义Logo"
+  },
+  "bg_dialog_adddial_group": {
+    "message": "组"
+  },
+  "bg_dialog_adddial_group_name": {
+    "message": "组名"
+  },
+  "bg_dialog_adddial_enable_autoupdate_preview": {
+    "message": "Auto Update"
+  },
+  "bg_dialog_adddial_autoupdate_minutes": {
+    "message": "Minutes"
+  },
+  "bg_dialog_adddial_autoupdate_hours": {
+    "message": "Hours"
+  },
+  "bg_dialog_adddial_autoupdate_days": {
+    "message": "Days"
+  },
+  "bg_dialog_adddial_autoupdate_every": {
+    "message": "Every"
+  },
+  "bg_dialog_adddial_refresh_preview": {
+    "message": "刷新预览"
+  },
+  "bg_dialog_adddial_top10pics_title": {
+    "message": "用户图像前10"
+  },
+  "bg_dialog_adddial_top10pics_showmore": {
+    "message": "显示更多"
+  },
+  "bg_dialog_addgroup_name": {
+    "message": "名称"
+  },
+  "bg_dialog_addgroup_sync": {
+    "message": "同步该组"
+  },
+  "bg_dialog_managegroups_groups": {
+    "message": "组"
+  },
+  "bg_dialog_deny_type": {
+    "message": "类型"
+  },
+  "bg_dialog_deny_type_domain": {
+    "message": "域名"
+  },
+  "bg_dialog_deny_type_url": {
+    "message": "URL"
+  },
+  "bg_dialog_deny_sign": {
+    "message": "标记"
+  },
+  "bg_dialog_view_group_title": {
+    "message": "标签"
+  },
+  "bg_dialog_view_group_url": {
+    "message": "Url"
+  },
+  "bg_dialog_manage_deny_sign": {
+    "message": "标记"
+  },
+  "bg_dialog_manage_deny_type": {
+    "message": "类型"
+  },
+  "dialog_add_dial_dynamic_title": {
+    "message": "动态标题"
+  },
+  "dialog_add_dial_enter_image_url": {
+    "message": "输入图片url"
+  },
+  "bg_dialog_adddial_use_auto_preview": {
+    "message": "自动预览"
+  },
+  "bg_dialog_adddial_use_manual_preview": {
+    "message": "手动预览"
+  },
+  "bg_dialog_adddial_use_custom_preview": {
+    "message": "自定义预览"
+  },
+  "bg_dialog_adddial_preview_creation_delay": {
+    "message": "预览创建延迟 (ms)："
+  },
+  "options_title": {
+    "message": "FVD快速拨号选项"
+  },
+  "options_enable_surfcanyon": {
+    "message": "启用搜索改进率"
+  },
+  "options_global_options": {
+    "message": "全局选项"
+  },
+  "options_global_tabs_main": {
+    "message": "主要"
+  },
+  "options_global_tabs_appearance": {
+    "message": "外观"
+  },
+  "options_show_urls_under_dials": {
+    "message": "在拨号下方显示URLs"
+  },
+  "options_show_icons_and_titles_above_dials": {
+    "message": "在拨号上方显示图标和标题"
+  },
+  "options_disable_custom_search": {
+    "message": "禁止搜索"
+  },
+  "options_default_dial": {
+    "message": "默认模式"
+  },
+  "options_speed_dial": {
+    "message": "快速拨号"
+  },
+  "options_most_visited": {
+    "message": "访问最多的"
+  },
+  "options_recently_closed": {
+    "message": "最近关闭的"
+  },
+  "options_enable": {
+    "message": "启用"
+  },
+  "options_blocked_domains": {
+    "message": "被屏蔽域名"
+  },
+  "options_dials_opening": {
+    "message": "拨号打开方式："
+  },
+  "options_current_tab": {
+    "message": "当前标签页"
+  },
+  "options_new_tab": {
+    "message": "新标签页"
+  },
+  "options_new_tab_background": {
+    "message": "新标签页 (后台)"
+  },
+  "options_dials_opacity": {
+    "message": "拨号透明度"
+  },
+  "options_speed_dial_options": {
+    "message": "快速拨号选项"
+  },
+  "options_display_plus_cells": {
+    "message": "显示 [+] 快速拨号按钮"
+  },
+  "options_groups": {
+    "message": "组"
+  },
+  "options_default_group": {
+    "message": "默认："
+  },
+  "options_max_dials_in_popular_group": {
+    "message": "流行组最多拨号数"
+  },
+  "options_most_visited_options": {
+    "message": "访问最多的选项"
+  },
+  "options_show_last": {
+    "message": "显示最后一个："
+  },
+  "options_sort_by": {
+    "message": "排序方式"
+  },
+  "options_last_week": {
+    "message": "上个星期"
+  },
+  "options_last_month": {
+    "message": "上个月"
+  },
+  "options_all_time": {
+    "message": "全部时间"
+  },
+  "options_recently_closed_options": {
+    "message": "最近关闭的选项"
+  },
+  "options_background_options": {
+    "message": "背景选项"
+  },
+  "options_refresh": {
+    "message": "刷新"
+  },
+  "options_background_color": {
+    "message": "背景颜色"
+  },
+  "options_bg_color_enabled": {
+    "message": "已启用"
+  },
+  "options_bg_install_themes": {
+    "message": "新品！安装主题！"
+  },
+  "options_bg_from_url": {
+    "message": "来自URL"
+  },
+  "options_bg_from_theme": {
+    "message": "来自动态主题"
+  },
+  "options_display_superfish": {
+    "message": "Superfish建议"
+  },
+  "options_image_url": {
+    "message": "图像来源"
+  },
+  "options_bg_image_type": {
+    "message": "类型："
+  },
+  "options_noimage": {
+    "message": "无图像"
+  },
+  "options_fill": {
+    "message": "填充"
+  },
+  "options_fit": {
+    "message": "适应"
+  },
+  "options_stretch": {
+    "message": "拉伸"
+  },
+  "options_tile": {
+    "message": "平铺"
+  },
+  "options_center": {
+    "message": "居中"
+  },
+  "options_load_and_preview": {
+    "message": "加载并预览"
+  },
+  "options_fonts_options": {
+    "message": "字体选项"
+  },
+  "options_title_for_dials": {
+    "message": "标题（用于拨号）"
+  },
+  "options_font_color": {
+    "message": "颜色："
+  },
+  "options_font_bolder": {
+    "message": "粗体"
+  },
+  "options_font_size": {
+    "message": "大小："
+  },
+  "options_url_for_dials": {
+    "message": "URL （用于拨号）"
+  },
+  "options_text_in_list_mode": {
+    "message": "列表模式文本"
+  },
+  "options_show_title_url_list_mode": {
+    "message": "显示标题/URL (列表模式)"
+  },
+  "options_list_links": {
+    "message": "列出链接"
+  },
+  "options_other_texts": {
+    "message": "其它文本"
+  },
+  "options_restore_default": {
+    "message": "恢复默认"
+  },
+  "options_apply_changes": {
+    "message": "应用更改"
+  },
+  "options_manage_blocked": {
+    "message": "管理"
+  },
+  "options_last_selected": {
+    "message": "上次所选的"
+  },
+  "options_close": {
+    "message": "关闭"
+  },
+  "options_recently_closed_max_show_last": {
+    "message": "(最多 100)"
+  },
+  "options_recently_closed_max_most_visited": {
+    "message": "(最多 75)"
+  },
+  "options_speeddial_max_in_popular": {
+    "message": "(最多 50)"
+  },
+  "options_manage_groups": {
+    "message": "管理组"
+  },
+  "options_back_to_speeddial": {
+    "message": "返回快速拨号"
+  },
+  "options_default_screen_delay": {
+    "message": "默认预览延时(ms):"
+  },
+  "options_display_in_new_tab": {
+    "message": "在新标签页中显示"
+  },
+  "options_display_dial_background": {
+    "message": "显示默认拨号背景"
+  },
+  "options_import_export": {
+    "message": "导入/导出"
+  },
+  "options_export": {
+    "message": "导出"
+  },
+  "options_import": {
+    "message": "导入"
+  },
+  "options_display_popular_group": {
+    "message": "显示流行组"
+  },
+  "options_display_quick_menu_and_clicks": {
+    "message": "显示点击量及快速菜单"
+  },
+  "options_cdsize_limits": {
+    "message": "最少 150， 最多 364px"
+  },
+  "options_cdsize_title": {
+    "message": "自定义拨号大小"
+  },
+  "options_submit_suggestion": {
+    "message": "提交建议"
+  },
+  "options_submit_bug": {
+    "message": "提交错误"
+  },
+  "options_show_in_context_menu": {
+    "message": "在右键菜单（右击）中显示"
+  },
+  "options_donate_message": {
+    "message": "感谢您对捐赠的兴趣！您的捐赠将有助于确保我们能继续制作伟大的软件，并尽可能地保持免费。如果我们要求您捐赠，那它怎么是免费的？这就是伟大之处－如果您无法承担，或者您不确定是否值得，欢迎您继续免费使用我们的软件。\n\n建造、改进和扩展我们的FVD快速拨号插件确实要花很多钱。\n\n因此，我们真的希望，感到满意的用户或喜欢我们精神的用户愿意捐一些钱（他们能承担得起的），让我们能够到达全世界尽可能多的用户。\n\n收到的捐赠将不会用于支付工资，或任何与保持互联网服务非直接相关的间接成本。"
+  },
+  "options_sync_need_install": {
+    "message": "要使用同步，您需要安装EverSync扩展"
+  },
+  "options_sync_need_install_desc": {
+    "message": "要使用Fvd同步，您需要安装额外的插件－EverSync扩展："
+  },
+  "options_sync_need_install_fvd_speeddial": {
+    "message": "FVD 快速拨号："
+  },
+  "options_sync_need_install_fvd_sync": {
+    "message": "同步书签："
+  },
+  "options_sync_need_install_ability_6": {
+    "message": "同步您的Firefox/Chrome书签"
+  },
+  "options_sync_need_install_ability_7": {
+    "message": "同步您的文件夹"
+  },
+  "options_sync_need_install_everhelper": {
+    "message": "您的EverHelper客户专区："
+  },
+  "options_sync_need_install_ability_8": {
+    "message": "拷贝书签到FVD快速拨号及从FVD快速拨号到书签。"
+  },
+  "options_sync_need_install_ability_9": {
+    "message": "垃圾桶 / 收藏夹 / 私有 / 存档 / 高级搜索及更多附加功能。"
+  },
+  "options_sync_need_install_ability_10": {
+    "message": "管理书签和快速拨号。"
+  },
+  "options_sync_need_install_ability_11": {
+    "message": "Server auto backups and restore."
+  },
+  "options_sync_need_install_ability_1": {
+    "message": "同步您的拨号。"
+  },
+  "options_sync_need_install_ability_2": {
+    "message": "同步您的组。"
+  },
+  "options_sync_need_install_ability_3": {
+    "message": "同步您的自定义图像。"
+  },
+  "options_sync_need_install_ability_4": {
+    "message": "在Firefox、Chrome、不同电脑之间使用。"
+  },
+  "options_sync_need_install_ability_5": {
+    "message": "更多功能即将到来(同步书签、历史、注释)."
+  },
+  "options_sync_link": {
+    "message": "从Chrome应用商店安装"
+  },
+  "options_sync_warning_line_1": {
+    "message": "<b>同步插件需要\"访问电脑所有数据\"的许可</b>"
+  },
+  "options_sync_warning_line_2": {
+    "message": "这并不意味着我们的插件将访问您所有的文件！"
+  },
+  "options_sync_warning_line_3": {
+    "message": "我们只需要 <b>访问Chrome环境中的一个书签文件。</b>"
+  },
+  "options_sync_warning_line_4": {
+    "message": "只要您获得重写文件的许可，Chrome称之为\"完全访问\"。"
+  },
+  "options_sync_warning_line_5": {
+    "message": "请不要纠结于此！Chrome应用商店对这类插件进行人工审核！！！"
+  },
+  "options_enable_search": {
+    "message": "启用搜索"
+  },
+  "options_enable_search_preview": {
+    "message": "启用搜索预览"
+  },
+  "options_poweroff_options": {
+    "message": "关闭"
+  },
+  "options_poweroff_tab_desc_1": {
+    "message": "创建您的个人密码来解锁您的拨号。"
+  },
+  "options_poweroff_tab_desc_2": {
+    "message": "按下关闭按钮后，您的拨号将被隐藏，唯一的解锁方式是输入密码。"
+  },
+  "options_poweroff_tab_desc_3": {
+    "message": "如果您不想其他人在您不在的情况下查看您的快速拨号，这将是一个很好的功能。"
+  },
+  "options_poweroff_error_empty_passcode": {
+    "message": "密码为空"
+  },
+  "options_poweroff_error_passcode_dont_match": {
+    "message": "密码不匹配"
+  },
+  "options_poweroff_idle_timeout_enable": {
+    "message": "Enable Passcode when idle:"
+  },
+  "options_poweroff_error_email_wrong_format": {
+    "message": "E-mail格式错误"
+  },
+  "options_poweroff_error_wrong_pass_code": {
+    "message": "密码错误"
+  },
+  "options_poweroff_passcode_changed_title": {
+    "message": "成功"
+  },
+  "options_poweroff_passcode_changed_text": {
+    "message": "密码已成功更改。"
+  },
+  "options_powerof_password_restore_title": {
+    "message": "密码已恢复"
+  },
+  "options_powerof_password_restore_text": {
+    "message": "密码已成功发送到您的电子邮箱"
+  },
+  "options_poweroff_create_passcode": {
+    "message": "创建密码"
+  },
+  "options_poweroff_passcode": {
+    "message": "密码："
+  },
+  "options_poweroff_repeat_passcode": {
+    "message": "重复密码："
+  },
+  "options_poweroff_email": {
+    "message": "恢复E-Mail："
+  },
+  "options_poweroff_create_passcode_button": {
+    "message": "创建密码"
+  },
+  "options_poweroff_passcode_setuped": {
+    "message": "密码已设定。"
+  },
+  "options_poweroff_old_passcode": {
+    "message": "旧密码："
+  },
+  "options_poweroff_change_passcode": {
+    "message": "更改密码"
+  },
+  "options_poweroff_new_passcode": {
+    "message": "新密码*："
+  },
+  "options_poweroff_change_passcode_button": {
+    "message": "更改密码"
+  },
+  "options_poweroff_star_desc": {
+    "message": "* 如要删除密码，新密码字段保持空白。"
+  },
+  "options_poweroff_restore_button": {
+    "message": "发送密码至恢复E-Mail"
+  },
+  "options_poweroff_tab_main_title": {
+    "message": "主标题"
+  },
+  "options_poweroff_tab_change_pass_title": {
+    "message": "更改密码"
+  },
+  "options_poweroff_tab_restore_title": {
+    "message": "恢复密码"
+  },
+  "options_poweroff_3min": {
+    "message": "3min"
+  },
+  "options_poweroff_5min": {
+    "message": "5min"
+  },
+  "options_poweroff_10min": {
+    "message": "10min"
+  },
+  "options_poweroff_15min": {
+    "message": "15min"
+  },
+  "options_poweroff_30min": {
+    "message": "30min"
+  },
+  "options_poweroff_60min": {
+    "message": "60min"
+  },
+  "options_display_mirror": {
+    "message": "显示镜像"
+  },
+  "options_scrolling": {
+    "message": "拨号滚动类型"
+  },
+  "options_scrolling_horizontal": {
+    "message": "水平"
+  },
+  "options_scrolling_vertical": {
+    "message": "垂直"
+  },
+  "options_widgets_options": {
+    "message": "控件"
+  },
+  "options_widgets_enabled_title": {
+    "message": "启用控件"
+  },
+  "options_widgets_opacity_title": {
+    "message": "控件面板透明度"
+  },
+  "options_widgets_bgcolor_title": {
+    "message": "控件面板背景颜色"
+  },
+  "options_enable_widgets_autoscroll": {
+    "message": "启用自动滚动"
+  },
+  "options_widgets_autoscroll_speed": {
+    "message": "自动滚动速度"
+  },
+  "options_set_auto_preview": {
+    "message": "设置所有指南为自动缩略图"
+  },
+  "options_set_auto_preview_button": {
+    "message": "设置自动预览"
+  },
+  "options_premium_for_share": {
+    "message": "免费获取高级账户！"
+  },
+  "cropper_click_to_make_preview": {
+    "message": "点击生成预览"
+  },
+  "cropper_message_wait": {
+    "message": "创建缩略图中... 请稍候..."
+  },
+  "cropper_your_url": {
+    "message": "您的URL"
+  },
+  "cropper_last_page_url": {
+    "message": "上一页URL"
+  },
+  "cropper_pick_this": {
+    "message": "选定这个"
+  },
+  "dialog_pick_user_pics_order_best": {
+    "message": "最好的"
+  },
+  "dialog_pick_user_pics_order_new": {
+    "message": "新的"
+  },
+  "dialog_pick_user_pics_order": {
+    "message": "顺序： "
+  },
+  "dialog_pick_user_pics_not_found_title": {
+    "message": "您可以在这些宝贵的资源中搜索{host} logo, 并将它们添加到我们的相册中。"
+  },
+  "dialog_pick_user_pics_not_found_enter_in": {
+    "message": "当您找到喜欢的图像，复制URL并粘贴到该表格中："
+  },
+  "dialog_pick_user_pics_report": {
+    "message": "报告图片"
+  },
+  "dialog_pick_user_pics_not_found": {
+    "message": "没找到任何符合您要求的图片。"
+  },
+  "dialog_pick_user_pics_report_thanks": {
+    "message": "谢谢！"
+  },
+  "dialog_pick_user_pics_report_innop": {
+    "message": "不适当的"
+  },
+  "dialog_pick_user_pics_report_duplicate": {
+    "message": "重复的"
+  },
+  "dialog_pick_user_pics_bottom_desc_1": {
+    "message": "使用"
+  },
+  "dialog_pick_user_pics_bottom_desc_2": {
+    "message": "报告违规。"
+  },
+  "dialog_title_add_dial": {
+    "message": "增加拨号"
+  },
+  "dialog_title_modify_dial": {
+    "message": "修改拨号"
+  },
+  "dialog_title_add_group": {
+    "message": "增加组"
+  },
+  "dialog_title_modify_group": {
+    "message": "修改组"
+  },
+  "dialog_title_manage_groups": {
+    "message": "管理组"
+  },
+  "dialog_title_deny": {
+    "message": "屏蔽"
+  },
+  "dialog_title_view_group": {
+    "message": "查看组"
+  },
+  "dialog_title_manage_deny": {
+    "message": "管理屏蔽组"
+  },
+  "dialog_title_pick_user_images": {
+    "message": "选定您喜欢的图像"
+  },
+  "dialog_title_edit_deny": {
+    "message": "编辑屏蔽规则"
+  },
+  "dialog_title_export": {
+    "message": "导出"
+  },
+  "dialog_title_import": {
+    "message": "导入"
+  },
+  "dialog_title_install_fvd_sync": {
+    "message": "安装FVD同步器"
+  },
+  "dlg_button_close": {
+    "message": "关闭"
+  },
+  "dlg_button_deny": {
+    "message": "屏蔽"
+  },
+  "dlg_button_add_dial": {
+    "message": "增加拨号"
+  },
+  "dlg_button_cancel": {
+    "message": "取消"
+  },
+  "dlg_button_save": {
+    "message": "保存"
+  },
+  "dlg_button_modify_dial": {
+    "message": "修改"
+  },
+  "dlg_button_add_group": {
+    "message": "增加组"
+  },
+  "dlg_button_modify_group": {
+    "message": "修改组"
+  },
+  "dlg_button_add_deny_rule": {
+    "message": "增加屏蔽规则"
+  },
+  "dlg_button_copy_to_clipboard": {
+    "message": "复制到剪贴板"
+  },
+  "dlg_button_import": {
+    "message": "导入"
+  },
+  "dlg_alert_release_left_button": {
+    "message": "请释放鼠标按钮创建屏幕截图！"
+  },
+  "dlg_alert_ok": {
+    "message": " OK "
+  },
+  "dlg_alert_cannot_remove_group_title": {
+    "message": "不能移除组"
+  },
+  "dlg_alert_cannot_remove_group_text": {
+    "message": "不能移除上一个组"
+  },
+  "dlg_alert_sd_locked_action_title": {
+    "message": "拒绝访问"
+  },
+  "dlg_alert_sd_locked_action_text": {
+    "message": "快速拨号被锁定。请解锁以继续进行该动作。"
+  },
+  "dlg_alert_wait_importing_title": {
+    "message": "请稍候"
+  },
+  "dlg_alert_wait_importing_text": {
+    "message": "导入处理中，请稍候"
+  },
+  "dlg_alert_sync_on_another_driver_title": {
+    "message": "同步激活"
+  },
+  "dlg_alert_sync_on_another_driver_text": {
+    "message": "另一个数据（书签等）现在正在同步。请等候同步完成。"
+  },
+  "dlg_alert_fail_obtain_user_pics_title": {
+    "message": "用户图片现在不可用"
+  },
+  "dlg_alert_fail_obtain_user_pics_text": {
+    "message": "用户图库现在不可用，请稍后再试。"
+  },
+  "dlg_confirm_ok": {
+    "message": "OK"
+  },
+  "dlg_confirm_cancel": {
+    "message": "取消"
+  },
+  "dlg_confirm_remove_links_all_title": {
+    "message": "您确定吗?"
+  },
+  "dlg_confirm_remove_links_all_text": {
+    "message": "移除这些链接？"
+  },
+  "dlg_confirm_dial_exists_title": {
+    "message": "已存在?"
+  },
+  "dlg_confirm_dial_exists_text": {
+    "message": "该URL拨号已经存在。继续吗？"
+  },
+  "dlg_confirm_remove_dial_title": {
+    "message": "您确定吗?"
+  },
+  "dlg_confirm_remove_dial_text": {
+    "message": "移除该项？"
+  },
+  "dlg_confirm_remove_group_title": {
+    "message": "您确定吗?"
+  },
+  "dlg_confirm_remove_group_text": {
+    "message": "该组%count% 个拨号"
+  },
+  "dlg_confirm_import_title": {
+    "message": "请确认导入"
+  },
+  "dlg_confirm_import_text": {
+    "message": "导入将删除当前拨号数据库并用导入设置覆盖当前设置，要继续吗?"
+  },
+  "dlg_confirm_set_auto_preview_global_title": {
+    "message": "您所有的自定义拨号将被重置"
+  },
+  "dlg_confirm_set_auto_preview_global_text": {
+    "message": "您是否确认您所有的自定义拨号将被重置？"
+  },
+  "dlg_alert_set_auto_preview_global_title": {
+    "message": "成功！"
+  },
+  "dlg_alert_set_auto_preview_global_text": {
+    "message": "手动拨号已成功更改！"
+  },
+  "dlg_adddial_create_group": {
+    "message": "创建新组..."
+  },
+  "dlg_adddial_set_file": {
+    "message": "从本地文件"
+  },
+  "dlg_adddial_help_us_user_pics": {
+    "message": "帮助我们改进预定义图像。输入URL或从本地文件上传您喜欢的网站的自定义logo。它们将进入用户相册！"
+  },
+  "dlg_importing_step1": {
+    "message": "第1步：清除旧数据"
+  },
+  "dlg_importing_step2": {
+    "message": "第2步： 导入参数选择"
+  },
+  "dlg_importing_step3": {
+    "message": "第3步：导入屏蔽域名/URLs"
+  },
+  "dlg_importing_step4": {
+    "message": "第4步： 导入组"
+  },
+  "dlg_importing_step5": {
+    "message": "第5步： 导入拨号"
+  },
+  "dlg_importing_finished": {
+    "message": "成功！已导入 %groups% 个组和 %dials% 个拨号"
+  },
+  "dlg_manage_groups_add_group": {
+    "message": "增加组"
+  },
+  "dlg_move_to_nosync_group_title": {
+    "message": "将拨号移动到非同步组"
+  },
+  "dlg_move_to_nosync_group_text": {
+    "message": "您正在移动该拨号至<b>非同步</b> 组。<br/>请注意该拨号将只在当前电脑可见。在其它电脑上将会 <b>消失</b> 。"
+  },
+  "dlg_nosync_group_title": {
+    "message": "将同步组设为非同步"
+  },
+  "dlg_nosync_group_text": {
+    "message": "您正在将同步组设为<b>非同步</b> 组。 请注意该组将只在当前电脑可见。在其它电脑上将会 <b>消失</b> 。"
+  },
+  "dlg_dont_show_it_again": {
+    "message": "不再显示"
+  },
+  "sah_copied": {
+    "message": "已复制!"
+  },
+  "error_must_be_filled": {
+    "message": "必须填写"
+  },
+  "error_invalid_url": {
+    "message": "无效URL"
+  },
+  "error_url_deny": {
+    "message": "URL被屏蔽，请在选项中检查您的屏蔽域名"
+  },
+  "error_url_deny_host": {
+    "message": "域名被屏蔽，请在选项中检查您的屏蔽域名"
+  },
+  "error_url_deny_url": {
+    "message": "URL被屏蔽，请在选项中检查您的屏蔽域名"
+  },
+  "error_fail_get_title_dinamically": {
+    "message": "动态获取标题失败"
+  },
+  "error_already_exists": {
+    "message": "已经存在"
+  },
+  "error_wrong_import_data": {
+    "message": "导入数据错误"
+  },
+  "error_not_image": {
+    "message": "所选文件不是图片"
+  },
+  "cm_speeddial_cell_open_tab": {
+    "message": "在标签中打开"
+  },
+  "cm_speeddial_cell_open_new_tab": {
+    "message": "在新标签页打开"
+  },
+  "cm_speeddial_cell_open_bg_tab": {
+    "message": "在后台标签页中打开"
+  },
+  "cm_speeddial_cell_edit": {
+    "message": "编辑"
+  },
+  "cm_speeddial_cell_remove": {
+    "message": "删除拨号"
+  },
+  "cm_speeddial_cell_copy_url": {
+    "message": "复制URL"
+  },
+  "cm_speeddial_cell_move_to": {
+    "message": "移动到"
+  },
+  "cm_speeddial_cell_refresh": {
+    "message": "刷新"
+  },
+  "cm_speeddial_cell_refresh_manual": {
+    "message": "手动刷新"
+  },
+  "cm_speeddial_group_edit": {
+    "message": "编辑"
+  },
+  "cm_speeddial_group_remove": {
+    "message": "移除"
+  },
+  "cm_speeddial_group_default": {
+    "message": "默认"
+  },
+  "cm_speeddial_group_sync_this_group": {
+    "message": "同步该组"
+  },
+  "cm_speeddial_group_open_all": {
+    "message": "打开所有拨号"
+  },
+  "cm_speeddial_group_manage": {
+    "message": "管理组"
+  },
+  "cm_speeddial_global_add_dial": {
+    "message": "增加组"
+  },
+  "cm_speeddial_global_open_all": {
+    "message": "打开所有拨号"
+  },
+  "cm_speeddial_global_style": {
+    "message": "样式"
+  },
+  "cm_speeddial_global_style_fancy": {
+    "message": "奇特"
+  },
+  "cm_speeddial_global_style_standard": {
+    "message": "标准"
+  },
+  "cm_speeddial_global_view": {
+    "message": "视图"
+  },
+  "cm_speeddial_global_preview": {
+    "message": "预览"
+  },
+  "cm_speeddial_global_change_size": {
+    "message": "改变大小..."
+  },
+  "cm_speeddial_global_number_of_columns": {
+    "message": "列数"
+  },
+  "cm_speeddial_global_number_of_rows": {
+    "message": "行数"
+  },
+  "cm_speeddial_global_view_big": {
+    "message": "大"
+  },
+  "cm_speeddial_global_view_medium": {
+    "message": "中等"
+  },
+  "cm_speeddial_global_view_small": {
+    "message": "小"
+  },
+  "cm_speeddial_global_view_custom": {
+    "message": "自定义"
+  },
+  "cm_speeddial_global_view_list": {
+    "message": "列表"
+  },
+  "cm_scrolling_type": {
+    "message": "滚动方式"
+  },
+  "cm_mostvisited_cell_add_to_speeddial": {
+    "message": "添加到快速拨号"
+  },
+  "cm_mostvisited_cell_block": {
+    "message": "屏蔽"
+  },
+  "cm_apps_open": {
+    "message": "打开"
+  },
+  "cm_apps_remove": {
+    "message": "移除"
+  },
+  "cm_main_title": {
+    "message": "FVD快速拨号"
+  },
+  "cm_add_to": {
+    "message": "添加到"
+  },
+  "cm_refresh_all": {
+    "message": "刷新全部"
+  },
+  "popup_speed_dial": {
+    "message": "快速拨号"
+  },
+  "popup_options": {
+    "message": "选项"
+  },
+  "cs_dial_added": {
+    "message": "拨号已添加"
+  },
+  "options_sd_preview_settings": {
+    "message": "Speed Dial preview setings"
+  },
+  "options_set_dials_to_auto_update": {
+    "message": "Set auto update"
+  },
+  "options_turn_off_dials_auto_update": {
+    "message": "Turn off auto update"
+  },
+  "dlg_confirm_turn_off_autoupdate_globally_title": {
+    "message": "Confirm your action"
+  },
+  "dlg_confirm_turn_off_autoupdate_globally_text": {
+    "message": "All speed dials auto update settings will be turned off."
+  },
+  "dlg_alert_dials_autoupdate_updated_title": {
+    "message": "Success!"
+  },
+  "dlg_alert_dials_autoupdate_updated_text": {
+    "message": "Dials updated successully."
+  },
+  "dialog_title_set_autoupdate_batch": {
+    "message": "Set auto update"
+  },
+  "bg_dialog_setautoupdate_autoupdate_every": {
+    "message": "Auto update dial every"
+  },
+  "newtab_introduction_slide3_title": {
+    "message": "Which phone do you use?"
+  },
+  "newtab_introduction_slide3_text": {
+    "message": "You only need to select this once and we will save your preference"
+  },
+  "newtab_introduction_last_step": {
+    "message": "Last step"
+  },
+  "newtab_initialization_message": {
+    "message": "Initialization... Please wait..."
+  },
+  "newtab_search": {
+    "message": "Search"
+  },
+  "newtab_search_on_ebay": {
+    "message": "Search on Ebay"
+  },
+  "newtab_cant_move_dials_in_popular": {
+    "message": "You can rearrange dials in ANY group except in <b>Popular Group</b>. This group arranges dials by clicks popularity."
+  },
+  "newtab_or": {
+    "message": "or"
+  },
+  "bg_dialog_adddial_pic_local_file": {
+    "message": "Local File?"
+  },
+  "bg_dialog_adddial_pick_local_file_desc": {
+    "message": "To link dial to you local file you need to write correct file location in format:<br>{examples}<br>Alternative way how to get file address: open new tab. drag and drop file into your browser. In URL bar you will see the address of your files."
+  },
+  "bg_dialog_adddial_pick_local_file_desc_linux": {
+    "message": "file://{full path to file}<br>For example: <b>file:///home/user/page.html</b>"
+  },
+  "bg_dialog_adddial_pick_local_file_desc_win": {
+    "message": "file:///{full path to file where \\ replaced by /}<br>For example: <b>file:///C:\\user\\pic.jpg</b>"
+  },
+  "options_display_dial_borders": {
+    "message": "Display dial borders"
+  },
+  "options_reset_speed_dial_clicks": {
+    "message": "Reset dials clicks"
+  },
+  "options_reset_clicks": {
+    "message": "Reset clicks"
+  },
+  "options_confirm_reset_clicks_title": {
+    "message": "Confirm your action"
+  },
+  "options_confirm_reset_clicks_text": {
+    "message": "Do you really want to reset clicks?"
+  },
+  "options_success_reset_clicks_title": {
+    "message": "Success!"
+  },
+  "options_success_reset_clicks_text": {
+    "message": "Clicks resetted successfully!"
+  },
+  "options_available_in_standard_theme_only": {
+    "message": "Available in Standard theme only."
+  },
+  "newtab_search_input_placeholder": {
+    "message": "Enter your search..."
+  },
+  "options_parallax_option": {
+    "message": "Parallax"
+  },
+  "options_parallax_strength": {
+    "message": "Parallax effect strength: "
+  },
+  "newtab_offer_parallax_title": {
+    "message": "Make your background dynamic with Parallax effect."
+  },
+  "newtab_offer_parallax_try_parallax": {
+    "message": "Try Parallax"
+  },
+  "newtab_offer_parallax_cancel": {
+    "message": "Close"
+  },
+  "newtab_offer_parallax_description": {
+    "message": "Go to FVD Speed Dial > Settings > Background > Select Parallax in Type Drop down."
+  },
+  "newtab_light_collapsed_message_text": {
+    "message": "Double click to show Speed Dial"
+  },
+  "bg_default_dial_nimbus": {
+    "message": "Nimbus Note"
+  },
+  "options_backup_via_eversync_suggestion": {
+    "message": "Important! Don't forget to Backup your dials and custom images to restore them any time."
+  },
+  "options_backup_via_eversync_suggestion_button": {
+    "message": "Backup Dials"
+  },
+  "newtab_voice_search": {
+    "message": "Voice Search"
+  },
+  "newtab_search_on_amazon": {
+    "message": "Search on Amazon"
+  },
+  "bg_default_dial_half_com": {
+    "message": "Half.com"
+  },
+  "bg_default_dial_tripadvizor": {
+    "message": "TripAdvisor"
+  },
+  "bg_default_dial_booking": {
+    "message": "Booking.com"
+  },
+  "bg_default_dial_aliexpress": {
+    "message": "AliExpress"
+  },
+  "newtab_dials_search_input_placeholder": {
+    "message": "Search in Speed Dial"
+  },
+  "newtab_dials_search_no_match": {
+    "message": "No Match"
+  },
+  "newtab_dials_search_try_on_web": {
+    "message": "Try on Web? Or press Enter key."
+  },
+  "newtab_dials_search_no_match_query": {
+    "message": "Your search: <strong></strong> didn't match any Speed Dial titles/urls."
+  },
+  "options_enable_dials_search": {
+    "message": "Enable search in Speed Dial"
+  },
+  "newtab_search_on_aliexpress": {
+    "message": "Search on AliExpress"
+  },
+  "bg_default_dial_wayfair": {
+    "message": "Wayfair"
+  },
+  "bg_default_dial_groupon": {
+    "message": "Groupon"
+  },
+  "options_start_donate": {
+    "message": "Donate"
+  },
+  "newtab_search_on_billiger": {
+    "message": "Search on Billiger"
+  },
+  "bg_default_dial_billiger": {
+    "message": "Billiger"
+  },
+  "newtab_restore_corrupted_files_title": {
+    "message": "Speed dials being restored…"
+  },
+  "newtab_restore_corrupted_files_msg1": {
+    "message": "As a result of unidentified factors/actions of other programs some speed dials were damaged and are being restored at the moment. This may take some time."
+  },
+  "newtab_restore_corrupted_files_msg2": {
+    "message": "No need to worry! Everything will be up and running in no time!"
+  },
+  "options_enable_ondial_search": {
+    "message": "Enable search on dials"
+  },
+  "newtab_ondialsearch_placeholder": {
+    "message": "enter your search.."
+  },
+  "newtab_disable_page_mod": {
+    "message": "disable this widget"
+  },
+  "options_quick_preview": {
+    "message": "Quick Preview Widget"
+  },
+  "dlg_confirm_disable_quick_preview_title": {
+    "message": "Please confirm your action."
+  },
+  "dlg_confirm_disable_quick_preview_text": {
+    "message": "Do you really want to disable Quick Preview Widget?"
+  },
+  "cm_speeddial_cell_open_incognito_tab": {
+    "message": "Open in Incognito window"
+  },
+  "newtab_introduction_opera_how_to_newtab": {
+    "message": "How to set FVD Speed Dial as new tab?"
+  },
+  "newtab_introduction_opera_how_to_newtab_step1": {
+    "message": "1) Install add Custom new tab page from"
+  },
+  "newtab_introduction_opera_how_to_newtab_step2": {
+    "message": "2) Enter the URL in form"
+  },
+  "options_sync_link_opera": {
+    "message": "Install from Opera Webstore"
+  },
+  "bg_dialog_addgroup_position": {
+    "message": "Add To:"
+  },
+  "bg_dialog_addgroup_position_top": {
+    "message": "Top"
+  },
+  "bg_dialog_addgroup_position_bottom": {
+    "message": "Bottom"
+  },
+  "options_help": {
+    "message": "Help"
+  },
+  "options_help_url": {
+    "message": "https://s.nimbusweb.me/share/3644739/26cf9i89r01k7swzsw9g"
+  },
+  "options_main_button_action": {
+    "message": "Toolbar button action"
+  },
+  "options_main_button_action_sd_in_new_tab": {
+    "message": "Open Speed Dial in a new tab"
+  },
+  "options_main_button_action_sd_in_active_tab": {
+    "message": "Open Speed Dial in the active tab"
+  },
+  "options_main_button_action_add_site_to_sd": {
+    "message": "Add the active site to Speed Dial"
+  },
+  "newtab_bottom_text_terms_of_use": {
+    "message": "Terms of Use"
+  },
+  "newtab_bottom_text_privacy_policy": {
+    "message": "Privacy Policy"
+  },
+  "options_release_notes": {
+    "message": "Release Notes"
+  },
+  "options_release_notes_url": {
+    "message": "https://everhelper.me/release-notes-en.php"
+  },
+  "booking_widget_quick_search": {
+    "message": "Quick Search"
+  },
+  "booking_widget_reset": {
+    "message": "reset"
+  },
+  "booking_widget_destination_title": {
+    "message": "Destination/Hotel Name:"
+  },
+  "booking_widget_destination_empty_error": {
+    "message": "Enter a destination to start searching."
+  },
+  "booking_widget_are_you_travelling_for_work": {
+    "message": "Are you travelling for work?"
+  },
+  "booking_widget_yes": {
+    "message": "Yes"
+  },
+  "booking_widget_no": {
+    "message": "No"
+  },
+  "booking_widget_checkin": {
+    "message": "Check-in:"
+  },
+  "booking_widget_checkin_date": {
+    "message": "Tuesday, April 11, 2017"
+  },
+  "booking_widget_reservation_too_long": {
+    "message": "Reservations longer than 30 nights are not possible. "
+  },
+  "booking_widget_checkout": {
+    "message": "Check-out:"
+  },
+  "booking_widget_checkout_date": {
+    "message": "Thursday, April 27, 2017"
+  },
+  "booking_widget_dont_have_dates": {
+    "message": "I don't have specific dates yet"
+  },
+  "booking_widget_rooms": {
+    "message": "Rooms"
+  },
+  "booking_widget_adults": {
+    "message": "Adults"
+  },
+  "booking_widget_children": {
+    "message": "Children<br>(under 18)"
+  },
+  "booking_widget_close": {
+    "message": "close"
+  },
+  "booking_widget_search": {
+    "message": "Search"
+  },
+  "booking_widget_night_stay": {
+    "message": "-night stay"
+  },
+  "booking_widget_children_ages_on": {
+    "message": "Children's ages on"
+  },
+  "booking_widget_children_ages_at_checkout": {
+    "message": "Children's ages at checkout"
+  },
+  "booking_widget_previous_month": {
+    "message": "Previous Month"
+  },
+  "booking_widget_next_month": {
+    "message": "Next Month"
+  },
+  "month_0": {
+    "message": "January"
+  },
+  "month_1": {
+    "message": "February"
+  },
+  "month_2": {
+    "message": "March"
+  },
+  "month_3": {
+    "message": "April"
+  },
+  "month_4": {
+    "message": "May"
+  },
+  "month_5": {
+    "message": "June"
+  },
+  "month_6": {
+    "message": "July"
+  },
+  "month_7": {
+    "message": "August"
+  },
+  "month_8": {
+    "message": "September"
+  },
+  "month_9": {
+    "message": "October"
+  },
+  "month_10": {
+    "message": "November"
+  },
+  "month_11": {
+    "message": "December"
+  },
+  "dow_0": {
+    "message": "Sunday"
+  },
+  "dow_1": {
+    "message": "Monday"
+  },
+  "dow_2": {
+    "message": "Tuesday"
+  },
+  "dow_3": {
+    "message": "Wednesday"
+  },
+  "dow_4": {
+    "message": "Thursday"
+  },
+  "dow_5": {
+    "message": "Friday"
+  },
+  "dow_6": {
+    "message": "Saturday"
+  },
+  "booking_widget_from": {
+    "message": "from"
+  },
+  "booking_widget_to": {
+    "message": "to"
+  },
+  "booking_widget_travel_for_work_hint": {
+    "message": "Quickly find the best properties for your trip"
+  },
+  "dow_short_0": {
+    "message": "Su"
+  },
+  "dow_short_1": {
+    "message": "Mo"
+  },
+  "dow_short_2": {
+    "message": "Tu"
+  },
+  "dow_short_3": {
+    "message": "We"
+  },
+  "dow_short_4": {
+    "message": "Th"
+  },
+  "dow_short_5": {
+    "message": "Fr"
+  },
+  "dow_short_6": {
+    "message": "Sa"
+  },
+  "options_preload_search_items": {
+    "message": "Pre-load related search results"
+  }
+}
