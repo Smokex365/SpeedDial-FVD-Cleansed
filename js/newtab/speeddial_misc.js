@@ -1006,8 +1006,8 @@
     //deepLinks
     adMarketplace: {
       instantSearch: {
-        // Changed from the default to good. Should be possible to change to any search engine. Haven't figured
-        // out how to make the user-selection work.
+        // Changed from the default to Google. Should be possible to change to any search engine.
+        // Haven't figured out how to make the user-selection work.
         url: "https://www.google.com/search?q={query}"
       }
     },
