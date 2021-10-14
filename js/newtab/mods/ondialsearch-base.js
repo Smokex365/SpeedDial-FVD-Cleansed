@@ -212,7 +212,6 @@ var Autocomplete = {
         return items;
       }
     }
-    
   }
 };
 
