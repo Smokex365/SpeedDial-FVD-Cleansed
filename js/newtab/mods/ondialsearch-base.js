@@ -971,8 +971,6 @@ module.exports = sitesList;
         iterate();
     };
 
-
-
     async.forEachOfLimit =
     async.eachOfLimit = function (obj, limit, iterator, callback) {
         _eachOfLimit(limit)(obj, iterator, callback);
@@ -1020,7 +1018,6 @@ module.exports = sitesList;
             })();
         };
     }
-
 
     function doParallel(fn) {
         return function (obj, iterator, callback) {
@@ -1297,8 +1294,6 @@ module.exports = sitesList;
             }
         });
     };
-
-
 
     async.retry = function(times, task, callback) {
         var DEFAULT_TIMES = 5;
@@ -1873,7 +1868,6 @@ module.exports = sitesList;
     async.applyEach = _applyEach(async.eachOf);
     async.applyEachSeries = _applyEach(async.eachOfSeries);
 
-
     async.forever = function (fn, callback) {
         var done = only_once(callback || noop);
         var task = ensureAsync(fn);
@@ -1995,28 +1989,26 @@ function defaultClearTimeout () {
 } ())
 function runTimeout(fun) {
     if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  }
+  // if setTimeout wasn't available but was latter defined
     if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
+      cachedSetTimeout = setTimeout;
+      return setTimeout(fun, 0);
     }
     try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
+      // when when somebody has screwed with setTimeout but no I.E. maddness
+      return cachedSetTimeout(fun, 0);
     } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
+      try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch(e){
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
     }
-
-
+  }
 }
 function runClearTimeout(marker) {
     if (cachedClearTimeout === clearTimeout) {
@@ -2041,9 +2033,6 @@ function runClearTimeout(marker) {
             return cachedClearTimeout.call(this, marker);
         }
     }
-
-
-
 }
 var queue = [];
 var draining = false;
@@ -2443,7 +2432,6 @@ process.umask = function() { return 0; };
 				}
 
 				w *= baseMinusT;
-
 			}
 
 			out = output.length + 1;
