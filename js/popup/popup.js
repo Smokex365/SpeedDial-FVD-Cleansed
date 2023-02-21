@@ -10,11 +10,11 @@
 	
 	Popup.prototype = {
 		showOptions: function(){
-			fvdSpeedDial.Utils.Opener.newTab( chrome.extension.getURL("options.html") );
+			fvdSpeedDial.Utils.Opener.newTab( chrome.runtime.getURL("options.html") );
 		},
 		
 		showSpeedDial: function(){
-			fvdSpeedDial.Utils.Opener.newTab( chrome.extension.getURL("newtab.html") );			
+			fvdSpeedDial.Utils.Opener.newTab( chrome.runtime.getURL("newtab.html") );			
 		}
 	}
 	

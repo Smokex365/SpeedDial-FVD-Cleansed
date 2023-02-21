@@ -1,44 +1,68 @@
 {
-   "background": {
-      "page": "background.html"
-   },
-   "browser_action": {
-      "default_icon": "images/icons/24x24.png",
-      "default_title": "FVD Speed Dial"
-   },
-   "chrome_url_overrides": {
-      "newtab": "newtab.html"
-   },
-   "content_scripts": [
-      {
-         "js": [ "content-scripts/fvdspeeddial.js" ],
-         "matches": [ "https://www.fvdspeeddial.com/*", "https://fvdspeeddial.com/*" ]
-      },
-      {
-         "all_frames": true,
-         "js": [ "content-scripts/everhelper.js" ],
-         "matches": [ "*://everhelper.me/*", "*://*.everhelper.me/*" ],
-         "run_at": "document_start"
-      }
-   ],
-   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
-   "default_locale": "en",
-   "description": "New Tab Page Replacement with 3D Speed Dial and predefined images, sync and organize your bookmarks, groups, and most visited",
-   "icons": {
-      "128": "images/icons/128x128.png",
-      "16": "images/icons/16x16.png",
-      "24": "images/icons/24x24.png",
-      "32": "images/icons/32x32.png",
-      "48": "images/icons/48x48.png",
-      "64": "images/icons/64x64.png"
-   },
-   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCcLWij2OcnGKZ9EBrjBUmTPIhLiH/lvGsLY49LnaeKIcI1MkhKIP4Q7ok8E1Y2iD0xpgF/EE9cq0g+9IX9CKpk92cYU/69Z6HnMwfn8MGvRFT4qmbh/8GrmFXCJqbyt3fbGqGRxH+fzY5wDGQ4mQkX2PUaG1MALUVnmEt5eV1aIwIDAQAB",
-   "manifest_version": 3,
-   "name": "Speed Dial [FVD] - New Tab Page, 3D, Sync...",
-   "options_page": "options.html",
-   "permissions": [ "scripting", "tabs", "history", "management", "unlimitedStorage", "chrome://favicon/", "<all_urls>", "contextMenus", "storage", "idle" ],
-   "short_name": "New Tab Page",
-   "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.01-[1.77.9.3]",
-   "web_accessible_resources": [ "images/cropper/img.png", "newtab.html", "content-scripts/hiddencapture-inject.js" ]
+	"manifest_version": 3,
+	"name": "Speed Dial [FVD] - New Tab Page, 3D, Sync...",
+	"description": "New Tab Page Replacement with 3D Speed Dial and predefined images, sync and organize your bookmarks, groups, and most visited",
+	"default_locale": "en",
+	"background": {
+		"service_worker": "worker.js",
+		"type": "module"
+	},
+		"chrome_url_overrides": {
+		"newtab": "newtab.html"
+	},
+		"action": {
+		"default_icon": "images/icons/24x24.png",
+		"default_title": "FVD Speed Dial"
+	},
+	"content_scripts": [
+		{
+			"js": ["content-scripts/fvdspeeddial.js"],
+			"matches": ["https://www.fvdspeeddial.com/*", "https://fvdspeeddial.com/*"]
+		},
+		{
+			"all_frames": true,
+			"js": ["content-scripts/everhelper.js"],
+			"matches": ["*://everhelper.me/*", "*://*.everhelper.me/*"],
+			"run_at": "document_start"
+		}
+	],
+	"permissions": [
+		"tabs",
+		"history",
+		"management",
+		"unlimitedStorage",
+		"contextMenus",
+		"storage",
+		"idle",
+		"scripting",
+		"activeTab"
+	],
+	"host_permissions": ["*://*/*", "<all_urls>"],
+	"options_page": "options.html",
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'"
+	},
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"images/cropper/img.png",
+				"newtab.html",
+				"content-scripts/hiddencapture-inject.js"
+			],
+			"matches": ["<all_urls>"],
+			"extension_ids": []
+		}
+	],
+	"short_name": "New Tab Page",
+	"update_url": "https://clients2.google.com/service/update2/crx",
+	"version": "81.2.6",
+	"icons": {
+		"128": "images/icons/128x128.png",
+		"16": "images/icons/16x16.png",
+		"24": "images/icons/24x24.png",
+		"32": "images/icons/32x32.png",
+		"48": "images/icons/48x48.png",
+		"64": "images/icons/64x64.png"
+	},
+	"key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCcLWij2OcnGKZ9EBrjBUmTPIhLiH/lvGsLY49LnaeKIcI1MkhKIP4Q7ok8E1Y2iD0xpgF/EE9cq0g+9IX9CKpk92cYU/69Z6HnMwfn8MGvRFT4qmbh/8GrmFXCJqbyt3fbGqGRxH+fzY5wDGQ4mQkX2PUaG1MALUVnmEt5eV1aIwIDAQAB"
 }

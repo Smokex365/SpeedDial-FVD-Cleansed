@@ -6,20 +6,19 @@
 	left: 0;
 	z-index: 99999;
 	opacity: 0;
-	-webkit-transition-duration: 200ms;	
+	-webkit-transition-duration: 200ms;
 }
 
-#tiptip_holder[active="1"]{
+#tiptip_holder[active='1'] {
 	opacity: 1;
 }
-
 
 #tiptip_holder.tip_bottom {
 	padding-top: 5px;
 }
 
-#tiptip_content {	
-	width: auto !important;	
+#tiptip_content {
+	width: auto !important;
 	font-size: 11px;
 	color: #fff;
 	text-shadow: 0 0 2px #000;
@@ -31,9 +30,9 @@
 }
 
 #tiptip_content.textTip {
-  color: #000;
-  text-shadow: none;
-  max-width: 300px;
+	color: #000;
+	text-shadow: none;
+	max-width: 300px;
 }
 
 /*
@@ -62,9 +61,6 @@
 }
 */
 
-
-
-
 /* Webkit Hacks  */
 /*
 @media screen and (-webkit-min-device-pixel-ratio:0) {	
@@ -81,27 +77,24 @@
 }
 */
 
-#tiptip_holder:after, #tiptip_holder:before
-{
-    content: ' ';
-    position: absolute;
-    top: -20px;
-    border-style: solid;
-    width: 0;
-    height: 0;
+#tiptip_holder:after,
+#tiptip_holder:before {
+	content: ' ';
+	position: absolute;
+	top: -20px;
+	border-style: solid;
+	width: 0;
+	height: 0;
 }
 
-
-#tiptip_holder:before
-{
-    border-color: transparent transparent #aaa transparent;
-    border-width: 0 17px 16px 7px;
-    left: 10px;
+#tiptip_holder:before {
+	border-color: transparent transparent #aaa transparent;
+	border-width: 0 17px 16px 7px;
+	left: 10px;
 }
 
-#tiptip_holder:after
-{
-    border-color: transparent transparent #eee transparent;
-    border-width: 4px 11px 12px 4px;
-    left: 14px;
+#tiptip_holder:after {
+	border-color: transparent transparent #eee transparent;
+	border-width: 4px 11px 12px 4px;
+	left: 14px;
 }

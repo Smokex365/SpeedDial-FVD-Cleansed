@@ -1,146 +1,119 @@
-// background script
+import HiddenCaptureModule from './hiddencapture.js';
+import Broadcaster from '../_external/broadcaster.js';
 
-(function() {
-  var MAX_SIMULTANEUSELY_CAPTURES = 1;
+const MAX_SIMULTANEUSELY_CAPTURES = 1;
 
-  fvdSpeedDial.HiddenCaptureQueue = new function() {
+const HiddenCaptureQueueModule = function (fvdSpeedDial) {
+	const HiddenCapture = new HiddenCaptureModule(fvdSpeedDial);
+	let queue = [];
+	let currentItem = null;
+	let nowCapturesInProgressCount = 0;
 
-    var queue = [];
-    var currentItem = null;
-    var nowCapturesInProgressCount = 0;
-    var self = this;
+	const ignoreIdsAfterComplete = [];
 
-    var ignoreIdsAfterComplete = [];
+	function checkNeedIgnoreIdAndRemove(id) {
+		const removeIndex = ignoreIdsAfterComplete.indexOf(id);
 
-    function checkNeedIgnoreIdAndRemove( id ){
-      var removeIndex = ignoreIdsAfterComplete.indexOf( id );
-      if( removeIndex != -1 ){
-        ignoreIdsAfterComplete.splice( removeIndex, 1 );
+		if (removeIndex !== -1) {
+			ignoreIdsAfterComplete.splice(removeIndex, 1);
+			return true;
+		}
 
-        return true;
-      }
+		return false;
+	}
 
-      return false;
-    }
+	function captureNext() {
+		
+		if (nowCapturesInProgressCount >= MAX_SIMULTANEUSELY_CAPTURES) {
+			
+			return;
+		}
 
-    function captureNext(){
+		if (queue.length === 0) {
+			return;
+		}
 
-      if( nowCapturesInProgressCount >= MAX_SIMULTANEUSELY_CAPTURES ){
-        return;
-      }
+		const item = queue.shift();
 
-      if( queue.length === 0 ){
-        return;
-      }
+		currentItem = item;
+		nowCapturesInProgressCount++;
 
-      var item = queue.shift();
-      currentItem = item;
-      nowCapturesInProgressCount++;
+		HiddenCapture.capture(item.params, function (resultData) {
+			if (!checkNeedIgnoreIdAndRemove(currentItem.id)) {
 
-      fvdSpeedDial.HiddenCapture.capture( item.params, function( resultData ){
-        if( !checkNeedIgnoreIdAndRemove( currentItem.id ) ){
-          console.info("Capture done");
-          Broadcaster.sendMessage({
-            action: "hiddencapture:done",
-            params: item.params,
-            result: resultData
-          });
-          if( item.callback ){
-            item.callback( resultData );
-          }
-        }
-        currentItem = null;
-        nowCapturesInProgressCount--;
-        captureNext();
-      } );
+				Broadcaster.sendMessage({
+					action: 'hiddencapture:done',
+					params: item.params,
+					result: resultData,
+				});
 
-    }
+				if (item.callback) {
+					item.callback(resultData);
+				}
+			}
 
-    this.removeFromQueueById = function( id ){
-      if( currentItem && currentItem.id == id ){// Task #1486
-        ignoreIdsAfterComplete.push( id );
-        return;
-      }
+			currentItem = null;
+			nowCapturesInProgressCount--;
+			captureNext();
+		});
+	}
 
-      var index = -1;
+	this.removeFromQueueById = function (id) {
+		if (currentItem && currentItem.id === id) {
+			ignoreIdsAfterComplete.push(id);
+			return;
+		}
 
-      for( var i = 0; i != queue.length; i++ ){
+		let index = -1;
 
-        if( queue[i].id == id ){
-          index = i;
-          break;
-        }
+		for (let i = 0; i !== queue.length; i++) {
+			if (queue[i].id === id) {
+				index = i;
+				break;
+			}
+		}
 
-      }
+		if (index !== -1) {
+			queue.splice(index, 1);
+		}
+	};
 
-      if( index != -1 ){
-        queue.splice( index, 1 );
-      }
+	this.getQueue = function () {
+		return queue;
+	};
 
-    };
+	this.getCurrentItem = function () {
+		return currentItem;
+	};
 
-    this.getQueue = function(){
-      return queue;
-    };
+	this.isEnqueued = function (id) {
+		if (currentItem && currentItem.id === id) {
+			return true;
+		}
 
-    this.getCurrentItem = function(){
-      return currentItem;
-    };
+		for (let i = 0; i !== queue.length; i++) {
+			if (queue[i].id === id) {
+				return true;
+			}
+		}
+		return false;
+	};
 
-    this.isEnqueued = function(id) {
-      if(currentItem && currentItem.id == id) {
-        return true;
-      }
-      for(var i = 0; i != queue.length; i++) {
-        if(queue[i].id == id) {
-          return true;
-        }
-      }
-      return false;
-    };
+	this.capture = function (params, callback) {
+		checkNeedIgnoreIdAndRemove(params.id);
 
-    this.capture = function( params, callback ){
+		queue.push({
+			id: params.id,
+			params: params,
+			callback: callback,
+		});
 
-      checkNeedIgnoreIdAndRemove( params.id );
+		captureNext();
+	};
 
-      queue.push({
-        id: params.id,
-        params: params,
-        callback: callback
-      });
+	this.empty = function () {
+		queue = [];
+	};
+};
 
-      captureNext();
-
-    };
-
-    this.empty = function() {
-      queue = [];
-    };
-
-  }();
-
-  Broadcaster.onMessage.addListener(function(msg, sender, sendResponse) {
-    if(msg.action == "hiddencapture:queue") {
-      var params = msg.params,
-          cb = null;
-      if(params.wantResponse) {
-        cb = function(res) {
-          sendResponse(res);
-        };
-      }
-      fvdSpeedDial.HiddenCaptureQueue.capture(params, cb);
-      if(cb) {
-        return true;
-      }
-    }else
-    if(msg.action == "hiddencapture:empty") {
-        fvdSpeedDial.HiddenCaptureQueue.empty();
-    }
-    else
-    if(msg.action == "storage:dialsCleared") {
-      // all dials removed, empty queue
-      fvdSpeedDial.HiddenCaptureQueue.empty();
-    }
-  });
-})();
-
+export default HiddenCaptureQueueModule;

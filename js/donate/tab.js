@@ -1,10 +1,9 @@
-(function() {
-  fvdSpeedDial.Donate = {
-    canShow: function() {
-      if(localStorage["paypal-donate-state"]) {
-        return false;
-      }
-      return true;
-    }
-  };
-})();
+import Prefs from '../prefs.js';
+
+const Donate = {
+	canShow: function () {
+		return !Prefs.get("paypal-donate-state");
+	},
+};
+
+export default Donate;

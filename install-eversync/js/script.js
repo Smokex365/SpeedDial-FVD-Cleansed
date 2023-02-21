@@ -1,3 +1,5 @@
-document.addEventListener("DOMContentLoaded", function() {
-  fvdSpeedDial.Localizer.localizeCurrentPage();
+import Localizer from '../../js/localizer.js';
+
+document.addEventListener("DOMContentLoaded", function () {
+	Localizer.localizeCurrentPage();
 }, false);

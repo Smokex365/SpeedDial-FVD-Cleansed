@@ -1,484 +1,530 @@
-(function(){
-  /**
-   * due to continue bug reporting, that previews stored in local filesystem is disappeared,
-   * store object with redundancy, both in local fs and indexedDB, hope it helps
-   */
-  var RedundancyStorage = {
-    _dbInst: null,
-    _db: function(cb) {
-      var self = this;
-      // req for db
-      if(this._dbInst) {
-        return cb(this._dbInst);
-      }
-      var request = indexedDB.open("FSRedundancy", 1);
-      request.onupgradeneeded = function(event) {
-        var db = event.target.result;
-        var objectStore = db.createObjectStore("fs_store", { keyPath: "path" });
-      };
-      request.onerror = function(event) {
-        console.error("Fatal! Can't request indexedDB.");
-      };
-      request.onsuccess = function(event) {
-        self._dbInst = event.target.result;
-        cb(self._dbInst);
-      };
-    },
-    set: function(path, contents, cb) {
-      cb = cb || function() {};
-      this._db(function(db) {
-        var transaction = db.transaction(["fs_store"], "readwrite");
-        transaction.onerror = function(event) {
-          cb(event);
-        };
-        var request = transaction.objectStore("fs_store").put({
-          path: path,
-          contents: contents
-        });
-        request.onsuccess = function(event) {
-          cb(null);
-        };
-      });
-    },
-    get: function(path, cb) {
-      this._db(function(db) {
-        var transaction = db.transaction(["fs_store"]);
-        var request = transaction.objectStore("fs_store").get(path);
-        request.onerror = function(event) {
-          cb(event);
-        };
-        request.onsuccess = function(event) {
-          cb(null, request.result.contents);
-        };
-      });
-    },
-    delete: function(path, cb) {
-      cb = cb || function() {};
-      this._db(function(db) {
-        var transaction = db.transaction(["fs_store"], "readwrite");
-        transaction.onerror = function(event) {
-          cb(event);
-        };
-        var request = transaction.objectStore("fs_store").delete(path);
-        request.onsuccess = function(event) {
-          cb(null);
-        };
-      });
-    },
-    getAllPaths: function(cb) {
-      this._db(function(db) {
-        var transaction = db.transaction(["fs_store"]);
-        var objectStore = transaction.objectStore("fs_store");
-        var paths = [];
-        objectStore.openCursor().onsuccess = function(event) {
-          var cursor = event.target.result;
-          if (cursor) {
-            paths.push(cursor.key);
-            cursor.continue();
-          }
-          else {
-            cb(null, paths);
-          }
-        };
-      });
-    }
-  };
+/**
+ * due to continue bug reporting, that previews stored in local filesystem is disappeared,
+ * store object with redundancy, both in local fs and indexedDB, hope it helps
+ */
+import Broadcaster from '../_external/broadcaster.js';
+import { Utils } from '../utils.js';
 
-  var FileSystem = function(){
-    var self = this;
-    // can be "restoring" or "normal"
-    // "restoring" means restore previous corruptions
-    var _state = "normal";
-    var _fs = null;
+const RedundancyStorage = {
+	_dbInst: null,
+	_db: function (cb) {
+		const self = this;
 
-    function request(callback){
-      if(_fs) {
-        return callback(_fs);
-      }
-      webkitRequestFileSystem(window.PERSISTENT, 1024 * 1024 * 1024, function(fs){
-        _fs = fs;
-        callback(fs);
-      });
-    }
+		if (this._dbInst) {
+			return cb(this._dbInst);
+		}
 
-    function _parseDir(path) {
-      var index = path.lastIndexOf("/");
-      if(index == -1) {
-        return ".";
-      }
-      var dir = path.substr(0, index);
-      if(!dir) {
-        dir = "/";
-      }
-      return dir;
-    }
+		const request = indexedDB.open('FSRedundancy', 1);
 
-    function init(){
-      request( function( fs ){
-        fs.root.getDirectory( "backups", {create: true}, function( dir ){
-          dir.getDirectory( "bookmarks", {create: true}, function(){} );
-          dir.getDirectory( "sd", {create: true}, function(){} );
-        } );
-      } );
-    }
+		request.onupgradeneeded = function (event) {
+			const db = event.target.result;
+			const objectStore = db.createObjectStore('fs_store', { keyPath: 'path' });
+		};
+		request.onerror = function (event) {
+			console.error("Fatal! Can't request indexedDB.");
+		};
+		request.onsuccess = function (event) {
+			self._dbInst = event.target.result;
+			cb(self._dbInst);
+		};
+	},
+	set: function (path, contents, cb) {
+		cb = cb || function () {};
+		this._db(function (db) {
+			const transaction = db.transaction(['fs_store'], 'readwrite');
 
-    this.__defineGetter__("redundancyStorage", function() {
-      return RedundancyStorage;
-    });
-    this.__defineSetter__("state", function(val) {
-      _state = val;
-      Broadcaster.sendMessage({
-        action: "storage:fs:updatestate",
-        state: val
-      });
-    });
-    this.__defineGetter__("state", function() {
-      return _state;
-    });
+			transaction.onerror = function (event) {
+				cb(event);
+			};
+			const request = transaction.objectStore('fs_store').put({
+				path: path,
+				contents: contents,
+			});
 
-    this.dirContents = function( path, callback ){
+			request.onsuccess = function (event) {
+				cb(null);
+			};
+		});
+	},
+	get: function (path, cb) {
+		this._db(function (db) {
+			const transaction = db.transaction(['fs_store']);
+			const request = transaction.objectStore('fs_store').get(path);
 
-      request( function( fs ){
+			request.onerror = function (event) {
+				console.warn(path);
+				cb(event);
+			};
+			request.onsuccess = function (event) {
+				if (!request.result || !request.result.contents) {
+					console.warn(path);
+					cb(true);
+				} else {
+					cb(null, request.result.contents);
+				}
+			};
+		});
+	},
+	delete: function (path, cb) {
+		cb = cb || function () {};
+		this._db(function (db) {
+			const transaction = db.transaction(['fs_store'], 'readwrite');
 
-        function toArray(list) {
-          return Array.prototype.slice.call(list || [], 0);
-        }
+			transaction.onerror = function (event) {
+				cb(event);
+			};
+			const request = transaction.objectStore('fs_store').delete(path);
 
-        fs.root.getDirectory( path, {create: true}, function( dir ){
+			request.onsuccess = function (event) {
+				cb(null);
+			};
+		});
+	},
+	getAllPaths: function (cb) {
+		this._db(function (db) {
+			const transaction = db.transaction(['fs_store']);
+			const objectStore = transaction.objectStore('fs_store');
+			const paths = [];
 
-          var dirReader = dir.createReader();
-          var entries = [];
+			objectStore.openCursor().onsuccess = function (event) {
+				const cursor = event.target.result;
 
-          // Keep calling readEntries() until no more results are returned.
-          var readEntries = function() {
-            dirReader.readEntries (function(results) {
+				if (cursor) {
+					paths.push(cursor.key);
+					cursor.continue();
+				} else {
+					cb(null, paths);
+				}
+			};
+		});
+	},
+};
 
-              if (!results.length) {
-                entries.sort();
+const FileSystemSD = function () {
+	const self = this;
+	// can be "restoring" or "normal"
+	// "restoring" means restore previous corruptions
+	let _state = 'normal';
+	let _fs = null;
 
-                var names = [];
-                entries.forEach(function( entry ){
-                  names.push( entry.name.replace( path, "" ) );
-                });
+	function request(callback) {
+		if (_fs) {
+			return callback(_fs);
+		}
 
-                callback( names );
-              } else {
-                entries = entries.concat(toArray(results));
-                readEntries();
-              }
+		webkitRequestFileSystem(window.PERSISTENT, 1024 * 1024 * 1024, function (fs) {
+			_fs = fs;
+			callback(fs);
+		});
+	}
 
-            }, function(){
-              callback( false );
-            });
-          };
+	function _parseDir(path) {
+		const index = path.lastIndexOf('/');
 
-          readEntries();
+		if (index === -1) {
+			return '.';
+		}
 
-        }, function(){
-          callback(false);
-        });
+		let dir = path.substr(0, index);
 
-      } );
+		if (!dir) {
+			dir = '/';
+		}
 
-    };
+		return dir;
+	}
 
-    this.makeDir = function( path, callback ){
+	function init() {
+		request(function (fs) {
+			fs.root.getDirectory('backups', { create: true }, function (dir) {
+				dir.getDirectory('bookmarks', { create: true }, function () {});
+				dir.getDirectory('sd', { create: true }, function () {});
+			});
+		});
+	}
 
-      request(function( fs ){
+	this.__defineGetter__('redundancyStorage', function () {
+		return RedundancyStorage;
+	});
+	this.__defineSetter__('state', function (val) {
+		_state = val;
+		Broadcaster.sendMessage({
+			action: 'storage:fs:updatestate',
+			state: val,
+		});
+	});
+	this.__defineGetter__('state', function () {
+		return _state;
+	});
 
-        fs.root.getDirectory( path, {create: true}, function( dir ){
+	this.makeDir = function (path, callback) {
+		request(function (fs) {
+			fs.root.getDirectory(path, { create: true }, function (dir) {
+				callback();
+			});
+		});
+	};
 
-          callback();
+	this.removeDir = function (path, callback) {
+		request(function (fs) {
+			fs.root.getDirectory(path, { create: true }, function (dir) {
+				dir.removeRecursively(
+					function () {
+						callback(true);
+					},
+					function () {
+						callback(false);
+					}
+				);
+			});
+		});
+	};
 
-        });
+	this.removeByURL = function (url, cb) {
+		if (typeof webkitResolveLocalFileSystemURL !== 'undefined') {
+			webkitResolveLocalFileSystemURL(
+				url,
+				function (entry) {
+					// remove from redundancy storage
+					RedundancyStorage.delete(entry.fullPath);
+					// remove from fs
+					entry.remove(cb, cb);
+				},
+				cb
+			);
+		} else {
+			console.info('webkitResolveLocalFileSystemURL is', typeof webkitResolveLocalFileSystemURL);
+			cb();
+		}
+	};
 
-      });
+	this.readAsDataURL = function (name, callback) {
+		request(function (fs) {
+			fs.root.getFile(
+				name,
+				null,
+				function (fileEntry) {
+					fileEntry.file(function (f) {
+						const reader = new FileReader();
 
-    };
+						reader.onload = function (e) {
+							callback(null, e.target.result);
+						};
+						reader.readAsDataURL(f);
+					});
+				},
+				function (err) {
+					console.log('Fail get entry for', name);
+					callback(err);
+				}
+			);
+		});
+	};
 
-    this.removeDir = function( path, callback ){
+	this.readAsDataURLbyURL = function (url, callback) {
+		url = url.replace(/.+persistent\//, '');
+		request(function (fs) {
+			fs.root.getFile(
+				url,
+				null,
+				function (fileEntry) {
+					fileEntry.file(function (file) {
+						const reader = new FileReader();
 
-      request(function( fs ){
+						reader.onload = function (e) {
+							callback(null, e.target.result);
+						};
+						reader.readAsDataURL(file);
+					});
+				},
+				function (err) {
+					console.log('Fail get entry for', url);
+					callback(err);
+				}
+			);
+		});
+	};
 
-        fs.root.getDirectory( path, {create: true}, function( dir ){
+	this.safeReadAsDataURLbyURL = function (url, callback) {
+		if (typeof webkitRequestFileSystem === 'object') {
+			return readAsDataURLbyURL(url, callback);
+		}
 
-          dir.removeRecursively( function(){
-            callback( true) ;
-          }, function(){
-            callback( false );
-          } );
+		const path = url.split('/persistent').pop();
 
-        });
+		RedundancyStorage.get(path, function (err, contents) {
+			// const blob = Utils.dataURIToBlob(contents);
 
-      });
+			if (err) {
+				console.warn(err);
+				callback(err, null);
+				return;
+			} else {
+				callback(null, contents);
+			}
+		});
+	};
 
-    };
+	this.read = function (name, callback) {
+		request(function (fs) {
+			fs.root.getFile(
+				name,
+				null,
+				function (fileEntry) {
+					fileEntry.file(function (f) {
+						const reader = new FileReader();
 
-    this.removeByURL = function(url, cb) {
-      webkitResolveLocalFileSystemURL(url, function(entry) {
-        // remove from redundancy storage
-        RedundancyStorage.delete(entry.fullPath);
-        // remove from fs
-        entry.remove(cb, cb);
-      }, cb);
-    };
+						reader.onload = function (e) {
+							callback(null, e.target.result);
+						};
+						reader.readAsArrayBuffer(f);
+					});
+				},
+				function (err) {
+					console.log('Fail get entry for', name);
+					callback(err);
+				}
+			);
+		});
+	};
 
-    this.readAsDataURL = function(name, callback){
-      request(function(fs){
-        fs.root.getFile(name, null, function(fileEntry){
-          fileEntry.file(function(f){
-            var reader = new FileReader();
-            reader.onload = function(e){
-              callback( null, e.target.result );
-            };
-            reader.readAsDataURL(f);
-          });
-        }, function(err){
-          console.log("Fail get entry for", name);
-          callback(err);
-        });
-      });
-    };
+	this.truncate = function (name, callback) {
+		request(function (fs) {
+			fs.root.getFile(
+				name,
+				{
+					create: true,
+				},
+				function (fileEntry) {
+					fileEntry.createWriter(function (f) {
+						f.onwriteend = function (event) {
+							callback(null);
+						};
+						f.onerror = function (err) {
+							callback(err);
+						};
 
-    this.readAsDataURLbyURL = function(url, callback) {
-      webkitResolveLocalFileSystemURL(url, function(fileEntry){
-        fileEntry.file(function(f){
-          var reader = new FileReader();
-          reader.onload = function(e){
-            callback( null, e.target.result );
-          };
-          reader.readAsDataURL(f);
-        });
-      }, function(err){
-        console.log("Fail get entry for", name);
-        callback(err);
-      });
-    };
+						f.truncate(0);
+					});
+				}
+			);
+		});
+	};
 
-    this.read = function(name, callback){
-      request(function(fs){
-        fs.root.getFile(name, null, function(fileEntry){
-          fileEntry.file(function(f){
-            var reader = new FileReader();
-            reader.onload = function(e){
-              callback( null, e.target.result );
-            };
-            reader.readAsArrayBuffer(f);
-          });
-        }, function(err){
-          console.log("Fail get entry for", name);
-          callback(err);
-        });
-      });
-    };
+	this.getEntryByURL = function (url, cb) {
+		webkitResolveLocalFileSystemURL(
+			url,
+			function (entry) {
+				cb(null, entry);
+			},
+			cb
+		);
+	};
 
-    this.truncate = function(name, callback){
+	this.existsByURL = function (url, cb) {
+		webkitResolveLocalFileSystemURL(
+			url,
+			function (entry) {
+				cb(null, true);
+			},
+			function () {
+				cb(null, false);
+			}
+		);
+	};
 
-      request(function( fs ){
-        fs.root.getFile(name, {
-          create: true
-        }, function(fileEntry){
-          fileEntry.createWriter(function(f){
-            f.onwriteend = function(event) {
-              callback(null);
-            };
-            f.onerror = function(err){
-              callback(err);
-            };
+	this.getEntry = function (name, cb) {
+		request(function (fs) {
+			fs.root.getFile(
+				name,
+				null,
+				function (fileEntry) {
+					cb(null, fileEntry);
+				},
+				function (err) {
+					cb(err);
+				}
+			);
+		});
+	};
 
-            f.truncate(0);
-          });
+	this.write = function (name, text, params, callback) {
+		if (typeof params === 'function') {
+			callback = params;
+			params = {};
+		}
 
-        });
+		if (typeof params.redundancy === 'undefined') {
+			params.redundancy = true;
+		}
 
-      });
+		// first create dir
+		console.log('Write File', name);
+		const dir = _parseDir(name);
 
-    };
+		self.makeDir(dir, function () {
+			self.truncate(name, function (err) {
+				if (err) {
+					return callback(err);
+				}
 
-    this.getEntryByURL = function(url, cb) {
-      webkitResolveLocalFileSystemURL(url, function(entry) {
-        cb(null, entry);
-      }, cb);
-    };
+				request(function (fs) {
+					fs.root.getFile(
+						name,
+						{
+							create: true,
+						},
+						function (fileEntry) {
+							fileEntry.createWriter(function (f) {
+								const blob = new Blob([text]);
+								let cbCalled = false;
 
-    this.existsByURL = function(url, cb) {
-      webkitResolveLocalFileSystemURL(url, function(entry) {
-        cb(null, true);
-      }, function() {
-        cb(null, false);
-      });
-    };
+								f.onwriteend = function (event) {
+									if (cbCalled) {
+										return;
+									}
 
-    this.getEntry = function(name, cb) {
-      request(function(fs) {
-        fs.root.getFile(name, null, function(fileEntry) {
-          cb(null, fileEntry);
-        }, function(err) {
-          cb(err);
-        });
-      });
-    };
+									cbCalled = true;
+									console.log('Write end for', name, f.length);
+									// store content to redundancy storage
+									const fURL = fileEntry.toURL();
 
-    this.write = function(name, text, params, callback) {
-      if(typeof params == "function") {
-        callback = params;
-        params = {};
-      }
-      if(typeof params.redundancy == "undefined") {
-        params.redundancy = true;
-      }
-      // first create dir
-      console.log("Write File", name);
-      var dir = _parseDir(name);
-      self.makeDir(dir, function() {
-        self.truncate( name, function(err) {
-          if(err) {
-            return callback(err);
-          }
-          request(function( fs ){
-            fs.root.getFile(name, {
-              create: true
-            }, function(fileEntry){
+									Utils.Async.chain([
+										function (next) {
+											if (params.redundancy) {
+												const reader = new FileReader();
+												let _nextCalled = false;
 
-              fileEntry.createWriter(function(f){
-                var cbCalled = false;
-                f.onwriteend = function(event) {
-                  if(cbCalled) {
-                    return;
-                  }
-                  cbCalled = true;
-                  console.log("Write end for", name, f.length);
-                  // store content to redundancy storage
-                  var fURL = fileEntry.toURL();
-                  fvdSpeedDial.Utils.Async.chain([
-                    function(next) {
-                      if(params.redundancy) {
-                        var reader = new FileReader();
-                        var _nextCalled = false;
-                        reader.onload = function(e){
-                          if(_nextCalled) {
-                            return;
-                          }
-                          _nextCalled = true;
-                          RedundancyStorage.set(name, e.target.result, function(err) {
-                            console.log("Redundancy set", name, err);
-                            next();
-                          });
-                        };
-                        reader.onerror = function() {
-                          if(_nextCalled) {
-                            return;
-                          }
-                          _nextCalled = true;
-                          return next();
-                        };
-                        reader.readAsDataURL(blob);
-                      }
-                      else {
-                        next();
-                      }
-                    },
-                    function() {
-                      callback(null, fURL);
-                    }
-                  ]);
-                };
-                f.onerror = function(err) {
-                 if(cbCalled) {
-                    return;
-                  }
-                  cbCalled = true;
-                  console.error("Twrite file error", err);
-                  callback(err);
-                };
-                var blob = new Blob( [text] );
-                f.write( blob );
-              });
+												reader.onload = function (e) {
+													if (_nextCalled) {
+														return;
+													}
 
-            });
+													_nextCalled = true;
+													RedundancyStorage.set(name, e.target.result, function (err) {
+														console.log('Redundancy set', name, err);
+														next();
+													});
+												};
+												reader.onerror = function () {
+													if (_nextCalled) {
+														return;
+													}
 
-          });
+													_nextCalled = true;
+													return next();
+												};
+												reader.readAsDataURL(blob);
+											} else {
+												next();
+											}
+										},
+										function () {
+											callback(null, fURL);
+										},
+									]);
+								};
+								f.onerror = function (err) {
+									if (cbCalled) {
+										return;
+									}
 
-        } );
-      });
-    };
+									cbCalled = true;
+									console.error('Twrite file error', err);
+									callback(err);
+								};
 
-    this.checkIntegrity = function() {
-      var notExistsFiles = [];
-      fvdSpeedDial.Utils.Async.chain([
-        function(next) {
-          RedundancyStorage.getAllPaths(function(err, paths) {
-            if(err) {
-              return console.error("FS Integity check: fail get paths from redundancy storage");
-            }
-            // check all paths should be exists
-            fvdSpeedDial.Utils.Async.arrayProcess(paths, function(path, apNext) {
-              self.getEntry(path, function(err, entry) {
-                if(err) {
-                  // think that file not found
-                  notExistsFiles.push(path);
-                }
-                apNext();
-              });
-            }, function() {
-              next();
-            });
-          });
-        },
-        function(next) {
-          if(!notExistsFiles.length) {
-            return next();
-          }
-          // restore files
-          self.state = "restoring";
-          fvdSpeedDial.Utils.Async.arrayProcess(notExistsFiles, function(path, apNext) {
-            RedundancyStorage.get(path, function(err, contents) {
-              var blob = fvdSpeedDial.Utils.dataURIToBlob(contents);
-              self.write(path, blob, {
-                redundancy: true
-              }, function(err) {
-                console.log("File written ", path, " result", err);
-                apNext();
-              });
-            });
-          }, function() {
-            next();
-          });
-        },
-        function() {
-          setTimeout(function() {
-            self.state = "normal";
-          }, 3000);
-        }
-      ]);
-    };
+								f.write(blob);
+							});
+						}
+					);
+				});
+			});
+		});
+	};
 
-    this.exists = function( name, callback ){
-      request(function(fs){
-        fs.root.getFile(name, null, function(fileEntry){
-          callback( true );
-        }, function(){
-          callback( false );
-        });
-      });
-    };
+	this.checkIntegrity = function () {
+		const notExistsFiles = [];
 
-    document.addEventListener( "DOMContentLoaded", function(){
-      init();
-    }, false );
-  };
+		Utils.Async.chain([
+			function (next) {
+				RedundancyStorage.getAllPaths(function (err, paths) {
+					if (err) {
+						return console.error('FS Integity check: fail get paths from redundancy storage');
+					}
 
-  window.addEventListener("load", function() {
-    fvdSpeedDial.Storage.FileSystem.checkIntegrity();
-  }, false);
+					// check all paths should be exists
+					Utils.Async.arrayProcess(
+						paths,
+						function (path, apNext) {
+							self.getEntry(path, function (err, entry) {
+								if (err) {
+									// think that file not found
+									notExistsFiles.push(path);
+								}
 
-  Broadcaster.onMessage.addListener(function(msg, sender, sendResponse) {
-    if(msg.action == "storage:fs:getState") {
-      sendResponse(fvdSpeedDial.Storage.FileSystem.state);
-      return true;
-    }
-  });
+								apNext();
+							});
+						},
+						function () {
+							next();
+						}
+					);
+				});
+			},
+			function (next) {
+				if (!notExistsFiles.length) {
+					return next();
+				}
 
-  fvdSpeedDial.Storage.FileSystem = new FileSystem();
+				// restore files
+				self.state = 'restoring';
+				Utils.Async.arrayProcess(
+					notExistsFiles,
+					function (path, apNext) {
+						RedundancyStorage.get(path, function (err, contents) {
+							const blob = Utils.dataURIToBlob(contents);
 
-})();
+							self.write(
+								path,
+								blob,
+								{
+									redundancy: true,
+								},
+								function (err) {
+									console.log('File written ', path, ' result', err);
+									apNext();
+								}
+							);
+						});
+					},
+					function () {
+						next();
+					}
+				);
+			},
+			function () {
+				setTimeout(function () {
+					self.state = 'normal';
+				}, 3000);
+			},
+		]);
+	};
+
+	this.exists = function (name, callback) {
+		request(function (fs) {
+			fs.root.getFile(
+				name,
+				null,
+				function () {
+					callback(true);
+				},
+				function () {
+					callback(false);
+				}
+			);
+		});
+	};
+};
+
+export default new FileSystemSD();

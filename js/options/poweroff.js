@@ -1,154 +1,128 @@
-fvdSpeedDial.Options.PowerOff = new function(){
-	
-	var self = this;
-	
-	function refresh(){
-		
-		var tabChangePass = document.getElementById( "poweroffTabChangePassCode" );
-		var tabRestore = document.getElementById( "poweroffTabRestorePassCode" );
-		
-		var setupForm = document.querySelector( ".tabCreate .createPassCode" );
-		var setupedMessage = document.querySelector( ".tabCreate .setuped" );
-		
-		if( !fvdSpeedDial.PowerOff.isEnabled() ){
-			
+import { _ } from '../localizer.js';
+import { Utils } from '../utils.js';
+
+const OptionsPowerOff = function (fvdSpeedDial) {
+	this.fvdSpeedDial = fvdSpeedDial;
+	const {PowerOff, Options, Dialogs} = this.fvdSpeedDial;
+
+	function refresh() {
+		const tabChangePass = document.getElementById("poweroffTabChangePassCode");
+		const tabRestore = document.getElementById("poweroffTabRestorePassCode");
+		const setupForm = document.querySelector(".tabCreate .createPassCode");
+		const setupedMessage = document.querySelector(".tabCreate .setuped");
+
+		if (!PowerOff.isEnabled()) {
 			tabChangePass.style.display = "none";
 			tabRestore.style.display = "none";
-						
-			if( fvdSpeedDial.Options.Tabs.tabsA["powerOffTabs"] ){
-				fvdSpeedDial.Options.Tabs.tabsA["powerOffTabs"].setActiveTab( 0 );
-			}			
-			
+
+			if (Options.Tabs.tabsA["powerOffTabs"]) {
+				Options.Tabs.tabsA["powerOffTabs"].setActiveTab(0);
+			}
+
 			setupForm.style.display = "block";
 			setupedMessage.style.display = "none";
-				
-		}
-		else{
+
+		} else {
 			tabChangePass.style.display = "";
-			tabRestore.style.display = "";		
-			
+			tabRestore.style.display = "";
+
 			setupForm.style.display = "none";
 			setupedMessage.style.display = "block";
-			
-			document.getElementById( "currentPassCodeEmail" ).textContent = fvdSpeedDial.PowerOff.getEmail();
+
+			document.getElementById("currentPassCodeEmail").textContent = PowerOff.getEmail();
 		}
-		
 	}
-	
-	function hideErrors(){
-		
-		var errors = document.querySelectorAll( "#poweroffSettings .error" );
-		
-		for( var i = 0; i != errors.length; i++ ){			
-			errors[i].style.display = "none";			
+
+	function hideErrors() {
+		const errors = document.querySelectorAll("#poweroffSettings .error");
+
+		for (let i = 0; i !== errors.length; i++) {
+			errors[i].style.display = "none";
 		}
-		
 	}
-	
-	function showError( id, text ){
-		
-		var error = document.getElementById( id );
-		
-		console.log( id, error );
-		
+
+	function showError(id, text) {
+		const error = document.getElementById(id);
+
+		console.log(id, error);
 		error.textContent = text;
 		error.style.display = "block";
-		
 	}
-	
-	this.createPassCode = function(){
-		
+
+	this.createPassCode = function () {
 		hideErrors();
-		
-		var passCode = document.getElementById( "passcodeValue" ).value;
-		var repeatPasscode = document.getElementById( "repeatPasscodeValue" ).value;
-		var email = document.getElementById( "reserveEmailValue" ).value;
-		
-		if( !passCode ){			
-			return showError( "createPassCodeError", _("options_poweroff_error_empty_passcode") );
+
+		const passCode = document.getElementById("passcodeValue").value;
+		const repeatPasscode = document.getElementById("repeatPasscodeValue").value;
+		const email = document.getElementById("reserveEmailValue").value;
+
+		if (!passCode) {
+			return showError("createPassCodeError", _("options_poweroff_error_empty_passcode"));
 		}
-		
-		if( passCode != repeatPasscode ){			
-			return showError( "createPassCodeError", _("options_poweroff_error_passcode_dont_match") );
+
+		if (passCode !== repeatPasscode) {
+			return showError("createPassCodeError", _("options_poweroff_error_passcode_dont_match"));
 		}
-		
-		if( !fvdSpeedDial.Utils.validateText( "email", email ) ){
-			return showError( "createPassCodeError", _("options_poweroff_error_email_wrong_format") );
+
+		if (!Utils.validateText("email", email)) {
+			return showError("createPassCodeError", _("options_poweroff_error_email_wrong_format"));
 		}
-		
-		document.getElementById( "passcodeValue" ).value = "";
-		document.getElementById( "repeatPasscodeValue" ).value = "";
-		document.getElementById( "reserveEmailValue" ).value = "";
-		
-		fvdSpeedDial.PowerOff.setup( email, passCode );
-		
+
+		document.getElementById("passcodeValue").value = "";
+		document.getElementById("repeatPasscodeValue").value = "";
+		document.getElementById("reserveEmailValue").value = "";
+
+		PowerOff.setup(email, passCode);
 		//document.getElementById( "closeButton" ).setAttribute( "active", 1 );
-		
 		refresh();
-		
 	};
-	
-	this.changePassCode = function(){
-		
+
+	this.changePassCode = function () {
 		hideErrors();
-		
-		var oldPassCode = document.getElementById( "oldPasscodeValue" ).value; 
-		var newPassCode = document.getElementById( "newPasscodeValue" ).value; 
-		
-		if( !fvdSpeedDial.PowerOff.checkPassword( oldPassCode ) ){
-			return showError( "changePassCodeError", _("options_poweroff_error_wrong_pass_code") );
+
+		const oldPassCode = document.getElementById("oldPasscodeValue").value;
+		const newPassCode = document.getElementById("newPasscodeValue").value;
+
+		if (!PowerOff.checkPassword(oldPassCode)) {
+			return showError("changePassCodeError", _("options_poweroff_error_wrong_pass_code"));
 		}
-		
-		document.getElementById( "oldPasscodeValue" ).value = "";
-		document.getElementById( "newPasscodeValue" ).value = "";	
-	
+
+		document.getElementById("oldPasscodeValue").value = "";
+		document.getElementById("newPasscodeValue").value = "";
+
 		//document.getElementById( "closeButton" ).setAttribute( "active", 1 );
-	
-		if( !newPassCode ){
-			fvdSpeedDial.PowerOff.removePassword();
+
+		if (!newPassCode) {
+			PowerOff.removePassword();
 			refresh();
-			
+
 			return;
 		}
-		
-		fvdSpeedDial.PowerOff.changePassword( newPassCode );
-		
-		fvdSpeedDial.Dialogs.alert( _("options_poweroff_passcode_changed_title"), _("options_poweroff_passcode_changed_text") );
-		
+
+		PowerOff.changePassword(newPassCode);
+
+		Dialogs.alert(_("options_poweroff_passcode_changed_title"), _("options_poweroff_passcode_changed_text"));
 	};
-	
-	this.restorePassCode = function(){
-		
-		fvdSpeedDial.PowerOff.restorePassword( function(){
-			
-			fvdSpeedDial.Dialogs.alert( _("options_powerof_password_restore_title"), _("options_powerof_password_restore_text") + ":<br>" + fvdSpeedDial.PowerOff.getEmail() );
-			
-		} );
-		
+
+	this.restorePassCode = function () {
+		PowerOff.restorePassword(function () {
+			Dialogs.alert(_("options_powerof_password_restore_title"), _("options_powerof_password_restore_text") + ":<br>" + PowerOff.getEmail());
+		});
 	};
-	
-	window.addEventListener( "load", function(){
-		
-		document.getElementById( "createPassCode" ).addEventListener("click", function(){
-			
-			self.createPassCode();
-			
-		}, false);
-		
-		document.getElementById( "changePassCode" ).addEventListener( "click", function(){
-			
-			self.changePassCode();
-			
-		}, false );
-		
-		document.getElementById( "resorePassCode" ).addEventListener( "click", function(){
-			
-			self.restorePassCode();
-			
-		}, false );
-		
-		refresh();
-		
-	}, false );
-	
+
+	document.getElementById("createPassCode").addEventListener("click", () =>  {
+		this.createPassCode();
+	}, false);
+
+	document.getElementById("changePassCode").addEventListener("click", () =>  {
+		this.changePassCode();
+	}, false);
+
+	document.getElementById("resorePassCode").addEventListener("click", () =>  {
+		this.restorePassCode();
+	}, false);
+
+	refresh();
 };
+
+export default OptionsPowerOff;

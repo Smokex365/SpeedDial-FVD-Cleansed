@@ -1,34 +1,30 @@
-(function(){
+const Roller = function () {
+};
 
-	var Roller = function() {
-	};
+const _Roller = function (elem, elemWidth) {
+	this._elem = elem;
+	this.elemWidth = elemWidth;
+};
 
-	var _Roller = function(elem, elemWidth) {
-		this._elem = elem;
-    this.elemWidth = elemWidth;
-	};
+_Roller.prototype = {
+	_elem: null,
 
-	_Roller.prototype = {
-		_elem: null,
+	rollTo: function (itemNumber) { /* from zero */
+		const that = this;
 
-		rollTo: function(itemNumber) { /* from zero */
-			var that = this;
+		const firstNode = this._elem.querySelector("div:first-child");
+		const width = this.elemWidth || firstNode.offsetWidth;
 
-			var firstNode = this._elem.querySelector("div:first-child");
-			var width = this.elemWidth || firstNode.offsetWidth;
+		const offset = -itemNumber*width;
 
-			var offset = -itemNumber*width;
+		firstNode.style.marginLeft = offset + "px";
+	},
+};
 
-			firstNode.style.marginLeft = offset + "px";
-		}
-	};
+Roller.prototype = {
+	create: function (elem, elemWidth) {
+		return new _Roller(elem, elemWidth);
+	},
+};
 
-	Roller.prototype = {
-		create: function(elem, elemWidth){
-			return new _Roller(elem, elemWidth);
-    }
-	};
-
-	this.Roller = new Roller();
-
-}).apply( fvdSpeedDial );
+export default new Roller();

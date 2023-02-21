@@ -1,1804 +1,1804 @@
 {
-  "extension_locale": {
-    "message": "hu",
-    "description": "Belső használatra"
-  },
-  "newtab_title": {
-    "message": "FVD Speed Dial",
-    "description": "Új lap címe"
-  },
-  "newtab_introduction_title": {
-    "message": "Üdvözöljük az FVD Speed Dial rövid bemutatóján!!"
-  },
-  "newtab_introduction_button_next": {
-    "message": "Következő"
-  },
-  "newtab_introduction_button_prev": {
-    "message": "Előző"
-  },
-  "newtab_introduction_button_start": {
-    "message": "Kezdjük!"
-  },
-  "newtab_introduction_slide1_title": {
-    "message": "Válassza ki a 3D-s vagy a szabványos gyorshívó stílust"
-  },
-  "newtab_introduction_slide1_text": {
-    "message": "A megjelenés bármikor módosítható a <b>Jobb kattintás > Stílus</b> vagy <b>Opciók > Megjelenés > Stílus</b> menüpontból.<br><br><img src=\"images/newtab/introduction/slide1_img.png\">"
-  },
-  "newtab_introduction_slide2_title": {
-    "message": "Saját alkalmazások és widgetek"
-  },
-  "newtab_introduction_slide2_text": {
-    "message": "Kattintson a lenti vagy bal oldali panelre az Alkalmazás vagy Widget oldalsáv aktiválásához.<br><br><b>Tipp:</b> Használja a szóköz gombot a billentyűzeten a widgetek megjelenítéséhez/elrejtéséhez"
-  },
-  "newtab_offer_theme_bg": {
-    "message": "A SpeedDial elérhető a jelenleg téma háttér alkalmazására"
-  },
-  "newtab_apply_theme_bg": {
-    "message": "Téma háttér alkalmazása"
-  },
-  "newtab_cancel_theme_bg": {
-    "message": "Téma háttér elvetése"
-  },
-  "newtab_offer_theme_download": {
-    "message": "Háttér letöltése..."
-  },
-  "newtab_instant_seach_preview": {
-    "message": "Szolgáltató: Yahoo Search"
-  },
-  "newtab_enable_speed_dial": {
-    "message": "Gyorshívó engedélyezése"
-  },
-  "newtab_sure": {
-    "message": "Biztos?"
-  },
-  "newtab_yes": {
-    "message": "Igen"
-  },
-  "newtab_no": {
-    "message": "Nem"
-  },
-  "newtab_default": {
-    "message": "Alapértelmezett"
-  },
-  "newtab_max_groups": {
-    "message": "Gyorshívók max száma a népszerű csoportban:"
-  },
-  "newtab_thumbnails": {
-    "message": "Miniatűrök"
-  },
-  "newtab_big": {
-    "message": "Nagy"
-  },
-  "newtab_medium": {
-    "message": "Közepes"
-  },
-  "newtab_small": {
-    "message": "Kicsi"
-  },
-  "newtab_custom": {
-    "message": "Egyéni"
-  },
-  "newtab_preview": {
-    "message": "Előnézet"
-  },
-  "newtab_list": {
-    "message": "Lista"
-  },
-  "newtab_number_of_columns": {
-    "message": "Oszlopok száma"
-  },
-  "newtab_number_of_rows": {
-    "message": "Sorok száma"
-  },
-  "newtab_columns_auto": {
-    "message": "Automatikus"
-  },
-  "newtab_groups": {
-    "message": "Csoportok"
-  },
-  "newtab_default_group": {
-    "message": "Alapértelmezett csoport"
-  },
-  "newtab_manage_groups": {
-    "message": "Csoportok kezelése"
-  },
-  "newtab_import_available": {
-    "message": "Importálási adat érhető el"
-  },
-  "newtab_enable_most_visited": {
-    "message": "Leglátogatottabb engedélyezése"
-  },
-  "newtab_show_last": {
-    "message": "Utolsó megjelenítése"
-  },
-  "newtab_synchronization": {
-    "message": "Szinkronizáció"
-  },
-  "newtab_cache_life_time": {
-    "message": "Gyorsítótár élettartam"
-  },
-  "newtab_hours": {
-    "message": "Óra"
-  },
-  "newtab_done": {
-    "message": "Kész"
-  },
-  "newtab_sync_now": {
-    "message": "Frissítési statisztika"
-  },
-  "newtab_restore_removed": {
-    "message": "Eltávolított visszaállítása"
-  },
-  "newtab_enable_recently_closed": {
-    "message": "Legutóbb bezárt engedélyezése"
-  },
-  "newtab_migrate_message": {
-    "message": "Adatok importálása más bővítményekből"
-  },
-  "newtab_start_migrate": {
-    "message": "Importálás megkezdése"
-  },
-  "newtab_cancel_migrate": {
-    "message": "Mégse"
-  },
-  "newtab_do_not_display_migrate": {
-    "message": "Ne jelenjen meg többé"
-  },
-  "newtab_rate_fvd_speed_dial": {
-    "message": "FVD Speed Dial"
-  },
-  "newtab_rate_text": {
-    "message": "Kérjük, írja meg véleményét és értékeljen minket."
-  },
-  "newtab_rate_appreciate": {
-    "message": "Nagyra értékeljük segítségét"
-  },
-  "newtab_expand_all": {
-    "message": "Összes kibontása"
-  },
-  "newtab_hide_all": {
-    "message": "Összes elrejtése"
-  },
-  "newtab_options": {
-    "message": "Opciók"
-  },
-  "newtab_restore_previous_session": {
-    "message": "Előző munkafolyamat helyreállítása"
-  },
-  "newtab_global_options": {
-    "message": "Globális opciók"
-  },
-  "newtab_sync_button": {
-    "message": "Szinkronizálás"
-  },
-  "newtab_all_group_title": {
-    "message": "Népszerű"
-  },
-  "newtab_make_as_homepage": {
-    "message": "Beállítás kezdőlapként"
-  },
-  "newtab_change_background": {
-    "message": "Háttér módosítása"
-  },
-  "newtab_speeddial_label": {
-    "message": "Gyorshívó (%count%)"
-  },
-  "newtab_most_visited_label": {
-    "message": "Leglátogatottabb (%count%)"
-  },
-  "newtab_recently_closed_label": {
-    "message": "Legutóbb bezárt (%count%)"
-  },
-  "newtab_dial_clicks": {
-    "message": "Kattintások"
-  },
-  "newtab_popular_group_title": {
-    "message": "Népszerű"
-  },
-  "newtab_mostvisited_interval_all_time": {
-    "message": "Bármikor"
-  },
-  "newtab_mostvisited_interval_month": {
-    "message": "Múlt hónapban"
-  },
-  "newtab_mostvisited_interval_week": {
-    "message": "Múlt héten"
-  },
-  "newtab_mostvisited_views": {
-    "message": "Megtekintések"
-  },
-  "newtab_mostvisited_views_small": {
-    "message": "V"
-  },
-  "newtab_mostvisited_ingroup": {
-    "message": "Csoportban"
-  },
-  "newtab_mostvisited_ingroup_small": {
-    "message": "G"
-  },
-  "newtab_listview_title": {
-    "message": "Cím"
-  },
-  "newtab_listview_url": {
-    "message": "URL-cím"
-  },
-  "newtab_listviewmenu_add_dial": {
-    "message": "Gyorshívó hozzáadása"
-  },
-  "newtab_listviewmenu_open_all": {
-    "message": "Összes link megnyitása"
-  },
-  "newtab_listviewmenu_delete_all": {
-    "message": "Összes link törlése"
-  },
-  "newtab_listview_noitems": {
-    "message": "Nincs megjeleníthető elem"
-  },
-  "newtab_dblclick_to_expand": {
-    "message": "Kattintson duplán a kibontáshoz"
-  },
-  "newtab_click_to_get_title": {
-    "message": "Kattintson a cím lekéréséhez"
-  },
-  "newtab_getting_title": {
-    "message": "Cím lekérése..."
-  },
-  "newtab_last_used_group": {
-    "message": "Utoljára használt csoport"
-  },
-  "newtab_can_turn_off_newtab_msg": {
-    "message": "Megjegyzés: Az FVD Speed Dial letiltható az Új lap fülön, és csak a gomb megnyomásával indítható."
-  },
-  "newtab_can_turn_off_newtab_opt_app": {
-    "message": "Opciók > Megjelenés"
-  },
-  "newtab_can_turn_off_newtab_got_it": {
-    "message": "Értem. Köszönöm."
-  },
-  "newtab_ops_3d_unavailable": {
-    "message": "Hoppá, 3D funkció probléma."
-  },
-  "newtab_switch_to_standard": {
-    "message": "Kattintson ide a szabványos mód használatához"
-  },
-  "newtab_3d_how_to_fix": {
-    "message": "Hogyan javítható:"
-  },
-  "newtab_3d_if_not_works": {
-    "message": "Ha ez nem segít - próbálja meg frissíteni a videokártya illesztőprogramjait"
-  },
-  "newtab_3d_open_new_tab": {
-    "message": "Új lap megnyitása"
-  },
-  "newtab_3d_type_flags": {
-    "message": "Gépelje be: \"chrome://flags\""
-  },
-  "newtab_3d_without_quotes": {
-    "message": "Idézőjelek nélkül"
-  },
-  "newtab_3d_find_override": {
-    "message": "Keresse a \"Szoftveres renderelési lista felülbírálása\" opciót, majd kattintson az Engedélyezés gombra"
-  },
-  "newtab_3d_note_dont_afraid": {
-    "message": "Megjegyzés: Ne féljen aktiválni ezt a funkciót. Semmi rossz nem történhet."
-  },
-  "newtab_3d_restart": {
-    "message": "Indítsa újra"
-  },
-  "newtab_3d_restart_continue": {
-    "message": "böngészőjét és élvezze az új Fancy 3D megjelenést."
-  },
-  "newtab_3d_install_new_drivers": {
-    "message": "A 3D mód engedélyezéséhez, frissítenie kell a videokártya illesztőprogramjait"
-  },
-  "newtab_3d_last_step": {
-    "message": "Ha újra látja ezt az üzenetet, azt jelenti, hogy a böngésző nem támogatja a videokártyáját az FVD Speed ​​Dial 3D nézetű megjelenítéshez."
-  },
-  "newtab_search_on_google": {
-    "message": "Keresés"
-  },
-  "newtab_search_on_yandex": {
-    "message": "Keresés a Yandex-en"
-  },
-  "newtab_poweroff_desc": {
-    "message": "Ismerje meg, hogyan védheti meg a gyorshívót a kiváncsi szemek elől"
-  },
-  "newtab_poweroff_feature": {
-    "message": "Kikapcsolás funkció"
-  },
-  "newtab_poweroff_dont_show_again": {
-    "message": "Ne jelenjen meg többé"
-  },
-  "newtab_poweroff_enterpasscode": {
-    "message": "Jelszó megadása"
-  },
-  "newtab_powerof_wrong_passcode_title": {
-    "message": "Hibás jelszó"
-  },
-  "newtab_powerof_wrong_passcode_text": {
-    "message": "A megadott jelszó hibás"
-  },
-  "newtab_poweroff": {
-    "message": "Kikapcsolás"
-  },
-  "newtab_show_hide": {
-    "message": "Megjelenítés/Elrejtés"
-  },
-  "newtab_instant_seach_preview_google": {
-    "message": "Azonnali keresés"
-  },
-  "newtab_widgets_panel_move_or_delete": {
-    "message": "Minialkalmazások törlése vagy áthelyezése"
-  },
-  "newtab_apps_panel_open_desc": {
-    "message": "Nyomja meg a \"Ctrl + Szóköz\" billentyűt az alkalmazások panel elrejtéséhez/megjelenítéséhez."
-  },
-  "newtab_widgets_panel_open_desc": {
-    "message": "Nyomja meg a \"Szóköz\" billentyűt a minialkalmazások panel elrejtéséhez/megjelenítéséhez."
-  },
-  "newtab_widgets_panel_not_found": {
-    "message": "Kattintson a + gombra néhány minialkalmazás hozzáadásához!"
-  },
-  "newtab_themes_message_head": {
-    "message": "Hű! Új témák érhetők el!"
-  },
-  "newtab_themes_message_text": {
-    "message": "FVD Speed Dial témák telepítése"
-  },
-  "newtab_themes_message_install": {
-    "message": "Témák letöltése!"
-  },
-  "newtab_quicksitemap_text": {
-    "message": "Weboldal navigáció bővítése!"
-  },
-  "newtab_ad_install_text": {
-    "message": "Lásd alkalmazás"
-  },
-  "bg_default_group_name": {
-    "message": "Alapértelmezett"
-  },
-  "bg_default_group_products": {
-    "message": "Termékeink"
-  },
-  "bg_default_dial_google": {
-    "message": "Google"
-  },
-  "bg_write_review_dial_title": {
-    "message": "Írja meg véleményét"
-  },
-  "bg_default_dial_facebook": {
-    "message": "FaceBook"
-  },
-  "bg_default_dial_twitter": {
-    "message": "Twitter"
-  },
-  "bg_default_dial_fvdsyncchrome": {
-    "message": "EverSync"
-  },
-  "bg_default_dial_fvdsdff": {
-    "message": "FVD SpeedDial for FireFox"
-  },
-  "bg_write_review_dial_chromedownloader": {
-    "message": "FVD Video Downloader"
-  },
-  "bg_default_dial_betterchrome": {
-    "message": "BetterChrome"
-  },
-  "bg_default_dial_amazon": {
-    "message": "Amazon"
-  },
-  "bg_default_dial_ebay": {
-    "message": "EBay"
-  },
-  "bg_default_dial_webstore": {
-    "message": "Chrome webáruház"
-  },
-  "bg_dialog_loading": {
-    "message": "Betöltés..."
-  },
-  "bg_dialog_import_export_eversync_1": {
-    "message": "Ez a mentési mód, nem menti el az Ön egyéni képeit!!!"
-  },
-  "bg_dialog_import_export_eversync_2": {
-    "message": "Ha teljes biztonsági mentésre van szüksége, használja online mentési bővítményünket:"
-  },
-  "bg_dialog_import_export_eversync_clickhere": {
-    "message": "Kattintson ide a bővítmény telepítéséhez..."
-  },
-  "bg_dialog_adddial_title": {
-    "message": "Cím"
-  },
-  "bg_dialog_adddial_click_to_get_title": {
-    "message": "Kattintson a cím lekéréséhez"
-  },
-  "bg_dialog_adddial_url": {
-    "message": "URL-cím"
-  },
-  "bg_dialog_adddial_pick_user_pic": {
-    "message": "Felhasználói galéria böngészése"
-  },
-  "bg_dialog_adddial_pick_url_from": {
-    "message": "Kiválasztás URL-címből:"
-  },
-  "bg_dialog_adddial_pick_url_from_opened_tabs": {
-    "message": "Megnyitott lapok"
-  },
-  "bg_dialog_adddial_pick_url_from_or": {
-    "message": "vagy"
-  },
-  "bg_dialog_adddial_pick_url_from_most_visited": {
-    "message": "Leglátogatottabb"
-  },
-  "bg_dialog_adddial_pick_url_from_most_popular": {
-    "message": "Legnépszerűbb"
-  },
-  "bg_dialog_adddial_custom_preview_updated": {
-    "message": " (Frissítve!)"
-  },
-  "bg_dialog_adddial_image_url": {
-    "message": "URL előnézet"
-  },
-  "bg_dialog_adddial_default_preview": {
-    "message": "Elődefiniált logó"
-  },
-  "bg_dialog_adddial_group": {
-    "message": "Csoport"
-  },
-  "bg_dialog_adddial_group_name": {
-    "message": "Csoport neve"
-  },
-  "bg_dialog_adddial_refresh_preview": {
-    "message": "Előnézet frissítése"
-  },
-  "bg_dialog_adddial_top10pics_title": {
-    "message": "Legjobb 10 felhasználói kép"
-  },
-  "bg_dialog_adddial_top10pics_showmore": {
-    "message": "Több megjelenítése"
-  },
-  "bg_dialog_addgroup_name": {
-    "message": "Név"
-  },
-  "bg_dialog_addgroup_sync": {
-    "message": "Csoport szinkronizálása"
-  },
-  "bg_dialog_managegroups_groups": {
-    "message": "Csoportok"
-  },
-  "bg_dialog_deny_type": {
-    "message": "Típus"
-  },
-  "bg_dialog_deny_type_domain": {
-    "message": "Tartomány"
-  },
-  "bg_dialog_deny_type_url": {
-    "message": "URL-cím"
-  },
-  "bg_dialog_deny_sign": {
-    "message": "Aláírás"
-  },
-  "bg_dialog_view_group_title": {
-    "message": "Cím"
-  },
-  "bg_dialog_view_group_url": {
-    "message": "URL-cím"
-  },
-  "bg_dialog_manage_deny_sign": {
-    "message": "Aláírás"
-  },
-  "bg_dialog_manage_deny_type": {
-    "message": "Típus"
-  },
-  "dialog_add_dial_dynamic_title": {
-    "message": "Dinamikus cím"
-  },
-  "dialog_add_dial_enter_image_url": {
-    "message": "Adja meg a kép URL-címét"
-  },
-  "bg_dialog_adddial_use_auto_preview": {
-    "message": "Automatikus előnézet"
-  },
-  "bg_dialog_adddial_use_manual_preview": {
-    "message": "Manuális előnézet"
-  },
-  "bg_dialog_adddial_use_custom_preview": {
-    "message": "Egyéni előnézet"
-  },
-  "bg_dialog_adddial_preview_creation_delay": {
-    "message": "Előnézet késleltetése (ms):"
-  },
-  "options_title": {
-    "message": "FVD SpeedDial opciók"
-  },
-  "options_reset_clicks": {
-    "message": "Reset clicks"
-  },
-  "options_sd_preview_settings": {
-    "message": "Speed Dial preview setings"
-  },
-  "options_set_dials_to_auto_update": {
-    "message": "Set auto update"
-  },
-  "options_turn_off_dials_auto_update": {
-    "message": "Turn off auto update"
-  },
-  "options_enable_surfcanyon": {
-    "message": "Keresési finomítások engedélyezése"
-  },
-  "options_global_options": {
-    "message": "Globális opciók"
-  },
-  "options_global_tabs_main": {
-    "message": "Fő"
-  },
-  "options_global_tabs_appearance": {
-    "message": "Megjelenés"
-  },
-  "options_show_urls_under_dials": {
-    "message": "Webcímek megjelenítése a gyorshívók alatt"
-  },
-  "options_show_icons_and_titles_above_dials": {
-    "message": "Ikon es felirat a gyorshivo felett"
-  },
-  "options_disable_custom_search": {
-    "message": "Keresés letiltása"
-  },
-  "options_default_dial": {
-    "message": "Alapértelmezett modul"
-  },
-  "options_speed_dial": {
-    "message": "Gyorshívó"
-  },
-  "options_most_visited": {
-    "message": "Leglátogatottabb"
-  },
-  "options_recently_closed": {
-    "message": "Legutóbb bezárt"
-  },
-  "options_enable": {
-    "message": "Engedélyezés"
-  },
-  "options_blocked_domains": {
-    "message": "Blokkolt tartományok"
-  },
-  "options_dials_opening": {
-    "message": "Gyorshívó megnyitása:"
-  },
-  "options_current_tab": {
-    "message": "Aktuális lapon"
-  },
-  "options_new_tab": {
-    "message": "Új lapon"
-  },
-  "options_new_tab_background": {
-    "message": "Új lapon (háttérben)"
-  },
-  "options_dials_opacity": {
-    "message": "Gyorshívók átlátszósága"
-  },
-  "options_speed_dial_options": {
-    "message": "Gyorshívó opciók"
-  },
-  "options_display_plus_cells": {
-    "message": "[+] gyorshívó gomb megjelenítése"
-  },
-  "options_groups": {
-    "message": "Csoportok"
-  },
-  "options_default_group": {
-    "message": "Alapértelmezett:"
-  },
-  "options_max_dials_in_popular_group": {
-    "message": "Gyorshívók max száma a népszerű csoportban"
-  },
-  "options_most_visited_options": {
-    "message": "Leglátogatottabb lap opciók"
-  },
-  "options_show_last": {
-    "message": "Utolsó megjelenítése:"
-  },
-  "options_sort_by": {
-    "message": "Rendezés"
-  },
-  "options_last_week": {
-    "message": "Múlt héten"
-  },
-  "options_last_month": {
-    "message": "Múlt hónapban"
-  },
-  "options_all_time": {
-    "message": "Bármikor"
-  },
-  "options_recently_closed_options": {
-    "message": "Legutóbb bezárt lap opciók"
-  },
-  "options_background_options": {
-    "message": "Háttér beállítások"
-  },
-  "options_refresh": {
-    "message": "Frissítés"
-  },
-  "options_background_color": {
-    "message": "Háttér színe"
-  },
-  "options_bg_color_enabled": {
-    "message": "Engedélyezve"
-  },
-  "options_bg_install_themes": {
-    "message": "Új! Témák telepítése!"
-  },
-  "options_bg_from_url": {
-    "message": "URL-címről"
-  },
-  "options_bg_from_theme": {
-    "message": "Aktív témából"
-  },
-  "options_display_superfish": {
-    "message": "Superfish javaslatok"
-  },
-  "options_image_url": {
-    "message": "Kép forrása"
-  },
-  "options_bg_image_type": {
-    "message": "Típus:"
-  },
-  "options_noimage": {
-    "message": "Nincs kép"
-  },
-  "options_fill": {
-    "message": "Kitöltés"
-  },
-  "options_fit": {
-    "message": "Igazítás"
-  },
-  "options_stretch": {
-    "message": "Nyújtás"
-  },
-  "options_tile": {
-    "message": "Mozaik"
-  },
-  "options_center": {
-    "message": "Középre"
-  },
-  "options_load_and_preview": {
-    "message": "Betöltés és előnézet"
-  },
-  "options_fonts_options": {
-    "message": "Betűtípus beállítások"
-  },
-  "options_title_for_dials": {
-    "message": "Cím (Gyorshívók)"
-  },
-  "options_font_color": {
-    "message": "Szín:"
-  },
-  "options_font_bolder": {
-    "message": "Szegély"
-  },
-  "options_font_size": {
-    "message": "Méret:"
-  },
-  "options_url_for_dials": {
-    "message": "URL (Gyorshívók)"
-  },
-  "options_text_in_list_mode": {
-    "message": "Szöveg lista módban"
-  },
-  "options_show_title_url_list_mode": {
-    "message": "Cím/URL megjelenítése (Lista mód)"
-  },
-  "options_list_links": {
-    "message": "Hivatkozások listája"
-  },
-  "options_other_texts": {
-    "message": "Egyéb szövegek"
-  },
-  "options_restore_default": {
-    "message": "Alapértelmezett visszaállítása"
-  },
-  "options_apply_changes": {
-    "message": "Módosítások alkalmazása"
-  },
-  "options_manage_blocked": {
-    "message": "Kezelése"
-  },
-  "options_last_selected": {
-    "message": "Utoljára kiválasztott"
-  },
-  "options_close": {
-    "message": "Bezárás"
-  },
-  "options_recently_closed_max_show_last": {
-    "message": "(Max. 100)"
-  },
-  "options_recently_closed_max_most_visited": {
-    "message": "(Max. 75)"
-  },
-  "options_speeddial_max_in_popular": {
-    "message": "(Max. 50)"
-  },
-  "options_manage_groups": {
-    "message": "Csoportok kezelése"
-  },
-  "options_back_to_speeddial": {
-    "message": "Vissza a gyorshívóba"
-  },
-  "options_default_screen_delay": {
-    "message": "Alapértelmezett előnézeti késleltetés (ms):"
-  },
-  "options_display_in_new_tab": {
-    "message": "Megjelenítés új lapon"
-  },
-  "options_display_dial_background": {
-    "message": "Alapertelmezett gyorshivo hatter"
-  },
-  "options_import_export": {
-    "message": "Importálás/Exportálás"
-  },
-  "options_export": {
-    "message": "Exportálás"
-  },
-  "options_import": {
-    "message": "Importálás"
-  },
-  "options_display_popular_group": {
-    "message": "Népszerű csoport megjelenítése"
-  },
-  "options_display_quick_menu_and_clicks": {
-    "message": "Kattintások és gyorsmenü megjelenítése"
-  },
-  "options_cdsize_limits": {
-    "message": "Min. 150, Max. 260px"
-  },
-  "options_cdsize_title": {
-    "message": "Egyéni gyorshívó méret"
-  },
-  "options_submit_suggestion": {
-    "message": "Javaslatok küldése"
-  },
-  "options_submit_bug": {
-    "message": "Hibajelentés küldése"
-  },
-  "options_show_in_context_menu": {
-    "message": "Megjelenites a helyi menuben (Jobb klikk)"
-  },
-  "options_donate_message": {
-    "message": "Köszönjük érdeklődését az adományozás iránt! Az Ön adománya elősegíti szoftverünk folyamatos fejlesztését, és lehetőséget ad az alkalmazás ingyenességének fenntartására. Hogy van az, hogy az alkalmazás ingyenes, és mi mégis adományozásra kérjük fel Önt? A felhasználók nagy része, ha nem engedheti meg magának, vagy ha nem biztos benne, hogy megéri az árát, akkor ingyenesen is használhatja a szoftvert. \n\nAz FVD Speed dial bővítmény fejlesztése, javítása egy csomó pénzbe kerül.\n\nŐszintén reméljük, hogy vannak olyan elégedett felhasználók, akik kezdeményezésünk folytán hajlandóak lennének egy kis pénzt adományozni (akik megengedhetik maguknak), amely lehetővé teszi számunkra, hogy a lehető legtöbb embert elérjük az egész világon.\n\nA kapott adományokat nem fogjuk bérek vagy közvetett költségek kifizetésére használni, amelyek közvetlenül nem kapcsolódnak az interneten közzétett szolgáltatásunkhoz."
-  },
-  "options_sync_need_install": {
-    "message": "A szinkronizálás használatához telepítenie kell az EverSync bővítményt"
-  },
-  "options_sync_need_install_desc": {
-    "message": "Az Fvd Sync használatához kiegészítő bővítmény telepítésére lesz szüksége - EverSync:"
-  },
-  "options_sync_need_install_fvd_speeddial": {
-    "message": "FVD SpeedDial:"
-  },
-  "options_sync_need_install_fvd_sync": {
-    "message": "Könyvjelzők szinkronizálása:"
-  },
-  "options_sync_need_install_ability_6": {
-    "message": "Firefox/Chrome könyvjelzők szinkronizálása."
-  },
-  "options_sync_need_install_ability_7": {
-    "message": "Mappák szinkronizálása."
-  },
-  "options_sync_need_install_everhelper": {
-    "message": "Saját EverHelper kliens terület:"
-  },
-  "options_sync_need_install_ability_8": {
-    "message": "Könyvjelzők másolása az FVD Speed Dial-ba, és a Speed Dial-ból a könyvjelzőkbe"
-  },
-  "options_sync_need_install_ability_9": {
-    "message": "Lomtár / Kedvencek / Privát / Archívum / Részletes keresés és további funkciók."
-  },
-  "options_sync_need_install_ability_10": {
-    "message": "Könyvjelzők és gyorshívók kezelése."
-  },
-  "options_sync_need_install_ability_1": {
-    "message": "Gyorshívók szinkronizálása."
-  },
-  "options_sync_need_install_ability_2": {
-    "message": "Csoportok szinkronizálása."
-  },
-  "options_sync_need_install_ability_3": {
-    "message": "Egyéni képek szinkronizálása."
-  },
-  "options_sync_need_install_ability_4": {
-    "message": "Használja Firefox, Chrome böngészőn, különböző PC-k között"
-  },
-  "options_sync_need_install_ability_5": {
-    "message": "További funkciók hamarosan (Könyvjelzők, előzmények, jegyzetek szinkronizálása)."
-  },
-  "options_sync_link": {
-    "message": "Telepítés a Chrome webáruházból"
-  },
-  "options_sync_warning_line_1": {
-    "message": "<b>A szinkronizálási bővítménynek a következő engedélyre van szüksége: \"Hozzáférés az összes adathoz a számítógépen\"</b>"
-  },
-  "options_sync_warning_line_2": {
-    "message": "Ez nem jelenti azt, hogy a mi bővítményünknek hozzáférése lesz az Ön összes állományához!"
-  },
-  "options_sync_warning_line_3": {
-    "message": "Csak egy <b>könyvjelzőfájl elérésére van szükségünk Chrome környezetben.</b>"
-  },
-  "options_sync_warning_line_4": {
-    "message": "Amint engedélyt kap a fájl(ok) felülírására, a Chrome azt \"Teljes hozzáférés\"-nek fogja nevezni."
-  },
-  "options_sync_warning_line_5": {
-    "message": "Kérjük, nem váljon ettől paranoiássá! A Chrome webáruház egyenként felülvizsgál minden egyes bővítményt!!!"
-  },
-  "options_enable_search": {
-    "message": "Keresés engedélyezése"
-  },
-  "options_enable_search_preview": {
-    "message": "Keresési előnézet engedélyezése"
-  },
-  "options_poweroff_options": {
-    "message": "Kikapcsolás"
-  },
-  "options_poweroff_tab_desc_1": {
-    "message": "Személyes jelszó létrehozása a saját gyorshívók feloldásához."
-  },
-  "options_poweroff_tab_desc_2": {
-    "message": "A Kikapcsolás gomb megnyomása után a gyorshívók el lesznek rejtve, amelyek feloldásának egyetlen módja a jelszó megadása."
-  },
-  "options_poweroff_tab_desc_3": {
-    "message": "Ez egy nagyszerű funkció, ha nem szeretné, hogy bárki más lássa a gyorshívókat az Ön távollétében."
-  },
-  "options_poweroff_error_empty_passcode": {
-    "message": "A jelszó mező üres"
-  },
-  "options_poweroff_error_passcode_dont_match": {
-    "message": "A kódok nem egyeznek"
-  },
-  "options_poweroff_error_email_wrong_format": {
-    "message": "Hibás e-mail formátum"
-  },
-  "options_poweroff_error_wrong_pass_code": {
-    "message": "Hibás jelszó"
-  },
-  "options_poweroff_passcode_changed_title": {
-    "message": "Sikeres"
-  },
-  "options_poweroff_passcode_changed_text": {
-    "message": "A jelszó sikeresen módosítva lett."
-  },
-  "options_powerof_password_restore_title": {
-    "message": "Jelszó visszaállítva"
-  },
-  "options_powerof_password_restore_text": {
-    "message": "A jelszó sikeresen el lett küldve az Ön e-mail címére"
-  },
-  "options_poweroff_create_passcode": {
-    "message": "Jelszó létrehozása"
-  },
-  "options_poweroff_passcode": {
-    "message": "Jelszó:"
-  },
-  "options_poweroff_repeat_passcode": {
-    "message": "Jelszó megismétlése:"
-  },
-  "options_poweroff_email": {
-    "message": "Jelszó visszaállítási e-mail:"
-  },
-  "options_poweroff_create_passcode_button": {
-    "message": "Jelszó létrehozása"
-  },
-  "options_poweroff_passcode_setuped": {
-    "message": "Jelszó beállítva."
-  },
-  "options_poweroff_old_passcode": {
-    "message": "Régi jelszó:"
-  },
-  "options_poweroff_change_passcode": {
-    "message": "Jelszó módosítása"
-  },
-  "options_poweroff_new_passcode": {
-    "message": "Új jelszó *:"
-  },
-  "options_poweroff_change_passcode_button": {
-    "message": "Jelszó módosítása"
-  },
-  "options_poweroff_star_desc": {
-    "message": "* A jelszó eltávolításához, hagyja üresen az Új jelszó mezőt."
-  },
-  "options_poweroff_restore_button": {
-    "message": "Jelszó helyreállítás saját e-mail címre"
-  },
-  "options_poweroff_tab_main_title": {
-    "message": "Fő"
-  },
-  "options_poweroff_tab_change_pass_title": {
-    "message": "Jelszó módosítása"
-  },
-  "options_poweroff_tab_restore_title": {
-    "message": "Jelszó visszaállítása"
-  },
-  "options_display_mirror": {
-    "message": "Tükröződő gyorshívó bélyegképek"
-  },
-  "options_scrolling": {
-    "message": "Gyorshívó görgetési típusa"
-  },
-  "options_scrolling_horizontal": {
-    "message": "Vízszintes"
-  },
-  "options_scrolling_vertical": {
-    "message": "Függőleges"
-  },
-  "options_widgets_options": {
-    "message": "Minialkalmazások"
-  },
-  "options_widgets_enabled_title": {
-    "message": "Minialkalmazások engedélyezése"
-  },
-  "options_widgets_opacity_title": {
-    "message": "Minialkalmazások panel átlátszósága"
-  },
-  "options_widgets_bgcolor_title": {
-    "message": "Minialkalmazások panel háttér színe"
-  },
-  "options_enable_widgets_autoscroll": {
-    "message": "Automatikus görgetés engedélyezése"
-  },
-  "options_widgets_autoscroll_speed": {
-    "message": "Automatikus görgetési sebesség"
-  },
-  "options_set_auto_preview": {
-    "message": "Visszaállítás automatikusra"
-  },
-  "options_set_auto_preview_button": {
-    "message": "Automatikus előnézet beállítása"
-  },
-  "options_premium_for_share": {
-    "message": "Prémium fiók ingyenesen!"
-  },
-  "cropper_click_to_make_preview": {
-    "message": "Kattintson az előnézet létrehozásához"
-  },
-  "cropper_message_wait": {
-    "message": "Miniatűrök létrehozása... Kis türelmet..."
-  },
-  "cropper_your_url": {
-    "message": "Ön URL-címe"
-  },
-  "cropper_last_page_url": {
-    "message": "Utolsó oldal URL-je"
-  },
-  "cropper_pick_this": {
-    "message": "Jelenlegi kiválasztása"
-  },
-  "dialog_pick_user_pics_order_best": {
-    "message": "Legjobb"
-  },
-  "dialog_pick_user_pics_order_new": {
-    "message": "Új"
-  },
-  "dialog_pick_user_pics_order": {
-    "message": "Rendezés: "
-  },
-  "dialog_pick_user_pics_not_found_title": {
-    "message": "Kereshet {host} logót ezekhez a nagyszerű készletekhez és hozzáadhatja azt a galériánkhoz."
-  },
-  "dialog_pick_user_pics_not_found_enter_in": {
-    "message": "Ha talált egy Önnek tetsző képet, másolja ki az URL-t és illessze be ebbe az űrlapba:"
-  },
-  "dialog_pick_user_pics_report": {
-    "message": "Kép jelentése"
-  },
-  "dialog_pick_user_pics_not_found": {
-    "message": "Nem található semmilyen kép az Ön kérésére."
-  },
-  "dialog_pick_user_pics_report_thanks": {
-    "message": "Köszönjük!"
-  },
-  "dialog_pick_user_pics_report_innop": {
-    "message": "Nem megfelelő"
-  },
-  "dialog_pick_user_pics_report_duplicate": {
-    "message": "Másolat"
-  },
-  "dialog_pick_user_pics_bottom_desc_1": {
-    "message": "Használja"
-  },
-  "dialog_pick_user_pics_bottom_desc_2": {
-    "message": "a szabálysértés jelentéséhez."
-  },
-  "dialog_title_add_dial": {
-    "message": "Gyorshívó hozzáadása"
-  },
-  "dialog_title_modify_dial": {
-    "message": "Gyorshívó módosítása"
-  },
-  "dialog_title_add_group": {
-    "message": "Csoport hozzáadása"
-  },
-  "dialog_title_modify_group": {
-    "message": "Csoport módosítása"
-  },
-  "dialog_title_manage_groups": {
-    "message": "Csoportok kezelése"
-  },
-  "dialog_title_deny": {
-    "message": "Blokkolás"
-  },
-  "dialog_title_view_group": {
-    "message": "Csoport megtekintése"
-  },
-  "dialog_title_manage_deny": {
-    "message": "Blokkoltak kezelése"
-  },
-  "dialog_title_pick_user_images": {
-    "message": "Válassza ki a kívánt képet"
-  },
-  "dialog_title_edit_deny": {
-    "message": "Blokkolási szabályok szerkesztése"
-  },
-  "dialog_title_export": {
-    "message": "Exportálás"
-  },
-  "dialog_title_import": {
-    "message": "Importálás"
-  },
-  "dialog_title_install_fvd_sync": {
-    "message": "FVD Synchronizer telepítése"
-  },
-  "dlg_button_close": {
-    "message": "Bezárás"
-  },
-  "dlg_button_deny": {
-    "message": "Blokkolás"
-  },
-  "dlg_button_add_dial": {
-    "message": "Gyorshívó hozzáadása"
-  },
-  "dlg_button_cancel": {
-    "message": "Mégse"
-  },
-  "dlg_button_save": {
-    "message": "Mentés"
-  },
-  "dlg_button_modify_dial": {
-    "message": "Módosítás"
-  },
-  "dlg_button_add_group": {
-    "message": "Csoport hozzáadása"
-  },
-  "dlg_button_modify_group": {
-    "message": "Csoport módosítása"
-  },
-  "dlg_button_add_deny_rule": {
-    "message": "Blokkolási szabály hozzáadása"
-  },
-  "dlg_button_copy_to_clipboard": {
-    "message": "Másolás a vágólapra"
-  },
-  "dlg_button_import": {
-    "message": "Importálás"
-  },
-  "dlg_alert_release_left_button": {
-    "message": "Kérjük, engedje el az egérgombot a képernyőkép elkészítéséhez!"
-  },
-  "dlg_alert_ok": {
-    "message": " OK "
-  },
-  "dlg_alert_cannot_remove_group_title": {
-    "message": "Nem lehet eltávolítani a csoportot"
-  },
-  "dlg_alert_cannot_remove_group_text": {
-    "message": "Nem lehet eltávolítani az utolsó csoportot"
-  },
-  "dlg_alert_sd_locked_action_title": {
-    "message": "Hozzáférés megtagadva"
-  },
-  "dlg_alert_sd_locked_action_text": {
-    "message": "A Speed Dial zárolva van. Kérjük, oldja fel a jelenlegi művelet folytatásához."
-  },
-  "dlg_alert_wait_importing_title": {
-    "message": "Kis türelmet"
-  },
-  "dlg_alert_wait_importing_text": {
-    "message": "Kis türelmet kérünk az importálás során"
-  },
-  "dlg_alert_sync_on_another_driver_title": {
-    "message": "A szinkronizáció aktív"
-  },
-  "dlg_alert_sync_on_another_driver_text": {
-    "message": "Más adatok (könyvjelzők stb.) szinkronizálása folyik. Kérjük, várja meg a szinkronizálás végét"
-  },
-  "dlg_alert_fail_obtain_user_pics_title": {
-    "message": "A felhasználói képek jelenleg nem érhetők el"
-  },
-  "dlg_alert_fail_obtain_user_pics_text": {
-    "message": "A felhasználói képek könyvtár jelenleg nem érhető el. Kérjük, próbálkozzon később."
-  },
-  "dlg_confirm_ok": {
-    "message": "OK"
-  },
-  "dlg_confirm_cancel": {
-    "message": "Mégse"
-  },
-  "dlg_confirm_remove_links_all_title": {
-    "message": "Biztos benne?"
-  },
-  "dlg_confirm_remove_links_all_text": {
-    "message": "Eltávolítja ezeket a linkeket?"
-  },
-  "dlg_confirm_dial_exists_title": {
-    "message": "Már létezik?"
-  },
-  "dlg_confirm_dial_exists_text": {
-    "message": "Ezzel az URL-címmel már létezik gyorshívó. Folytatja?"
-  },
-  "dlg_confirm_remove_dial_title": {
-    "message": "Biztos benne?"
-  },
-  "dlg_confirm_remove_dial_text": {
-    "message": "Eltávolítja ezt az elemet?"
-  },
-  "dlg_confirm_remove_group_title": {
-    "message": "Biztos benne?"
-  },
-  "dlg_confirm_remove_group_text": {
-    "message": "%count% gyorshívó ebben a csoportban"
-  },
-  "dlg_confirm_import_title": {
-    "message": "Kérjük, hagyja jóvá az importálást"
-  },
-  "dlg_confirm_import_text": {
-    "message": "Az importálás eltávolítja az aktuális gyorshívó adatbázist, és felülírja a jelenlegi beállításokat az importálandó beállításokkal. Folytatja?"
-  },
-  "dlg_confirm_set_auto_preview_global_title": {
-    "message": "Az összes egyéni gyorshívó konfigurációja vissza lesz állítva"
-  },
-  "dlg_confirm_set_auto_preview_global_text": {
-    "message": "Megerősíti, hogy az összes egyéni gyorshívó konfigurációját visszaállítja?"
-  },
-  "dlg_alert_set_auto_preview_global_title": {
-    "message": "Sikeres!"
-  },
-  "dlg_alert_set_auto_preview_global_text": {
-    "message": "A manuális gyorshívó sikeresen módosítva lett!"
-  },
-  "dlg_adddial_create_group": {
-    "message": "Új csoport létrehozása..."
-  },
-  "dlg_adddial_set_file": {
-    "message": "Helyi fájlból"
-  },
-  "dlg_adddial_help_us_user_pics": {
-    "message": "Segítsen nekünk az elődefiniált képek javításában. Írja be az URL-címet, vagy töltse fel helyi fájlból kedvenc weboldalai logóit. Ezek elérhetőek lesznek a felhasználói galériában!"
-  },
-  "dlg_importing_step1": {
-    "message": "1. lépés: Régi adat törlése"
-  },
-  "dlg_importing_step2": {
-    "message": "2. lépés: Beállítások importálása"
-  },
-  "dlg_importing_step3": {
-    "message": "3. lépés: Blokkolt domain/URL-címek importálása"
-  },
-  "dlg_importing_step4": {
-    "message": "4. lépés: Csoportok importálása"
-  },
-  "dlg_importing_step5": {
-    "message": "5. lépés: Gyorshívók importálása"
-  },
-  "dlg_importing_finished": {
-    "message": "A(z) %groups% csoport és %dials% gyorshívó sikeresen importálásra került"
-  },
-  "dlg_manage_groups_add_group": {
-    "message": "Csoport hozzáadása"
-  },
-  "dlg_move_to_nosync_group_title": {
-    "message": "Gyorshívó áthelyezése a nem szinkronizált csoportba"
-  },
-  "dlg_move_to_nosync_group_text": {
-    "message": "Át fogja helyezni ezt a gyorshívót a <b>szinkronizálatlan</b> csoportba.<br/>Vegye figyelembe, hogy ez a gyorshívó csak a jelenlegi számítógépen lesz látható. A többi számítógépen <b>el fog tűnni</b>."
-  },
-  "dlg_nosync_group_title": {
-    "message": "Állítsa a szinkronizált csoportot szinkronizálatlanra"
-  },
-  "dlg_nosync_group_text": {
-    "message": "A szinkronizált csoportot <b>szinkronizálatlanra</b> fogja váltani. Vegye figyelembe, hogy ez a csoport csak a jelenlegi számítógépen lesz látható. A többi számítógépen <b>el fog tűnni</b>."
-  },
-  "dlg_dont_show_it_again": {
-    "message": "Ne jelenjen meg többé"
-  },
-  "sah_copied": {
-    "message": "Másolva!"
-  },
-  "error_must_be_filled": {
-    "message": "Ki kell tölteni"
-  },
-  "error_invalid_url": {
-    "message": "Érvénytelen URL"
-  },
-  "error_url_deny": {
-    "message": "URL blokkolva. Ellenőrizze a blokkolt domain címeket az opciókban"
-  },
-  "error_url_deny_host": {
-    "message": "Domain blokkolva. Ellenőrizze a blokkolt domain címeket az opciókban"
-  },
-  "error_url_deny_url": {
-    "message": "URL blokkolva. Ellenőrizze a blokkolt domain címeket az opciókban"
-  },
-  "error_fail_get_title_dinamically": {
-    "message": "Nem sikerült lekérni a címet dinamikusan"
-  },
-  "error_already_exists": {
-    "message": "Már létezik"
-  },
-  "error_wrong_import_data": {
-    "message": "Hibás importálási adat"
-  },
-  "error_not_image": {
-    "message": "A kiválasztott fájl nem kép"
-  },
-  "cm_speeddial_cell_open_tab": {
-    "message": "Megnyitás a lapon"
-  },
-  "cm_speeddial_cell_open_new_tab": {
-    "message": "Megnyitás új lapon"
-  },
-  "cm_speeddial_cell_open_bg_tab": {
-    "message": "Megnyitás egy háttérlapon"
-  },
-  "cm_speeddial_cell_edit": {
-    "message": "Szerkesztés"
-  },
-  "cm_speeddial_cell_remove": {
-    "message": "Gyorshívó törlése"
-  },
-  "cm_speeddial_cell_copy_url": {
-    "message": "URL másolása"
-  },
-  "cm_speeddial_cell_move_to": {
-    "message": "Áthelyezés..."
-  },
-  "cm_speeddial_cell_refresh": {
-    "message": "Frissítés"
-  },
-  "cm_speeddial_cell_refresh_manual": {
-    "message": "Manuális frissítés"
-  },
-  "cm_speeddial_group_edit": {
-    "message": "Szerkesztés"
-  },
-  "cm_speeddial_group_remove": {
-    "message": "Eltávolítás"
-  },
-  "cm_speeddial_group_default": {
-    "message": "Alapértelmezett"
-  },
-  "cm_speeddial_group_sync_this_group": {
-    "message": "Csoport szinkronizálása"
-  },
-  "cm_speeddial_group_open_all": {
-    "message": "Összes gyorshívó megnyitása"
-  },
-  "cm_speeddial_group_manage": {
-    "message": "Csoportok kezelése"
-  },
-  "cm_speeddial_global_add_dial": {
-    "message": "Gyorshívó hozzáadása"
-  },
-  "cm_speeddial_global_open_all": {
-    "message": "Összes gyorshívó megnyitása"
-  },
-  "cm_speeddial_global_style": {
-    "message": "Stílus"
-  },
-  "cm_speeddial_global_style_fancy": {
-    "message": "Képzelet"
-  },
-  "cm_speeddial_global_style_standard": {
-    "message": "Szabványos"
-  },
-  "cm_speeddial_global_view": {
-    "message": "Nézet"
-  },
-  "cm_speeddial_global_preview": {
-    "message": "Előnézet"
-  },
-  "cm_speeddial_global_change_size": {
-    "message": "Méret módosítása..."
-  },
-  "cm_speeddial_global_number_of_columns": {
-    "message": "Oszlopok száma"
-  },
-  "cm_speeddial_global_number_of_rows": {
-    "message": "Sorok száma"
-  },
-  "cm_speeddial_global_view_big": {
-    "message": "Nagy"
-  },
-  "cm_speeddial_global_view_medium": {
-    "message": "Közepes"
-  },
-  "cm_speeddial_global_view_small": {
-    "message": "Kicsi"
-  },
-  "cm_speeddial_global_view_custom": {
-    "message": "Egyéni"
-  },
-  "cm_speeddial_global_view_list": {
-    "message": "Lista"
-  },
-  "cm_scrolling_type": {
-    "message": "Görgetés típusa"
-  },
-  "cm_mostvisited_cell_add_to_speeddial": {
-    "message": "Hozzáadás a gyorshívóhoz"
-  },
-  "cm_mostvisited_cell_block": {
-    "message": "Blokkolás"
-  },
-  "cm_apps_open": {
-    "message": "Megnyitás"
-  },
-  "cm_apps_remove": {
-    "message": "Eltávolítás"
-  },
-  "cm_main_title": {
-    "message": "FVD Speed Dial"
-  },
-  "cm_add_to": {
-    "message": "Hozzáadás a következőhöz: "
-  },
-  "cm_refresh_all": {
-    "message": "Összes frissítése"
-  },
-  "popup_speed_dial": {
-    "message": "Gyorshívó"
-  },
-  "popup_options": {
-    "message": "Opciók"
-  },
-  "cs_dial_added": {
-    "message": "A gyorshívó hozzáadásra került"
-  },
-  "newtab_introduction_slide3_title": {
-    "message": "Which phone do you use?"
-  },
-  "newtab_introduction_slide3_text": {
-    "message": "You only need to select this once and we will save your preference"
-  },
-  "newtab_introduction_last_step": {
-    "message": "Last step"
-  },
-  "newtab_initialization_message": {
-    "message": "Initialization... Please wait..."
-  },
-  "newtab_none": {
-    "message": "none"
-  },
-  "newtab_search": {
-    "message": "Search"
-  },
-  "newtab_search_on_ebay": {
-    "message": "Search on Ebay"
-  },
-  "newtab_cant_move_dials_in_popular": {
-    "message": "You can rearrange dials in ANY group except in <b>Popular Group</b>. This group arranges dials by clicks popularity."
-  },
-  "newtab_or": {
-    "message": "or"
-  },
-  "bg_dialog_adddial_pic_local_file": {
-    "message": "Local File?"
-  },
-  "bg_dialog_adddial_enable_autoupdate_preview": {
-    "message": "Auto Update"
-  },
-  "bg_dialog_adddial_autoupdate_minutes": {
-    "message": "Minutes"
-  },
-  "bg_dialog_adddial_autoupdate_hours": {
-    "message": "Hours"
-  },
-  "bg_dialog_adddial_autoupdate_days": {
-    "message": "Days"
-  },
-  "bg_dialog_adddial_autoupdate_every": {
-    "message": "Every"
-  },
-  "bg_dialog_adddial_pick_local_file_desc": {
-    "message": "To link dial to you local file you need to write correct file location in format:<br>{examples}<br>Alternative way how to get file address: open new tab. drag and drop file into your browser. In URL bar you will see the address of your files."
-  },
-  "bg_dialog_adddial_pick_local_file_desc_linux": {
-    "message": "file://{full path to file}<br>For example: <b>file:///home/user/page.html</b>"
-  },
-  "bg_dialog_adddial_pick_local_file_desc_win": {
-    "message": "file:///{full path to file where \\ replaced by /}<br>For example: <b>file:///C:\\user\\pic.jpg</b>"
-  },
-  "options_display_dial_borders": {
-    "message": "Display dial borders"
-  },
-  "options_sync_need_install_ability_11": {
-    "message": "Server auto backups and restore."
-  },
-  "options_poweroff_idle_timeout_enable": {
-    "message": "Enable Passcode when idle:"
-  },
-  "options_poweroff_3min": {
-    "message": "3min"
-  },
-  "options_poweroff_5min": {
-    "message": "5min"
-  },
-  "options_poweroff_10min": {
-    "message": "10min"
-  },
-  "options_poweroff_15min": {
-    "message": "15min"
-  },
-  "options_poweroff_30min": {
-    "message": "30min"
-  },
-  "options_poweroff_60min": {
-    "message": "60min"
-  },
-  "dlg_confirm_turn_off_autoupdate_globally_title": {
-    "message": "Confirm your action"
-  },
-  "dlg_confirm_turn_off_autoupdate_globally_text": {
-    "message": "All speed dials auto update settings will be turned off."
-  },
-  "dlg_alert_dials_autoupdate_updated_title": {
-    "message": "Success!"
-  },
-  "dlg_alert_dials_autoupdate_updated_text": {
-    "message": "Dials updated successully."
-  },
-  "dialog_title_set_autoupdate_batch": {
-    "message": "Set auto update"
-  },
-  "bg_dialog_setautoupdate_autoupdate_every": {
-    "message": "Auto update dial every"
-  },
-  "options_reset_speed_dial_clicks": {
-    "message": "Reset dials clicks"
-  },
-  "options_confirm_reset_clicks_title": {
-    "message": "Confirm your action"
-  },
-  "options_confirm_reset_clicks_text": {
-    "message": "Do you really want to reset clicks?"
-  },
-  "options_success_reset_clicks_title": {
-    "message": "Success!"
-  },
-  "options_success_reset_clicks_text": {
-    "message": "Clicks resetted successfully!"
-  },
-  "options_available_in_standard_theme_only": {
-    "message": "Available in Standard theme only."
-  },
-  "newtab_search_input_placeholder": {
-    "message": "Enter your search..."
-  },
-  "options_parallax_option": {
-    "message": "Parallax"
-  },
-  "options_parallax_strength": {
-    "message": "Parallax effect strength: "
-  },
-  "newtab_offer_parallax_title": {
-    "message": "Make your background dynamic with Parallax effect."
-  },
-  "newtab_offer_parallax_try_parallax": {
-    "message": "Try Parallax"
-  },
-  "newtab_offer_parallax_cancel": {
-    "message": "Close"
-  },
-  "newtab_offer_parallax_description": {
-    "message": "Go to FVD Speed Dial > Settings > Background > Select Parallax in Type Drop down."
-  },
-  "newtab_light_collapsed_message_text": {
-    "message": "Double click to show Speed Dial"
-  },
-  "bg_default_dial_nimbus": {
-    "message": "Nimbus Note"
-  },
-  "options_backup_via_eversync_suggestion": {
-    "message": "Important! Don't forget to Backup your dials and custom images to restore them any time."
-  },
-  "options_backup_via_eversync_suggestion_button": {
-    "message": "Backup Dials"
-  },
-  "newtab_voice_search": {
-    "message": "Voice Search"
-  },
-  "newtab_search_on_amazon": {
-    "message": "Search on Amazon"
-  },
-  "bg_default_dial_half_com": {
-    "message": "Half.com"
-  },
-  "bg_default_dial_tripadvizor": {
-    "message": "TripAdvisor"
-  },
-  "bg_default_dial_booking": {
-    "message": "Booking.com"
-  },
-  "bg_default_dial_aliexpress": {
-    "message": "AliExpress"
-  },
-  "newtab_dials_search_input_placeholder": {
-    "message": "Search in Speed Dial"
-  },
-  "newtab_dials_search_no_match": {
-    "message": "No Match"
-  },
-  "newtab_dials_search_try_on_web": {
-    "message": "Try on Web? Or press Enter key."
-  },
-  "newtab_dials_search_no_match_query": {
-    "message": "Your search: <strong></strong> didn't match any Speed Dial titles/urls."
-  },
-  "options_enable_dials_search": {
-    "message": "Enable search in Speed Dial"
-  },
-  "newtab_search_on_aliexpress": {
-    "message": "Search on AliExpress"
-  },
-  "bg_default_dial_wayfair": {
-    "message": "Wayfair"
-  },
-  "bg_default_dial_groupon": {
-    "message": "Groupon"
-  },
-  "options_start_donate": {
-    "message": "Donate"
-  },
-  "newtab_search_on_billiger": {
-    "message": "Search on Billiger"
-  },
-  "bg_default_dial_billiger": {
-    "message": "Billiger"
-  },
-  "newtab_restore_corrupted_files_title": {
-    "message": "Speed dials being restored…"
-  },
-  "newtab_restore_corrupted_files_msg1": {
-    "message": "As a result of unidentified factors/actions of other programs some speed dials were damaged and are being restored at the moment. This may take some time."
-  },
-  "newtab_restore_corrupted_files_msg2": {
-    "message": "No need to worry! Everything will be up and running in no time!"
-  },
-  "options_enable_ondial_search": {
-    "message": "Enable search on dials"
-  },
-  "newtab_ondialsearch_placeholder": {
-    "message": "enter your search.."
-  },
-  "newtab_disable_page_mod": {
-    "message": "disable this widget"
-  },
-  "options_quick_preview": {
-    "message": "Quick Preview Widget"
-  },
-  "dlg_confirm_disable_quick_preview_title": {
-    "message": "Please confirm your action."
-  },
-  "dlg_confirm_disable_quick_preview_text": {
-    "message": "Do you really want to disable Quick Preview Widget?"
-  },
-  "cm_speeddial_cell_open_incognito_tab": {
-    "message": "Open in Incognito window"
-  },
-  "newtab_introduction_opera_how_to_newtab": {
-    "message": "How to set FVD Speed Dial as new tab?"
-  },
-  "newtab_introduction_opera_how_to_newtab_step1": {
-    "message": "1) Install add Custom new tab page from"
-  },
-  "newtab_introduction_opera_how_to_newtab_step2": {
-    "message": "2) Enter the URL in form"
-  },
-  "options_sync_link_opera": {
-    "message": "Install from Opera Webstore"
-  },
-  "bg_dialog_addgroup_position": {
-    "message": "Add To:"
-  },
-  "bg_dialog_addgroup_position_top": {
-    "message": "Top"
-  },
-  "bg_dialog_addgroup_position_bottom": {
-    "message": "Bottom"
-  },
-  "options_help": {
-    "message": "Help"
-  },
-  "options_help_url": {
-    "message": "https://s.nimbusweb.me/share/3644739/26cf9i89r01k7swzsw9g"
-  },
-  "options_main_button_action": {
-    "message": "Toolbar button action"
-  },
-  "options_main_button_action_sd_in_new_tab": {
-    "message": "Open Speed Dial in a new tab"
-  },
-  "options_main_button_action_sd_in_active_tab": {
-    "message": "Open Speed Dial in the active tab"
-  },
-  "options_main_button_action_add_site_to_sd": {
-    "message": "Add the active site to Speed Dial"
-  },
-  "newtab_bottom_text_terms_of_use": {
-    "message": "Terms of Use"
-  },
-  "newtab_bottom_text_privacy_policy": {
-    "message": "Privacy Policy"
-  },
-  "options_release_notes": {
-    "message": "Release Notes"
-  },
-  "options_release_notes_url": {
-    "message": "https://everhelper.me/release-notes-en.php"
-  },
-  "booking_widget_quick_search": {
-    "message": "Quick Search"
-  },
-  "booking_widget_reset": {
-    "message": "reset"
-  },
-  "booking_widget_destination_title": {
-    "message": "Destination/Hotel Name:"
-  },
-  "booking_widget_destination_empty_error": {
-    "message": "Enter a destination to start searching."
-  },
-  "booking_widget_are_you_travelling_for_work": {
-    "message": "Are you travelling for work?"
-  },
-  "booking_widget_yes": {
-    "message": "Yes"
-  },
-  "booking_widget_no": {
-    "message": "No"
-  },
-  "booking_widget_checkin": {
-    "message": "Check-in:"
-  },
-  "booking_widget_checkin_date": {
-    "message": "Tuesday, April 11, 2017"
-  },
-  "booking_widget_reservation_too_long": {
-    "message": "Reservations longer than 30 nights are not possible. "
-  },
-  "booking_widget_checkout": {
-    "message": "Check-out:"
-  },
-  "booking_widget_checkout_date": {
-    "message": "Thursday, April 27, 2017"
-  },
-  "booking_widget_dont_have_dates": {
-    "message": "I don't have specific dates yet"
-  },
-  "booking_widget_rooms": {
-    "message": "Rooms"
-  },
-  "booking_widget_adults": {
-    "message": "Adults"
-  },
-  "booking_widget_children": {
-    "message": "Children<br>(under 18)"
-  },
-  "booking_widget_close": {
-    "message": "close"
-  },
-  "booking_widget_search": {
-    "message": "Search"
-  },
-  "booking_widget_night_stay": {
-    "message": "-night stay"
-  },
-  "booking_widget_children_ages_on": {
-    "message": "Children's ages on"
-  },
-  "booking_widget_children_ages_at_checkout": {
-    "message": "Children's ages at checkout"
-  },
-  "booking_widget_previous_month": {
-    "message": "Previous Month"
-  },
-  "booking_widget_next_month": {
-    "message": "Next Month"
-  },
-  "month_0": {
-    "message": "January"
-  },
-  "month_1": {
-    "message": "February"
-  },
-  "month_2": {
-    "message": "March"
-  },
-  "month_3": {
-    "message": "April"
-  },
-  "month_4": {
-    "message": "May"
-  },
-  "month_5": {
-    "message": "June"
-  },
-  "month_6": {
-    "message": "July"
-  },
-  "month_7": {
-    "message": "August"
-  },
-  "month_8": {
-    "message": "September"
-  },
-  "month_9": {
-    "message": "October"
-  },
-  "month_10": {
-    "message": "November"
-  },
-  "month_11": {
-    "message": "December"
-  },
-  "dow_0": {
-    "message": "Sunday"
-  },
-  "dow_1": {
-    "message": "Monday"
-  },
-  "dow_2": {
-    "message": "Tuesday"
-  },
-  "dow_3": {
-    "message": "Wednesday"
-  },
-  "dow_4": {
-    "message": "Thursday"
-  },
-  "dow_5": {
-    "message": "Friday"
-  },
-  "dow_6": {
-    "message": "Saturday"
-  },
-  "booking_widget_from": {
-    "message": "from"
-  },
-  "booking_widget_to": {
-    "message": "to"
-  },
-  "booking_widget_travel_for_work_hint": {
-    "message": "Quickly find the best properties for your trip"
-  },
-  "dow_short_0": {
-    "message": "Su"
-  },
-  "dow_short_1": {
-    "message": "Mo"
-  },
-  "dow_short_2": {
-    "message": "Tu"
-  },
-  "dow_short_3": {
-    "message": "We"
-  },
-  "dow_short_4": {
-    "message": "Th"
-  },
-  "dow_short_5": {
-    "message": "Fr"
-  },
-  "dow_short_6": {
-    "message": "Sa"
-  },
-  "options_preload_search_items": {
-    "message": "Pre-load related search results"
-  }
+	"extension_locale": {
+		"message": "hu",
+		"description": "Belső használatra"
+	},
+	"newtab_title": {
+		"message": "FVD Speed Dial",
+		"description": "Új lap címe"
+	},
+	"newtab_introduction_title": {
+		"message": "Üdvözöljük az FVD Speed Dial rövid bemutatóján!!"
+	},
+	"newtab_introduction_button_next": {
+		"message": "Következő"
+	},
+	"newtab_introduction_button_prev": {
+		"message": "Előző"
+	},
+	"newtab_introduction_button_start": {
+		"message": "Kezdjük!"
+	},
+	"newtab_introduction_slide1_title": {
+		"message": "Válassza ki a 3D-s vagy a szabványos gyorshívó stílust"
+	},
+	"newtab_introduction_slide1_text": {
+		"message": "A megjelenés bármikor módosítható a <b>Jobb kattintás > Stílus</b> vagy <b>Opciók > Megjelenés > Stílus</b> menüpontból.<br><br><img src=\"images/newtab/introduction/slide1_img.png\">"
+	},
+	"newtab_introduction_slide2_title": {
+		"message": "Saját alkalmazások és widgetek"
+	},
+	"newtab_introduction_slide2_text": {
+		"message": "Kattintson a lenti vagy bal oldali panelre az Alkalmazás vagy Widget oldalsáv aktiválásához.<br><br><b>Tipp:</b> Használja a szóköz gombot a billentyűzeten a widgetek megjelenítéséhez/elrejtéséhez"
+	},
+	"newtab_offer_theme_bg": {
+		"message": "A SpeedDial elérhető a jelenleg téma háttér alkalmazására"
+	},
+	"newtab_apply_theme_bg": {
+		"message": "Téma háttér alkalmazása"
+	},
+	"newtab_cancel_theme_bg": {
+		"message": "Téma háttér elvetése"
+	},
+	"newtab_offer_theme_download": {
+		"message": "Háttér letöltése..."
+	},
+	"newtab_instant_seach_preview": {
+		"message": "Szolgáltató: Yahoo Search"
+	},
+	"newtab_enable_speed_dial": {
+		"message": "Gyorshívó engedélyezése"
+	},
+	"newtab_sure": {
+		"message": "Biztos?"
+	},
+	"newtab_yes": {
+		"message": "Igen"
+	},
+	"newtab_no": {
+		"message": "Nem"
+	},
+	"newtab_default": {
+		"message": "Alapértelmezett"
+	},
+	"newtab_max_groups": {
+		"message": "Gyorshívók max száma a népszerű csoportban:"
+	},
+	"newtab_thumbnails": {
+		"message": "Miniatűrök"
+	},
+	"newtab_big": {
+		"message": "Nagy"
+	},
+	"newtab_medium": {
+		"message": "Közepes"
+	},
+	"newtab_small": {
+		"message": "Kicsi"
+	},
+	"newtab_custom": {
+		"message": "Egyéni"
+	},
+	"newtab_preview": {
+		"message": "Előnézet"
+	},
+	"newtab_list": {
+		"message": "Lista"
+	},
+	"newtab_number_of_columns": {
+		"message": "Oszlopok száma"
+	},
+	"newtab_number_of_rows": {
+		"message": "Sorok száma"
+	},
+	"newtab_columns_auto": {
+		"message": "Automatikus"
+	},
+	"newtab_groups": {
+		"message": "Csoportok"
+	},
+	"newtab_default_group": {
+		"message": "Alapértelmezett csoport"
+	},
+	"newtab_manage_groups": {
+		"message": "Csoportok kezelése"
+	},
+	"newtab_import_available": {
+		"message": "Importálási adat érhető el"
+	},
+	"newtab_enable_most_visited": {
+		"message": "Leglátogatottabb engedélyezése"
+	},
+	"newtab_show_last": {
+		"message": "Utolsó megjelenítése"
+	},
+	"newtab_synchronization": {
+		"message": "Szinkronizáció"
+	},
+	"newtab_cache_life_time": {
+		"message": "Gyorsítótár élettartam"
+	},
+	"newtab_hours": {
+		"message": "Óra"
+	},
+	"newtab_done": {
+		"message": "Kész"
+	},
+	"newtab_sync_now": {
+		"message": "Frissítési statisztika"
+	},
+	"newtab_restore_removed": {
+		"message": "Eltávolított visszaállítása"
+	},
+	"newtab_enable_recently_closed": {
+		"message": "Legutóbb bezárt engedélyezése"
+	},
+	"newtab_migrate_message": {
+		"message": "Adatok importálása más bővítményekből"
+	},
+	"newtab_start_migrate": {
+		"message": "Importálás megkezdése"
+	},
+	"newtab_cancel_migrate": {
+		"message": "Mégse"
+	},
+	"newtab_do_not_display_migrate": {
+		"message": "Ne jelenjen meg többé"
+	},
+	"newtab_rate_fvd_speed_dial": {
+		"message": "FVD Speed Dial"
+	},
+	"newtab_rate_text": {
+		"message": "Kérjük, írja meg véleményét és értékeljen minket."
+	},
+	"newtab_rate_appreciate": {
+		"message": "Nagyra értékeljük segítségét"
+	},
+	"newtab_expand_all": {
+		"message": "Összes kibontása"
+	},
+	"newtab_hide_all": {
+		"message": "Összes elrejtése"
+	},
+	"newtab_options": {
+		"message": "Opciók"
+	},
+	"newtab_restore_previous_session": {
+		"message": "Előző munkafolyamat helyreállítása"
+	},
+	"newtab_global_options": {
+		"message": "Globális opciók"
+	},
+	"newtab_sync_button": {
+		"message": "Szinkronizálás"
+	},
+	"newtab_all_group_title": {
+		"message": "Népszerű"
+	},
+	"newtab_make_as_homepage": {
+		"message": "Beállítás kezdőlapként"
+	},
+	"newtab_change_background": {
+		"message": "Háttér módosítása"
+	},
+	"newtab_speeddial_label": {
+		"message": "Gyorshívó (%count%)"
+	},
+	"newtab_most_visited_label": {
+		"message": "Leglátogatottabb (%count%)"
+	},
+	"newtab_recently_closed_label": {
+		"message": "Legutóbb bezárt (%count%)"
+	},
+	"newtab_dial_clicks": {
+		"message": "Kattintások"
+	},
+	"newtab_popular_group_title": {
+		"message": "Népszerű"
+	},
+	"newtab_mostvisited_interval_all_time": {
+		"message": "Bármikor"
+	},
+	"newtab_mostvisited_interval_month": {
+		"message": "Múlt hónapban"
+	},
+	"newtab_mostvisited_interval_week": {
+		"message": "Múlt héten"
+	},
+	"newtab_mostvisited_views": {
+		"message": "Megtekintések"
+	},
+	"newtab_mostvisited_views_small": {
+		"message": "V"
+	},
+	"newtab_mostvisited_ingroup": {
+		"message": "Csoportban"
+	},
+	"newtab_mostvisited_ingroup_small": {
+		"message": "G"
+	},
+	"newtab_listview_title": {
+		"message": "Cím"
+	},
+	"newtab_listview_url": {
+		"message": "URL-cím"
+	},
+	"newtab_listviewmenu_add_dial": {
+		"message": "Gyorshívó hozzáadása"
+	},
+	"newtab_listviewmenu_open_all": {
+		"message": "Összes link megnyitása"
+	},
+	"newtab_listviewmenu_delete_all": {
+		"message": "Összes link törlése"
+	},
+	"newtab_listview_noitems": {
+		"message": "Nincs megjeleníthető elem"
+	},
+	"newtab_dblclick_to_expand": {
+		"message": "Kattintson duplán a kibontáshoz"
+	},
+	"newtab_click_to_get_title": {
+		"message": "Kattintson a cím lekéréséhez"
+	},
+	"newtab_getting_title": {
+		"message": "Cím lekérése..."
+	},
+	"newtab_last_used_group": {
+		"message": "Utoljára használt csoport"
+	},
+	"newtab_can_turn_off_newtab_msg": {
+		"message": "Megjegyzés: Az FVD Speed Dial letiltható az Új lap fülön, és csak a gomb megnyomásával indítható."
+	},
+	"newtab_can_turn_off_newtab_opt_app": {
+		"message": "Opciók > Megjelenés"
+	},
+	"newtab_can_turn_off_newtab_got_it": {
+		"message": "Értem. Köszönöm."
+	},
+	"newtab_ops_3d_unavailable": {
+		"message": "Hoppá, 3D funkció probléma."
+	},
+	"newtab_switch_to_standard": {
+		"message": "Kattintson ide a szabványos mód használatához"
+	},
+	"newtab_3d_how_to_fix": {
+		"message": "Hogyan javítható:"
+	},
+	"newtab_3d_if_not_works": {
+		"message": "Ha ez nem segít - próbálja meg frissíteni a videokártya illesztőprogramjait"
+	},
+	"newtab_3d_open_new_tab": {
+		"message": "Új lap megnyitása"
+	},
+	"newtab_3d_type_flags": {
+		"message": "Gépelje be: \"chrome://flags\""
+	},
+	"newtab_3d_without_quotes": {
+		"message": "Idézőjelek nélkül"
+	},
+	"newtab_3d_find_override": {
+		"message": "Keresse a \"Szoftveres renderelési lista felülbírálása\" opciót, majd kattintson az Engedélyezés gombra"
+	},
+	"newtab_3d_note_dont_afraid": {
+		"message": "Megjegyzés: Ne féljen aktiválni ezt a funkciót. Semmi rossz nem történhet."
+	},
+	"newtab_3d_restart": {
+		"message": "Indítsa újra"
+	},
+	"newtab_3d_restart_continue": {
+		"message": "böngészőjét és élvezze az új Fancy 3D megjelenést."
+	},
+	"newtab_3d_install_new_drivers": {
+		"message": "A 3D mód engedélyezéséhez, frissítenie kell a videokártya illesztőprogramjait"
+	},
+	"newtab_3d_last_step": {
+		"message": "Ha újra látja ezt az üzenetet, azt jelenti, hogy a böngésző nem támogatja a videokártyáját az FVD Speed ​​Dial 3D nézetű megjelenítéshez."
+	},
+	"newtab_search_on_google": {
+		"message": "Keresés"
+	},
+	"newtab_search_on_yandex": {
+		"message": "Keresés a Yandex-en"
+	},
+	"newtab_poweroff_desc": {
+		"message": "Ismerje meg, hogyan védheti meg a gyorshívót a kiváncsi szemek elől"
+	},
+	"newtab_poweroff_feature": {
+		"message": "Kikapcsolás funkció"
+	},
+	"newtab_poweroff_dont_show_again": {
+		"message": "Ne jelenjen meg többé"
+	},
+	"newtab_poweroff_enterpasscode": {
+		"message": "Jelszó megadása"
+	},
+	"newtab_powerof_wrong_passcode_title": {
+		"message": "Hibás jelszó"
+	},
+	"newtab_powerof_wrong_passcode_text": {
+		"message": "A megadott jelszó hibás"
+	},
+	"newtab_poweroff": {
+		"message": "Kikapcsolás"
+	},
+	"newtab_show_hide": {
+		"message": "Megjelenítés/Elrejtés"
+	},
+	"newtab_instant_seach_preview_google": {
+		"message": "Azonnali keresés"
+	},
+	"newtab_widgets_panel_move_or_delete": {
+		"message": "Minialkalmazások törlése vagy áthelyezése"
+	},
+	"newtab_apps_panel_open_desc": {
+		"message": "Nyomja meg a \"Ctrl + Szóköz\" billentyűt az alkalmazások panel elrejtéséhez/megjelenítéséhez."
+	},
+	"newtab_widgets_panel_open_desc": {
+		"message": "Nyomja meg a \"Szóköz\" billentyűt a minialkalmazások panel elrejtéséhez/megjelenítéséhez."
+	},
+	"newtab_widgets_panel_not_found": {
+		"message": "Kattintson a + gombra néhány minialkalmazás hozzáadásához!"
+	},
+	"newtab_themes_message_head": {
+		"message": "Hű! Új témák érhetők el!"
+	},
+	"newtab_themes_message_text": {
+		"message": "FVD Speed Dial témák telepítése"
+	},
+	"newtab_themes_message_install": {
+		"message": "Témák letöltése!"
+	},
+	"newtab_quicksitemap_text": {
+		"message": "Weboldal navigáció bővítése!"
+	},
+	"newtab_ad_install_text": {
+		"message": "Lásd alkalmazás"
+	},
+	"bg_default_group_name": {
+		"message": "Alapértelmezett"
+	},
+	"bg_default_group_products": {
+		"message": "Termékeink"
+	},
+	"bg_default_dial_google": {
+		"message": "Google"
+	},
+	"bg_write_review_dial_title": {
+		"message": "Írja meg véleményét"
+	},
+	"bg_default_dial_facebook": {
+		"message": "FaceBook"
+	},
+	"bg_default_dial_twitter": {
+		"message": "Twitter"
+	},
+	"bg_default_dial_fvdsyncchrome": {
+		"message": "EverSync"
+	},
+	"bg_default_dial_fvdsdff": {
+		"message": "FVD SpeedDial for FireFox"
+	},
+	"bg_write_review_dial_chromedownloader": {
+		"message": "FVD Video Downloader"
+	},
+	"bg_default_dial_betterchrome": {
+		"message": "BetterChrome"
+	},
+	"bg_default_dial_amazon": {
+		"message": "Amazon"
+	},
+	"bg_default_dial_ebay": {
+		"message": "EBay"
+	},
+	"bg_default_dial_webstore": {
+		"message": "Chrome webáruház"
+	},
+	"bg_dialog_loading": {
+		"message": "Betöltés..."
+	},
+	"bg_dialog_import_export_eversync_1": {
+		"message": "Ez a mentési mód, nem menti el az Ön egyéni képeit!!!"
+	},
+	"bg_dialog_import_export_eversync_2": {
+		"message": "Ha teljes biztonsági mentésre van szüksége, használja online mentési bővítményünket:"
+	},
+	"bg_dialog_import_export_eversync_clickhere": {
+		"message": "Kattintson ide a bővítmény telepítéséhez..."
+	},
+	"bg_dialog_adddial_title": {
+		"message": "Cím"
+	},
+	"bg_dialog_adddial_click_to_get_title": {
+		"message": "Kattintson a cím lekéréséhez"
+	},
+	"bg_dialog_adddial_url": {
+		"message": "URL-cím"
+	},
+	"bg_dialog_adddial_pick_user_pic": {
+		"message": "Felhasználói galéria böngészése"
+	},
+	"bg_dialog_adddial_pick_url_from": {
+		"message": "Kiválasztás URL-címből:"
+	},
+	"bg_dialog_adddial_pick_url_from_opened_tabs": {
+		"message": "Megnyitott lapok"
+	},
+	"bg_dialog_adddial_pick_url_from_or": {
+		"message": "vagy"
+	},
+	"bg_dialog_adddial_pick_url_from_most_visited": {
+		"message": "Leglátogatottabb"
+	},
+	"bg_dialog_adddial_pick_url_from_most_popular": {
+		"message": "Legnépszerűbb"
+	},
+	"bg_dialog_adddial_custom_preview_updated": {
+		"message": " (Frissítve!)"
+	},
+	"bg_dialog_adddial_image_url": {
+		"message": "URL előnézet"
+	},
+	"bg_dialog_adddial_default_preview": {
+		"message": "Elődefiniált logó"
+	},
+	"bg_dialog_adddial_group": {
+		"message": "Csoport"
+	},
+	"bg_dialog_adddial_group_name": {
+		"message": "Csoport neve"
+	},
+	"bg_dialog_adddial_refresh_preview": {
+		"message": "Előnézet frissítése"
+	},
+	"bg_dialog_adddial_top10pics_title": {
+		"message": "Legjobb 10 felhasználói kép"
+	},
+	"bg_dialog_adddial_top10pics_showmore": {
+		"message": "Több megjelenítése"
+	},
+	"bg_dialog_addgroup_name": {
+		"message": "Név"
+	},
+	"bg_dialog_addgroup_sync": {
+		"message": "Csoport szinkronizálása"
+	},
+	"bg_dialog_managegroups_groups": {
+		"message": "Csoportok"
+	},
+	"bg_dialog_deny_type": {
+		"message": "Típus"
+	},
+	"bg_dialog_deny_type_domain": {
+		"message": "Tartomány"
+	},
+	"bg_dialog_deny_type_url": {
+		"message": "URL-cím"
+	},
+	"bg_dialog_deny_sign": {
+		"message": "Aláírás"
+	},
+	"bg_dialog_view_group_title": {
+		"message": "Cím"
+	},
+	"bg_dialog_view_group_url": {
+		"message": "URL-cím"
+	},
+	"bg_dialog_manage_deny_sign": {
+		"message": "Aláírás"
+	},
+	"bg_dialog_manage_deny_type": {
+		"message": "Típus"
+	},
+	"dialog_add_dial_dynamic_title": {
+		"message": "Dinamikus cím"
+	},
+	"dialog_add_dial_enter_image_url": {
+		"message": "Adja meg a kép URL-címét"
+	},
+	"bg_dialog_adddial_use_auto_preview": {
+		"message": "Automatikus előnézet"
+	},
+	"bg_dialog_adddial_use_manual_preview": {
+		"message": "Manuális előnézet"
+	},
+	"bg_dialog_adddial_use_custom_preview": {
+		"message": "Egyéni előnézet"
+	},
+	"bg_dialog_adddial_preview_creation_delay": {
+		"message": "Előnézet késleltetése (ms):"
+	},
+	"options_title": {
+		"message": "FVD SpeedDial opciók"
+	},
+	"options_reset_clicks": {
+		"message": "Reset clicks"
+	},
+	"options_sd_preview_settings": {
+		"message": "Speed Dial preview setings"
+	},
+	"options_set_dials_to_auto_update": {
+		"message": "Set auto update"
+	},
+	"options_turn_off_dials_auto_update": {
+		"message": "Turn off auto update"
+	},
+	"options_enable_surfcanyon": {
+		"message": "Keresési finomítások engedélyezése"
+	},
+	"options_global_options": {
+		"message": "Globális opciók"
+	},
+	"options_global_tabs_main": {
+		"message": "Fő"
+	},
+	"options_global_tabs_appearance": {
+		"message": "Megjelenés"
+	},
+	"options_show_urls_under_dials": {
+		"message": "Webcímek megjelenítése a gyorshívók alatt"
+	},
+	"options_show_icons_and_titles_above_dials": {
+		"message": "Ikon es felirat a gyorshivo felett"
+	},
+	"options_disable_custom_search": {
+		"message": "Keresés letiltása"
+	},
+	"options_default_dial": {
+		"message": "Alapértelmezett modul"
+	},
+	"options_speed_dial": {
+		"message": "Gyorshívó"
+	},
+	"options_most_visited": {
+		"message": "Leglátogatottabb"
+	},
+	"options_recently_closed": {
+		"message": "Legutóbb bezárt"
+	},
+	"options_enable": {
+		"message": "Engedélyezés"
+	},
+	"options_blocked_domains": {
+		"message": "Blokkolt tartományok"
+	},
+	"options_dials_opening": {
+		"message": "Gyorshívó megnyitása:"
+	},
+	"options_current_tab": {
+		"message": "Aktuális lapon"
+	},
+	"options_new_tab": {
+		"message": "Új lapon"
+	},
+	"options_new_tab_background": {
+		"message": "Új lapon (háttérben)"
+	},
+	"options_dials_opacity": {
+		"message": "Gyorshívók átlátszósága"
+	},
+	"options_speed_dial_options": {
+		"message": "Gyorshívó opciók"
+	},
+	"options_display_plus_cells": {
+		"message": "[+] gyorshívó gomb megjelenítése"
+	},
+	"options_groups": {
+		"message": "Csoportok"
+	},
+	"options_default_group": {
+		"message": "Alapértelmezett:"
+	},
+	"options_max_dials_in_popular_group": {
+		"message": "Gyorshívók max száma a népszerű csoportban"
+	},
+	"options_most_visited_options": {
+		"message": "Leglátogatottabb lap opciók"
+	},
+	"options_show_last": {
+		"message": "Utolsó megjelenítése:"
+	},
+	"options_sort_by": {
+		"message": "Rendezés"
+	},
+	"options_last_week": {
+		"message": "Múlt héten"
+	},
+	"options_last_month": {
+		"message": "Múlt hónapban"
+	},
+	"options_all_time": {
+		"message": "Bármikor"
+	},
+	"options_recently_closed_options": {
+		"message": "Legutóbb bezárt lap opciók"
+	},
+	"options_background_options": {
+		"message": "Háttér beállítások"
+	},
+	"options_refresh": {
+		"message": "Frissítés"
+	},
+	"options_background_color": {
+		"message": "Háttér színe"
+	},
+	"options_bg_color_enabled": {
+		"message": "Engedélyezve"
+	},
+	"options_bg_install_themes": {
+		"message": "Új! Témák telepítése!"
+	},
+	"options_bg_from_url": {
+		"message": "URL-címről"
+	},
+	"options_bg_from_theme": {
+		"message": "Aktív témából"
+	},
+	"options_display_superfish": {
+		"message": "Superfish javaslatok"
+	},
+	"options_image_url": {
+		"message": "Kép forrása"
+	},
+	"options_bg_image_type": {
+		"message": "Típus:"
+	},
+	"options_noimage": {
+		"message": "Nincs kép"
+	},
+	"options_fill": {
+		"message": "Kitöltés"
+	},
+	"options_fit": {
+		"message": "Igazítás"
+	},
+	"options_stretch": {
+		"message": "Nyújtás"
+	},
+	"options_tile": {
+		"message": "Mozaik"
+	},
+	"options_center": {
+		"message": "Középre"
+	},
+	"options_load_and_preview": {
+		"message": "Betöltés és előnézet"
+	},
+	"options_fonts_options": {
+		"message": "Betűtípus beállítások"
+	},
+	"options_title_for_dials": {
+		"message": "Cím (Gyorshívók)"
+	},
+	"options_font_color": {
+		"message": "Szín:"
+	},
+	"options_font_bolder": {
+		"message": "Szegély"
+	},
+	"options_font_size": {
+		"message": "Méret:"
+	},
+	"options_url_for_dials": {
+		"message": "URL (Gyorshívók)"
+	},
+	"options_text_in_list_mode": {
+		"message": "Szöveg lista módban"
+	},
+	"options_show_title_url_list_mode": {
+		"message": "Cím/URL megjelenítése (Lista mód)"
+	},
+	"options_list_links": {
+		"message": "Hivatkozások listája"
+	},
+	"options_other_texts": {
+		"message": "Egyéb szövegek"
+	},
+	"options_restore_default": {
+		"message": "Alapértelmezett visszaállítása"
+	},
+	"options_apply_changes": {
+		"message": "Módosítások alkalmazása"
+	},
+	"options_manage_blocked": {
+		"message": "Kezelése"
+	},
+	"options_last_selected": {
+		"message": "Utoljára kiválasztott"
+	},
+	"options_close": {
+		"message": "Bezárás"
+	},
+	"options_recently_closed_max_show_last": {
+		"message": "(Max. 100)"
+	},
+	"options_recently_closed_max_most_visited": {
+		"message": "(Max. 75)"
+	},
+	"options_speeddial_max_in_popular": {
+		"message": "(Max. 50)"
+	},
+	"options_manage_groups": {
+		"message": "Csoportok kezelése"
+	},
+	"options_back_to_speeddial": {
+		"message": "Vissza a gyorshívóba"
+	},
+	"options_default_screen_delay": {
+		"message": "Alapértelmezett előnézeti késleltetés (ms):"
+	},
+	"options_display_in_new_tab": {
+		"message": "Megjelenítés új lapon"
+	},
+	"options_display_dial_background": {
+		"message": "Alapertelmezett gyorshivo hatter"
+	},
+	"options_import_export": {
+		"message": "Importálás/Exportálás"
+	},
+	"options_export": {
+		"message": "Exportálás"
+	},
+	"options_import": {
+		"message": "Importálás"
+	},
+	"options_display_popular_group": {
+		"message": "Népszerű csoport megjelenítése"
+	},
+	"options_display_quick_menu_and_clicks": {
+		"message": "Kattintások és gyorsmenü megjelenítése"
+	},
+	"options_cdsize_limits": {
+		"message": "Min. 150, Max. 260px"
+	},
+	"options_cdsize_title": {
+		"message": "Egyéni gyorshívó méret"
+	},
+	"options_submit_suggestion": {
+		"message": "Javaslatok küldése"
+	},
+	"options_submit_bug": {
+		"message": "Hibajelentés küldése"
+	},
+	"options_show_in_context_menu": {
+		"message": "Megjelenites a helyi menuben (Jobb klikk)"
+	},
+	"options_donate_message": {
+		"message": "Köszönjük érdeklődését az adományozás iránt! Az Ön adománya elősegíti szoftverünk folyamatos fejlesztését, és lehetőséget ad az alkalmazás ingyenességének fenntartására. Hogy van az, hogy az alkalmazás ingyenes, és mi mégis adományozásra kérjük fel Önt? A felhasználók nagy része, ha nem engedheti meg magának, vagy ha nem biztos benne, hogy megéri az árát, akkor ingyenesen is használhatja a szoftvert. \n\nAz FVD Speed dial bővítmény fejlesztése, javítása egy csomó pénzbe kerül.\n\nŐszintén reméljük, hogy vannak olyan elégedett felhasználók, akik kezdeményezésünk folytán hajlandóak lennének egy kis pénzt adományozni (akik megengedhetik maguknak), amely lehetővé teszi számunkra, hogy a lehető legtöbb embert elérjük az egész világon.\n\nA kapott adományokat nem fogjuk bérek vagy közvetett költségek kifizetésére használni, amelyek közvetlenül nem kapcsolódnak az interneten közzétett szolgáltatásunkhoz."
+	},
+	"options_sync_need_install": {
+		"message": "A szinkronizálás használatához telepítenie kell az EverSync bővítményt"
+	},
+	"options_sync_need_install_desc": {
+		"message": "Az Fvd Sync használatához kiegészítő bővítmény telepítésére lesz szüksége - EverSync:"
+	},
+	"options_sync_need_install_fvd_speeddial": {
+		"message": "FVD SpeedDial:"
+	},
+	"options_sync_need_install_fvd_sync": {
+		"message": "Könyvjelzők szinkronizálása:"
+	},
+	"options_sync_need_install_ability_6": {
+		"message": "Firefox/Chrome könyvjelzők szinkronizálása."
+	},
+	"options_sync_need_install_ability_7": {
+		"message": "Mappák szinkronizálása."
+	},
+	"options_sync_need_install_everhelper": {
+		"message": "Saját EverHelper kliens terület:"
+	},
+	"options_sync_need_install_ability_8": {
+		"message": "Könyvjelzők másolása az FVD Speed Dial-ba, és a Speed Dial-ból a könyvjelzőkbe"
+	},
+	"options_sync_need_install_ability_9": {
+		"message": "Lomtár / Kedvencek / Privát / Archívum / Részletes keresés és további funkciók."
+	},
+	"options_sync_need_install_ability_10": {
+		"message": "Könyvjelzők és gyorshívók kezelése."
+	},
+	"options_sync_need_install_ability_1": {
+		"message": "Gyorshívók szinkronizálása."
+	},
+	"options_sync_need_install_ability_2": {
+		"message": "Csoportok szinkronizálása."
+	},
+	"options_sync_need_install_ability_3": {
+		"message": "Egyéni képek szinkronizálása."
+	},
+	"options_sync_need_install_ability_4": {
+		"message": "Használja Firefox, Chrome böngészőn, különböző PC-k között"
+	},
+	"options_sync_need_install_ability_5": {
+		"message": "További funkciók hamarosan (Könyvjelzők, előzmények, jegyzetek szinkronizálása)."
+	},
+	"options_sync_link": {
+		"message": "Telepítés a Chrome webáruházból"
+	},
+	"options_sync_warning_line_1": {
+		"message": "<b>A szinkronizálási bővítménynek a következő engedélyre van szüksége: \"Hozzáférés az összes adathoz a számítógépen\"</b>"
+	},
+	"options_sync_warning_line_2": {
+		"message": "Ez nem jelenti azt, hogy a mi bővítményünknek hozzáférése lesz az Ön összes állományához!"
+	},
+	"options_sync_warning_line_3": {
+		"message": "Csak egy <b>könyvjelzőfájl elérésére van szükségünk Chrome környezetben.</b>"
+	},
+	"options_sync_warning_line_4": {
+		"message": "Amint engedélyt kap a fájl(ok) felülírására, a Chrome azt \"Teljes hozzáférés\"-nek fogja nevezni."
+	},
+	"options_sync_warning_line_5": {
+		"message": "Kérjük, nem váljon ettől paranoiássá! A Chrome webáruház egyenként felülvizsgál minden egyes bővítményt!!!"
+	},
+	"options_enable_search": {
+		"message": "Keresés engedélyezése"
+	},
+	"options_enable_search_preview": {
+		"message": "Keresési előnézet engedélyezése"
+	},
+	"options_poweroff_options": {
+		"message": "Kikapcsolás"
+	},
+	"options_poweroff_tab_desc_1": {
+		"message": "Személyes jelszó létrehozása a saját gyorshívók feloldásához."
+	},
+	"options_poweroff_tab_desc_2": {
+		"message": "A Kikapcsolás gomb megnyomása után a gyorshívók el lesznek rejtve, amelyek feloldásának egyetlen módja a jelszó megadása."
+	},
+	"options_poweroff_tab_desc_3": {
+		"message": "Ez egy nagyszerű funkció, ha nem szeretné, hogy bárki más lássa a gyorshívókat az Ön távollétében."
+	},
+	"options_poweroff_error_empty_passcode": {
+		"message": "A jelszó mező üres"
+	},
+	"options_poweroff_error_passcode_dont_match": {
+		"message": "A kódok nem egyeznek"
+	},
+	"options_poweroff_error_email_wrong_format": {
+		"message": "Hibás e-mail formátum"
+	},
+	"options_poweroff_error_wrong_pass_code": {
+		"message": "Hibás jelszó"
+	},
+	"options_poweroff_passcode_changed_title": {
+		"message": "Sikeres"
+	},
+	"options_poweroff_passcode_changed_text": {
+		"message": "A jelszó sikeresen módosítva lett."
+	},
+	"options_powerof_password_restore_title": {
+		"message": "Jelszó visszaállítva"
+	},
+	"options_powerof_password_restore_text": {
+		"message": "A jelszó sikeresen el lett küldve az Ön e-mail címére"
+	},
+	"options_poweroff_create_passcode": {
+		"message": "Jelszó létrehozása"
+	},
+	"options_poweroff_passcode": {
+		"message": "Jelszó:"
+	},
+	"options_poweroff_repeat_passcode": {
+		"message": "Jelszó megismétlése:"
+	},
+	"options_poweroff_email": {
+		"message": "Jelszó visszaállítási e-mail:"
+	},
+	"options_poweroff_create_passcode_button": {
+		"message": "Jelszó létrehozása"
+	},
+	"options_poweroff_passcode_setuped": {
+		"message": "Jelszó beállítva."
+	},
+	"options_poweroff_old_passcode": {
+		"message": "Régi jelszó:"
+	},
+	"options_poweroff_change_passcode": {
+		"message": "Jelszó módosítása"
+	},
+	"options_poweroff_new_passcode": {
+		"message": "Új jelszó *:"
+	},
+	"options_poweroff_change_passcode_button": {
+		"message": "Jelszó módosítása"
+	},
+	"options_poweroff_star_desc": {
+		"message": "* A jelszó eltávolításához, hagyja üresen az Új jelszó mezőt."
+	},
+	"options_poweroff_restore_button": {
+		"message": "Jelszó helyreállítás saját e-mail címre"
+	},
+	"options_poweroff_tab_main_title": {
+		"message": "Fő"
+	},
+	"options_poweroff_tab_change_pass_title": {
+		"message": "Jelszó módosítása"
+	},
+	"options_poweroff_tab_restore_title": {
+		"message": "Jelszó visszaállítása"
+	},
+	"options_display_mirror": {
+		"message": "Tükröződő gyorshívó bélyegképek"
+	},
+	"options_scrolling": {
+		"message": "Gyorshívó görgetési típusa"
+	},
+	"options_scrolling_horizontal": {
+		"message": "Vízszintes"
+	},
+	"options_scrolling_vertical": {
+		"message": "Függőleges"
+	},
+	"options_widgets_options": {
+		"message": "Minialkalmazások"
+	},
+	"options_widgets_enabled_title": {
+		"message": "Minialkalmazások engedélyezése"
+	},
+	"options_widgets_opacity_title": {
+		"message": "Minialkalmazások panel átlátszósága"
+	},
+	"options_widgets_bgcolor_title": {
+		"message": "Minialkalmazások panel háttér színe"
+	},
+	"options_enable_widgets_autoscroll": {
+		"message": "Automatikus görgetés engedélyezése"
+	},
+	"options_widgets_autoscroll_speed": {
+		"message": "Automatikus görgetési sebesség"
+	},
+	"options_set_auto_preview": {
+		"message": "Visszaállítás automatikusra"
+	},
+	"options_set_auto_preview_button": {
+		"message": "Automatikus előnézet beállítása"
+	},
+	"options_premium_for_share": {
+		"message": "Prémium fiók ingyenesen!"
+	},
+	"cropper_click_to_make_preview": {
+		"message": "Kattintson az előnézet létrehozásához"
+	},
+	"cropper_message_wait": {
+		"message": "Miniatűrök létrehozása... Kis türelmet..."
+	},
+	"cropper_your_url": {
+		"message": "Ön URL-címe"
+	},
+	"cropper_last_page_url": {
+		"message": "Utolsó oldal URL-je"
+	},
+	"cropper_pick_this": {
+		"message": "Jelenlegi kiválasztása"
+	},
+	"dialog_pick_user_pics_order_best": {
+		"message": "Legjobb"
+	},
+	"dialog_pick_user_pics_order_new": {
+		"message": "Új"
+	},
+	"dialog_pick_user_pics_order": {
+		"message": "Rendezés: "
+	},
+	"dialog_pick_user_pics_not_found_title": {
+		"message": "Kereshet {host} logót ezekhez a nagyszerű készletekhez és hozzáadhatja azt a galériánkhoz."
+	},
+	"dialog_pick_user_pics_not_found_enter_in": {
+		"message": "Ha talált egy Önnek tetsző képet, másolja ki az URL-t és illessze be ebbe az űrlapba:"
+	},
+	"dialog_pick_user_pics_report": {
+		"message": "Kép jelentése"
+	},
+	"dialog_pick_user_pics_not_found": {
+		"message": "Nem található semmilyen kép az Ön kérésére."
+	},
+	"dialog_pick_user_pics_report_thanks": {
+		"message": "Köszönjük!"
+	},
+	"dialog_pick_user_pics_report_innop": {
+		"message": "Nem megfelelő"
+	},
+	"dialog_pick_user_pics_report_duplicate": {
+		"message": "Másolat"
+	},
+	"dialog_pick_user_pics_bottom_desc_1": {
+		"message": "Használja"
+	},
+	"dialog_pick_user_pics_bottom_desc_2": {
+		"message": "a szabálysértés jelentéséhez."
+	},
+	"dialog_title_add_dial": {
+		"message": "Gyorshívó hozzáadása"
+	},
+	"dialog_title_modify_dial": {
+		"message": "Gyorshívó módosítása"
+	},
+	"dialog_title_add_group": {
+		"message": "Csoport hozzáadása"
+	},
+	"dialog_title_modify_group": {
+		"message": "Csoport módosítása"
+	},
+	"dialog_title_manage_groups": {
+		"message": "Csoportok kezelése"
+	},
+	"dialog_title_deny": {
+		"message": "Blokkolás"
+	},
+	"dialog_title_view_group": {
+		"message": "Csoport megtekintése"
+	},
+	"dialog_title_manage_deny": {
+		"message": "Blokkoltak kezelése"
+	},
+	"dialog_title_pick_user_images": {
+		"message": "Válassza ki a kívánt képet"
+	},
+	"dialog_title_edit_deny": {
+		"message": "Blokkolási szabályok szerkesztése"
+	},
+	"dialog_title_export": {
+		"message": "Exportálás"
+	},
+	"dialog_title_import": {
+		"message": "Importálás"
+	},
+	"dialog_title_install_fvd_sync": {
+		"message": "FVD Synchronizer telepítése"
+	},
+	"dlg_button_close": {
+		"message": "Bezárás"
+	},
+	"dlg_button_deny": {
+		"message": "Blokkolás"
+	},
+	"dlg_button_add_dial": {
+		"message": "Gyorshívó hozzáadása"
+	},
+	"dlg_button_cancel": {
+		"message": "Mégse"
+	},
+	"dlg_button_save": {
+		"message": "Mentés"
+	},
+	"dlg_button_modify_dial": {
+		"message": "Módosítás"
+	},
+	"dlg_button_add_group": {
+		"message": "Csoport hozzáadása"
+	},
+	"dlg_button_modify_group": {
+		"message": "Csoport módosítása"
+	},
+	"dlg_button_add_deny_rule": {
+		"message": "Blokkolási szabály hozzáadása"
+	},
+	"dlg_button_copy_to_clipboard": {
+		"message": "Másolás a vágólapra"
+	},
+	"dlg_button_import": {
+		"message": "Importálás"
+	},
+	"dlg_alert_release_left_button": {
+		"message": "Kérjük, engedje el az egérgombot a képernyőkép elkészítéséhez!"
+	},
+	"dlg_alert_ok": {
+		"message": " OK "
+	},
+	"dlg_alert_cannot_remove_group_title": {
+		"message": "Nem lehet eltávolítani a csoportot"
+	},
+	"dlg_alert_cannot_remove_group_text": {
+		"message": "Nem lehet eltávolítani az utolsó csoportot"
+	},
+	"dlg_alert_sd_locked_action_title": {
+		"message": "Hozzáférés megtagadva"
+	},
+	"dlg_alert_sd_locked_action_text": {
+		"message": "A Speed Dial zárolva van. Kérjük, oldja fel a jelenlegi művelet folytatásához."
+	},
+	"dlg_alert_wait_importing_title": {
+		"message": "Kis türelmet"
+	},
+	"dlg_alert_wait_importing_text": {
+		"message": "Kis türelmet kérünk az importálás során"
+	},
+	"dlg_alert_sync_on_another_driver_title": {
+		"message": "A szinkronizáció aktív"
+	},
+	"dlg_alert_sync_on_another_driver_text": {
+		"message": "Más adatok (könyvjelzők stb.) szinkronizálása folyik. Kérjük, várja meg a szinkronizálás végét"
+	},
+	"dlg_alert_fail_obtain_user_pics_title": {
+		"message": "A felhasználói képek jelenleg nem érhetők el"
+	},
+	"dlg_alert_fail_obtain_user_pics_text": {
+		"message": "A felhasználói képek könyvtár jelenleg nem érhető el. Kérjük, próbálkozzon később."
+	},
+	"dlg_confirm_ok": {
+		"message": "OK"
+	},
+	"dlg_confirm_cancel": {
+		"message": "Mégse"
+	},
+	"dlg_confirm_remove_links_all_title": {
+		"message": "Biztos benne?"
+	},
+	"dlg_confirm_remove_links_all_text": {
+		"message": "Eltávolítja ezeket a linkeket?"
+	},
+	"dlg_confirm_dial_exists_title": {
+		"message": "Már létezik?"
+	},
+	"dlg_confirm_dial_exists_text": {
+		"message": "Ezzel az URL-címmel már létezik gyorshívó. Folytatja?"
+	},
+	"dlg_confirm_remove_dial_title": {
+		"message": "Biztos benne?"
+	},
+	"dlg_confirm_remove_dial_text": {
+		"message": "Eltávolítja ezt az elemet?"
+	},
+	"dlg_confirm_remove_group_title": {
+		"message": "Biztos benne?"
+	},
+	"dlg_confirm_remove_group_text": {
+		"message": "%count% gyorshívó ebben a csoportban"
+	},
+	"dlg_confirm_import_title": {
+		"message": "Kérjük, hagyja jóvá az importálást"
+	},
+	"dlg_confirm_import_text": {
+		"message": "Az importálás eltávolítja az aktuális gyorshívó adatbázist, és felülírja a jelenlegi beállításokat az importálandó beállításokkal. Folytatja?"
+	},
+	"dlg_confirm_set_auto_preview_global_title": {
+		"message": "Az összes egyéni gyorshívó konfigurációja vissza lesz állítva"
+	},
+	"dlg_confirm_set_auto_preview_global_text": {
+		"message": "Megerősíti, hogy az összes egyéni gyorshívó konfigurációját visszaállítja?"
+	},
+	"dlg_alert_set_auto_preview_global_title": {
+		"message": "Sikeres!"
+	},
+	"dlg_alert_set_auto_preview_global_text": {
+		"message": "A manuális gyorshívó sikeresen módosítva lett!"
+	},
+	"dlg_adddial_create_group": {
+		"message": "Új csoport létrehozása..."
+	},
+	"dlg_adddial_set_file": {
+		"message": "Helyi fájlból"
+	},
+	"dlg_adddial_help_us_user_pics": {
+		"message": "Segítsen nekünk az elődefiniált képek javításában. Írja be az URL-címet, vagy töltse fel helyi fájlból kedvenc weboldalai logóit. Ezek elérhetőek lesznek a felhasználói galériában!"
+	},
+	"dlg_importing_step1": {
+		"message": "1. lépés: Régi adat törlése"
+	},
+	"dlg_importing_step2": {
+		"message": "2. lépés: Beállítások importálása"
+	},
+	"dlg_importing_step3": {
+		"message": "3. lépés: Blokkolt domain/URL-címek importálása"
+	},
+	"dlg_importing_step4": {
+		"message": "4. lépés: Csoportok importálása"
+	},
+	"dlg_importing_step5": {
+		"message": "5. lépés: Gyorshívók importálása"
+	},
+	"dlg_importing_finished": {
+		"message": "A(z) %groups% csoport és %dials% gyorshívó sikeresen importálásra került"
+	},
+	"dlg_manage_groups_add_group": {
+		"message": "Csoport hozzáadása"
+	},
+	"dlg_move_to_nosync_group_title": {
+		"message": "Gyorshívó áthelyezése a nem szinkronizált csoportba"
+	},
+	"dlg_move_to_nosync_group_text": {
+		"message": "Át fogja helyezni ezt a gyorshívót a <b>szinkronizálatlan</b> csoportba.<br/>Vegye figyelembe, hogy ez a gyorshívó csak a jelenlegi számítógépen lesz látható. A többi számítógépen <b>el fog tűnni</b>."
+	},
+	"dlg_nosync_group_title": {
+		"message": "Állítsa a szinkronizált csoportot szinkronizálatlanra"
+	},
+	"dlg_nosync_group_text": {
+		"message": "A szinkronizált csoportot <b>szinkronizálatlanra</b> fogja váltani. Vegye figyelembe, hogy ez a csoport csak a jelenlegi számítógépen lesz látható. A többi számítógépen <b>el fog tűnni</b>."
+	},
+	"dlg_dont_show_it_again": {
+		"message": "Ne jelenjen meg többé"
+	},
+	"sah_copied": {
+		"message": "Másolva!"
+	},
+	"error_must_be_filled": {
+		"message": "Ki kell tölteni"
+	},
+	"error_invalid_url": {
+		"message": "Érvénytelen URL"
+	},
+	"error_url_deny": {
+		"message": "URL blokkolva. Ellenőrizze a blokkolt domain címeket az opciókban"
+	},
+	"error_url_deny_host": {
+		"message": "Domain blokkolva. Ellenőrizze a blokkolt domain címeket az opciókban"
+	},
+	"error_url_deny_url": {
+		"message": "URL blokkolva. Ellenőrizze a blokkolt domain címeket az opciókban"
+	},
+	"error_fail_get_title_dinamically": {
+		"message": "Nem sikerült lekérni a címet dinamikusan"
+	},
+	"error_already_exists": {
+		"message": "Már létezik"
+	},
+	"error_wrong_import_data": {
+		"message": "Hibás importálási adat"
+	},
+	"error_not_image": {
+		"message": "A kiválasztott fájl nem kép"
+	},
+	"cm_speeddial_cell_open_tab": {
+		"message": "Megnyitás a lapon"
+	},
+	"cm_speeddial_cell_open_new_tab": {
+		"message": "Megnyitás új lapon"
+	},
+	"cm_speeddial_cell_open_bg_tab": {
+		"message": "Megnyitás egy háttérlapon"
+	},
+	"cm_speeddial_cell_edit": {
+		"message": "Szerkesztés"
+	},
+	"cm_speeddial_cell_remove": {
+		"message": "Gyorshívó törlése"
+	},
+	"cm_speeddial_cell_copy_url": {
+		"message": "URL másolása"
+	},
+	"cm_speeddial_cell_move_to": {
+		"message": "Áthelyezés..."
+	},
+	"cm_speeddial_cell_refresh": {
+		"message": "Frissítés"
+	},
+	"cm_speeddial_cell_refresh_manual": {
+		"message": "Manuális frissítés"
+	},
+	"cm_speeddial_group_edit": {
+		"message": "Szerkesztés"
+	},
+	"cm_speeddial_group_remove": {
+		"message": "Eltávolítás"
+	},
+	"cm_speeddial_group_default": {
+		"message": "Alapértelmezett"
+	},
+	"cm_speeddial_group_sync_this_group": {
+		"message": "Csoport szinkronizálása"
+	},
+	"cm_speeddial_group_open_all": {
+		"message": "Összes gyorshívó megnyitása"
+	},
+	"cm_speeddial_group_manage": {
+		"message": "Csoportok kezelése"
+	},
+	"cm_speeddial_global_add_dial": {
+		"message": "Gyorshívó hozzáadása"
+	},
+	"cm_speeddial_global_open_all": {
+		"message": "Összes gyorshívó megnyitása"
+	},
+	"cm_speeddial_global_style": {
+		"message": "Stílus"
+	},
+	"cm_speeddial_global_style_fancy": {
+		"message": "Képzelet"
+	},
+	"cm_speeddial_global_style_standard": {
+		"message": "Szabványos"
+	},
+	"cm_speeddial_global_view": {
+		"message": "Nézet"
+	},
+	"cm_speeddial_global_preview": {
+		"message": "Előnézet"
+	},
+	"cm_speeddial_global_change_size": {
+		"message": "Méret módosítása..."
+	},
+	"cm_speeddial_global_number_of_columns": {
+		"message": "Oszlopok száma"
+	},
+	"cm_speeddial_global_number_of_rows": {
+		"message": "Sorok száma"
+	},
+	"cm_speeddial_global_view_big": {
+		"message": "Nagy"
+	},
+	"cm_speeddial_global_view_medium": {
+		"message": "Közepes"
+	},
+	"cm_speeddial_global_view_small": {
+		"message": "Kicsi"
+	},
+	"cm_speeddial_global_view_custom": {
+		"message": "Egyéni"
+	},
+	"cm_speeddial_global_view_list": {
+		"message": "Lista"
+	},
+	"cm_scrolling_type": {
+		"message": "Görgetés típusa"
+	},
+	"cm_mostvisited_cell_add_to_speeddial": {
+		"message": "Hozzáadás a gyorshívóhoz"
+	},
+	"cm_mostvisited_cell_block": {
+		"message": "Blokkolás"
+	},
+	"cm_apps_open": {
+		"message": "Megnyitás"
+	},
+	"cm_apps_remove": {
+		"message": "Eltávolítás"
+	},
+	"cm_main_title": {
+		"message": "FVD Speed Dial"
+	},
+	"cm_add_to": {
+		"message": "Hozzáadás a következőhöz: "
+	},
+	"cm_refresh_all": {
+		"message": "Összes frissítése"
+	},
+	"popup_speed_dial": {
+		"message": "Gyorshívó"
+	},
+	"popup_options": {
+		"message": "Opciók"
+	},
+	"cs_dial_added": {
+		"message": "A gyorshívó hozzáadásra került"
+	},
+	"newtab_introduction_slide3_title": {
+		"message": "Which phone do you use?"
+	},
+	"newtab_introduction_slide3_text": {
+		"message": "You only need to select this once and we will save your preference"
+	},
+	"newtab_introduction_last_step": {
+		"message": "Last step"
+	},
+	"newtab_initialization_message": {
+		"message": "Initialization... Please wait..."
+	},
+	"newtab_none": {
+		"message": "none"
+	},
+	"newtab_search": {
+		"message": "Search"
+	},
+	"newtab_search_on_ebay": {
+		"message": "Search on Ebay"
+	},
+	"newtab_cant_move_dials_in_popular": {
+		"message": "You can rearrange dials in ANY group except in <b>Popular Group</b>. This group arranges dials by clicks popularity."
+	},
+	"newtab_or": {
+		"message": "or"
+	},
+	"bg_dialog_adddial_pic_local_file": {
+		"message": "Local File?"
+	},
+	"bg_dialog_adddial_enable_autoupdate_preview": {
+		"message": "Auto Update"
+	},
+	"bg_dialog_adddial_autoupdate_minutes": {
+		"message": "Minutes"
+	},
+	"bg_dialog_adddial_autoupdate_hours": {
+		"message": "Hours"
+	},
+	"bg_dialog_adddial_autoupdate_days": {
+		"message": "Days"
+	},
+	"bg_dialog_adddial_autoupdate_every": {
+		"message": "Every"
+	},
+	"bg_dialog_adddial_pick_local_file_desc": {
+		"message": "To link dial to you local file you need to write correct file location in format:<br>{examples}<br>Alternative way how to get file address: open new tab. drag and drop file into your browser. In URL bar you will see the address of your files."
+	},
+	"bg_dialog_adddial_pick_local_file_desc_linux": {
+		"message": "file://{full path to file}<br>For example: <b>file:///home/user/page.html</b>"
+	},
+	"bg_dialog_adddial_pick_local_file_desc_win": {
+		"message": "file:///{full path to file where \\ replaced by /}<br>For example: <b>file:///C:\\user\\pic.jpg</b>"
+	},
+	"options_display_dial_borders": {
+		"message": "Display dial borders"
+	},
+	"options_sync_need_install_ability_11": {
+		"message": "Server auto backups and restore."
+	},
+	"options_poweroff_idle_timeout_enable": {
+		"message": "Enable Passcode when idle:"
+	},
+	"options_poweroff_3min": {
+		"message": "3min"
+	},
+	"options_poweroff_5min": {
+		"message": "5min"
+	},
+	"options_poweroff_10min": {
+		"message": "10min"
+	},
+	"options_poweroff_15min": {
+		"message": "15min"
+	},
+	"options_poweroff_30min": {
+		"message": "30min"
+	},
+	"options_poweroff_60min": {
+		"message": "60min"
+	},
+	"dlg_confirm_turn_off_autoupdate_globally_title": {
+		"message": "Confirm your action"
+	},
+	"dlg_confirm_turn_off_autoupdate_globally_text": {
+		"message": "All speed dials auto update settings will be turned off."
+	},
+	"dlg_alert_dials_autoupdate_updated_title": {
+		"message": "Success!"
+	},
+	"dlg_alert_dials_autoupdate_updated_text": {
+		"message": "Dials updated successully."
+	},
+	"dialog_title_set_autoupdate_batch": {
+		"message": "Set auto update"
+	},
+	"bg_dialog_setautoupdate_autoupdate_every": {
+		"message": "Auto update dial every"
+	},
+	"options_reset_speed_dial_clicks": {
+		"message": "Reset dials clicks"
+	},
+	"options_confirm_reset_clicks_title": {
+		"message": "Confirm your action"
+	},
+	"options_confirm_reset_clicks_text": {
+		"message": "Do you really want to reset clicks?"
+	},
+	"options_success_reset_clicks_title": {
+		"message": "Success!"
+	},
+	"options_success_reset_clicks_text": {
+		"message": "Clicks resetted successfully!"
+	},
+	"options_available_in_standard_theme_only": {
+		"message": "Available in Standard theme only."
+	},
+	"newtab_search_input_placeholder": {
+		"message": "Enter your search..."
+	},
+	"options_parallax_option": {
+		"message": "Parallax"
+	},
+	"options_parallax_strength": {
+		"message": "Parallax effect strength: "
+	},
+	"newtab_offer_parallax_title": {
+		"message": "Make your background dynamic with Parallax effect."
+	},
+	"newtab_offer_parallax_try_parallax": {
+		"message": "Try Parallax"
+	},
+	"newtab_offer_parallax_cancel": {
+		"message": "Close"
+	},
+	"newtab_offer_parallax_description": {
+		"message": "Go to FVD Speed Dial > Settings > Background > Select Parallax in Type Drop down."
+	},
+	"newtab_light_collapsed_message_text": {
+		"message": "Double click to show Speed Dial"
+	},
+	"bg_default_dial_nimbus": {
+		"message": "Nimbus Note"
+	},
+	"options_backup_via_eversync_suggestion": {
+		"message": "Important! Don't forget to Backup your dials and custom images to restore them any time."
+	},
+	"options_backup_via_eversync_suggestion_button": {
+		"message": "Backup Dials"
+	},
+	"newtab_voice_search": {
+		"message": "Voice Search"
+	},
+	"newtab_search_on_amazon": {
+		"message": "Search on Amazon"
+	},
+	"bg_default_dial_half_com": {
+		"message": "Half.com"
+	},
+	"bg_default_dial_tripadvizor": {
+		"message": "TripAdvisor"
+	},
+	"bg_default_dial_booking": {
+		"message": "Booking.com"
+	},
+	"bg_default_dial_aliexpress": {
+		"message": "AliExpress"
+	},
+	"newtab_dials_search_input_placeholder": {
+		"message": "Search in Speed Dial"
+	},
+	"newtab_dials_search_no_match": {
+		"message": "No Match"
+	},
+	"newtab_dials_search_try_on_web": {
+		"message": "Try on Web? Or press Enter key."
+	},
+	"newtab_dials_search_no_match_query": {
+		"message": "Your search: <strong></strong> didn't match any Speed Dial titles/urls."
+	},
+	"options_enable_dials_search": {
+		"message": "Enable search in Speed Dial"
+	},
+	"newtab_search_on_aliexpress": {
+		"message": "Search on AliExpress"
+	},
+	"bg_default_dial_wayfair": {
+		"message": "Wayfair"
+	},
+	"bg_default_dial_groupon": {
+		"message": "Groupon"
+	},
+	"options_start_donate": {
+		"message": "Donate"
+	},
+	"newtab_search_on_billiger": {
+		"message": "Search on Billiger"
+	},
+	"bg_default_dial_billiger": {
+		"message": "Billiger"
+	},
+	"newtab_restore_corrupted_files_title": {
+		"message": "Pulling Up Your Data"
+	},
+	"newtab_restore_corrupted_files_msg1": {
+		"message": "Speed Dial needs to reload your data. It will be done automatically as fast as possible."
+	},
+	"newtab_restore_corrupted_files_msg2": {
+		"message": "Don't worry, everything is going as planned. To remain it so,<br><b>please don't close the window until the process is complete</b>."
+	},
+	"options_enable_ondial_search": {
+		"message": "Enable search on dials"
+	},
+	"newtab_ondialsearch_placeholder": {
+		"message": "enter your search.."
+	},
+	"newtab_disable_page_mod": {
+		"message": "disable this widget"
+	},
+	"options_quick_preview": {
+		"message": "Quick Preview Widget"
+	},
+	"dlg_confirm_disable_quick_preview_title": {
+		"message": "Please confirm your action."
+	},
+	"dlg_confirm_disable_quick_preview_text": {
+		"message": "Do you really want to disable Quick Preview Widget?"
+	},
+	"cm_speeddial_cell_open_incognito_tab": {
+		"message": "Open in Incognito window"
+	},
+	"newtab_introduction_opera_how_to_newtab": {
+		"message": "How to set FVD Speed Dial as new tab?"
+	},
+	"newtab_introduction_opera_how_to_newtab_step1": {
+		"message": "1) Install add Custom new tab page from"
+	},
+	"newtab_introduction_opera_how_to_newtab_step2": {
+		"message": "2) Enter the URL in form"
+	},
+	"options_sync_link_opera": {
+		"message": "Install from Opera Webstore"
+	},
+	"bg_dialog_addgroup_position": {
+		"message": "Add To:"
+	},
+	"bg_dialog_addgroup_position_top": {
+		"message": "Top"
+	},
+	"bg_dialog_addgroup_position_bottom": {
+		"message": "Bottom"
+	},
+	"options_help": {
+		"message": "Help"
+	},
+	"options_help_url": {
+		"message": "https://s.nimbusweb.me/share/3644739/26cf9i89r01k7swzsw9g"
+	},
+	"options_main_button_action": {
+		"message": "Toolbar button action"
+	},
+	"options_main_button_action_sd_in_new_tab": {
+		"message": "Open Speed Dial in a new tab"
+	},
+	"options_main_button_action_sd_in_active_tab": {
+		"message": "Open Speed Dial in the active tab"
+	},
+	"options_main_button_action_add_site_to_sd": {
+		"message": "Add the active site to Speed Dial"
+	},
+	"newtab_bottom_text_terms_of_use": {
+		"message": "Terms of Use"
+	},
+	"newtab_bottom_text_privacy_policy": {
+		"message": "Privacy Policy"
+	},
+	"options_release_notes": {
+		"message": "Release Notes"
+	},
+	"options_release_notes_url": {
+		"message": "https://everhelper.me/release-notes-en.php"
+	},
+	"booking_widget_quick_search": {
+		"message": "Quick Search"
+	},
+	"booking_widget_reset": {
+		"message": "reset"
+	},
+	"booking_widget_destination_title": {
+		"message": "Destination/Hotel Name:"
+	},
+	"booking_widget_destination_empty_error": {
+		"message": "Enter a destination to start searching."
+	},
+	"booking_widget_are_you_travelling_for_work": {
+		"message": "Are you travelling for work?"
+	},
+	"booking_widget_yes": {
+		"message": "Yes"
+	},
+	"booking_widget_no": {
+		"message": "No"
+	},
+	"booking_widget_checkin": {
+		"message": "Check-in:"
+	},
+	"booking_widget_checkin_date": {
+		"message": "Tuesday, April 11, 2017"
+	},
+	"booking_widget_reservation_too_long": {
+		"message": "Reservations longer than 30 nights are not possible. "
+	},
+	"booking_widget_checkout": {
+		"message": "Check-out:"
+	},
+	"booking_widget_checkout_date": {
+		"message": "Thursday, April 27, 2017"
+	},
+	"booking_widget_dont_have_dates": {
+		"message": "I don't have specific dates yet"
+	},
+	"booking_widget_rooms": {
+		"message": "Rooms"
+	},
+	"booking_widget_adults": {
+		"message": "Adults"
+	},
+	"booking_widget_children": {
+		"message": "Children<br>(under 18)"
+	},
+	"booking_widget_close": {
+		"message": "close"
+	},
+	"booking_widget_search": {
+		"message": "Search"
+	},
+	"booking_widget_night_stay": {
+		"message": "-night stay"
+	},
+	"booking_widget_children_ages_on": {
+		"message": "Children's ages on"
+	},
+	"booking_widget_children_ages_at_checkout": {
+		"message": "Children's ages at checkout"
+	},
+	"booking_widget_previous_month": {
+		"message": "Previous Month"
+	},
+	"booking_widget_next_month": {
+		"message": "Next Month"
+	},
+	"month_0": {
+		"message": "January"
+	},
+	"month_1": {
+		"message": "February"
+	},
+	"month_2": {
+		"message": "March"
+	},
+	"month_3": {
+		"message": "April"
+	},
+	"month_4": {
+		"message": "May"
+	},
+	"month_5": {
+		"message": "June"
+	},
+	"month_6": {
+		"message": "July"
+	},
+	"month_7": {
+		"message": "August"
+	},
+	"month_8": {
+		"message": "September"
+	},
+	"month_9": {
+		"message": "October"
+	},
+	"month_10": {
+		"message": "November"
+	},
+	"month_11": {
+		"message": "December"
+	},
+	"dow_0": {
+		"message": "Sunday"
+	},
+	"dow_1": {
+		"message": "Monday"
+	},
+	"dow_2": {
+		"message": "Tuesday"
+	},
+	"dow_3": {
+		"message": "Wednesday"
+	},
+	"dow_4": {
+		"message": "Thursday"
+	},
+	"dow_5": {
+		"message": "Friday"
+	},
+	"dow_6": {
+		"message": "Saturday"
+	},
+	"booking_widget_from": {
+		"message": "from"
+	},
+	"booking_widget_to": {
+		"message": "to"
+	},
+	"booking_widget_travel_for_work_hint": {
+		"message": "Quickly find the best properties for your trip"
+	},
+	"dow_short_0": {
+		"message": "Su"
+	},
+	"dow_short_1": {
+		"message": "Mo"
+	},
+	"dow_short_2": {
+		"message": "Tu"
+	},
+	"dow_short_3": {
+		"message": "We"
+	},
+	"dow_short_4": {
+		"message": "Th"
+	},
+	"dow_short_5": {
+		"message": "Fr"
+	},
+	"dow_short_6": {
+		"message": "Sa"
+	},
+	"options_preload_search_items": {
+		"message": "Pre-load related search results"
+	}
 }

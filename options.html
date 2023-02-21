@@ -4,44 +4,7 @@
 
   <title msg="options_title"></title>
 
-  <script src="js/_external/jquery.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/_external/broadcaster.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/options/namespace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/log.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/debug.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/_external/aes.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/_external/parallax.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/poweroff.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/tooltip.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/storage/tab.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/dialogs.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/localizer.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/templates.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/prefs.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/historycomplete.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/thumbmaker/tab.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/sync/tab.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/runtimestore.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/premiumforshare.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/options/roller.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/options/options.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/options/poweroff.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/background.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/speeddial.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/contextmenus.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/draglists.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/css.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/options/script.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/dialogs/simple-dialog.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/colorpicker/jscolor.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/contextmenu/dhtmlxcommon.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/contextmenu/dhtmlxmenu.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/newtab/contextmenu/ext/dhtmlxmenu_ext.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/importtranslators.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/_external/qtip/jquery.qtip.min.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/_external/fix_input_number.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/donate/tab.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/options/index.js" type="module" charset="utf-8"></script>
   <link rel="stylesheet" href="styles/icons.css">
   <link rel="stylesheet" href="styles/tooltip.css">
   <link rel="stylesheet" href="styles/historycomplete.css">
@@ -64,10 +27,10 @@
 
   <div id="getSatisfactionSuggestSelect">
     <a href="https://nimbusweb.co/contact.php" target="_blank" msg="options_submit_suggestion"></a>
-    
+
     <a href="https://nimbusweb.co/contact.php" target="_blank" msg="options_submit_bug"></a>
-	
-      
+
+
     <a msg="options_help_url" target="_blank" msg_target="href"><span msg="options_help"></span></a>
     <!--<a msg="options_release_notes_url" target="_blank" msg_target="href"><span msg="options_release_notes"></span></a>-->
   </div>
@@ -216,52 +179,52 @@
                             <input type="checkbox" id="show_icons_and_titles_above_dials" sname="sd.show_icons_and_titles_above_dials" /><span msg="options_show_icons_and_titles_above_dials"></span></label>
                         <br/>
                     </span>
-                      
-                      
+
+
                     <label><input id="display_plus_cells" type="checkbox" sname="sd.display_plus_cells"/><span msg="options_display_plus_cells"></span></label> <div id="displayPlusCellsHelp" class="sdIcon question clickable"></div><br>
                     <label><input type="checkbox" sname="sd.enable_search"/><span msg="options_enable_search"></span></label><br>
                     <label><input type="checkbox" sname="sd.enable_dials_search"/><span msg="options_enable_dials_search"></span></label><br>
                     <label><input id="enable_ondial_search" type="checkbox" sname="sd.enable_ondial_search"/><span msg="options_enable_ondial_search"></span></label><br>
-                      
 
-                      
-                      <label><input type="checkbox" sname="sd.show_gray_line"/><span msg="options_show_gray_line"></span></label> 
+
+
+                      <label><input type="checkbox" sname="sd.show_gray_line"/><span msg="options_show_gray_line"></span></label>
                       <div id="displayShowGrayLineHelp" class="sdIcon question clickable"></div><br>
                   </fieldset>
 
                   <fieldset class="subSet higher-145">
                     <label style="display:none"><input type="checkbox" sname="sd.disable_custom_search"/><span msg="options_disable_custom_search"></span></label>
                     <label><input type="checkbox" sname="sd.display_dial_background"/><span msg="options_display_dial_background"></span></label> <div id="displayDialBackgroundHelp" class="sdIcon question clickable"></div><br/>
-                    
+
                     <div id="display_dial_background_color">
                         <label><input type="radio" name="global_display_dial_background_color" sname="sd.display_dial_background_color" value="white"/><span msg="options_bg_white">White Bg</span></label>
                         <label><input type="radio" name="global_display_dial_background_color" sname="sd.display_dial_background_color" value="dark"/><span msg="options_bg_dark">Dark Bg</span></label>
                     </div>
-                      
+
                     <div id="display_dial_borders_container">
                       <label><input type="checkbox" sname="sd.display_dial_borders"/><span msg="options_display_dial_borders"></span></label>
                     </div>
-                      
+
                       <span class="activeInStandard">
                         <label data-only-in-standard="1"><input type="checkbox" id="display_quick_menu_and_clicks" sname="sd.display_quick_menu_and_clicks"/><span msg="options_display_quick_menu_and_clicks"></span></label> <div id="displayQuickMenuHelp" class="sdIcon question clickable"></div><br/>
-                      
-                        <label data-only-in-standard="1"><input type="checkbox" id="display_clicks" sname="sd.display_clicks"/><span msg="options_display_clicks"></span></label> 
-                          <div id="displayClicksHelp" class="sdIcon question clickable"></div><br/>                      
+
+                        <label data-only-in-standard="1"><input type="checkbox" id="display_clicks" sname="sd.display_clicks"/><span msg="options_display_clicks"></span></label>
+                          <div id="displayClicksHelp" class="sdIcon question clickable"></div><br/>
                       </span>
-                      
+
                     <label><input type="checkbox" sname="sd.show_in_context_menu"/><span msg="options_show_in_context_menu"></span></label> <div id="displayShowInContextMenuHelp" class="sdIcon question clickable"></div><br>
-                      
-                      
+
+
                     <!--<label><input type="checkbox" sname="sd.enable_search_preview"/><span msg="options_enable_search_preview"></span></label><br>-->
                     <!--<label><input type="checkbox" sname="sd.display_superfish"/><span msg="options_display_superfish"></span></label>-->
                     <label><input id="display_mirror" type="checkbox" sname="sd.display_mirror"/><span msg="options_display_mirror"></span></label><br>
                     <!--
                     <label><input type="checkbox" sname="quick-preview.enabled"/><span msg="options_quick_preview"></span></label><br>-->
                     <label style="display:none"><input type="checkbox" sname="surfcanyon.enabled"/><span msg="options_enable_surfcanyon"></span></label>
-                      
+
                       <label><input type="checkbox" sname="sd.enable_dials_counter"/><span msg="options_enable_dials_counter"></span></label>
                       <div id="displayEnableDialsCounter" class="sdIcon question clickable"></div><br>
-                      
+
                   </fieldset>
                 </div>
 
@@ -328,7 +291,7 @@
                             <option value="auto" msg="newtab_columns_auto"></option>
                         </select>
                     </fieldset>
-                    
+
                     <fieldset id="numberOfRows" class="subSet higher-50" hidden="true">
                         <legend msg="newtab_number_of_rows"></legend>
                         <select class="full-width" sname="sd.top_sites_columns" id="rowsSelect">
@@ -345,8 +308,8 @@
                         </fieldset>
                     </span>
                 </div>
-                  
-                  
+
+
 
                 <!--
                 <div class="singleSet">
@@ -599,14 +562,14 @@
 
 
           <div class="setsLine">
-              
+
             <fieldset class="subSet">
                 <legend msg="options_group_font"></legend>
-                
+
                 <span class="color-column-1" msg="active"></span>
                 <span class="color-column-2" msg="passive"></span>
                 <br/>
-                
+
                 <label> <span msg="options_group_background_color" class="color-width"></span>
                     <input type="text" id="groupActiveBgColor" class="color color-two" sname="sd.text.group_active_bg.color" />
                 </label>
@@ -677,7 +640,6 @@
           </div>
 
           <div class="tabs" id="powerOffTabs">
-
             <div class="tabsHead">
               <span class="tabHead" msg="options_poweroff_tab_main_title"></span>
               <span class="tabHead" id="poweroffTabChangePassCode" msg="options_poweroff_tab_change_pass_title"></span>

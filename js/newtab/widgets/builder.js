@@ -1,244 +1,255 @@
+import { _array, FVDEventEmitter, Utils } from '../../utils.js';
+import Widgets from '../widgets.js';
+import Templates from '../../templates.js';
+
 console.log("load builder");
-fvdSpeedDial.Widgets.Builder = new function(){
+const WidgetsBuilder = new function () {
+	const self = this;
+	let pckry = null;
+	const WIDGET_PANEL_MIN_PADDING_TOP = 15;
+	const WIDGET_PANEL_OPEN_BUTTON_HEIGHT = 19;
+	const WIDGET_MARGIN = 10;
+	const WIDGET_PADDING_LEFT = 10;
+	const widgetsPanelSize = {
+		width: window.innerWidth,
+		height: 0,
+	};
+	const cellSize = {
+		width: 250,
+		height: 200,
+	};
+	// number of rows and height
+	const widgetsPanelHeights = {
+		1: 200,
+		2: 400,
+	};
 
-  var self = this;
+	this.onReorderComplete = new FVDEventEmitter();
 
-  var pckry = null;
-  var WIDGET_PANEL_MIN_PADDING_TOP = 15;
-  var WIDGET_PANEL_OPEN_BUTTON_HEIGHT = 19;
+	function effCellWidth(x) {
+		let marginsIncludedWidth = 0;
 
-  var WIDGET_MARGIN = 10;
-  var WIDGET_PADDING_LEFT = 10;
+		// max width is 4 cells
+		if (x > 4) {
+			x = 4;
+		}
 
-  var widgetsPanelSize = {
-    width: window.innerWidth,
-    height: 0
-  };
+		if (x > 1) {
+			marginsIncludedWidth = WIDGET_MARGIN * (x-1);
+		}
 
-  var cellSize = {
-    width: 250,
-    height: 200
-  };
+		return cellSize.width * x + marginsIncludedWidth;
+	}
+	function effCellHeight(y) {
+		// max widget height is 2 cells
+		if (y > 2) {
+			y = 2;
+		}
 
-  // number of rows and height
-  var widgetsPanelHeights = {
-    1: 200,
-    2: 400
-  };
+		let marginsIncludedHeight = 0;
 
-  this.onReorderComplete = new FVDEventEmitter();
+		if (y > 1) {
+			marginsIncludedHeight = WIDGET_MARGIN * (y-1);
+		}
 
-  function effCellWidth(x) {
-    var marginsIncludedWidth = 0;
-    // max width is 4 cells
-    if(x > 4) {
-      x = 4;
-    }
-    if(x > 1) {
-      marginsIncludedWidth = WIDGET_MARGIN * (x-1);
-    }
-    return cellSize.width * x + marginsIncludedWidth;
-  }
-  function effCellHeight(y) {
-    // max widget height is 2 cells
-    if(y > 2) {
-      y = 2;
-    }
-    var marginsIncludedHeight = 0;
-    if(y > 1) {
-      marginsIncludedHeight = WIDGET_MARGIN * (y-1);
-    }
-    return cellSize.height * y + marginsIncludedHeight;
-  }
+		return cellSize.height * y + marginsIncludedHeight;
+	}
 
-  function adjustWidgetPanelSize( widgets ) {
-    var rowsCount = 1;
-    var widgetsSummaryWidth = WIDGET_PADDING_LEFT;
-    widgets.forEach(function( widget ) {
-      widgetsSummaryWidth += effCellWidth(widget.widthCells) + WIDGET_MARGIN;
-      if(widget.heightCells >= 2) {
-        rowsCount = 2;
-      }
-    });
-    widgetsPanelSize.height = widgetsPanelHeights[rowsCount] + WIDGET_MARGIN;
-    widgetsPanelSize.width = window.innerWidth;
-    widgetsPanelSize.width = Math.max(widgetsPanelSize.width, widgetsSummaryWidth);
-    document.querySelector("#widgetsPanel .widgetsContainer").style.height = widgetsPanelSize.height + "px";
-    document.querySelector("#widgetsPanel .widgetsContainer").style.width = widgetsPanelSize.width + "px";
-    document.getElementById("widgetsPanel").style.bottom = 
-      "-" + (widgetsPanelSize.height - WIDGET_PANEL_OPEN_BUTTON_HEIGHT + WIDGET_PANEL_MIN_PADDING_TOP) + "px";
-  }
+	function adjustWidgetPanelSize(widgets) {
+		let rowsCount = 1;
+		let widgetsSummaryWidth = WIDGET_PADDING_LEFT;
 
-  function getWidgetMargins( params ){
+		widgets.forEach(function (widget) {
+			widgetsSummaryWidth += effCellWidth(widget.widthCells) + WIDGET_MARGIN;
 
-    var data = params.data;
+			if (widget.heightCells >= 2) {
+				rowsCount = 2;
+			}
+		});
+		widgetsPanelSize.height = widgetsPanelHeights[rowsCount] + WIDGET_MARGIN;
+		widgetsPanelSize.width = window.innerWidth;
+		widgetsPanelSize.width = Math.max(widgetsPanelSize.width, widgetsSummaryWidth);
+		document.querySelector("#widgetsPanel .widgetsContainer").style.height = widgetsPanelSize.height + "px";
+		document.querySelector("#widgetsPanel .widgetsContainer").style.width = widgetsPanelSize.width + "px";
+		document.getElementById("widgetsPanel").style.bottom = "-" + (widgetsPanelSize.height - WIDGET_PANEL_OPEN_BUTTON_HEIGHT + WIDGET_PANEL_MIN_PADDING_TOP) + "px";
+	}
 
-    if( !data.height ){
-      return {};
-    }
+	function getWidgetMargins(params) {
+		const data = params.data;
 
-    var result = {};
-    result.top = (widgetsPanelSize.height - data.height)/2;
+		if (!data.height) {
+			return {};
+		}
 
-    return result;
+		const result = {};
 
-  }
+		result.top = (widgetsPanelSize.height - data.height)/2;
 
-  function refreshPositions( params ){
-    pckry.items.sort(function(p1, p2) {
-      var a = p1.element;
-      var b = p2.element;
-      return parseInt( a.getAttribute("position"), 10 ) - parseInt( b.getAttribute("position"), 10 );
-    });
-    pckry.layout();
-  }
+		return result;
+	}
 
-  function storeCurrentPositions(){
-    var widgets = pckry.getItemElements();
-    var positions = {};
-    widgets.forEach(function( elem, index ){
-      positions[ elem.getAttribute("id").replace("widget_", "") ] = index + 1;
-    });
-    fvdSpeedDial.Widgets.setAllWidgetPositions( positions );
-  }
+	function refreshPositions(params) {
+		pckry.items.sort(function (p1, p2) {
+			const a = p1.element;
+			const b = p2.element;
 
-  this.getWidgetsPanelHeight = function(){
-    return widgetsPanelSize.height;
-  };
+			return parseInt(a.getAttribute("position"), 10) - parseInt(b.getAttribute("position"), 10);
+		});
+		pckry.layout();
+	}
 
-  this.getWidgetsTotalWidth = function(){
-    var widgets = _array( document.querySelectorAll("#widgetsPanel .widgetsContainer .widget") );
+	function storeCurrentPositions() {
+		const widgets = pckry.getItemElements();
+		const positions = {};
 
-    var w = 0;
-    widgets.forEach(function( widget ){
-      w += parseInt( widget.getAttribute("_width"), 10 ) + WIDGET_MARGIN;
-    });
+		widgets.forEach(function (elem, index) {
+			positions[ elem.getAttribute("id").replace("widget_", "") ] = index + 1;
+		});
+		Widgets.setAllWidgetPositions(positions);
+	}
 
-    w -= WIDGET_MARGIN;
-    w += WIDGET_PADDING_LEFT;
+	this.getWidgetsPanelHeight = function () {
+		return widgetsPanelSize.height;
+	};
 
-    return w;
-  };
+	this.getWidgetsTotalWidth = function () {
+		const widgets = _array(document.querySelectorAll("#widgetsPanel .widgetsContainer .widget"));
+		let w = 0;
 
+		widgets.forEach(function (widget) {
+			w += parseInt(widget.getAttribute("_width"), 10) + WIDGET_MARGIN;
+		});
 
-  this.syncPositionsWithDb = function(){
+		w -= WIDGET_MARGIN;
+		w += WIDGET_PADDING_LEFT;
 
-    var widgets = _array( document.querySelectorAll("#widgetsPanel .widgetsContainer .widget") );
+		return w;
+	};
 
-    fvdSpeedDial.Utils.Async.arrayProcess(widgets, function( el, next ) {
-      fvdSpeedDial.Widgets.getPosition( el.getAttribute("id").replace("widget_", ""), function(pos) {
-        el.setAttribute( "position", pos );
-        next();
-      } );
-    }, function() {
-      refreshPositions();
-    });
+	this.syncPositionsWithDb = function () {
+		const widgets = _array(document.querySelectorAll("#widgetsPanel .widgetsContainer .widget"));
 
-  };
+		Utils.Async.arrayProcess(widgets, function (el, next) {
+			Widgets.getPosition(el.getAttribute("id").replace("widget_", ""), function (pos) {
+				el.setAttribute("position", pos);
+				next();
+			});
+		}, function () {
+			refreshPositions();
+		});
+	};
 
-  this.removeWidget = function(id) {
-    var el = document.getElementById("widget_" + id);
-    if( el ) {
-      fvdSpeedDial.Widgets.getAll(function(widgets) {
-        adjustWidgetPanelSize( widgets );
-        pckry.remove(el);
-      });
-    }
-  };
+	this.removeWidget = function (id) {
+		const el = document.getElementById("widget_" + id);
 
-  this.buildWidgetElem = function( params ){
-    var data = params.data;
+		if (el) {
+			Widgets.getAll(function (widgets) {
+				adjustWidgetPanelSize(widgets);
+				pckry.remove(el);
+			});
+		}
+	};
 
-    var elem = fvdSpeedDial.Templates.clone("prototype_widget");
-    elem.removeAttribute( "id" );
-    elem.setAttribute( "id", "widget_" + data.id );
-    elem.setAttribute( "dd_class", "widget" );
+	this.buildWidgetElem = function (params) {
+		const data = params.data;
 
-    elem.setAttribute( "position", params.position );
-    elem.setAttribute( "_width", data.widthCells );
-    elem.setAttribute( "_height", data.heightCells );
-    elem.querySelector("iframe").setAttribute( "src", "chrome-extension://" + data.id + data.path );
+		const elem = Templates.clone("prototype_widget");
 
-    if( data.widthCells ){
-      elem.style.width = effCellWidth(data.widthCells) + "px";
-    }
+		elem.removeAttribute("id");
+		elem.setAttribute("id", "widget_" + data.id);
+		elem.setAttribute("dd_class", "widget");
 
-    if( data.heightCells ){
-      elem.style.height = effCellHeight(data.heightCells) + "px";
-    }
+		elem.setAttribute("position", params.position);
+		elem.setAttribute("_width", data.widthCells);
+		elem.setAttribute("_height", data.heightCells);
+		elem.querySelector("iframe").setAttribute("src", "chrome-extension://" + data.id + data.path);
 
-    elem.querySelector( ".buttons .close" ).addEventListener( "click", function(){
-      fvdSpeedDial.Widgets.remove( data.id );
-    }, false );
+		if (data.widthCells) {
+			elem.style.width = effCellWidth(data.widthCells) + "px";
+		}
 
-    return elem;
-  };
+		if (data.heightCells) {
+			elem.style.height = effCellHeight(data.heightCells) + "px";
+		}
 
-  this.rebuildAll = function() {
-    var container = document.querySelector("#widgetsPanel .widgetsContainer");
-    var panel = document.getElementById("widgetsPanel");
-    while( container.firstChild ){
-      container.removeChild( container.firstChild );
-    }
+		elem.querySelector(".buttons .close").addEventListener("click", function () {
+			Widgets.remove(data.id);
+		}, false);
 
-    fvdSpeedDial.Widgets.getAll(function(widgets) {
-      if(!widgets.length){
-        panel.setAttribute( "nowidgets", 1 );
-      }
-      else{
-        panel.setAttribute( "nowidgets", 0 );
-      }
+		return elem;
+	};
 
-      var els = [];
-      widgets.forEach( function( widget ){
-        var position = widget.position;
-        var elem = self.buildWidgetElem( {
-          data: widget,
-          position: position
-        } );
-        container.appendChild( elem );
-        els.push(elem);
-      } );
-      if(pckry) {
-        pckry.destroy();
-      }
-      adjustWidgetPanelSize( widgets );
-      pckry = new Packery( container, {
-        itemSelector: '.widget',
-        gutter: WIDGET_MARGIN,
-        isHorizontal: true,
-        columnWidth: cellSize.width,
-        rowHeight: cellSize.height,
-        containerStyle: null,
-        isInitLayout: false
-      });
-      els.forEach(function(el) {
-        var draggie = new Draggabilly(el, {
-          containment: container
-        });
-        draggie.on( 'dragStart', function( event, pointer ) {
-          //el.setAttribute("dragging", 1);
-        });
-        draggie.on( 'dragMove', function( event, pointer ) {
-          el.setAttribute("dragging", 1);
-        });
-        draggie.on( 'dragEnd', function( event, pointer ) {
-        });
-        pckry.bindDraggabillyEvents(draggie);
-      });
-      pckry.on("dragItemPositioned", function(pckryInstance, draggedItem) {
-        draggedItem.element.removeAttribute("dragging");
-        self.onReorderComplete.callListeners();
-        storeCurrentPositions();
-      });
-      pckry.on("layoutComplete", function() {
-        self.onReorderComplete.callListeners();
-      });
-      pckry.on('removeComplete', function() {
-        storeCurrentPositions();
-      });
-      refreshPositions();
-    });
-  };
+	this.rebuildAll = function () {
+		const container = document.querySelector("#widgetsPanel .widgetsContainer");
+		const panel = document.getElementById("widgetsPanel");
 
-}();
+		while (container.firstChild) {
+			container.removeChild(container.firstChild);
+		}
+
+		Widgets.getAll(function (widgets) {
+			if (!widgets.length) {
+				panel.setAttribute("nowidgets", 1);
+			} else {
+				panel.setAttribute("nowidgets", 0);
+			}
+
+			const els = [];
+
+			widgets.forEach(function (widget) {
+				const position = widget.position;
+				const elem = self.buildWidgetElem({
+					data: widget,
+					position: position,
+				});
+
+				container.appendChild(elem);
+				els.push(elem);
+			});
+
+			if (pckry) {
+				pckry.destroy();
+			}
+
+			adjustWidgetPanelSize(widgets);
+			pckry = new Packery(container, {
+				itemSelector: '.widget',
+				gutter: WIDGET_MARGIN,
+				isHorizontal: true,
+				columnWidth: cellSize.width,
+				rowHeight: cellSize.height,
+				containerStyle: null,
+				isInitLayout: false,
+			});
+			els.forEach(function (el) {
+				const draggie = new Draggabilly(el, {
+					containment: container,
+				});
+
+				draggie.on('dragStart', function (event, pointer) {
+					//el.setAttribute("dragging", 1);
+				});
+				draggie.on('dragMove', function (event, pointer) {
+					el.setAttribute("dragging", 1);
+				});
+				draggie.on('dragEnd', function (event, pointer) {
+				});
+				pckry.bindDraggabillyEvents(draggie);
+			});
+			pckry.on("dragItemPositioned", function (pckryInstance, draggedItem) {
+				draggedItem.element.removeAttribute("dragging");
+				self.onReorderComplete.callListeners();
+				storeCurrentPositions();
+			});
+			pckry.on("layoutComplete", function () {
+				self.onReorderComplete.callListeners();
+			});
+			pckry.on('removeComplete', function () {
+				storeCurrentPositions();
+			});
+			refreshPositions();
+		});
+	};
+};
+
+export default WidgetsBuilder;

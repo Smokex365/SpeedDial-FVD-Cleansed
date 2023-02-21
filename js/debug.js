@@ -1,23 +1,22 @@
-(function(){
-	var Debug = function(){
+import Config from "./config.js";
 
+const Debug = function () {
+
+};
+
+Debug.prototype = {
+};
+
+["log", "info", "warn", "error"].forEach(function (method) {
+	Debug.prototype[method] = function () {
+		if (!Config || !Config.DEBUG) {
+			return;
+		}
+
+		const args = Array.prototype.slice.call(arguments);
+
+		console[method].apply(console, args); // #Debug
 	};
-  window.Debug = Debug;
+});
 
-	Debug.prototype = {
-	};
-
-  ["log", "info", "warn", "error"].forEach(function(method) {
-    Debug.prototype[method] = function() {
-      if(!fvdSpeedDial.Config || !fvdSpeedDial.Config.DEBUG) {
-        return;
-      }
-      var args = Array.prototype.slice.call(arguments);
-        
-      //console[method].apply(console, args); // #Debug
-    };
-  });
-
-	this.Debug = new Debug();
-  window.debug = this.Debug;
-}).apply( fvdSpeedDial );
+export default new Debug();

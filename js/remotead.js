@@ -1,345 +1,330 @@
-(function(){
+import Broadcaster from './_external/broadcaster.js';
+
+const UPDATE_AD_INTERVAL = 24 * 3600 * 1000; // 7 days
+
+const AD_URL = "https://s3.amazonaws.com/fvd-special/remotead/fvdsd_chrome2.json";
+
+const USE_CACHE = true;
+
+const console = {};
+
+const messages = {
+	donotdisplay: _("newtab_do_not_display_migrate"),
+};
+
+let supportedLanguages = [];
+const adHTML = '<div>'
+    +'<iframe></iframe>'
+  +'</div>';
+
+chrome.i18n.getAcceptLanguages(function (languageList) {
+	supportedLanguages = languageList;
+});
+
+console.log = function () {
+	const args = Array.prototype.slice.call(arguments);
+
+	args.unshift("REMOTEAD:");
+	window.console.log.apply(window.console, args);
+};
+
+console.error = function () {
+	const args = Array.prototype.slice.call(arguments);
+
+	args.unshift("REMOTEAD ERROR:");
+	window.console.error.apply(window.console, args);
+};
 
-  const UPDATE_AD_INTERVAL = 24 * 3600 * 1 * 1000; // 7 days
+if (!USE_CACHE) {
+	window.console.warn("Use REMOTEAD without cache!");
+}
 
-  const AD_URL = "https://s3.amazonaws.com/fvd-special/remotead/fvdsd_chrome2.json";
+const storage = new function () {
+	function _k(k) {
+		return "__remotead." + k;
+	}
+	this.set = function (k, v) {
+		localStorage[_k(k)] = v;
+	};
+	this.get = function (k) {
+		return localStorage[_k(k)];
+	};
+};
 
-  const USE_CACHE = true;
+function getUrlContents(url, callback) {
+	const xhr = new XMLHttpRequest();
 
-  var console = {};
+	xhr.open("GET", url);
+	xhr.onload = function () {
+		callback(xhr.responseText);
+	};
 
-  var messages = {
-    donotdisplay: _("newtab_do_not_display_migrate")
-  };
+	xhr.send(null);
+}
 
-  var supportedLanguages = [];
-  var adHTML = '<div>'+
-    '<iframe></iframe>'+
-  '</div>';
+function hasEqualElements(a, b) {
+	for (let i = 0; i !== a.length; i++) {
+		if (b.indexOf(a[i]) !== -1) {
+			return true;
+		}
+	}
 
-  chrome.i18n.getAcceptLanguages(function(languageList) {
-    supportedLanguages = languageList;
-  });
+	return false;
+}
 
-  console.log = function(){
+function cloneObj(obj) {
+	return JSON.parse(JSON.stringify(obj));
+}
 
-    var args = Array.prototype.slice.call(arguments);
+function parseUrl(str, component) {
 
-    args.unshift( "REMOTEAD:" );
+	const key = ['source', 'scheme', 'authority', 'userInfo', 'user', 'pass', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'fragment']; const ini = (this.php_js && this.php_js.ini)
+      || {}; const mode = (ini['phpjs.parse_url.mode']
+      && ini['phpjs.parse_url.mode'].local_value)
+      || 'php'; let parser = {
+		php: /^(?:([^:\/?#]+):)?(?:\/\/()(?:(?:()(?:([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?()(?:(()(?:(?:[^?#\/]*\/)*)()(?:[^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+		strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+		loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/\/?)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/, // Added one optional slash to post-scheme to catch file:/// (should restrict this)
+	};
 
-    window.console.log.apply( window.console, args );
+	const m = parser[mode].exec(str); const uri = {}; let i = 14;
 
-  };
+	while (i--) {
+		if (m[i]) {
+			uri[key[i]] = m[i];
+		}
+	}
 
-  console.error = function(){
+	if (component) {
+		return uri[component.replace('PHP_URL_', '').toLowerCase()];
+	}
 
-    var args = Array.prototype.slice.call(arguments);
+	if (mode !== 'php') {
+		const name = (ini['phpjs.parse_url.queryKey']
+          && ini['phpjs.parse_url.queryKey'].local_value)
+          || 'queryKey';
 
-    args.unshift( "REMOTEAD ERROR:" );
+		parser = /(?:^|&)([^&=]*)=?([^&]*)/g;
+		uri[name] = {};
+		uri[key[12]].replace(parser, function ($0, $1, $2) {
+			if ($1) {
+				uri[name][$1] = $2;
+			}
+		});
+	}
 
-    window.console.error.apply( window.console, args );
+	delete uri.source;
+	return uri;
 
-  };
+}
 
-  if( !USE_CACHE ){
-    window.console.warn("Use REMOTEAD without cache!");
-  }
+/* tab listener */
 
+Broadcaster.onMessage.addListener(function (msg) {
+	if (msg.a === "remoteAD:ignore") {
+		RemoteAD.ignoreAd(msg.id);
+	}
+});
 
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+	if (changeInfo.status === "complete") {
 
-  var storage = new function(){
-    function _k( k ){
-      return "__remotead." + k;
-    }
-    this.set = function( k, v ){
-      localStorage[_k(k)] = v;
-    };
-    this.get = function( k ){
-      return localStorage[_k(k)];
-    };
-  };
+		try {
 
-  function getUrlContents( url, callback ){
-    var xhr = new XMLHttpRequest();
-    xhr.open( "GET", url );
-    xhr.onload = function(){
-      callback( xhr.responseText );
-    };
+			let host = parseUrl(tab.url, "host").toLowerCase();
 
-    xhr.send( null );
-  }
+			host = host.replace(/^www\./, "");
 
-  function hasEqualElements(a, b){
-    for( var i = 0; i != a.length; i++ ){
-      if( b.indexOf( a[i] ) != -1 ){
-        return true;
-      }
-    }
+			RemoteAD.getADToShow({
+				host: host,
+			}, function (ad) {
 
-    return false;
-  }
+				if (ad) {
 
-  function cloneObj( obj ){
-    return JSON.parse( JSON.stringify( obj ) );
-  }
+					chrome.tabs.sendMessage(tabId, {
+						a: "fvd:remotead:show",
+						ad: ad,
+						html: adHTML,
+					});
 
-  function parseUrl(str, component){
+				}
 
-      var key = ['source', 'scheme', 'authority', 'userInfo', 'user', 'pass', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'fragment'], ini = (this.php_js && this.php_js.ini) ||
-      {}, mode = (ini['phpjs.parse_url.mode'] &&
-      ini['phpjs.parse_url.mode'].local_value) ||
-      'php', parser = {
-          php: /^(?:([^:\/?#]+):)?(?:\/\/()(?:(?:()(?:([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?()(?:(()(?:(?:[^?#\/]*\/)*)()(?:[^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-          strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-          loose: /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/\/?)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/ // Added one optional slash to post-scheme to catch file:/// (should restrict this)
-      };
+			});
 
-      var m = parser[mode].exec(str), uri = {}, i = 14;
-      while (i--) {
-          if (m[i]) {
-              uri[key[i]] = m[i];
-          }
-      }
+		} catch (ex) {
 
-      if (component) {
-          return uri[component.replace('PHP_URL_', '').toLowerCase()];
-      }
-      if (mode !== 'php') {
-          var name = (ini['phpjs.parse_url.queryKey'] &&
-          ini['phpjs.parse_url.queryKey'].local_value) ||
-          'queryKey';
-          parser = /(?:^|&)([^&=]*)=?([^&]*)/g;
-          uri[name] = {};
-          uri[key[12]].replace(parser, function($0, $1, $2){
-              if ($1) {
-                  uri[name][$1] = $2;
-              }
-          });
-      }
-      delete uri.source;
-      return uri;
+			console.warn("Fail check tab", ex);
 
-  }
+		}
 
-  /* tab listener */
+	}
 
-  Broadcaster.onMessage.addListener(function( msg ){
+});
 
-    if( msg.a == "remoteAD:ignore" ){
+/*main*/
 
-      RemoteAD.ignoreAd( msg.id );
+const RemoteAdClass = new function () {
 
-    }
+	let _isFirstStart = null;
 
-  });
+	function cacheTTL(cache) {
+		return new Date().getTime() - cache.createDate;
+	}
 
-  chrome.tabs.onUpdated.addListener(function( tabId, changeInfo, tab ){
+	function getADList(params, callback) {
 
-    if( changeInfo.status == "complete" ){
+		let cache = storage.get("adcache");
 
-      try{
+		const now = new Date().getTime();
 
-        var host = parseUrl( tab.url, "host" ).toLowerCase();
-        host = host.replace(/^www\./, "");
+		if (USE_CACHE && cache) {
+			try {
+				cache = JSON.parse(cache);
 
-        RemoteAD.getADToShow({
-          host: host
-        }, function( ad ){
+				if (cacheTTL(cache) > 0) {
+					console.log("CACHE!");
 
-          if( ad ){
+					return callback(cache.data);
+				}
+			} catch (ex) {
+				console.warn(ex);
+			}
+		}
 
-            chrome.tabs.sendMessage( tabId, {
-              a: "fvd:remotead:show",
-              ad: ad,
-              html: adHTML
-            } );
+		getUrlContents(AD_URL + "?c=" + (new Date().getTime()), function (text) {
 
-          }
+			console.log(text);
 
-        });
+			const data = JSON.parse(text);
 
-      }
-      catch( ex ){
+			const cache = {
+				createDate: new Date().getTime(),
+				data: data,
+			};
 
-        console.error("Fail check tab", ex);
+			storage.set("adcache", JSON.stringify(cache));
 
-      }
+			callback(data);
 
-    }
+		});
 
-  });
+	}
 
-  /*main*/
+	function isFirstStart() {
+		if (_isFirstStart === null) {
 
-  var RemoteAdClass = function(){
+			if (!storage.get("firstStartCompleted")) {
+				_isFirstStart = true;
+				storage.set("firstStartCompleted", true);
+			} else {
+				_isFirstStart = false;
+			}
 
-    var _isFirstStart = null;
+			console.log("Is first start?", _isFirstStart);
 
-    function cacheTTL( cache ){
-      return new Date().getTime() - cache.createDate;
-    }
+		}
 
-    function getADList( params, callback ){
+		return _isFirstStart;
 
-      var cache = storage.get("adcache");
+	}
 
-      var now = new Date().getTime();
+	function canDisplayAD(ad) {
 
-      if( USE_CACHE && cache ){
-        try{
-          cache = JSON.parse(cache);
+		const now = new Date().getTime();
 
-          if( cacheTTL(cache) > 0 ){
-            console.log("CACHE!");
+		if (ad.languages) {
+			if (!hasEqualElements(ad.languages, supportedLanguages)) {
+				console.log("Language not supported", ad.languages,", not in list of ", supportedLanguages);
+				return false;
+			}
+		}
 
-            return callback( cache.data );
-          }
-        }
-        catch( ex ){
+		if (ad.newUserDelay) {
 
-        }
-      }
+			const obtainedTime = parseInt(storage.get("ad.obtained_time." + ad.id));
 
-      getUrlContents( AD_URL + "?c=" + (new Date().getTime()), function( text ){
+			if (obtainedTime) {
+				if (now - obtainedTime < ad.newUserDelay * 3600 * 1000) {
+					console.log("Delay is active");
 
-        console.log(text);
+					return false;
+				}
+			} else if (isFirstStart()) {
+				storage.set("ad.obtained_time." + ad.id, now);
 
-        var data = JSON.parse(text);
+				console.log("Need to wait delay for first start", ad.newUserDelay);
 
-        var cache = {
-          createDate: new Date().getTime(),
-          data: data
-        };
+				return false;
+			}
 
-        storage.set( "adcache", JSON.stringify( cache ) );
+		}
 
-        callback( data );
+		const adIgnored = !!parseInt(storage.get("ad.ignored." + ad.id));
 
-      } );
+		if (adIgnored) {
+			console.log("AD is ignored by user");
 
-    }
+			return false;
+		}
 
-    function isFirstStart(){
+		return true;
 
-      if( _isFirstStart === null ){
+	}
 
-        if( !storage.get("firstStartCompleted") ){
-          _isFirstStart = true;
-          storage.set("firstStartCompleted", true);
-        }
-        else{
-          _isFirstStart = false;
-        }
+	function getADToShow(params, callback) {
 
-        console.log("Is first start?", _isFirstStart);
+		if (typeof params === "function") {
+			callback = params;
+			params = {};
+		}
 
-      }
+		params = params || {};
 
-      return _isFirstStart;
+		getADList(null, function (ads) {
 
-    }
+			for (let i = 0; i !== ads.length; i++) {
+				let ad = ads[i];
 
-    function canDisplayAD( ad ){
+				if (params.nohosts && ad.hosts && ad.hosts.length > 0) {
+					continue;
+				}
 
-      var now = new Date().getTime();
+				if (params.host && (!ad.hosts || ad.hosts.indexOf(params.host) === -1)) {
+					continue;
+				}
 
-      if( ad.languages ){
-        if( !hasEqualElements( ad.languages, supportedLanguages ) ){
-          console.log("Language not supported", ad.languages,", not in list of ", supportedLanguages);
-          return false;
-        }
-      }
+				ad = cloneObj(ad);
 
-      if( ad.newUserDelay ){
+				ad.frameUrl += "?id=" + encodeURIComponent(ad.id);
 
-        var obtainedTime = parseInt( storage.get( "ad.obtained_time." + ad.id ) );
+				if (canDisplayAD(ad)) {
+					callback(ad);
+					return;
+				} else {
+					console.log("Can't show");
+				}
+			}
 
-        if( obtainedTime ){
-          if( now - obtainedTime < ad.newUserDelay * 3600 * 1000 ){
-            console.log("Delay is active");
+			callback(null);
 
-            return false;
-          }
-        }
-        else if( isFirstStart() ){
-          storage.set( "ad.obtained_time." + ad.id, now );
+		});
 
-          console.log("Need to wait delay for first start", ad.newUserDelay);
+	}
 
-          return false;
-        }
+	this.ignoreAd = function (adId) {
+		storage.set("ad.ignored." + adId, 1);
+	};
 
-      }
+	this.getADToShow = function () {
 
-      var adIgnored = !!parseInt( storage.get( "ad.ignored." + ad.id ) );
+		// always empty
+		return [];
 
-      if( adIgnored ){
-        console.log("AD is ignored by user");
+		//return getADToShow.apply( this, arguments );
 
-        return false;
-      }
+	};
 
-      return true;
 
-    }
+};
 
-    function getADToShow( params, callback ){
-
-      if( typeof params == "function" ){
-        callback = params;
-        params = {};
-      }
-
-      params = params || {};
-
-      getADList( null, function( ads ){
-
-        for( var i = 0; i != ads.length; i++ ){
-          var ad = ads[i];
-
-          if( params.nohosts && ad.hosts && ad.hosts.length > 0 ){
-            continue;
-          }
-
-          if( params.host && ( !ad.hosts || ad.hosts.indexOf( params.host ) == -1 ) ){
-            continue;
-          }
-
-          ad = cloneObj( ad );
-
-          ad.frameUrl += "?id=" + encodeURIComponent( ad.id );
-
-          if( canDisplayAD( ad ) ){
-            callback( ad );
-            return;
-          }
-          else{
-            console.log("Can't show");
-          }
-        }
-
-        callback( null );
-
-      } );
-
-    }
-
-    this.ignoreAd = function( adId ){
-      storage.set( "ad.ignored." + adId, 1 );
-    };
-
-    this.getADToShow = function(){
-
-      // always empty
-      return [];
-
-      //return getADToShow.apply( this, arguments );
-
-    };
-
-
-  };
-
-  var RemoteAD = new RemoteAdClass();
-  window.RemoteAD = RemoteAD;
-})();
+export default RemoteAdClass();

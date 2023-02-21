@@ -1,22 +1,22 @@
-.sdIcon{
-	background-image: url(/images/icons.png)
+.sdIcon {
+	background-image: url(/images/icons.png);
 }
 
-.sdIcon.question{
+.sdIcon.question {
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 }
 
-.sdIcon.clickable{
+.sdIcon.clickable {
 	cursor: pointer;
 }
 
-.sdIconImage{
+.sdIconImage {
 	list-style-image: url('/images/icons.png');
 }
 
-.sdIconImage.screamer{
+.sdIconImage.screamer {
 	max-width: 17px;
 	max-height: 14px;
 	-moz-image-region: rect(1px 38px 15px 21px);

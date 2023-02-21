@@ -1,110 +1,115 @@
-(function(){
-	var ToolTip = function(){
-		
-	};
-	
-	ToolTip.prototype = {
-		_container: null,
-		_arrowLeftOffset: 10,
-		_arrowTopOffset: 19,		
-		_currentElement: null,
-		
-		displayImage: function( elem, imageSrc, event ){
-			var html = "<img src=\""+imageSrc+"\"/>";
-			this.display( elem, html, event );
-		},
-		
-		display: function( elem, html, event, isText ){
-			event.stopPropagation();
-			
-			if( this._currentElement == elem ){
-				return;				
-			}
-			
-			this._currentElement = elem;
-			
-			var that = this;
-			
-			var setFunction = function(){
-				var toolTipContainer = fvdSpeedDial.Templates.clone( "tiptip_holder" );
-				that._container = toolTipContainer;	
-				
-				// position
-				var offset = fvdSpeedDial.Utils.getOffset( elem );
-				toolTipContainer.style.left = offset.left + (elem.offsetWidth/2) - that._arrowLeftOffset - 1 + "px";
-				toolTipContainer.style.top = offset.top + elem.offsetHeight + that._arrowTopOffset + "px";			
-				
-				document.body.appendChild( that._container );	
-				var contentContainer = document.getElementById("tiptip_content");
-				if(isText) {
+import Templates from './templates.js';
+import { Utils } from './utils.js';
+
+const ToolTip = function () {
+
+};
+
+ToolTip.prototype = {
+	_container: null,
+	_arrowLeftOffset: 10,
+	_arrowTopOffset: 19,
+	_currentElement: null,
+
+	displayImage: function (elem, imageSrc, event) {
+		const html = `<img src="${imageSrc}" alt=""/>`;
+
+		this.display(elem, html, event);
+	},
+	display: function (elem, html, event, isText) {
+		event.stopPropagation();
+
+		if (this._currentElement === elem) {
+			return;
+		}
+
+		this._currentElement = elem;
+
+		this.setFunction = () => {
+			const toolTipContainer = Templates.clone("tiptip_holder");
+
+			this._container = toolTipContainer;
+
+			// position
+			const offset = Utils.getOffset(elem);
+
+			toolTipContainer.style.left = offset.left + (elem.offsetWidth/2) - this._arrowLeftOffset - 1 + "px";
+			toolTipContainer.style.top = offset.top + elem.offsetHeight + this._arrowTopOffset + "px";
+
+			document.body.appendChild(this._container);
+			const contentContainer = document.getElementById("tiptip_content");
+
+			if (isText) {
 				  contentContainer.classList.add("textTip");
-				}
-				if( html.tagName ){
-					contentContainer.appendChild( html );			
-				}
-				else{
-					contentContainer.innerHTML = html;					
-				}
-				
-				setTimeout( function(){
-					toolTipContainer.setAttribute( "active", 1 );				
-					that._assignClickListener();				
-				}, 0 );	
-			};
-			
-			if( this._container ){
-				this.close( setFunction );
-			}		
-			else{
-				setFunction();
-			}	
-		},
-		
-		close: function( callback ){
-			
-			fvdSpeedDial.ToolTip._container.setAttribute( "active", 0 );
-			
-			fvdSpeedDial.ToolTip._container.addEventListener( "webkitTransitionEnd", function(){
-				try{
-					fvdSpeedDial.ToolTip._container.parentNode.removeChild( fvdSpeedDial.ToolTip._container );
-					fvdSpeedDial.ToolTip._container = null;
-					fvdSpeedDial.ToolTip._currentElement = null;
-					fvdSpeedDial.ToolTip._removeClickListener();
-					
-					if( callback ){
+			}
+
+			if (html.tagName) {
+				contentContainer.appendChild(html);
+			} else {
+				contentContainer.innerHTML = html;
+			}
+
+			setTimeout(() => {
+				toolTipContainer.setAttribute("active", 1);
+				this._assignClickListener();
+			}, 0);
+		};
+
+		if (this._container) {
+			this.close(this.setFunction);
+		} else {
+			this.setFunction();
+		}
+	},
+
+	close: function (callback) {
+		if (this._container) {
+			this._container.setAttribute("active", 0);
+			this._container.addEventListener("webkitTransitionEnd", () => {
+				try {
+					this._container.parentNode.removeChild(this._container);
+					this._container = null;
+					this._currentElement = null;
+					this._removeClickListener();
+	
+					if (callback) {
 						callback();
 					}
+				} catch (ex) {
+					console.warn(ex);
 				}
-				catch( ex ){
-					
-				}
-			}, false );		
-			
-		},
-		
-		_clickListener: function( event ){
-			if( fvdSpeedDial.ToolTip._container ){
-				var el = event.target;
-				do{
-					if( el == fvdSpeedDial.ToolTip._container ){
-						return;
-					}
-					el = el.parentNode;
-				}
-				while( el );
-			}	
-			
-			fvdSpeedDial.ToolTip.close();
-		},
-				
-		_assignClickListener: function(){
-			document.addEventListener( "click", fvdSpeedDial.ToolTip._clickListener, false );
-		},
-		
-		_removeClickListener: function(){
-			document.removeEventListener( "click", fvdSpeedDial.ToolTip._clickListener );
+			}, false);
+		} else {
+			console.info('_container is', typeof _container);
 		}
-	};
-	
-	this.ToolTip = new ToolTip();
-}).apply(fvdSpeedDial);
+
+	},
+
+	_clickListener: function (event) {
+		if (this._container) {
+			let el = event.target;
+
+			do {
+				if (el === this._container) {
+					return;
+				}
+
+				el = el.parentNode;
+			}
+			while (el);
+		}
+
+		this.close();
+	},
+
+	_assignClickListener: function () {
+		document.addEventListener("click", this._clickListener.bind(this), false);
+	},
+
+	_removeClickListener: function () {
+		document.removeEventListener("click", this._clickListener.bind(this));
+	},
+};
+
+export default new ToolTip();
+
