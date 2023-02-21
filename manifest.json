@@ -33,12 +33,12 @@
       "64": "images/icons/64x64.png"
    },
    "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCcLWij2OcnGKZ9EBrjBUmTPIhLiH/lvGsLY49LnaeKIcI1MkhKIP4Q7ok8E1Y2iD0xpgF/EE9cq0g+9IX9CKpk92cYU/69Z6HnMwfn8MGvRFT4qmbh/8GrmFXCJqbyt3fbGqGRxH+fzY5wDGQ4mQkX2PUaG1MALUVnmEt5eV1aIwIDAQAB",
-   "manifest_version": 2,
+   "manifest_version": 3,
    "name": "Speed Dial [FVD] - New Tab Page, 3D, Sync...",
    "options_page": "options.html",
-   "permissions": [ "tabs", "history", "management", "unlimitedStorage", "chrome://favicon/", "<all_urls>", "contextMenus", "storage", "idle" ],
+   "permissions": [ "scripting", "tabs", "history", "management", "unlimitedStorage", "chrome://favicon/", "<all_urls>", "contextMenus", "storage", "idle" ],
    "short_name": "New Tab Page",
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.77.9.3",
+   "version": ".01-[1.77.9.3]",
    "web_accessible_resources": [ "images/cropper/img.png", "newtab.html", "content-scripts/hiddencapture-inject.js" ]
 }
