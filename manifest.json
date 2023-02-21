@@ -39,6 +39,6 @@
    "permissions": [ "scripting", "tabs", "history", "management", "unlimitedStorage", "chrome://favicon/", "<all_urls>", "contextMenus", "storage", "idle" ],
    "short_name": "New Tab Page",
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": ".01-[1.77.9.3]",
+   "version": "1.01-[1.77.9.3]",
    "web_accessible_resources": [ "images/cropper/img.png", "newtab.html", "content-scripts/hiddencapture-inject.js" ]
 }
