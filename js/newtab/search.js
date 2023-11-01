@@ -10,7 +10,7 @@ const Search = function (fvdSpeedDial) {
 };
 
 Search.prototype = {
-	_defaultProvider: 'fvd',
+	_defaultProvider: 'google',
 	_ui: {},
 	_menuState: false,
 	_searchProviders: {
@@ -87,6 +87,18 @@ Search.prototype = {
 				've',
 				'my',
 			],
+		},
+		duckduckdo: {
+			name : 'DuckDuckGo',
+			url: 'https://duckduckgo.com/?q={q}',
+		},
+		youtube: {
+			name: 'Youtube',
+			url: 'https://www.youtube.com/results?search_query={q}',
+		},
+		reddit: {
+			name: 'Reddit',
+			url: 'https://old.reddit.com/search?q={q}',
 		},
 	},
 	_locale: {
