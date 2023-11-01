@@ -1,0 +1,50 @@
+body{
+    overflow-y: hidden;
+}
+
+.eversync_page {font-family:Arial, Helvetica, Sans-serif; color:#161616; font-size:13px; line-height:1.5;}
+.eversync_clear {clear:both; line-height:0; height:0; font-size:1px;}
+
+.eversync_alert {font-weight:bold; text-align:center; background:#f9edbe; padding:5px 10px; min-height:1px; margin:0 0 15px 0;}
+.eversync_logo {padding:0 0 15px 0; min-height:1px; text-align:center;}
+.eversync_logo_holder {background:url(../images/eversync_logo.png) no-repeat top center; padding:50px 0 0 0; min-height:1px; color:#787878;}
+
+.eversync_addons {background:#fff; border-radius:2px; padding:25px 25px 10px 25px; min-height:1px; margin:0 0 20px 0;}
+.eversync_addon {padding:0 0 10px 0; min-height:1px;}
+.eversync_addon_content {float:left; width:100%;}
+.eversync_addon_content_wrapper {margin:0 0 0 200px;}
+.eversync_addon_content ul li {display:block; list-style:none; padding:0 0 5px 24px; min-height:1px; background:url(../images/eversync_check.png) no-repeat 0px 3px;}
+.eversync_addon_img {float:left; width:180px; margin:0 0 0 -100%; line-height:0;}
+.eversync_addon_img img {display:block; max-width:100%; height:auto;}
+.eversync_addon_img_helper img {margin:-10px 0 0 0;}
+.eversync_addon_img_backup img {margin:-7px 0 0 0;}
+
+.eversync_install {
+    text-align:center;
+    margin-top: -2px;
+}
+
+.eversync_button {display:inline-block; position:relative; vertical-align:top; color:#fff; text-decoration:none; font-weight:bold; font-size:15px;}
+.eversync_button span {display:block; border:1px solid #315490; position:relative; border-radius:4px; height:52px; line-height:52px; padding:0 24px 0 54px;
+background: #5588da; /* Old browsers */
+background: -moz-linear-gradient(top,  #5588da 0%, #4e7ed6 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5588da), color-stop(100%,#4e7ed6)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #5588da 0%,#4e7ed6 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #5588da 0%,#4e7ed6 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #5588da 0%,#4e7ed6 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #5588da 0%,#4e7ed6 100%); /* W3C */
+}
+.eversync_button span i {display:block; position:absolute; left:0; top:0; width:54px; height:52px; background:url(../images/eversync_plus.png) no-repeat center;}
+.eversync_button:hover span {background:#4e7ed6;}
+.eversync_button:active {top:1px;}
+
+.eversync_button_green span {border-color:#75a256;
+background: #7db52d; /* Old browsers */
+background: -moz-linear-gradient(top,  #7db52d 0%, #699926 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7db52d), color-stop(100%,#699926)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #7db52d 0%,#699926 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #7db52d 0%,#699926 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #7db52d 0%,#699926 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #7db52d 0%,#699926 100%); /* W3C */
+}
+.eversync_button_green:hover span {background:#699926;}

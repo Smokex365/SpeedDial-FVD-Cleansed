@@ -1,0 +1,956 @@
+body {
+	/*background: url( /images/options/bg.png );*/
+
+	background: url(/images/options/bg.jpg);
+	background-size: cover;
+
+	margin: 0;
+	padding: 0;
+
+	font-size: 12px;
+	font-family: Arial, sans-serif;
+
+	overflow-x: hidden;
+}
+
+label.bold {
+	font-weight: bold;
+}
+
+#mainContainer {
+	position: relative;
+
+	border: 5px solid rgba(30, 30, 30, 0.2);
+	border-top: 0px;
+
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+
+	background-color: #f9f9f9;
+
+	width: 615px;
+	height: 670px;
+	margin-left: auto;
+	margin-right: auto;
+
+	box-shadow: 0px 0px 30px 3px #000;
+}
+
+#mainMenu {
+	height: 80px;
+	background-color: #eee;
+	border-bottom: 1px solid #ccc;
+
+	text-align: center;
+}
+
+#mainMenu .buttonBig:first-child {
+	margin-left: 15px;
+}
+
+.buttonBig {
+	margin-top: 20px;
+
+	width: 31px;
+	height: 31px;
+	background: url(/images/newtab/dial_icons.png);
+	margin-right: 25px;
+	cursor: pointer;
+
+	display: inline-block;
+
+	-webkit-filter: grayscale(1);
+	opacity: 0.7;
+	-webkit-transition: 200ms ease opacity;
+}
+
+.buttonBig[active='1'],
+.buttonBig:hover {
+	-webkit-filter: none;
+	opacity: 1;
+}
+
+.buttonBig.speedDial {
+	background-position: -60px 0px;
+}
+
+.buttonBig.mostVisited {
+	background-position: -125px 0px;
+}
+
+.buttonBig.recentlyClosed {
+	background-position: -221px 0px;
+}
+
+.buttonBig.sdBackground {
+	background-position: -317px 0px;
+}
+
+.buttonBig.sdFontColors {
+	background-position: -386px 0px;
+}
+
+.buttonBig.sdSync {
+	background-position: -618px 0px;
+}
+
+.buttonBig.sdPowerOff {
+	background-position: -766px 0px;
+}
+
+.buttonBig.sdGetSatisfaction {
+	background-position: -543px 0px;
+}
+
+.buttonBig.sdDonate {
+	background-position: -691px 0px;
+}
+
+.buttonBig.sdWidgets {
+	background-position: -803px 0px;
+}
+
+.buttonBig.settings {
+	background-position: -254px 0px;
+	width: 28px;
+}
+
+#settingsContent {
+	width: 100%;
+
+	position: absolute;
+	top: 82px;
+	bottom: 10px;
+	overflow: hidden;
+
+	background-color: #f9f9f9;
+}
+
+#settingsContent > #rollerContent {
+	position: relative;
+	-webkit-transition-duration: 200ms;
+	width: 100%;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.settingsPage {
+	vertical-align: top;
+	width: 605px;
+	-webkit-transition-duration: 1s;
+	display: inline-block;
+	padding: 5px;
+}
+
+.settingsPage > .pageTitle {
+	padding: 5px;
+	background-color: #f9edbe;
+	font-weight: bold;
+	text-shadow: 1px 1px 0px #fff;
+	color: #333;
+	margin-bottom: 2px;
+}
+
+fieldset {
+	margin-top: 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+
+	box-shadow: 0px 0px 10px -5px #000;
+	-webkit-transition-duration: 200ms;
+}
+
+fieldset > legend {
+	text-shadow: 1px 1px 0px #fff;
+	font-weight: bold;
+}
+fieldset > legend.legend-with-help-icon {
+	line-height: 24px;
+}
+fieldset > legend.legend-with-help-icon .sdIcon {
+	position: relative;
+	top: 3px;
+}
+
+fieldset.subSet {
+	width: 49%;
+	height: 110px;
+	box-sizing: border-box;
+}
+fieldset.subSetMini {
+	height: 85px;
+	padding: 7px 0 0 10px;
+}
+
+.color-column-1,
+.color-column-2 {
+	display: inline-block;
+	font-size: 12px;
+	width: 119px;
+	text-align: center;
+	margin-left: 33px;
+}
+
+.color-column-2 {
+	margin-left: 2px;
+}
+
+.color-two {
+	width: 120px;
+}
+
+fieldset.subSet.higher {
+	height: 130px;
+}
+fieldset.subSet.higher-145 {
+	height: 145px;
+}
+fieldset.subSet.higher-50 {
+	height: 50px;
+}
+
+fieldset .color-width {
+	width: 30px;
+	display: inline-block;
+}
+
+.singleSet {
+	clear: both;
+	width: 576px;
+	position: relative;
+}
+
+.tabContent .singleSet {
+	width: 556px;
+}
+
+.singleSet > fieldset {
+	float: left;
+	width: 100%;
+}
+
+.setsLine {
+	clear: both;
+}
+
+.setsLine > fieldset {
+	float: left;
+}
+
+.setsLine > .activeInStandard {
+	float: left;
+	display: block;
+	width: 49%;
+}
+
+.setsLine > .activeInStandard fieldset {
+	width: 100%;
+}
+
+/* Some elements */
+
+.dialsOpacityRange {
+	width: 100%;
+}
+
+#customDialSizeWrapper input {
+	width: 350px;
+}
+
+#backgroundPreview {
+	border: 1px solid #c0c0c0;
+	box-shadow: 0px 0px 10px -5px #000;
+	min-height: 150px;
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	position: relative;
+	overflow: hidden;
+}
+
+#backgroundPreview .parallax-bg-scene {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+
+#backgroundPreview > #refreshPreview {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	text-shadow: 0px 0px 3px #fff;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#currentDimension {
+	text-align: center;
+	font-weight: bold;
+}
+
+#bg_imageURL {
+	width: 95%;
+}
+
+#bg_parallaxDepthContainer {
+	float: right;
+}
+
+#bg_parallaxDepthContainer input {
+	width: 240px;
+}
+
+#bg_parallaxDepthContainer .value {
+	min-width: 40px;
+}
+
+#bg_parallaxDepthContainer span {
+	vertical-align: top;
+	margin-top: 2px;
+	display: inline-block;
+}
+
+#restoreDefaultFontsContainer {
+	margin-top: 5px;
+}
+
+.noFieldSet {
+	padding: 3px;
+	padding-left: 8px;
+	margin-top: 5px;
+	font-size: 14px;
+}
+
+#opacityMarks {
+	text-align: center;
+}
+
+#opacityMarks .left {
+	float: left;
+}
+
+#opacityMarks .right {
+	float: right;
+}
+
+#applyButton {
+	position: absolute;
+	bottom: 10000px;
+	width: 100%;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	text-align: center;
+	-webkit-transition: 200ms ease opacity;
+	opacity: 0;
+}
+
+#mainContainer[havechanges='1'] #applyButton {
+	opacity: 1;
+	bottom: 0px;
+}
+
+#applyChangesButton {
+	min-width: 100px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#bgRestoreDefaultContainer {
+	text-align: center;
+	margin-top: 15px;
+	position: relative;
+}
+
+#backgroundButtonRestoreDefault {
+}
+
+#installThemesForChrome {
+	position: absolute;
+	right: 0px;
+}
+
+/* Close button */
+
+#closeButton {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	text-align: center;
+	-webkit-transition-duration: 200ms;
+	opacity: 0;
+	display: none;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+#closeButton[active='1'] {
+	display: block;
+	opacity: 1;
+}
+
+#closeButton .fvdButton {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	height: 30px;
+}
+
+#blockedDomainContainer button {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	min-width: 70px;
+	margin-top: 20px;
+	height: 30px;
+}
+
+#setAutoScreenPreview button {
+	margin-top: 5px;
+}
+
+#importExportContainer button {
+	margin-top: 20px;
+}
+
+#containerBtnLoadAndPreview {
+	text-align: right;
+}
+
+#btnLoadAndPreview {
+	width: 150px;
+}
+
+/* Dialogs */
+
+.manageDenyTable {
+	width: 100%;
+	border: 1px solid #ccc;
+
+	background-color: #eaeaea;
+
+	font-size: 13px;
+}
+
+.manageDenyTable th {
+	background-color: #eee;
+}
+
+.manageDenyTable > tbody > tr > td:first-child > div {
+	width: 300px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.manageDenyTable td {
+	background-color: #fff;
+	padding: 5px;
+}
+
+.manageDenyTable .speedDialIcons {
+	text-align: center;
+}
+
+.manageDenyTable .speedDialIcons > div {
+	display: inline-block;
+	float: none;
+	cursor: pointer;
+}
+
+.manageDenyTable {
+}
+
+#manageDenyTableContainer {
+	max-height: 300px;
+	overflow: auto;
+}
+
+#linkToSD {
+	position: absolute;
+	width: 50px;
+	height: 100px;
+	background-color: #fff;
+	background-image: url(/images/icons/32x32.png);
+	background-repeat: no-repeat;
+	background-position: center 53px;
+	border: 5px solid #ccc;
+	border-bottom-right-radius: 50px;
+	border-bottom-left-radius: 50px;
+	left: 60px;
+	top: -150px;
+	cursor: pointer;
+
+	-webkit-transition-duration: 200ms;
+}
+
+#linkToSD[blackshadow='1'] {
+	box-shadow: 0px 0px 10px 2px #000;
+}
+
+#linkToSD:hover {
+	box-shadow: 0px 0px 10px 5px #fff;
+}
+
+#defaultScreenDelay {
+	width: 100px;
+}
+
+/* some tyles */
+
+.littleGray {
+	font-size: 10px;
+	color: #888;
+}
+
+option.lastUsedGroup {
+	color: green;
+}
+
+/* tabs */
+
+.tabs {
+	padding: 10px;
+}
+
+.tabs .tabsHead .tabHead {
+	position: relative;
+	border: 1px solid #ccc;
+	padding: 3px 10px;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-bottom: none;
+	-webkit-transition-duration: 200ms;
+	-webkit-transition-property: box-shadow, background;
+	cursor: pointer;
+	display: inline-block;
+	min-width: 100px;
+
+	background: -webkit-linear-gradient(90deg, #eee, #fff);
+	text-shadow: 1px 1px 0px #fff;
+	text-align: center;
+}
+
+.tabs .tabsHead .tabHead:hover {
+	box-shadow: 0px 0px 8px -3px #000;
+	background: -webkit-linear-gradient(90deg, #ddd, #fff);
+}
+
+.tabs .tabsHead .tabHead:hover:after {
+	content: '';
+	width: 106px;
+	z-index: 70;
+	height: 1px;
+	/*background:#f9f9f9;*/
+	margin-top: 20px;
+	left: 0px;
+	position: absolute;
+}
+
+.tabs .tabsHead .tabHead[active='1'] {
+	background: -webkit-linear-gradient(top, #568449, #75ad66);
+	color: #fff;
+	text-shadow: none;
+}
+
+.tabs .tabsData {
+	border-top: 1px solid #ccc;
+	background-color: #f9f9f9;
+}
+
+.tabs .tabsData .tabData {
+	position: relative;
+}
+
+/* Custom dial size */
+#customDialSizeWrapper input,
+#customDialSizeWrapper span {
+	display: inline-block;
+}
+
+#customDialSizeWrapper span {
+	vertical-align: top;
+	margin-top: 3px;
+}
+
+#customDialSizeWrapper span.littleGray {
+	margin-top: 5px;
+}
+
+#customDialSizePreview {
+	margin-left: 10px;
+}
+
+/* suggestions */
+
+#getSatisfactionSuggestSelect {
+	position: absolute;
+
+	background-clip: padding-box;
+
+	border: 5px solid rgba(0, 0, 0, 0.4);
+	border-radius: 5px;
+
+	-webkit-transition: opacity 200ms;
+	opacity: 0;
+	left: -1000px;
+	z-index: 100;
+}
+
+#getSatisfactionSuggestSelect[active='1'] {
+	opacity: 1;
+}
+
+#getSatisfactionSuggestSelect a {
+	display: block;
+	padding: 5px;
+	color: #000;
+	text-shadow: 1px 1px 0px #fff;
+	background-color: #eee;
+	text-decoration: none;
+}
+
+#getSatisfactionSuggestSelect a:hover {
+	background-color: #fff;
+}
+
+/* Donate message */
+
+.donateMessage {
+	max-width: 300px;
+}
+
+.donateMessage .buttonContainer {
+	margin-top: 7px;
+	text-align: center;
+}
+
+.donateMessage .textContent {
+	white-space: pre-line;
+}
+
+/* background source type */
+
+.backgroundSourceType {
+	margin-bottom: 5px;
+}
+
+/* sync */
+
+#syncSettings .desc {
+	text-align: center;
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+#syncSettings .syncButtonContainer {
+	margin-top: 40px;
+	text-align: center;
+}
+
+#syncSettings .syncButtonContainer a {
+	background-color: #f6ff00;
+}
+
+#syncSettings ul li {
+	list-style-image: url(/images/newtab/green_bird.png);
+	margin: 7px;
+}
+
+#syncSettings h3 {
+	padding-left: 10px;
+}
+
+#syncSettings h3 > * {
+	vertical-align: middle;
+}
+
+#syncSettings .paranoidLine {
+	color: #009900;
+}
+
+/* highlight */
+
+fieldset[highlight='1'] {
+	border: 2px solid red;
+}
+
+label.highlight {
+	color: red;
+}
+
+/* themes select */
+
+#themeSelect,
+#scrollSelect {
+	width: 100%;
+}
+
+.syncWarningMessage {
+	text-align: center;
+	margin-top: 25px;
+}
+
+.syncWarningMessage p {
+	margin: 0.5em 0 0.5em 0;
+}
+
+#poweroffSettings table {
+	width: 350px;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+#poweroffSettings .createPassCode input {
+	width: 130px;
+}
+
+#poweroffSettings .error {
+	color: #ff0000;
+	text-align: center;
+	display: none;
+	margin: 5px;
+}
+
+#poweroffSettings .setuped {
+	text-align: center;
+	padding: 10px;
+}
+
+#poweroffSettings .restorePassCode {
+	padding: 10px;
+	text-align: center;
+}
+
+.poweroffDesc {
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+
+	white-space: normal;
+	font-size: 15px;
+}
+
+.poweroffDesc .small {
+	font-size: 11px;
+}
+
+#powerOffTabs {
+	height: 200px;
+}
+
+.poweroffHelpMessage {
+	margin-top: 50px;
+	text-align: center;
+}
+
+.poweroffHelpMessage img {
+	box-shadow: 0px 0px 10px -2px #000;
+}
+
+#currentPassCodeEmail {
+	text-align: center;
+	font-size: 15px;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+
+#widgetsPanelOpacity,
+#widgetsAutoScrollSpeed {
+	width: 100%;
+}
+
+#widgetsAutoScrollSpeedFieldset > .content {
+	text-align: center;
+}
+
+.cbLabel > * {
+	vertical-align: top;
+}
+
+.cbLabel {
+	line-height: 19px;
+}
+
+#premiumForShareButton {
+	position: absolute;
+	left: 10px;
+	bottom: 5px;
+	display: none;
+	opacity: 0;
+	-webkit-transition: 200ms ease opacity;
+}
+
+#buttonpremiumForShareButton i {
+	background: url(/images/star.png);
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	float: left;
+	margin-right: 5px;
+}
+#buttonpremiumForShareButton span {
+	display: inline-block;
+	margin-top: 2px;
+}
+
+#buttonManageGroups {
+	margin-left: 10px;
+}
+
+.countItemsInput {
+	margin-left: 2px;
+	margin-right: 3px;
+}
+
+#fontsSettings fieldset label {
+	display: inline-block;
+	margin-bottom: 5px;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.eversync-install-frame {
+	border: none;
+	width: 600px;
+	height: 595px;
+}
+
+.select-theme a {
+	display: inline-block;
+	width: 400px;
+}
+
+.spacer {
+	height: 10px;
+}
+
+.backupViaEversyncSuggestion {
+	padding: 5px 10px 5px 10px;
+}
+
+.backupViaEversyncSuggestion {
+	display: block; /* Task #2006 */
+	height: 30px;
+}
+
+.backupViaEversyncSuggestion .backupSuggestionText {
+	color: green;
+	font-weight: bold;
+	float: left;
+	width: 470px;
+}
+
+.backupViaEversyncSuggestion .backupSuggestionText b {
+	color: red;
+}
+
+.backupViaEversyncSuggestion button {
+	float: right;
+}
+
+html[data-sync-active='0'] .backupViaEversyncSuggestion {
+	display: none; /* Task #2006 */
+}
+
+html[data-sync-active='0'] #mainContainer {
+	height: 710px;
+}
+
+/*donate*/
+#donate-container {
+	position: absolute;
+	right: -310px;
+	bottom: 0px;
+	width: 300px;
+	height: 250px;
+
+	opacity: 0;
+	-webkit-transition: 200ms ease opacity;
+}
+
+#donate-container[show='1'] {
+	opacity: 1;
+}
+
+#donate-container iframe {
+	position: absolute;
+	border: none;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	height: 100%;
+}
+
+#donate-container .close-donate {
+	width: 13px;
+	height: 13px;
+	background: url(/images/close.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 13px 13px;
+	position: absolute;
+	top: -10px;
+	right: 10px;
+	cursor: pointer;
+}
+
+#startDonateButton {
+	display: none;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+}
+
+#startDonateButton[show='1'] {
+	/*display: block; Task #1391*/
+}
+
+#buttonStartDonateButton {
+	line-height: 18px;
+}
+
+#buttonStartDonateButton i {
+	background: url(/images/heart.png);
+	width: 24px;
+	height: 24px;
+	background-size: 24px 24px;
+	display: inline-block;
+	float: left;
+	margin-right: 5px;
+	margin-top: -3px;
+}
+
+#buttonStartDonateButton:hover i {
+	animation: 1300ms ease 0s normal none infinite running heartbeat;
+}
+
+@-webkit-keyframes heartbeat {
+	0% {
+		transform: scale(1);
+	}
+	14% {
+		transform: scale(1.3);
+	}
+	28% {
+		transform: scale(1);
+	}
+	42% {
+		transform: scale(1.3);
+	}
+	70% {
+		transform: scale(1);
+	}
+}
+
+.full-width {
+	width: 100%;
+}
+
+#display_dial_background_color {
+	margin-left: 18px;
+}

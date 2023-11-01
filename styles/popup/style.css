@@ -1,0 +1,22 @@
+ul {
+	white-space: nowrap;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+
+	font-family: Arial;
+	font-size: 12px;
+}
+
+ul > li {
+	color: #7b7b7b;
+	margin-bottom: 5px;
+	cursor: pointer;
+	border-left: 2px solid transparent;
+	padding-left: 3px;
+}
+
+ul > li:hover {
+	border-left-color: #4e90f0;
+	color: #000;
+}

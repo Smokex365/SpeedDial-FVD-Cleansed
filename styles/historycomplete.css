@@ -1,0 +1,77 @@
+.historyComplete {
+	position: absolute;
+	border: 1px solid #000;
+	box-shadow: 0px 0px 10px -3px #000;
+	font-size: 11px;
+	z-index: 3002;
+
+	overflow-y: auto;
+	max-height: 220px;
+}
+
+.historyComplete[appear='1'] {
+	display: block;
+}
+
+.historyComplete[appear='0'] {
+	display: none;
+}
+
+.historyComplete > .elem {
+	padding: 5px;
+	cursor: pointer;
+}
+
+.historyComplete > .elem:nth-child(n) {
+	background-color: #fff;
+}
+
+.historyComplete > .elem:nth-child(2n) {
+	background-color: #f6f6f6;
+}
+
+.historyComplete > .elem[focused='1'] {
+	background-color: #ffffc4;
+}
+
+.historyComplete > .elem > .title {
+	color: #444444;
+	margin-bottom: 2px;
+	height: 18px;
+}
+
+.historyComplete > .elem[focused='1'] > .title {
+	color: #000000;
+}
+
+.historyComplete > .elem > .title img {
+	position: absolute;
+	max-width: 16px;
+}
+
+.historyComplete > .elem > .title div {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-left: 18px;
+}
+
+.historyComplete > .elem > .url {
+	color: #555555;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.historyComplete::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.7);
+	background: #fff;
+}
+
+.historyComplete::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.8);
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+}
+.historyComplete::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255, 255, 255, 0.4);
+}

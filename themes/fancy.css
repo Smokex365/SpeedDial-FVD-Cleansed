@@ -1,0 +1,214 @@
+#cellsContainer {
+	-webkit-perspective: 600px;
+	-webkit-perspective-origin: 50% 100px;
+
+	/*-webkit-transform: rotateX(89deg);*/
+
+	-webkit-transform: translateX(-5px); /* experimental */
+
+	margin-top: 100px;
+
+	/*-webkit-box-reflect: below -190px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.5, transparent), to(white));*/
+}
+
+#speedDialContent .newtabCell {
+	-webkit-transform-style: preserve-3d;
+}
+
+#speedDialContent .newtabCell[fadeOut='1'] {
+	opacity: 0.1;
+	/*-webkit-filter: blur(1px);*/
+}
+
+#speedDialContent .newtabCell[indrag='1'] {
+	-webkit-transition: 200ms -webkit-transform;
+}
+
+#speedDialContent .newtabCell .head {
+	display: none; /* for wall look */
+}
+
+#speedDialContent .newtabCell .body {
+	background-color: rgba(0, 0, 0, 0.5);
+
+	-webkit-transition: border 200ms;
+}
+
+#speedDialContent .newtabCell .body {
+	/*border: 1px solid #777777;*/
+}
+
+.newtabCell .mostVisitedMenu {
+	background: rgba(0, 0, 0, 0.8);
+	left: -5px;
+	right: -5px;
+	bottom: -5px;
+	padding: 3px 3px;
+	width: auto;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+#speedDialContent #cellsContainer > .newtabCell:hover .body .screenParent,
+#speedDialContent .newtabCell[indrag='1'] .body .screenParent {
+	box-shadow: none;
+	border: 1px solid #fff;
+}
+
+#speedDialContent .newtabCell[type='plus'] .body .preview-image,
+#speedDialContent #cellsContainer > .newtabCell[type='plus']:hover .body .preview-image {
+	background: none;
+}
+
+#speedDialContent .newtabCell .body .screenParent {
+	background-color: transparent;
+	-webkit-transition: 200ms ease border-color;
+}
+
+#speedDialContent #cellsContainer > .newtabCell:hover .body,
+#speedDialContent .newtabCell[indrag='1'] .body {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+#speedDialContent .newtabCell[type='plus'] .body .screenParent {
+	background: transparent;
+}
+
+#speedDialContent #cellsContainer > .newtabCell[type='plus'] {
+	/*opacity: 0.7;*/
+	-webkit-transition: opacity 200ms;
+}
+
+#speedDialContent #cellsContainer > .newtabCell[type='plus']:hover {
+	opacity: 1;
+}
+
+#speedDialContent #cellsContainer > .newtabCell[type='plus']:hover .body {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+#speedDialContent #cellsContainer > .newtabCell[type='plus']:hover .body .screenParent {
+	background: transparent;
+}
+
+#speedDialContent #cellsContainer > .newtabCell[type='plus']:hover .body .screen {
+	background: url(/images/newtab/plus.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+#speedDialContent .newtabCell[type='speeddial'] .menuOverlay {
+	display: none; /* for wall look */
+}
+
+#speedDialContent .newtabCell .menuOverlay {
+	background-color: transparent;
+}
+
+#speedDialContent .newtabCell .footer {
+	display: none; /* for wall look */
+}
+
+#groupsBox > .group {
+	background: -webkit-linear-gradient(top, rgba(110, 110, 110, 0.5), rgba(100, 100, 100, 0.5));
+	background-clip: padding-box;
+	color: #ddd;
+}
+
+#groupsBox > .group[current='1'] {
+	background: -webkit-linear-gradient(top, rgba(86, 132, 73, 0.7), rgba(117, 172, 102, 0.7));
+}
+
+#speedDialGroupsWrapper .additionalGroupsButton {
+	background: -webkit-linear-gradient(top, rgba(110, 110, 110, 0.5), rgba(100, 100, 100, 0.5));
+	margin-top: -2px;
+	border: none;
+}
+
+#groupsBox > .group.add {
+	/*margin-left: 20px;*/
+	background: -webkit-linear-gradient(top, rgba(110, 110, 110, 0.5), rgba(100, 100, 100, 0.5));
+}
+
+#speedDialContent .newtabCell[type='mostvisited'] .menuOverlay {
+	background: none; /*-webkit-linear-gradient(90deg, rgba( 0,0,0,0.3 ), rgba( 255,255,255,0.7 )) ;*/
+
+	border: 0px solid #000;
+	border-radius: 2px;
+
+	padding-bottom: 2px;
+}
+
+.newtabCell .mostVisitedMenu > .ingroup {
+	text-decoration: none;
+	color: #ccc;
+}
+
+.newtabCell .mostVisitedMenu > .ingroup:hover {
+	text-decoration: underline;
+	color: #fff;
+}
+
+/* misc */
+
+#searchBar {
+	background-color: rgba(110, 110, 110, 0.7);
+	border-top: 1px solid rgba(110, 110, 110, 0.7);
+	border-bottom: 1px solid rgba(110, 110, 110, 0.9);
+	text-align: left;
+	padding-left: 35px;
+	overflow: hidden;
+}
+
+#searchBar .activeContent .active-content-background {
+	stroke: #6e6e6e;
+}
+
+#searchBar .activeContent .menuBottom > .button {
+	/*background: url( /images/newtab/menu_bottom_fancy.png );*/
+}
+
+.newtabListElem .bottomData {
+	color: #ddd;
+}
+
+.newtabListElem:hover .bottomData {
+	color: #333;
+}
+
+.newtabListElem:hover .text {
+	color: #000;
+}
+
+.newtabListElem[dragon='1'] .text {
+	color: #000;
+}
+
+.collapsedMessageContainer {
+	background: -webkit-linear-gradient(30deg, rgba(0, 0, 0, 0.8), rgba(120, 120, 120, 0.8)) repeat
+		scroll 0 0 transparent;
+	border: 1px solid #555555;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 0 0 1px #ffffff inset;
+}
+
+.collapsedMessageContainer {
+	opacity: 0.5;
+}
+
+#speedDialCollapsedContent {
+	color: #fff;
+}
+
+#cellsContainer > .newtabCell[type='mostvisited']:hover .body {
+	padding-bottom: 0px;
+}
+
+.newtabCell .on-dial-search-form {
+	top: 1px;
+}
+
+.newtabCell .on-dial-search-form .on-dial-search-input {
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+}

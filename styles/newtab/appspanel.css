@@ -1,0 +1,128 @@
+#appsPanel {
+	border-right: 0px solid rgba(0, 0, 0, 0.6);
+	width: 220px;
+	position: fixed;
+	height: 100%;
+	max-height: 100%;
+	left: -201px;
+	top: 0px;
+
+	-webkit-transition-duration: 300ms;
+
+	z-index: 6;
+}
+
+#appsPanel[active='1'] {
+	left: -10px;
+}
+
+#appsPanel .preAppsContainer {
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	width: 201px;
+	background-color: rgba(0, 0, 0, 0.9);
+}
+
+#appsPanel .appsContainer {
+	margin-left: auto;
+	margin-right: auto;
+	width: 150px;
+
+	-webkit-transition: margin-top 200ms;
+	position: relative;
+}
+
+#appsPanel .appsContainer > .app {
+	width: 150px;
+	height: 100px;
+	margin-bottom: 10px;
+
+	padding: 3px;
+
+	border: 3px solid rgba(0, 0, 0, 0);
+	border-radius: 6px;
+
+	-webkit-transition-duration: 200ms;
+	cursor: pointer;
+
+	position: absolute;
+}
+
+#appsPanel .appsContainer > .app[dragging='1'] {
+	z-index: 3;
+}
+
+#appsPanel .appsContainer > .app:hover {
+	border-color: rgba(255, 255, 255, 0.9);
+	/*background-color: rgba( 255, 255, 255, 0.3 );*/
+	background: -webkit-linear-gradient(45deg, rgba(255, 0, 0, 0.5), rgba(0, 255, 0, 0.5));
+	background-clip: padding-box;
+	box-shadow: inset 0px 0px 10px -2px #fff;
+}
+
+#appsPanel .appsContainer > .app > .imgContainer {
+	text-align: center;
+	height: 80px;
+}
+
+#appsPanel .appsContainer > .app > .imgContainer > img {
+	max-width: 150px;
+	max-height: 80px;
+}
+
+#appsPanel .appsContainer > .app > .titleContainer {
+	color: #fff;
+	text-align: center;
+	font-size: 12px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#appsPanel > .scrollButton {
+	position: absolute;
+	background-color: rgb(0, 0, 0);
+	border: 1px solid #ccc;
+	font-size: 40px;
+	color: #eee;
+	height: 160px;
+	padding: 10px;
+	opacity: 0.5;
+	cursor: pointer;
+	vertical-align: middle;
+
+	-webkit-transform: rotate(-90deg);
+
+	z-index: 10;
+
+	left: 89px;
+}
+
+#appsPanel[state='scrolling'] .scrollButton {
+	display: none;
+}
+
+#appsPanel > .scrollButton:hover {
+	opacity: 1;
+}
+
+#appsPanel > .scrollButton.bottom {
+	bottom: -40px;
+}
+
+#appsPanel > .scrollButton.top {
+}
+
+#appsPanel .openButton {
+	top: 0px;
+	right: 0px;
+	height: 100%;
+	border: none;
+
+	position: absolute;
+
+	padding-left: 4px;
+	padding-right: 3px;
+	font-family: Arial, sans-serif;
+}

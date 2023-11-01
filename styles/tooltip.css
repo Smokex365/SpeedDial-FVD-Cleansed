@@ -1,0 +1,100 @@
+/* Based on Jquery TipTip */
+
+#tiptip_holder {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+	opacity: 0;
+	-webkit-transition-duration: 200ms;
+}
+
+#tiptip_holder[active='1'] {
+	opacity: 1;
+}
+
+#tiptip_holder.tip_bottom {
+	padding-top: 5px;
+}
+
+#tiptip_content {
+	width: auto !important;
+	font-size: 11px;
+	color: #fff;
+	text-shadow: 0 0 2px #000;
+	padding: 4px 8px !important;
+	border: 3px solid #aaa;
+	background-color: #eee;
+	border-radius: 3px;
+	box-shadow: 0px 0px 3px #555;
+}
+
+#tiptip_content.textTip {
+	color: #000;
+	text-shadow: none;
+	max-width: 300px;
+}
+
+/*
+#tiptip_arrow, #tiptip_arrow_inner {
+	position: absolute;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 6px;
+	height: 0px !important;
+	width: 0px !important;
+	
+	padding: 0px !important;	
+}
+
+
+#tiptip_holder.tip_bottom #tiptip_arrow {
+	border-bottom-color: #fff;
+	border-bottom-color: rgba(255,255,255,0.35);
+}
+
+#tiptip_holder.tip_bottom #tiptip_arrow_inner {
+	margin-top: -5px;
+	margin-left: -6px;
+	border-bottom-color: rgb(25,25,25);
+	border-bottom-color: rgba(25,25,25,0.92);
+}
+*/
+
+/* Webkit Hacks  */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {	
+	#tiptip_content {
+		padding: 4px 8px 5px 8px;
+		background-color: rgba(45,45,45,0.88);
+	}
+	#tiptip_holder.tip_bottom #tiptip_arrow_inner { 
+		border-bottom-color: rgba(45,45,45,0.88);
+	}
+	#tiptip_holder.tip_top #tiptip_arrow_inner { 
+		border-top-color: rgba(20,20,20,0.92);
+	}
+}
+*/
+
+#tiptip_holder:after,
+#tiptip_holder:before {
+	content: ' ';
+	position: absolute;
+	top: -20px;
+	border-style: solid;
+	width: 0;
+	height: 0;
+}
+
+#tiptip_holder:before {
+	border-color: transparent transparent #aaa transparent;
+	border-width: 0 17px 16px 7px;
+	left: 10px;
+}
+
+#tiptip_holder:after {
+	border-color: transparent transparent #eee transparent;
+	border-width: 4px 11px 12px 4px;
+	left: 14px;
+}

@@ -1,0 +1,60 @@
+#bottomTextContainer {
+	right: 0px;
+	bottom: 15px;
+	z-index: 5;
+	text-align: right;
+	position: absolute;
+}
+
+#bottomTextContainer.force-bottom {
+	position: absolute;
+}
+
+#bottomTextContainer.static-position {
+	position: relative;
+	margin-bottom: 50px;
+	margin-top: 50px;
+}
+
+#bottomTextContainer > div {
+	/*background: rgba(0,0,0,0.3);*/
+	padding: 5px;
+	padding-right: 25px;
+	display: inline-block;
+	opacity: 0;
+	-webkit-transition-duration: 200ms;
+}
+
+#bottomTextContainer[visible='1'] > div {
+	opacity: 0.9; /* 1 */
+}
+
+#bottomTextContainer[muted='1'] > div {
+	opacity: 0.9; /* 0.4 */
+}
+
+#bottomTextContainer[hide='1'] > div {
+	opacity: 0.9; /* 0 */
+}
+
+#bottomTextContainer > div:hover {
+	opacity: 1;
+}
+
+#bottomTextContainer a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#bottomTextContainer a:hover {
+	text-decoration: underline;
+	color: white;
+}
+
+body[scrollingtype='horizontal'] #bottomTextContainer {
+	display: none;
+}
+
+body[viewexpanded='0'] #bottomTextContainer {
+	display: none;
+}

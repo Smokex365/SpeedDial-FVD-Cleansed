@@ -1,0 +1,44 @@
+.collapsedMessageContainer {
+	background: rgba(255, 255, 255, 0.9);
+	border: 1px solid #d8d8d8;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 0 0 1px #ffffff inset;
+}
+
+#speedDialContent .newtabCell[indrag='1'] .menuOverlay {
+	display: none;
+}
+
+#speedDialGroupsWrapper .additionalGroupsButton {
+	margin-top: -3px;
+	border: none;
+	background: -webkit-linear-gradient(top, rgba(230, 230, 230, 0.7), rgba(248, 248, 248, 0.6));
+	background-clip: padding-box;
+}
+
+.newtabCell .ebay-magnifier {
+	top: 29px;
+}
+
+#speedDialGroupsWrapper .additionalGroupsButton .img {
+	background-position: -25px -12px;
+}
+
+.newtabCell .dial-search-magnifier {
+	top: 25px;
+}
+
+.newtabCell .on-dial-search-form {
+	-webkit-transition: none;
+}
+
+.newtabCell .on-dial-search-form .on-dial-search-input {
+	background-color: rgba(62, 125, 179, 1);
+	color: #fff;
+	border-bottom: none;
+	padding-left: 4px;
+}
+
+.newtabCell .on-dial-search-form .on-dial-search-input::-webkit-input-placeholder {
+	color: #fff;
+}

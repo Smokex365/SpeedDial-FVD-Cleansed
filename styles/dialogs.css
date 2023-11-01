@@ -1,0 +1,673 @@
+.dialog .greenText {
+	color: green;
+}
+
+/* View Group */
+
+#dialogViewGroup_urlContainer {
+	max-height: 500px;
+	overflow: auto;
+}
+
+#dialogViewGroup_urlContainer > .url:first-child {
+	border-top: 1px solid #e5e5e5;
+}
+
+#dialogViewGroup_urlContainer > .url {
+	display: block;
+	text-decoration: none;
+
+	font-size: 12px;
+
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid #e5e5e5;
+	border-left: 2px solid transparent;
+	background-color: #fff;
+
+	color: #7b7b7b;
+
+	padding: 8px;
+
+	position: relative;
+	height: 20px;
+
+	cursor: pointer;
+}
+
+#dialogViewGroup_urlContainer > .url:hover {
+	border-left-color: #4e90f0;
+	color: #000;
+}
+
+#dialogViewGroup_urlContainer > .url > img {
+	margin-top: 1px;
+	float: left;
+}
+
+#dialogViewGroup_urlContainer > .url > .text {
+	margin-top: 1px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	margin-left: 3px;
+	float: left;
+	width: 280px;
+}
+
+#dialogViewGroup_urlContainer > .url > .hits {
+	float: right;
+}
+
+/* Manage groups */
+
+#dialogManageGroups_groupsListContainer {
+	max-height: 500px;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+#dialogManageGroups_groupsList {
+	position: relative;
+}
+
+#dialogManageGroups_groupsList > .group:first-child {
+	border-top: 1px solid #e5e5e5;
+}
+
+#dialogManageGroups_groupsList > .group {
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid #e5e5e5;
+	border-left: 2px solid transparent;
+	background-color: #fff;
+
+	color: #7b7b7b;
+
+	padding: 8px;
+
+	position: relative;
+
+	width: 330px;
+	height: 20px;
+
+	cursor: pointer;
+}
+
+#dialogManageGroups_groupsList > .group:hover {
+	color: #000;
+	border-left-color: #4e90f0;
+}
+
+#dialogManageGroups_groupsList > .group .text {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	float: left;
+	width: 264px;
+	padding-left: 3px;
+}
+
+#dialogManageGroups_groupsList > .group[sync='1'] .text {
+	/*background: url( /images/sync_small.png ) no-repeat;*/
+}
+
+#dialogManageGroups_groupsList > .group[sync='0'] .text {
+	/*background: url( /images/nosync_small.png ) no-repeat;*/
+}
+
+#dialogManageGroups_groupsList > .group .icons {
+	visibility: hidden;
+}
+
+#dialogManageGroups_groupsList > .group:hover .icons {
+	visibility: visible;
+}
+
+#dialogManageGroups_groupsList > .group .icons div {
+	background: url(/images/newtab/sd_16x16.png);
+	width: 16px;
+	height: 16px;
+	float: right;
+	display: inline-block;
+}
+
+#dialogManageGroups_groupsList > .group .icons .iconRemove {
+	margin: 3px 0px 0px 5px;
+
+	background-position: -48px 0px;
+}
+
+#dialogManageGroups_groupsList > .group .icons .iconEdit {
+	margin: 3px 0px 0px 5px;
+
+	background-position: -32px 0px;
+}
+
+#dialogManageGroups_groupsList > .group[drag='1'] {
+	border-top: 1px solid #e5e5e5;
+	z-index: 100;
+	position: absolute;
+	opacity: 1;
+}
+
+#dialogManageGroups_groupsList > .placeHolder:first-child {
+	border-top: 1px solid #e5e5e5;
+}
+
+#dialogManageGroups_groupsList > .placeHolder {
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid #e5e5e5;
+	border-left: 2px solid transparent;
+	background: -webkit-linear-gradient(top, #eee, #fff);
+
+	color: #7b7b7b;
+
+	padding: 8px;
+
+	position: relative;
+
+	width: 330px;
+	height: 20px;
+}
+
+/* Add Dial */
+
+.toolTipUrlsList {
+	width: 300px;
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.toolTipUrlsList .elem {
+	color: #000;
+	text-shadow: none;
+	margin-top: 5px;
+	cursor: pointer;
+
+	opacity: 0.7;
+
+	transition-duration: 100ms;
+}
+
+.toolTipUrlsList .elem:hover .title {
+	color: #4183c4;
+}
+
+.toolTipUrlsList .elem:hover {
+	opacity: 0.99;
+}
+
+.toolTipUrlsList .elem > div {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.toolTipUrlsList .elem:first-child {
+	margin-top: 0px;
+}
+
+.toolTipUrlsList .elem .title {
+	font-size: 15px;
+	transition-duration: 100ms;
+}
+
+.toolTipUrlsList .elem .url {
+	color: #555;
+}
+
+#addDialog_previewCell {
+	margin-bottom: 30px;
+}
+
+#addDialog_refreshPreviewContainer {
+	margin-bottom: 20px;
+}
+
+#addDialog_getTitle {
+	float: right;
+}
+
+#addDialog_getTitle > div {
+	cursor: pointer;
+	font-size: 11px;
+	color: #666;
+	height: 18px;
+}
+
+#addDialog_getTitle > div:hover {
+	text-decoration: underline;
+}
+
+#addDialog_getTitle[loading] > div {
+	background: url(/images/loading.gif);
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+#addDialog_helpToImprovePredefined {
+	font-style: italic;
+}
+
+.addDialog_selectPreviewTypeBlock input {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#addDialog_default_image_extContainer {
+	text-align: right;
+}
+
+#addDialog_default_image_ext {
+	width: auto !important;
+}
+
+#addDialog_image_url {
+	/*width: 90%;*/
+}
+
+#addDialog_uploadFileContainer input {
+	display: none;
+}
+
+#addDialog_uploadFileContainer {
+	margin-right: 3px;
+}
+
+.uploadButton {
+	width: 32px;
+	height: 32px;
+	display: inline-block;
+	background: url(/images/newtab/upload.png) no-repeat;
+	background-position: center center;
+	vertical-align: middle;
+
+	-webkit-filter: grayscale(1);
+	opacity: 0.5;
+
+	-webkit-transition-duration: 200ms;
+
+	position: relative;
+}
+
+.uploadButton:hover {
+	-webkit-filter: grayscale(0);
+	opacity: 1;
+}
+
+.uploadButton input {
+	position: absolute;
+	top: 0px;
+	left: -10000px;
+	opacity: 0;
+	height: 0px;
+	width: 0px;
+}
+
+/* Import/Export */
+
+#importExportTextArea {
+	-webkit-transition-duration: 200ms;
+	-webkit-transition-property: opacity;
+}
+
+#exportDialogEverSyncMessage {
+	display: none;
+}
+
+#dialogImportExportContainer[type='export'] #exportDialogEverSyncMessage {
+	display: block;
+}
+
+#dialogImportExportContainer[type='import'] #importExportTextAreaContainer {
+	display: block;
+}
+
+#dialogImportExportContainer[type='importing'] #importExportTextAreaContainer {
+	display: none;
+}
+
+#dialogImportExportContainer[type='success'] #importingWaitIcon {
+	display: none;
+}
+
+#dialogImportExportContainer[type='importing'] #importingWaitIcon {
+	width: 18px;
+	height: 18px;
+	margin-left: auto;
+	margin-right: auto;
+	background: url(/images/loading.gif);
+	background-size: 16px 16px;
+	background-repeat: no-repeat;
+}
+
+#importingProcessState {
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+/* install fvd sync */
+
+.dialogInstallFVDSync .desc {
+	text-align: center;
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+.dialogInstallFVDSync .syncButtonContainer {
+	margin-top: 25px;
+	text-align: center;
+}
+
+.dialogInstallFVDSync ul {
+	margin-left: 10px;
+}
+
+.dialogInstallFVDSync ul li {
+	list-style-image: url(/images/newtab/green_bird.png);
+	margin: 7px;
+}
+
+/* alert dialog */
+
+.alertDialog b {
+	font-size: 11px;
+}
+
+.dialogAlertCheck_checkboxParent {
+	margin-top: 10px;
+}
+
+#dialogAlertCheckTextContainer {
+	padding-left: 55px;
+	min-height: 50px;
+	height: 50px;
+	background: url(/images/alert.png) no-repeat;
+	display: table;
+}
+
+#dialogAlertCheckTextContainer span {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.dialogAlertCheck_checkboxParent {
+	display: table;
+	font-size: 11px;
+	margin-top: 15px;
+}
+
+.dialogAlertCheck_checkboxParent span {
+	vertical-align: top;
+}
+
+.dialogAlertCheck_checkboxParent input {
+	margin-right: 3px;
+}
+
+#dialogPicUserPics .head {
+	text-align: right;
+	font-size: 12px;
+}
+
+#dialogPicUserPics .head a {
+	margin-left: 5px;
+	cursor: pointer;
+	color: #4183c4;
+}
+
+#dialogPicUserPics .head a:hover {
+	text-decoration: underline;
+}
+
+#dialogPicUserPics .head a[active='1'] {
+	text-decoration: underline;
+}
+
+#dialogPicUserPics .picsContainer {
+	text-align: left;
+	height: 400px;
+
+	overflow-y: scroll;
+
+	border: 1px solid #eee;
+	margin-top: 5px;
+
+	box-shadow: inset 0px 0px 1px 0px #777;
+}
+
+.dialogPicUserPics .picsContainer .item {
+	display: inline-block;
+	width: 150px;
+	height: 150px;
+	margin: 10px;
+
+	border: 1px solid #eee;
+
+	-webkit-transition: 200ms ease border, 200ms ease opacity;
+
+	cursor: pointer;
+
+	position: relative;
+
+	overflow: hidden;
+
+	opacity: 0;
+
+	background: url(/images/bg_squares.png);
+}
+
+.dialogPicUserPics .picsContainer .item[appear='1'] {
+	opacity: 1;
+}
+
+.dialogPicUserPics .picsContainer .item:hover {
+	border-color: #4183c4;
+}
+
+.dialogPicUserPics .picsContainer .item .preview {
+	width: 150px;
+	height: 150px;
+}
+
+.dialogPicUserPics .picsContainer .item .report {
+	width: 26px;
+	height: 25px;
+	background: url(/images/screamer.png);
+
+	position: absolute;
+	right: 5px;
+	top: 5px;
+
+	opacity: 0;
+
+	-webkit-transition-duration: 200ms;
+}
+
+.dialogPicUserPics .picsContainer .item:hover .report {
+	opacity: 0.7;
+}
+
+.dialogPicUserPics .picsContainer .item .report:hover {
+	opacity: 1;
+}
+
+.dialogPicUserPics .reportContainer {
+	position: absolute;
+	left: 0px;
+	top: -170px;
+	right: 0px;
+	bottom: 0px;
+	height: 110px;
+
+	background: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0%, rgba(239, 239, 239, 1)),
+		color-stop(100%, rgba(238, 238, 238, 1))
+	);
+
+	padding-top: 60px;
+
+	-webkit-transition: 200ms ease top;
+
+	text-align: center;
+}
+
+.dialogPicUserPics .reportContainer .thanks {
+	font-size: 16px;
+	opacity: 0;
+	-webkit-transition-duration: 200ms;
+}
+
+.dialogPicUserPics .reportContainer[thanks='1'] .thanks {
+	opacity: 1;
+}
+
+.dialogPicUserPics .reportContainer[thanks='1'] button {
+	display: none;
+}
+
+.dialogPicUserPics .picsContainer .item[report='1'] .reportContainer {
+	top: 0px;
+}
+
+.dialogPicUserPics .reportContainer button {
+	margin-bottom: 3px;
+	width: 120px;
+}
+
+.dialogPicUserPics .reportContainer .close {
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+
+	background: url(/images/close.png);
+}
+
+.dialogPicUserPics .picsContainer .loading {
+	width: 43px;
+	height: 11px;
+
+	margin: auto;
+
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	background: url(/images/squares-loader.gif);
+}
+
+.dialogPicUserPics .picsContainer .notFound {
+	text-align: center;
+	font-size: 14px;
+	margin-top: 10px;
+}
+
+#dialogPicUserPics_reportBottomDesc {
+	float: left;
+	font-size: 15px;
+	margin-top: 5px;
+}
+
+#dialogPicUserPics_reportBottomDesc img {
+	height: 15px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.dialogPicUserPics .additionalSearch {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 12px;
+}
+
+#dialogAddDial {
+	display: inline-block;
+	width: 380px;
+}
+
+#dialogPickUserPicsAuto {
+	display: inline-block;
+}
+
+#addDialogPickImages {
+	margin-left: 15px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	overflow: auto;
+
+	width: 200px;
+}
+
+#dialogAddDialTableContainer {
+}
+
+#dialogAddDialTableContainer > tbody > tr > td {
+	position: relative;
+	vertical-align: top;
+}
+
+#addDialogPickImages .showMoreContainer {
+}
+
+#addDialogPickImages .head {
+	text-align: center;
+	font-size: 11px;
+	margin-right: 10px;
+	margin-left: 10px;
+	width: 150px;
+}
+
+#addDialogPickImages .showMoreContainer button {
+	margin: 10px;
+	width: 151px;
+}
+
+.sdAdPopup .bold {
+	font-size: 15px;
+}
+
+.sdAdPopup div.desc {
+	font-size: 15px;
+}
+
+.sdAdPopup .migrateDontShowMessage {
+	color: #111;
+}
+
+#dialogPicUserPics .additionalHelpMessage {
+	text-align: center;
+	margin-top: 10px;
+}
+
+#dialogPicUserPics .additionalHelpMessage .img {
+	width: 396px;
+	height: 140px;
+	background: url(/images/set_preview_url.png);
+	margin: auto;
+	margin-bottom: 5px;
+}
+
+#addDialog_autoPreviewBlock input[type='checkbox'] {
+	margin-right: 2px;
+}
+
+#addDialog_autoPreviewBlock input[type='number'] {
+	width: 125px;
+	height: 24px;
+	margin-left: 2px;
+}
+
+#addDialog_autoPreviewBlock [disabled] {
+	opacity: 0.5;
+}
+
+#addDialog_autoPreviewBlock select {
+	width: 190px;
+	float: right;
+}

@@ -1,0 +1,290 @@
+#widgetsPanel {
+	/*height: 280px;*/
+
+	width: 100%;
+	position: fixed;
+
+	left: 0px;
+	right: 0px;
+
+	-webkit-transition-duration: 300ms;
+
+	z-index: 6;
+
+	overflow: visible;
+}
+
+#widgetsPanel[disabled='1'] {
+	display: none;
+}
+
+#widgetsPanel:hover {
+	opacity: 1 !important;
+}
+
+#widgetsPanel[active='1'] {
+	bottom: 20px !important;
+	z-index: 5;
+}
+
+#widgetsPanel .widgetsContainer {
+	/*height: 280px;*/
+	/*line-height: 280px;*/
+
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 15px;
+
+	white-space: nowrap;
+
+	/*-webkit-transition: width ease 200ms;*/
+}
+
+#widgetsPanel .openButton {
+	top: 0px;
+	right: 0px;
+	left: 0px;
+	width: 100%;
+	border: none;
+
+	position: absolute;
+	height: 20px;
+}
+
+#widgetsPanel .openButton span {
+	display: inline-block;
+	width: 20px;
+	height: 12px;
+
+	background: url(/images/newtab/vertical_openers.png);
+
+	position: absolute;
+	right: 81px;
+	top: 5px;
+}
+
+#widgetsPanel[active='1'] .openButton span {
+	background-position: 0px -12px;
+}
+
+#widgetsPanel .preWidgetsContainer {
+	position: absolute;
+	top: 20px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+
+	/*background: rgba(0,0,0,0.9);*/
+
+	border-top: 1px solid #b4b4b4;
+	border-bottom: 1px solid #b4b4b4;
+}
+
+#widgetPanelBgOverlay {
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+
+	display: none;
+
+	z-index: 7;
+}
+
+#widgetPanelBgOverlay[active='1'] {
+	display: block;
+}
+
+#widgetPanelBgOverlay .bg {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+
+	background-image: url(/images/newtab/bgwidgetsactive.jpg);
+
+	opacity: 0.9;
+}
+
+#widgetPanelBgOverlay .bg2 {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+
+	background-image: -webkit-linear-gradient(top left, red, yellow, green 60%, blue);
+
+	opacity: 0.15;
+}
+
+#widgetPanelBgOverlay .content {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+}
+
+#widgetsPanel .emboss {
+	background: rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+	-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+#widgetPanelBgOverlay .getMoreWidgets {
+	position: absolute;
+	top: 100px;
+	left: 100px;
+
+	padding: 20px;
+
+	border-radius: 10px;
+
+	color: #fff;
+	text-shadow: 1px 1px 0px #000;
+	font-size: 20px;
+}
+
+#widgetPanelBgOverlay .getMoreWidgets a {
+	color: #fff;
+	text-decoration: none;
+}
+
+#widgetsPanel .actionButtons {
+	position: absolute;
+	top: -56px;
+	border-top-left-radius: 10px;
+	background: rgba(255, 255, 255, 0.8);
+
+	right: -200px;
+	-webkit-transition: 200ms ease right;
+}
+
+#widgetsPanel[active='1']:hover .actionButtons {
+	right: 0px;
+}
+
+#widgetsPanel .actionButtons > div {
+	padding: 10px;
+	border-radius: 10px;
+	display: inline-block;
+
+	width: 32px;
+	height: 32px;
+
+	cursor: pointer;
+
+	opacity: 0.8;
+}
+
+#widgetsPanel .actionButtons > div:hover {
+	opacity: 1;
+}
+
+#widgetsPanel .actionButtons > div.add {
+	background: url(/images/newtab/widgets/add.png) no-repeat center center;
+}
+
+#widgetsPanel .actionButtons > div.lock {
+	background: url(/images/newtab/widgets/lock.png) no-repeat center center;
+}
+#widgetsPanel .actionButtons > div.lock[locked='0'] {
+	background: url(/images/newtab/widgets/unlocked.png) no-repeat center center;
+}
+
+#widgetsPanel .actionButtons > div.settings {
+	background: url(/images/newtab/widgets/settings.png) no-repeat center center;
+}
+
+/* widget styling */
+#widgetsPanel .widget {
+	/*position: absolute;*/
+	display: inline-block;
+	/*-webkit-transition-duration: 200ms;*/
+	/*border: 1px solid red;*/
+}
+
+#widgetsPanel .widget[dragging='1'] {
+	z-index: 3;
+}
+
+#widgetsPanel .widget:first-child {
+	margin-left: 0px;
+}
+
+#widgetsPanel .widget iframe {
+	width: 100%;
+	height: 100%;
+	border: none;
+}
+
+#widgetsPanel .widget .widgetSetupOverlay {
+	opacity: 0.8;
+	-webkit-transition: 200ms ease background;
+	background: rgba(0, 0, 0, 0.3);
+	background-image: url(/images/move.png);
+	background-size: 64px 64px;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+#widgetsPanel[locked='0'] .widget .widgetSetupOverlay {
+	position: absolute;
+	z-index: 2;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+}
+
+#widgetsPanel[locked='0'] .widget .widgetSetupOverlay .buttons {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+
+#widgetsPanel[locked='0'] .widget .widgetSetupOverlay .buttons > div {
+	width: 16px;
+	height: 16px;
+	background: url(/images/newtab/sd_16x16.png) no-repeat;
+	cursor: pointer;
+}
+
+#widgetsPanel[locked='0'] .widget .widgetSetupOverlay .buttons .close {
+	background-position: -48px 0px;
+}
+
+#widgetsPanel .widget[dragging='1'] .widgetSetupOverlay,
+#widgetsPanel[locked='0'] .widget .widgetSetupOverlay:hover {
+	background-color: rgba(0, 0, 0, 0.9);
+}
+
+#widgetsPanel .widgetsNotFoundMessage {
+	position: absolute;
+	right: 280px;
+	top: 120px;
+
+	color: #fff;
+	font-size: 30px;
+	font-family: pacifico;
+
+	display: none;
+}
+
+#widgetsPanel[nowidgets='1'] .widgetsNotFoundMessage {
+	display: block;
+}
+
+#widgetsPanel .widgetsNotFoundMessage img {
+	position: absolute;
+	right: -150px;
+	top: -120px;
+}
+
+#widgetsPanel .controlScroll {
+	top: 25px;
+	left: 5px;
+}

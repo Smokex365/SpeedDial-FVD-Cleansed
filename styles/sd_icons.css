@@ -1,0 +1,44 @@
+/* SpeedDial icons */
+
+.speedDialIcons > .icon {
+	background: url(/images/newtab/sd_16x16.png);
+	background-repeat: no-repeat;
+
+	width: 16px;
+	height: 16px;
+	float: right;
+
+	margin: 3px 0px 0px 5px;
+}
+
+.speedDialIcons > .icon.edit {
+	background-position: -32px -16px;
+}
+
+.speedDialIcons > .icon.edit:hover {
+	background-position: -32px 0px;
+}
+
+.speedDialIcons > .icon.remove {
+	background-position: -48px -16px;
+}
+
+.speedDialIcons > .icon.remove:hover {
+	background-position: -48px 0px;
+}
+
+.speedDialIcons > .icon.deny {
+	background-position: -16px -16px;
+}
+
+.speedDialIcons > .icon.deny:hover {
+	background-position: -16px 0px;
+}
+
+.speedDialIcons > .icon.add {
+	background-position: 0px -16px;
+}
+
+.speedDialIcons > .icon.add:hover {
+	background-position: 0px 0px;
+}

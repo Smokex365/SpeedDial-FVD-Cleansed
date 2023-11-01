@@ -1,0 +1,30 @@
+#fvdsd-overlay {
+	position: fixed !important;
+	left: 0px !important;
+	top: 0px !important;
+	right: 0px !important;
+	bottom: 0px !important;
+
+	z-index: 999999999 !important;
+}
+
+#fvdsd-dial-added {
+	-webkit-transition: 600ms ease opacity;
+
+	margin: auto !important;
+	margin-top: 400px !important;
+	border: 3px solid #ccc !important;
+	box-shadow: 0px 0px 10px -3px #000 !important;
+
+	background-color: rgba(0, 0, 0, 0.4) !important;
+
+	padding: 10px !important;
+
+	width: 200px !important;
+
+	color: #fff !important;
+	font-family: Arial !important;
+	font-size: 20px !important;
+
+	text-align: center !important;
+}

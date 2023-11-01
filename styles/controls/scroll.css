@@ -1,0 +1,36 @@
+.controlScroll {
+	position: absolute;
+}
+
+.controlScroll.scrollType_horizontal.scrollPosition_top {
+	top: 5px;
+}
+
+.controlScroll .scrollZone {
+	border-radius: 5px;
+	height: 7px;
+	padding-top: 1px;
+	background: rgba(255, 255, 255, 0.3);
+	position: relative;
+}
+
+.controlScroll .scrollThumb {
+	border-radius: 5px;
+	height: 6px;
+	background: rgba(255, 255, 255, 0.6);
+	cursor: pointer;
+	/*border: 1px solid #777;*/
+	-webkit-transition: 200ms ease width;
+}
+
+.controlScrollHelperOverlay {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+
+	z-index: 999999999999999;
+
+	cursor: pointer;
+}

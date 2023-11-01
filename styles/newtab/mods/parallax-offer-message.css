@@ -1,0 +1,18 @@
+#parallaxOfferOverlay .imgContainer img {
+	width: 350px;
+}
+
+#parallaxOfferOverlay {
+	text-align: center;
+}
+
+#parallaxOfferOverlay .description {
+	font-size: 15px;
+	margin-top: 3px;
+}
+
+#parallaxOfferOverlay .buttons {
+	left: 0px;
+	right: 0px;
+	text-align: center;
+}

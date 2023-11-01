@@ -1,0 +1,98 @@
+#searchOverlay[data-type='aliexpress'] .logo-container .searchOverlay-logo {
+	background: url(/images/aliexpress.png) no-repeat;
+	background-size: 360px 78px;
+	width: 360px;
+	height: 78px;
+}
+
+#searchOverlay[data-type='amazon'] .logo-container .searchOverlay-logo {
+	background: url(/images/amazon.png) no-repeat;
+	background-size: 226px 78px;
+	width: 226px;
+	height: 78px;
+}
+
+#searchOverlay[data-type='billiger'] .logo-container .searchOverlay-logo {
+	background: url(/images/billiger.png) no-repeat;
+	width: 400px;
+	height: 161px;
+	background-size: 400px 161px;
+}
+
+#searchOverlay[data-type='booking'] .logo-container .searchOverlay-logo {
+	background: url(/images/booking.png) no-repeat;
+	width: 400px;
+	height: 152px;
+	background-size: 400px 152px;
+}
+
+#searchOverlay[data-type='ebay'] .logo-container .searchOverlay-logo {
+	background: url(/images/ebay.png) no-repeat;
+	width: 200px;
+	height: 87px;
+}
+
+#searchOverlay[data-type='lamoda'] .logo-container .searchOverlay-logo {
+	background: url(/images/lamoda-logo.png) no-repeat;
+	width: 300px;
+	height: 160px;
+	background-size: 300px 160px;
+}
+
+#searchOverlay[data-type='mvideo'] .logo-container .searchOverlay-logo {
+	background: url(/images/mvideo-logo.png) no-repeat;
+	width: 300px;
+	height: 171px;
+	background-size: 300px 171px;
+}
+
+#searchOverlay[data-type='mediamarkt'] .logo-container .searchOverlay-logo {
+	background: url(/images/mediamarkt-logo.png) no-repeat;
+	width: 300px;
+	height: 65px;
+	background-size: 300px 65px;
+}
+#searchOverlay[data-type='ulmart'] .logo-container .searchOverlay-logo {
+	background: url(/images/ulmart-logo.png) no-repeat;
+	width: 300px;
+	height: 66px;
+	background-size: 300px 66px;
+}
+
+.newtabCell .on-dial-search-form {
+	position: absolute;
+	left: 1px;
+	right: 1px;
+	top: 5px;
+	opacity: 0;
+
+	-webkit-transition: 100ms ease opacity;
+}
+
+.newtabCell .on-dial-search-form .on-dial-search-input {
+	box-sizing: border-box;
+	width: 100%;
+	/*background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.9) 100%);*/
+	background: rgba(0, 0, 0, 0.9);
+	border: none;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+	color: rgba(255, 255, 255, 0.7);
+	padding: 2px 2px 2px 5px;
+	border-top-right-radius: 2px;
+	border-top-left-radius: 2px;
+	position: absolute;
+}
+
+.newtabCell .on-dial-search-form .on-dial-search-input::-webkit-input-placeholder {
+	opacity: 0.9;
+	color: white;
+}
+.newtabCell .on-dial-search-form .on-dial-search-input::-moz-placeholder {
+	opacity: 0.9;
+	color: white;
+}
+
+.newtabCell:not([indrag='1']):hover .on-dial-search-form,
+.newtabCell:not([indrag='1']) .on-dial-search-form.has-input {
+	opacity: 1;
+}

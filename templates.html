@@ -1,0 +1,509 @@
+    <!--Prototypes-->
+
+    <!-- Speed Dial Cell -->
+
+    <div class="newtabCell" id="prototype_speeddialCell">
+
+      <div class="head">
+        <img/>
+        <span></span>
+      </div>
+      <div class="body">
+        <!-- cell preview image is here -->
+        <div class="preview-image">
+
+        </div>
+        <div class="screenParent">
+          <div class="screen">
+            <div class="menuOverlay">
+              <div class="text">
+
+              </div>
+
+              <div class="speedDialIcons">
+                    <div class="icon remove" msg_target="title" msg="remove"></div>
+                    <div class="icon edit" msg_target="title" msg="edit"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img src="/images/newtab/bottom_shadow.png" class="imgShadow"/>
+      <div class="footer">
+        <span></span>
+      </div>
+
+    </div>
+
+    <!-- END Speed Dial Cell -->
+
+    <!-- Most visited Cell -->
+
+    <div class="newtabCell" id="prototype_mostvisitedCell">
+      <div class="head">
+        <img/>
+        <span></span>
+      </div>
+      <div class="body">
+        <div class="preview-image">
+
+        </div>
+        <div class="screenParent">
+          <div class="screen">
+            <div class="menuOverlay">
+              <div class="speedDialIcons">
+
+                <div class="icon deny" msg_target="title" msg="deny"></div>
+                <div class="icon remove" msg_target="title" msg="remove"></div>
+                <div class="icon add" msg_target="title" msg="add"></div>
+                <div class="icon edit" msg_target="title" msg="edit"></div>
+
+              </div>
+
+              <div class="mostVisitedMenu">
+
+                <div class="views"></div>
+                <div class="ingroup"></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img src="/images/newtab/bottom_shadow.png" class="imgShadow"/>
+      <div class="footer">
+        <span></span>
+      </div>
+    </div>
+
+    <!-- End Most visited Cell -->
+
+    <!-- SpeedDial list elem -->
+
+    <div class="newtabListElem" id="prototype_speeddialListElem">
+      <div class="leftData"><img/><div class="text"></div></div>
+      <div class="speedDialIcons">          
+          <div class="icon remove" msg_target="title" msg="remove"></div>
+          <div class="icon edit" msg_target="title" msg="edit"></div>
+      </div>
+    </div>
+
+    <!-- END SpeedDial list elem -->
+
+    <!-- MostVisited list elem -->
+
+    <div class="newtabListElem" id="prototype_mostvisitedListElem">
+      <div class="leftData"><img/><div class="text"></div></div>
+      <div class="speedDialIcons">
+          <div class="icon deny" msg_target="title" msg="deny"></div>
+          <div class="icon remove" msg_target="title" msg="remove"></div>
+          <div class="icon add" msg_target="title" msg="add"></div>
+          <div class="icon edit" msg_target="title" msg="edit"></div>
+      </div>
+      <div class="bottomData">
+        <div class="views">Views</div>
+        <div class="ingroup">InGRoup</div>
+      </div>
+    </div>
+
+    <!-- END MostVisited list elem -->
+
+
+    <!-- RecentlyClosed list elem -->
+
+    <div class="newtabListElem" id="prototype_recentlyclosedListElem">
+      <div class="leftData"><img/><div class="text"></div></div>
+      <div class="speedDialIcons">
+          <div class="icon deny" msg_target="title" msg="deny"></div>
+          <div class="icon remove" msg_target="title" msg="remove"></div>
+          <div class="icon add" msg_target="title" msg="add"></div>
+      </div>
+    </div>
+
+    <!-- END RecentlyClosed list elem -->
+
+    <!-- Widget -->
+
+    <div class="widget" id="prototype_widget">
+
+      <div class="widgetSetupOverlay">
+        <div class="buttons">
+          <div class="close"></div>
+        </div>
+      </div>
+
+      <iframe></iframe>
+
+    </div>
+
+    <!-- END Widget -->
+
+    <!--END Prototypes-->
+
+
+    <!-- CONTROLS -->
+
+    <div id="prototype_controlScroll" class="controlScroll">
+
+      <div class="scrollZone">
+        <div class="scrollThumb"></div>
+      </div>
+
+    </div>
+
+    <!-- /CONTROLS -->
+
+
+    <!-- DIALOGS -->
+
+    <div id="prototype_dialogAlertCheck">
+
+      <div id="dialogAlertCheckTextContainer">
+        <span id="dialogAlertCheck_text">
+
+        </span>
+      </div>
+
+      <div class="dialogAlertCheck_checkboxParent">
+        <label><input type="checkbox" id="dialogAlertCheck_checkbox"/><span id="dialogAlertCheck_checkBoxLabel"></span></label>
+      </div>
+
+    </div>
+
+
+    <div id="prototype_dialogAddGroup">
+      <div class="field">
+        <label><span msg="bg_dialog_addgroup_name"></span><input type="text" id="addGroup_name"></label>
+      </div>
+      <div class="field" id="addGroup_addPositionContainer">
+        <span msg="bg_dialog_addgroup_position"></span>
+        <label class="left-margin-5"><input name="addGroup_addPosition" type="radio" id="addGroup_addToTop"> <span msg="bg_dialog_addgroup_position_top"></span></label>
+        &nbsp;
+        <label><input name="addGroup_addPosition" type="radio" id="addGroup_addToBottom"> <span msg="bg_dialog_addgroup_position_bottom"></span></label>
+      </div>
+
+      <div class="field" hidden="true">
+        <label>
+          <input type="checkbox" id="addGroup_sync" onclick="fvdSpeedDial.Dialogs.AddGroup.clickSync()" checked />
+          <span msg="bg_dialog_addgroup_sync"></span>
+        </label>
+      </div>
+    </div>
+
+    <div id="prototype_dialogInstallSync">
+
+      <div class="dialogInstallFVDSync">
+
+        <div class="desc" msg="options_sync_need_install_desc"></div>
+
+        <ul>
+          <li msg="options_sync_need_install_ability_1"></li>
+          <li msg="options_sync_need_install_ability_2"></li>
+          <li msg="options_sync_need_install_ability_3"></li>
+          <li msg="options_sync_need_install_ability_4"></li>
+          <li msg="options_sync_need_install_ability_5_1"></li>
+          <li msg="options_sync_need_install_ability_5"></li>
+        </ul>
+
+        <div class="syncButtonContainer">
+          <a target="_blank" href="https://chrome.google.com/webstore/detail/eversync-sync-bookmarks-b/iohcojnlgnfbmjfjfkbhahhmppcggdog" class="fvdButton main" msg="options_sync_link"></a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="prototype_dialogPickUserPics">
+
+      <div class="dialogPicUserPics" id="dialogPicUserPics">
+
+        <div class="head">
+          <span msg="dialog_pick_user_pics_order"></span>
+          <a class="order best" msg="dialog_pick_user_pics_order_best"></a>
+          <a class="order new" msg="dialog_pick_user_pics_order_new"></a>
+        </div>
+
+
+
+        <div class="picsContainer"></div>
+
+      </div>
+
+    </div>
+
+
+    <div id="prototype_dialogAddDial">
+
+      <table id="dialogAddDialTableContainer">
+
+        <tr>
+          <td>
+
+            <div id="dialogAddDial">
+
+              <div class="field">
+                <label><span msg="bg_dialog_adddial_url"></span><span class="requiredMark">*</span><input type="text" id="addDialog_url"></label>
+                <div class="additional additional-top" id="addDialog_PickLocalFileContainer">
+                  <a>
+                    <span msg="bg_dialog_adddial_pic_local_file"></span>
+                  </a>
+                </div>
+                <div class="additional" id="addDialog_PickFromContainer" hidden="true">
+                  <span msg="bg_dialog_adddial_pick_url_from"></span> <a id="addDialog_pickFromOpenedTabs" msg="bg_dialog_adddial_pick_url_from_opened_tabs"></a>
+                  /
+                  <a id="addDialog_pickFromMostVisited" msg="bg_dialog_adddial_pick_url_from_most_visited"></a>
+                  /
+                  <a id="addDialog_pickFromMostPopular" msg="bg_dialog_adddial_pick_url_from_most_popular"></a>
+                </div>
+              </div>
+
+              <!--
+              <div class="field inline">
+                <label for="addDialog_screenDelay"><span msg="bg_dialog_adddial_preview_creation_delay"></span></label> <input class="inline" type="number" min="0" id="addDialog_screenDelay">
+              </div>
+              -->
+              <div class="field">
+                <label><span msg="bg_dialog_adddial_title"></span><input type="text" id="addDialog_title"></label>
+                <!--<div id="addDialog_getTitle"><div onclick="fvdSpeedDial.Dialogs.AddDial.getTitle()" msg="bg_dialog_adddial_click_to_get_title"></div></div>-->
+              </div>
+
+              <div class="field">
+                <label><span msg="bg_dialog_adddial_group"></span><select id="addDialog_group"></select></label>
+              </div>
+
+              <div class="field" hidden="true">
+                <label><span msg="bg_dialog_adddial_group_name"></span><input type="text" id="addDialog_groupName"  /></label>
+              </div>
+
+              <div class="field addDialog_selectPreviewTypeBlock">
+
+                <label><input name="sdPreview type" type="radio" id="addDialog_useAutoPreview" /><span msg="bg_dialog_adddial_use_auto_preview"></span></label><br>
+                <label><input name="sdPreview type" type="radio" id="addDialog_useManualPreview" /><span msg="bg_dialog_adddial_use_manual_preview"></span></label><br>
+                <label>
+                  <input name="sdPreview type" type="radio" id="addDialog_useCustomPreview" checked /><span msg="bg_dialog_adddial_use_custom_preview"></span>
+                </label>
+
+              </div>
+
+              <div id="addDialog_autoPreviewBlock">
+                <div class="field">
+                  <label>
+                    <input type="checkbox" id="addDialog_autoupdate_preview_enable">
+                    <span msg="bg_dialog_adddial_enable_autoupdate_preview"></span>
+                  </label>
+                  <div>
+                    <span msg="bg_dialog_adddial_autoupdate_every"></span>
+                    <input type="number" min="1" id="addDialog_autoupdate_preview_interval" value="1">
+                    <select id="addDialog_autoupdate_preview_interval_type">
+                      <option value="minutes" msg="bg_dialog_adddial_autoupdate_minutes"></option>
+                      <option value="hours" msg="bg_dialog_adddial_autoupdate_hours"></option>
+                      <option value="days" msg="bg_dialog_adddial_autoupdate_days" selected></option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div id="addDialog_customPreviewBlock">
+                <div class="field">
+                  <label>
+                    <span msg="bg_dialog_adddial_image_url"></span>
+                    <input type="text" id="addDialog_image_url">
+                  </label>
+                </div>
+
+                <div class="field">
+                  <a id="addDialog_uploadFileContainer" class="fvdButton">
+                    <span msg="dlg_adddial_set_file"></span>
+                    <input type="file" id="addDialog_uploadFile"/>
+                  </a>
+                  <a class="fvdButton green" id="addDialog_pickUserPic" msg="bg_dialog_adddial_pick_user_pic"></a>
+
+                </div>
+
+                <div id="addDialog_helpToImprovePredefined" class="field">
+                  <span msg="dlg_adddial_help_us_user_pics"></span>
+                </div>
+
+                <!-- START remove block, will be removed in next version -->
+
+                <div class="field" style="display:none">
+                  <label><span msg="bg_dialog_adddial_default_preview"></span><select id="addDialog_default_image"></select></label>
+                </div>
+
+                <div  style="display:none" class="field" id="addDialog_default_image_extContainer" hidden="true">
+                  <select id="addDialog_default_image_ext"></select>
+                </div>
+
+                <!-- END remove block -->
+
+                <div align="center">
+
+                  <div class="newtabCell" type="preview" filled="0" id="addDialog_previewCell">
+                    <div class="body">
+                      <!-- cell preview image is here -->
+                      <div class="preview-image">
+                      </div>
+                      <div class="screenParent">
+                        <div class="screen">
+                          <div class="menuOverlay">
+                            <div class="icon remove"></div>
+                            <div class="icon edit"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <img src="/images/newtab/bottom_shadow.png" class="imgShadow"/>
+                  </div>
+
+                  <div id="addDialog_refreshPreviewContainer">
+                    <a class="fvdButton main" id="addDialog_refreshPreview" msg="bg_dialog_adddial_refresh_preview"></a>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </td>
+          <td>
+
+          <div id="addDialogPickImages" class="dialogPicUserPics">
+
+              <div class="head">
+                <span msg="bg_dialog_adddial_top10pics_title"></span>
+              </div>
+
+              <div class="picsContainer">
+              </div>
+
+              <div class="showMoreContainer">
+                <button class="fvdButton green" msg="bg_dialog_adddial_top10pics_showmore"></button>
+              </div>
+
+            </div>
+
+          </td>
+        </tr>
+
+
+      </table>
+
+    </div>
+
+    <div id="prototype_dialogManageGroups">
+      <div class="field">
+
+        <div id="dialogManageGroups_groupsListContainer">
+          <div id="dialogManageGroups_groupsList"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="prototype_dialogDeny">
+      <div class="field">
+        <span msg="bg_dialog_deny_type"></span>
+        <label><input type="radio" value="domain" id="dialogDeny_denyHost" name="dialogDeny_type"/><span msg="bg_dialog_deny_type_domain"></span></label>
+        <label><input type="radio" value="url" id="dialogDeny_denyURL" name="dialogDeny_type" /><span msg="bg_dialog_deny_type_url"></span></label>
+      </div>
+      <div class="field">
+        <label><span msg="bg_dialog_deny_address"></span><input type="text" id="dialogDeny_sign"/></label>
+      </div>
+    </div>
+
+    <div id="prototype_dialogViewGroup">
+      <div class="field">
+        <label><input type="radio" id="dialogViewGroup_typeTitle" name="dialogViewGroup_viewType" value="title" checked/><span msg="bg_dialog_view_group_title"></span></label>
+        <label><input type="radio" id="dialogViewGroup_typeUrl" name="dialogViewGroup_viewType" value="url"/><span msg="bg_dialog_view_group_url"></span></label>
+      </div>
+      <div id="dialogViewGroup_urlContainer">
+
+      </div>
+    </div>
+
+    <div id="prototype_dialogManageDeny">
+      <div id="manageDenyTableContainer">
+        <table class="manageDenyTable" cellpadding="0" cellspacing="1">
+          <thead>
+            <tr>
+              <th><span msg="bg_dialog_manage_deny_sign"></span></th>
+              <th><span msg="bg_dialog_manage_deny_type"></span></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="denyUrlsContainer">
+
+
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="prototype_dialogExport">
+      <div id="dialogImportExportContainer">
+        <div class="field" id="importExportTextAreaContainer">
+          <textarea id="importExportTextArea"></textarea>
+        </div>
+
+        <div id="exportDialogEverSyncMessage">
+          <span msg="bg_dialog_import_export_eversync_1"></span><br>
+          <span msg="bg_dialog_import_export_eversync_2"> </span><br>
+          <a href="https://chrome.google.com/webstore/detail/eversync-sync-bookmarks-b/iohcojnlgnfbmjfjfkbhahhmppcggdog" msg="bg_dialog_import_export_eversync_clickhere" target="_blank"></a><br>
+        </div>
+
+        <div id="importingProcessData">
+
+          <div id="importingWaitIcon"></div>
+
+          <div id="importingProcessState"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="prototype_dialogSetAutoUpdate">
+      <div id="dialogSetAutoUpdate">
+        <div class="addDialog_autoPreviewBlock">
+          <div class="field">
+            <div>
+              <span msg="bg_dialog_setautoupdate_autoupdate_every"></span>
+              <input type="number" min="1" id="dialogSetAutoUpdate_autoupdate_preview_interval" value="1">
+              <select id="dialogSetAutoUpdate_autoupdate_preview_interval_type">
+                <option value="minutes" msg="bg_dialog_adddial_autoupdate_minutes"></option>
+                <option value="hours" msg="bg_dialog_adddial_autoupdate_hours"></option>
+                <option value="days" msg="bg_dialog_adddial_autoupdate_days" selected></option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- END DIALOGS -->
+
+    <!-- Fields prototypes -->
+
+    <!-- With green check prototype -->
+    <div id="prototype_fieldWithGreenCheck" class="fieldWithGreenCheck">
+      <div class="check"></div>
+    </div>
+    <!-- END With green check prototype -->
+
+
+    <!-- Prototype for tooltip -->
+
+    <div id="tiptip_holder" class="tip_bottom">
+      <div id="tiptip_arrow" style="margin-left: 14px; margin-top: -12px;">
+        <div id="tiptip_arrow_inner"></div>
+      </div>
+      <div id="tiptip_content"></div>
+    </div>
+
+    <!-- END Prototype for tooltip -->
+
+    <!-- Prototype for remoteAD -->
+
+    <div id="prototype_remoteADContainer" class="remoteADContainer popupOptions">
+      <iframe></iframe>
+    </div>

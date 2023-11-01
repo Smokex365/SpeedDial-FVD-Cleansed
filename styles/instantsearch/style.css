@@ -1,0 +1,48 @@
+body {
+	background-color: #fff;
+	font-size: medium;
+	font-weight: normal;
+
+	font-family: arial, sans-serif;
+	font-size: 12px;
+}
+
+.bgLoading {
+	background: #fff url(/images/search_loading.gif) center center no-repeat;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	left: 0px;
+	bottom: 0px;
+
+	z-index: 1;
+
+	display: none;
+}
+
+body[loading='1'] .bgLoading {
+	display: block;
+}
+
+#searchResults {
+	padding-left: 10px;
+}
+
+#searchResults li a {
+	display: block;
+	font-size: 15px;
+}
+
+#searchResults li {
+	margin-top: 20px;
+	list-style: none;
+}
+
+#searchResults li > b {
+	color: #009933;
+	font-weight: normal;
+}
+
+#searchResults li > div {
+	margin-top: 3px;
+}
