@@ -19,3 +19,18 @@ To-do:
 * Add new search providers : DuckDuckGo, Youtube, Reddit, etc.
 * Add ability to export settings to file and re-import from file instead of text string - maybe
 * Add some instructions for loading the extension for general users.
+
+# Instructions
+
+How to load SpeedDial-FVD-Cleansed into Chrome
+
+1. Download or `git clone` to your local computer.
+2. In Chrome open the extension manangement page and enable developer mode if not already enabled.
+3. Select Load Unpacked
+   
+   ![load-unpacked-ext](https://github.com/Smokex365/SpeedDial-FVD-Cleansed/assets/5600410/0c9a8593-87e4-4184-be7f-36a8752fc8c6)
+5. Select where you saved the extension folder and select the root.
+
+   ![select-ext-dir](https://github.com/Smokex365/SpeedDial-FVD-Cleansed/assets/5600410/2253ddf3-cc21-456f-afe7-4f34980cb283)
+
+7. Confirm and let Chome load the extension. You may have to toggle it to enable or open a new tab to get it to load.
