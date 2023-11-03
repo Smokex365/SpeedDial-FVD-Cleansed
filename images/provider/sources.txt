@@ -1,8 +1,10 @@
-updated bing icon
+updated bing
 - https://www.iconfinder.com/icons/2993699/bing_brand_brands_logo_logos_icon
-duckduckgo icon
+duckduckgo
 - https://www.iconfinder.com/icons/334622/duckduckgo_icon
-reddit icon
+reddit
 - https://www.iconfinder.com/icons/3225187/app_logo_media_popular_reddit_social_icon
-google icon
+google
 - https://www.iconfinder.com/icons/4975303/search_web_internet_google_search_search_engine_seo_icon
+youtube
+- https://www.iconfinder.com/icons/4375133/logo_youtube_icon
