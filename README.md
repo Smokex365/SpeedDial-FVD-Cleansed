@@ -16,12 +16,16 @@ To-do:
 * Improve general transparency of the extension - lots of suspect code
 * Remove Russian connections - Yandex, several Russian sites
   * where it feels neccessary
-* Add new search providers [search.js](js/newtab/search.js)
-  - [ ] DuckDuckGo
-  - [ ] Youtube
-  - [ ] Reddit
-* Add ability to export settings to file and re-import from file instead of text string - maybe
-* Add some instructions for loading the extension for general users.
+* Add new search providers [search.js]([js/newtab/search.js#L16)
+  - [x] DuckDuckGo
+  - [x] Youtube
+  - [x] Reddit
+* Fix search selection menu
+  - [x] Providers set up
+  - [x] menu works
+  - [ ] create hover or onClick to change provider
+- [ ]  Add ability to export settings to file and re-import from file instead of text string - maybe
+- [x]  Add some instructions for loading the extension for general users.
 
 # Instructions
 
