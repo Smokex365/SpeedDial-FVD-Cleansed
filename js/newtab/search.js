@@ -88,7 +88,7 @@ Search.prototype = {
 				'my',
 			],
 		},
-		duckduckdo: {
+		duckduckgo: {
 			name : 'DuckDuckGo',
 			url: 'https://duckduckgo.com/?q={q}',
 		},
