@@ -1684,6 +1684,9 @@ body[hidegroupcounter='1'] .groupCount {
 .searchLogo[provider='duckduckgo'] {
 	background-image: url(/images/provider/duckduckgo.png);
 }
+.searchLogo[provider='youtube'] {
+	background-image: url(/images/provider/youtube.png);
+}
 
 #searchMenu {
 	position: relative;
@@ -1698,8 +1701,8 @@ body[hidegroupcounter='1'] .groupCount {
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	display: inline-block;
 }
-
 #searchList li {
 	cursor: pointer;
 	padding: 9px 3px 9px 30px;
@@ -1728,4 +1731,16 @@ body[hidegroupcounter='1'] .groupCount {
 }
 #searchList li.provider-bing {
 	background-image: url(/images/provider/bing.png);
+}
+#searchList li.provider-google {
+	background-image: url(/images/provider/google.png);
+}
+#searchList li.provider-reddit {
+	background-image: url(/images/provider/reddit.png);
+}
+#searchList li.provider-duckduckgo {
+	background-image: url(/images/provider/duckduckgo.png);
+}
+#searchList li.provider-youtube {
+	background-image: url(/images/provider/youtube.png);
 }
