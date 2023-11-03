@@ -14,7 +14,7 @@ Search.prototype = {
 	_ui: {},
 	_menuState: false,
 	_searchProviders: {
-		// removed all of their search redirects
+		// removed all of the original search redirects
 		// searches changed to either standard search parameters or removed entirely
 		google: {
 			name: 'Google',
