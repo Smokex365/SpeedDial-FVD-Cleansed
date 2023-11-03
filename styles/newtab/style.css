@@ -1675,6 +1675,15 @@ body[hidegroupcounter='1'] .groupCount {
 .searchLogo[provider='bing'] {
 	background-image: url(/images/provider/bing.png);
 }
+.searchLogo[provider='google'] {
+	background-image: url(/images/provider/google.png);
+}
+.searchLogo[provider='reddit'] {
+	background-image: url(/images/provider/reddit.png);
+}
+.searchLogo[provider='duckduckgo'] {
+	background-image: url(/images/provider/duckduckgo.png);
+}
 
 #searchMenu {
 	position: relative;
