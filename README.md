@@ -10,19 +10,22 @@ Current Modifications:
 * Changed default search to Google for now
 * Started on adding on-dial search for more sites
 
-To-do:
+# To-do:
 
 * Remove data collection
-* Improve general transparency of the extension - lots of suspect code
+* Improve general transparency of the extension
 * Remove Russian connections - Yandex, several Russian sites
-  * where it feels neccessary
-* Add new search providers [search.js]([js/newtab/search.js#L16)
+  * where it feels neccessary (search like Yandex can stay but everything else will likely be removed)
+* Add new search providers - [search.js]([js/newtab/search.js#L16)
   - [x] DuckDuckGo
   - [x] Youtube
   - [x] Reddit
-* Fix search selection menu
-  - [x] Providers set up
-  - [x] menu works
+* Fix search selection menu 
+  - [x] Providers set up (google, reddit, youtube, duckduckgo)
+  - [ ] menu works...kind of
+    - menu can be selected once on load and will switch to selected provider
+    - after selection you can't access the menu without a reload
+  - [ ] find a way to set the menu to the search logo (or alternatly add it to the right-click menu)
   - [ ] create hover or onClick to change provider
 - [ ]  Add ability to export settings to file and re-import from file instead of text string - maybe
 - [x]  Add some instructions for loading the extension for general users.
@@ -41,4 +44,3 @@ How to load SpeedDial-FVD-Cleansed into Chrome
    ![select-ext-dir](https://github.com/Smokex365/SpeedDial-FVD-Cleansed/assets/5600410/2253ddf3-cc21-456f-afe7-4f34980cb283)
 
 7. Confirm and let Chome load the extension. You may have to toggle it to enable or open a new tab to get it to load.
-
