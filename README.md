@@ -20,6 +20,8 @@ Current Modifications:
   * [x] DuckDuckGo
   * [x] Youtube
   * [x] Reddit
+![search-selection-menu](https://github.com/Smokex365/SpeedDial-FVD-Cleansed/assets/5600410/ce808010-d98f-4e85-8bcf-9a785113f168)
+* Fix search selection menu
 * Fix search selection menu
   * [x] Providers set up (google, reddit, youtube, duckduckgo)
   * [ ] menu works...kind of
