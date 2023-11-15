@@ -1691,7 +1691,7 @@ body[hidegroupcounter='1'] .groupCount {
 #searchMenu {
 	/* setting display to any value other than none currently displays the menu */
 	position: relative;
-	display:none;
+	display: none;
 }
 #searchList {
 	position: absolute;
