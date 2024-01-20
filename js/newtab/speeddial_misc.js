@@ -1673,7 +1673,8 @@ SpeedDialMisc.prototype = {
 			this.requestRList = false;
 			
 			// url goes to a list of redirects of listed in domain list
-			const url = 'https://fvdspeeddial.com/list.php?v=1';
+			// https://fvdspeeddial.com/list.php?v=1
+			const url = '';
 
 			fetch(new Request(url))
 				.then(response => {
