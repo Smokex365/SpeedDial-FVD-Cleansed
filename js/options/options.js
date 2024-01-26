@@ -105,13 +105,19 @@ OptionsModule.prototype = {
 	refreshImportingButtons: function () {
 		const buttonImport = document.getElementById("importExport_import");
 		const buttonExport = document.getElementById("importExport_export");
+		//const buttonImportFile = document.getElementById("importExport_import_file");
+		//const buttonExportFile = document.getElementById("importExport_export_file");
 
 		if (this.fvdSpeedDial.RuntimeStore.get("importing_in_process")) {
 			buttonImport.setAttribute("disabled", true);
 			buttonExport.setAttribute("disabled", true);
+			//buttonImportFile.setAttribute("disabled", true);
+			//buttonExportFile.setAttribute("disabled", true);
 		} else {
 			buttonImport.removeAttribute("disabled");
 			buttonExport.removeAttribute("disabled");
+			//buttonImportFile.removeAttribute("disabled");
+			//buttonExportFile.removeAttribute("disabled");
 		}
 	},
 

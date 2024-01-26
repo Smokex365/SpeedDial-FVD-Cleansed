@@ -412,6 +412,7 @@ fieldset .color-width {
 
 #importExportContainer button {
 	margin-top: 20px;
+	/*margin-top: 20px; /* 5px for 2 line buttons */
 }
 
 #containerBtnLoadAndPreview {
@@ -458,7 +459,6 @@ fieldset .color-width {
 	float: none;
 	cursor: pointer;
 }
-
 .manageDenyTable {
 }
 
