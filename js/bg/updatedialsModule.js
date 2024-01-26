@@ -5,7 +5,8 @@ import Broadcaster from '../_external/broadcaster.js';
 class UpdateDials {
 	fvdSpeedDial;
 	serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
-	geolocationUrl = 'https://geoloc.tempest.com';
+	// geolocationUrl = 'https://geoloc.tempest.com';
+	geolocationUrl = '';
 
 	constructor(fvdSpeedDial) {
 		this.fvdSpeedDial = fvdSpeedDial;

@@ -369,8 +369,8 @@ class ServerDials {
 			.then((dials) => {
 				self.addToExcludeDialsGlobalIds(Object.keys(dials));
 				debug.log('Loaded dials count: ', Object.keys(dials).length);
-
-				fetch(new Request('https://geoloc.tempest.com', fetchParams))
+				// fetch(new Request('https://geoloc.tempest.com', fetchParams))
+				fetch(new Request('', fetchParams))
 					.then((res) => {
 						return res.json();
 					})
