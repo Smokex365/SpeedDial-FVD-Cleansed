@@ -751,6 +751,12 @@
 	"options_import": {
 		"message": "Importálás"
 	},
+	"options_export_file": {
+		"message": "Export File"
+	},
+	"options_import_file": {
+		"message": "Import File"
+	},
 	"options_display_popular_group": {
 		"message": "Népszerű csoport megjelenítése"
 	},
