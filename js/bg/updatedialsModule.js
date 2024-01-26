@@ -4,7 +4,9 @@ import Broadcaster from '../_external/broadcaster.js';
 
 class UpdateDials {
 	fvdSpeedDial;
-	serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
+	// serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
+	// looking for function that keeps adding sponsored ads
+	serverUrl = '';
 	// geolocationUrl = 'https://geoloc.tempest.com';
 	geolocationUrl = '';
 
