@@ -28,7 +28,7 @@ Current Modifications:
     * after selection you can't access the menu without a reload
   * [ ] find a way to set the menu to the search logo (or alternatly add it to the right-click menu)
   * [ ] create hover or onClick to change provider
-* [ ]  Add ability to export settings to file and re-import from file instead of text string - maybe
+* [ ]  Add ability to export settings to file and re-import from file instead of text string
 * [x]  Add some instructions for loading the extension for general users.
 
 ### Instructions
