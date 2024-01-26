@@ -411,8 +411,7 @@ fieldset .color-width {
 }
 
 #importExportContainer button {
-	margin-top: 20px;
-	/*margin-top: 20px; /* 5px for 2 line buttons */
+	margin-top: 20px; /* 5px for 2 line buttons */
 }
 
 #containerBtnLoadAndPreview {
