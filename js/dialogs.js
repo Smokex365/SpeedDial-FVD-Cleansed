@@ -1087,7 +1087,7 @@ DialogsModule.prototype = {
 												dial.group_id = groupsRelations[dial.group_id];
 
 												if (dial.screen_maked === 1) {
-													dial.screen_maked = 0; // screen not transfered and need to remake
+													dial.screen_maked = 0; // screen not transferred and need to remake
 												}
 
 												StorageSD.addDial(dial, function (result) {
