@@ -344,6 +344,7 @@ fieldset .color-width {
 	border-bottom-right-radius: 5px;
 	text-align: center;
 	-webkit-transition: 200ms ease opacity;
+	transition: ease;
 	opacity: 0;
 }
 
@@ -380,6 +381,7 @@ fieldset .color-width {
 	width: 100%;
 	text-align: center;
 	-webkit-transition-duration: 200ms;
+	transition-duration: 200ms;
 	opacity: 0;
 	display: none;
 	border-bottom-left-radius: 5px;
@@ -482,6 +484,7 @@ fieldset .color-width {
 	cursor: pointer;
 
 	-webkit-transition-duration: 200ms;
+	transition-duration: 200ms;
 }
 
 #linkToSD[blackshadow='1'] {
@@ -496,7 +499,7 @@ fieldset .color-width {
 	width: 100px;
 }
 
-/* some tyles */
+/* some styles */
 
 .littleGray {
 	font-size: 10px;
@@ -521,7 +524,9 @@ option.lastUsedGroup {
 	border-top-left-radius: 5px;
 	border-bottom: none;
 	-webkit-transition-duration: 200ms;
+	transition-duration: 200ms;
 	-webkit-transition-property: box-shadow, background;
+	transition-property: box-shadow, background;
 	cursor: pointer;
 	display: inline-block;
 	min-width: 100px;
@@ -592,6 +597,7 @@ option.lastUsedGroup {
 	border-radius: 5px;
 
 	-webkit-transition: opacity 200ms;
+	transition: opacity 200ms;
 	opacity: 0;
 	left: -1000px;
 	z-index: 100;
@@ -869,6 +875,7 @@ html[data-sync-active='0'] #mainContainer {
 
 	opacity: 0;
 	-webkit-transition: 200ms ease opacity;
+	transition: 200ms ease opacity;
 }
 
 #donate-container[show='1'] {
