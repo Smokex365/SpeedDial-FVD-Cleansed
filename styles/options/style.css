@@ -381,7 +381,7 @@ fieldset .color-width {
 	width: 100%;
 	text-align: center;
 	-webkit-transition-duration: 200ms;
-	transition-duration: 200ms;
+transition-duration: 200ms;
 	opacity: 0;
 	display: none;
 	border-bottom-left-radius: 5px;
@@ -484,7 +484,7 @@ fieldset .color-width {
 	cursor: pointer;
 
 	-webkit-transition-duration: 200ms;
-	transition-duration: 200ms;
+transition-duration: 200ms;
 }
 
 #linkToSD[blackshadow='1'] {

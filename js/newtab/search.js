@@ -1,3 +1,4 @@
+import Analytics from '../bg/google-analytics.js';
 import { EventType } from '../types.js';
 import { Utils } from '../utils.js';
 
@@ -10,16 +11,18 @@ const Search = function (fvdSpeedDial) {
 };
 
 Search.prototype = {
+	// set defaultProvider to google; originally fvd
 	_defaultProvider: 'google',
 	_ui: {},
 	_menuState: false,
 	_searchProviders: {
-		// removed all of the original search redirects
+		// removed all of the original search redirects 
 		// searches changed to either standard search parameters or removed entirely
+		// removed fvd and yandex search
 		google: {
 			name: 'Google',
 			url: 'https://www.google.com/search?q={q}',
-		  },
+		},
 		bing: {
 			name: 'Bing',
 			url: 'https://www.bing.com/search?q={q}',
@@ -237,7 +240,7 @@ Search.prototype = {
 
 		return provider;
 	},
-	doSearch: function (query) {
+	doSearch: async function (query) {
 		const { fvdSpeedDial } = this;
 
 		const {
@@ -268,6 +271,7 @@ Search.prototype = {
 			}
 
 			const providerData = this._searchProviders[provider];
+			await Analytics.fireSearchEvent(query, providerData?.name);
 
 			if (String(query).trim().length === 0) {
 				return false;

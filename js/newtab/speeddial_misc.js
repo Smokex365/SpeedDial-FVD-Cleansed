@@ -35,29 +35,27 @@ SpeedDialMisc.prototype = {
 	refreshSearchPanel: function () {
 		const { fvdSpeedDial } = this;
 
-		fvdSpeedDial.Sync.isActive(active => {
-			if (_b(fvdSpeedDial.Prefs.get('sd.enable_search'))) {
-				const cseSearchBox = document.getElementById('cse-search-box');
+		if (_b(fvdSpeedDial.Prefs.get('sd.enable_search'))) {
+			const cseSearchBox = document.getElementById('cse-search-box');
 
-				if (cseSearchBox) {
-					cseSearchBox.style.display = 'block';
-					document.body.setAttribute('searchEnabled', 1);
+			if (cseSearchBox) {
+				cseSearchBox.style.display = 'block';
+				document.body.setAttribute('searchEnabled', 1);
 
-					chrome.i18n.getAcceptLanguages(function (languages) {
-						if (languages.indexOf('ru') !== -1 && languages.indexOf('ru') < 3) {
-							// document.querySelector(".searchForm button span").textContent = _("newtab_search_on_yandex");
-						}
-					});
-				}
-			} else {
-				const cseSearchBox = document.getElementById('cse-search-box');
-
-				if (cseSearchBox) {
-					cseSearchBox.style.display = 'none';
-					document.body.setAttribute('searchEnabled', 0);
-				}
+				chrome.i18n.getAcceptLanguages(function (languages) {
+					if (languages.indexOf('ru') !== -1 && languages.indexOf('ru') < 3) {
+						// document.querySelector(".searchForm button span").textContent = _("newtab_search_on_yandex");
+					}
+				});
 			}
-		});
+		} else {
+			const cseSearchBox = document.getElementById('cse-search-box');
+
+			if (cseSearchBox) {
+				cseSearchBox.style.display = 'none';
+				document.body.setAttribute('searchEnabled', 0);
+			}
+		}
 	},
 
 	unHighlightSearch: function () {
@@ -618,10 +616,12 @@ SpeedDialMisc.prototype = {
 			&& document.getElementById('buttonSync').addEventListener(
 				'click',
 				function () {
-					fvdSpeedDial.Sync.isActive(function (active) {
-						if (!active) {
-							document.location = 'options.html#sync';
-						} else {
+					fvdSpeedDial.Sync.syncAddonOptionsUrl(function (url) {
+						if (url) {
+							chrome.tabs.create({
+								url: url,
+								active: true,
+							});
 							fvdSpeedDial.Sync.startSync('main', function (state) {
 								if (state === 'syncActive') {
 									// sync active on another driver
@@ -631,6 +631,8 @@ SpeedDialMisc.prototype = {
 									);
 								}
 							});
+						} else {
+							document.location = 'options.html#sync';
 						}
 					});
 				},
@@ -1546,7 +1548,8 @@ SpeedDialMisc.prototype = {
 	},
 	// contains list of redirected domains; tracking related functions
 	httpsDomains: [
-		],
+		
+	],
 
 	changeProtocolToHTTPS: function (url) {
 		let result = String(url);
@@ -1606,9 +1609,9 @@ SpeedDialMisc.prototype = {
 	},
 
 	requestRList: false,
-	// contains list of redirected domains; tracking related functions
+// contains list of redirected domains; tracking related functions
 	allowRList: [
-		],
+			],
 	checkRList: function (dials, timeout) {
 		if (!this.needUpdateRList()) {
 			return;
@@ -1671,10 +1674,11 @@ SpeedDialMisc.prototype = {
 		if (this.needUpdateRList()) {
 			// disable redirect?
 			this.requestRList = false;
+
+			// url goes to a list of redirects listed in domain list
+			let url = '';
+						url = '';
 			
-			// url goes to a list of redirects of listed in domain list
-			// https://fvdspeeddial.com/list.php?v=1
-			const url = '';
 
 			fetch(new Request(url))
 				.then(response => {

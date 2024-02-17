@@ -17,7 +17,7 @@
 	"content_scripts": [
 		{
 			"js": ["content-scripts/fvdspeeddial.js"],
-			"matches": ["https://www.fvdspeeddial.com/*", "https://fvdspeeddial.com/*"]
+			"matches": ["https://www.fvdspeeddial.com/*", "https://fvdspeeddial.com/*", "https://www.qa.fvdspeeddial.com/*", "https://qa.fvdspeeddial.com/*"]
 		},
 		{
 			"all_frames": true,
@@ -55,7 +55,8 @@
 	],
 	"short_name": "New Tab Page",
 	"update_url": "https://clients2.google.com/service/update2/crx",
-	"version": "81.4.0",
+	"version": "1.81.6.6",
+	"version_name": "81.6.6 Cleansed",
 	"icons": {
 		"128": "images/icons/128x128.png",
 		"16": "images/icons/16x16.png",

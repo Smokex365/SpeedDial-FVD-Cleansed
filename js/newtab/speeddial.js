@@ -8,6 +8,9 @@ import SpeedDialBuilderModule from './speeddial/builder.js';
 import { ThumbManagerModule } from '../thumbmanager/tab.js';
 import ThumbManagerBgModule from '../thumbmanager/bg.js';
 import { Log } from '../../extras/log.js';
+import Analytics from '../bg/google-analytics.js';
+import { defaultGroupGlobalIDs, DIALS_TRASH_KEY, GROUPS_TRASH_KEY, newTabUrls } from '../constants.js';
+import { userStorageKey } from '../sync/user.js';
 
 let _loadLog = new Log();
 
@@ -599,13 +602,68 @@ SpeedDialModule.prototype = {
 		// init drag and drop
 		this.DragAndDrop.init();
 
+		function trackGAPageViewEvent(tab) {
+			if (tab.active) {
+				const groupID = SpeedDial.currentGroupId();
+				let isDisplayDials = fvdSpeedDial.Prefs.get('sd.speeddial_expanded');
+				
+				if (typeof isDisplayDials === undefined) {
+					isDisplayDials = true;
+				}
+
+				fvdSpeedDial.StorageSD.getGroupTitleById(groupID, (groupTitle, group) => {
+					const sendItems = isDisplayDials && group && Object.values(defaultGroupGlobalIDs).includes(group.global_id);
+
+					fvdSpeedDial.StorageSD.getDialListByGroupId(groupID, (dials) => {
+						const params = {
+							page_location: tab.url,
+							display_dial_group: isDisplayDials ? 'yes' : 'no',
+							dial_group: isDisplayDials ? groupTitle : undefined,
+							items: sendItems ? dials.map((item) => ({
+								item_name: item.title,
+								item_url: fvdSpeedDial.SpeedDialMisc.getCleanRedirectTxt(item.display_url),
+							})) : undefined,
+						};
+
+						Analytics.fireTabViewEvent(params);
+					});
+
+				});
+
+			}
+		}
+
 		setTimeout(() => {
 			fvdSpeedDial.ContextMenus.setGlobalMenu(that.currentDisplayType());
+		});
+
+		let updateStop = false;
+
+		function onBrowserTabUpdated(tab) {
+			if (tab.status === 'complete' && tab.title !== tab.url && newTabUrls.includes(tab.url)) {
+				if (!updateStop) updateStop = true;
+				else return false;
+
+				setTimeout(() => {
+					updateStop = false;
+					trackGAPageViewEvent(tab);
+				}, 1000);
+			}
+		}
+
+		
+		//Send google analytic page_view event on tab created
+		chrome.tabs.onUpdated.addListener(function (tabId, change, tab) {
+			if (!fvdSpeedDial.localStorage.getItem('preventPageViewEvent')) {
+				onBrowserTabUpdated(tab);
+			}
 		});
 
 		// full rebuild when tab activated
 		chrome.tabs.onActivated.addListener(function (info) {
 			chrome.tabs.getCurrent(function (tab) {
+				trackGAPageViewEvent(tab);
+
 				if (tab.id === info.tabId) {
 					if (document.body.hasAttribute('dial-search-show-results')) {
 						// if the search is active don't rebuild page
@@ -1488,6 +1546,28 @@ SpeedDialModule.prototype = {
 		const { fvdSpeedDial } = this;
 		const { Dialogs } = fvdSpeedDial;
 
+		const saveGroupGlobalIdInTrash = function (globalId) {
+			const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+			const trash = fvdSpeedDial.Prefs.get(GROUPS_TRASH_KEY) || {};
+			const currentUserId = currentUserInfo?.user?.user_id;
+			const currentUserTrash = trash[currentUserId] || [];
+			fvdSpeedDial.Prefs.set(GROUPS_TRASH_KEY, {
+				...trash,
+				[currentUserId]: [...currentUserTrash, globalId],
+			});
+		};
+
+		const saveDialGlobalIdInTrash = function (globalId) {
+			const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+			const currentUserId = currentUserInfo?.user?.user_id;
+			const trash = fvdSpeedDial.Prefs.get(DIALS_TRASH_KEY, {});
+			const currentUserTrash = trash[currentUserId] || [];
+			fvdSpeedDial.Prefs.set(DIALS_TRASH_KEY, {
+				...trash,
+				[currentUserId]: [...currentUserTrash, globalId],
+			});
+		};
+
 		const removeFromBase = function () {
 			Utils.Async.chain([
 				function (chainCallback) {
@@ -1509,6 +1589,7 @@ SpeedDialModule.prototype = {
 						Utils.Async.arrayProcess(
 							dials,
 							function (dial, apCallback) {
+								saveDialGlobalIdInTrash(dial.global_id);
 								fvdSpeedDial.StorageSD.deleteDial(dial.id);
 
 								apCallback();
@@ -1538,6 +1619,7 @@ SpeedDialModule.prototype = {
 				fvdSpeedDial.StorageSD.getGroup(groupId, function (group) {
 					if (group !== null) {
 						if (group.count_dials === 0 || (params && params.noConfirmIfHaveDials)) {
+							saveGroupGlobalIdInTrash(group.global_id);
 							removeFromBase();
 
 							if (callback) {
@@ -1549,6 +1631,7 @@ SpeedDialModule.prototype = {
 								_('dlg_confirm_remove_group_text').replace('%count%', group.count_dials),
 								function (result) {
 									if (result) {
+										saveGroupGlobalIdInTrash(group.global_id);
 										removeFromBase();
 									}
 
@@ -2013,8 +2096,9 @@ SpeedDialModule.prototype = {
 		let allow = false;
 		const location = Search.getLocationSync();
 
-		if (location.indexOf('us') !== -1) {
-			allow = true;
+		if (['us', 'fr', 'gb', 'de', 'it', 'es', 'pl', 'ca'].includes(location)) {
+			// don't allow ads for any country domains
+			allow = false;
 		}
 
 		return allow;
@@ -2031,16 +2115,22 @@ SpeedDialModule.prototype = {
 				const host = fvdSpeedDial.SpeedDialMisc.getUrlHost(url);
 
 				if (host && host.length > 3) {
-					for (const key in adMarketplace.deepLinks) {
-						const val = adMarketplace.deepLinks[key];
+					const location = fvdSpeedDial.Search.getLocationSync();
+					const deepLinksByLocation = Object.values(adMarketplace.deepLinks).filter((item) => item.location.includes(location));
+					for (const val of deepLinksByLocation) {
 						const index = host.indexOf(val.domain);
 
 						if (index !== -1 && index <= 20) {
 							const uriComponent = encodeURIComponent(url);
 
-							redirectURL = String(val.url);
+							// eslint-disable-next-line max-len
+							// removed amazon redirect link (https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01HFT00MQRCSGPE9G2RC5AFHW6&url=https://amazon.com)
+							const customUSAmazonLink = 'https://amazon.com';
+
+							redirectURL = location === 'us' && val.domain === 'amazon.' ? customUSAmazonLink : String(val.url);
 							redirectURL = redirectURL.replace('{cu}', uriComponent);
 							redirectURL = redirectURL.replace('{fbu}', uriComponent);
+							redirectURL = redirectURL.replace('{ext}', location === 'gb' ? 'co.uk' : location);
 							break;
 						}
 					}
@@ -2092,7 +2182,7 @@ SpeedDialModule.prototype = {
 		const { fvdSpeedDial } = this;
 
 		const adm = fvdSpeedDial.SpeedDialMisc.getRList();
-		let defaultVersion = 7551;
+		let defaultVersion = 8157;
 
 		if (typeof adm === 'object' && adm.versionSD) {
 			defaultVersion = parseInt(adm.versionSD) || defaultVersion;

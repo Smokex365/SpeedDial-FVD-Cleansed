@@ -1704,6 +1704,7 @@ body[hidegroupcounter='1'] .groupCount {
 	margin: 0;
 	display: inline-block;
 }
+
 #searchList li {
 	cursor: pointer;
 	padding: 9px 3px 9px 30px;

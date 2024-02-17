@@ -1,7 +1,6 @@
 import Broadcaster from './_external/broadcaster.js';
 
-//increase update interval while disabling it
-const UPDATE_AD_INTERVAL = 24 * 3600 * 100000000000000000000; // 7 days
+const UPDATE_AD_INTERVAL = Number(8.64E10); // 1000 days
 
 // disable remote ad fetch url : https://s3.amazonaws.com/fvd-special/remotead/fvdsd_chrome2.json
 const AD_URL = "";

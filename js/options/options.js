@@ -135,6 +135,25 @@ OptionsModule.prototype = {
 
 		const that = this;
 
+		const isPremiumUser = that.fvdSpeedDial.UserInfoSync.getIsPremiumUser();
+		const searchOptionCheckbox = document.querySelector('[sname="sd.enable_search"]');
+
+		if (isPremiumUser) {
+			const isSearchEnabled = that.fvdSpeedDial.UserInfoSync.getIsSearchEnable();
+			that.fvdSpeedDial.Prefs.set('sd.enable_search', isSearchEnabled);
+			searchOptionCheckbox.parentElement.style.display = '';
+			searchOptionCheckbox.parentElement.nextElementSibling.style.display = '';
+			searchOptionCheckbox.checked = isSearchEnabled;
+		} else {
+			searchOptionCheckbox.checked = true;
+			searchOptionCheckbox.parentElement.style.display = 'none';
+			searchOptionCheckbox.parentElement.nextElementSibling.style.display = 'none';
+			// searchOptionCheckbox?.parentElement?.nextElementSibling?.remove();
+			// searchOptionCheckbox?.parentElement?.remove();
+
+			that.fvdSpeedDial.Prefs.set('sd.enable_search', true);
+		}
+
 		this._roller = Roller.create(document.getElementById("rollerContent"), ROLLER_ELEM_WIDTH);
 		this._listenOptions();
 		this.refreshOptionValues();
@@ -150,11 +169,26 @@ OptionsModule.prototype = {
 			});
 		});
 
+		/**Sync.getAccountInfo(function (info) {
+			if (!info?.user?.premium?.active) {
+				const searchOptionCheckbox = document.querySelector('[sname="sd.enable_search"]');
+
+				if (searchOptionCheckbox) {
+					searchOptionCheckbox.checked = true;
+					searchOptionCheckbox?.parentElement?.nextElementSibling?.remove();
+					searchOptionCheckbox?.parentElement?.remove();
+				}
+
+				that.fvdSpeedDial.Prefs.set('sd.enable_search', true);
+			}
+		});*/
+
 		Broadcaster.onMessage.addListener(function (msg) {
 			if (msg.action === "runtimestore:itemchanged") {
 				that.runtimeStoreChangeCallback(msg.name);
 			}
 		});
+
 		// init tabs
 		this.Tabs.init();
 
@@ -579,6 +613,7 @@ OptionsModule.prototype = {
 		const { fvdSpeedDial: {
 			Prefs,
 			StorageSD,
+			UserInfoSync,
 		} } = this;
 		const that = this;
 		const settedOptions = [];
@@ -599,6 +634,10 @@ OptionsModule.prototype = {
           && this._getOptionValue(options[i]) > Prefs.get('sd.custom_dial_size_fancy')
 			) {
 				Prefs.set("sd.top_sites_columns", "auto");
+			}
+
+			if (name === 'sd.enable_search' && UserInfoSync.getIsPremiumUser()) {
+				UserInfoSync.setIsSearchEnable(this._getOptionValue(options[i]));
 			}
 
 			Prefs.set(name, this._getOptionValue(options[i]));
