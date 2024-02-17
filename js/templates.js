@@ -29,7 +29,7 @@ const Templates = {
 		return el.querySelector("#" + id).cloneNode(true);
 	},
 	get: function (templateName, options, cb) {
-		console.log(`Template get ${templateName}`, options);
+		// console.log(`Template get ${templateName}`, options);
 
 		if (typeof options === "function") {
 			cb = options;

@@ -21,6 +21,7 @@ import PowerOffModule from '../poweroff.js';
 import OptionsPowerOffModule from './poweroff.js';
 import StorageSD from '../storage.js';
 import Sync from '../sync/tab.js';
+import UserInfoSync from '../sync/user.js';
 import Templates from '../templates.js';
 import ContextMenus from '../newtab/contextmenus.js';
 import CSSModule from '../newtab/css.js';
@@ -46,6 +47,7 @@ class SettingModule {
             window.fvdSpeedDial = fvdSpeedDial;
             yield fvdSpeedDial.init();
             fvdSpeedDial.Templates = Templates;
+            fvdSpeedDial.UserInfoSync = new UserInfoSync(fvdSpeedDial);
             fvdSpeedDial.Sync = Sync;
             fvdSpeedDial.ToolTip = ToolTip;
             fvdSpeedDial.RuntimeStore = new RuntimeStore(fvdSpeedDial);
@@ -119,7 +121,7 @@ class SettingModule {
     initEvent() {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18;
         const { fvdSpeedDial } = this;
-        const { ToolTip, Dialogs, Options, StorageSD, Prefs, PowerOff, CSS } = fvdSpeedDial;
+        const { ToolTip, Dialogs, Options, StorageSD, Prefs, PowerOff, CSS, SpeedDialMisc, ContextMenus } = fvdSpeedDial;
         Broadcaster.onMessage.addListener(function (msg) {
             if (msg.action === 'poweroff:hide') {
                 if (!PowerOff.isHidden()) {
@@ -128,6 +130,11 @@ class SettingModule {
             }
             if (msg.action === 'pref:changed' && msg.name === 'sd.display_mode') {
                 CSS.prefChanged(msg.name, msg.value);
+            }
+            if (['user:logout', 'user:login'].includes(msg.action)) {
+                globalThis.navigation.reload();
+                SpeedDialMisc.refreshSearchPanel();
+                ContextMenus.init();
             }
         });
         window.addEventListener("unload", function () {

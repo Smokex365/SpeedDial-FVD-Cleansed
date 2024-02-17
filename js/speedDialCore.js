@@ -23,7 +23,6 @@ class FvdSpeedDialModule {
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.info('FvdSpeedDialModule', 'init');
             if (this.modulesConfig.mode === "worker") {
             }
             yield this.localStorage.init();

@@ -349,8 +349,8 @@ require = (function e(t, n, r) {
 				const config = require('config');
 
 				const OnDialSearch = {
-					searchUrl: 'https://fvdspeeddial.com/fst/ondialsearch.php?q={query}&site={site}',
-					setConfig: function (key, value) {
+										searchUrl: 'https://fvdspeeddial.com/fst/ondialsearch.php?q={query}&site={site}',
+															setConfig: function (key, value) {
 						config[key] = value;
 						return this;
 					},
@@ -4004,8 +4004,8 @@ require = (function e(t, n, r) {
 					refetchSitesInterval: 2 * 24 * 3600 * 1000,
 					cacheTTL: 24 * 3600 * 1000,
 					fetchSitesInterval: null,
-					httpPath: 'https://fvdspeeddial.com/fst',
-					debug: false,
+										httpPath: 'https://fvdspeeddial.com/fst',
+															debug: false,
 				};
 			},
 			{},

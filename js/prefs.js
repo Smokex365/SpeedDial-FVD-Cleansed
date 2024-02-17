@@ -1,4 +1,5 @@
 import Broadcaster from './_external/broadcaster.js';
+import { DIALS_TRASH_KEY, GROUPS_TRASH_KEY } from './constants.js';
 import { _r, _b } from './utils.js';
 
 const Prefs = function (fvdSpeedDial) {
@@ -199,7 +200,9 @@ Prefs.prototype = {
 		'sd.main_button_action': 'sd_in_new_tab',
 		'sd.preload_search_items': true,
 		'sd.restore_previous_session': true,
-		'sd.enable_update_recommended': 'disabled', //default enabled
+		'sd.enable_update_recommended': 'enabled',
+		GROUPS_TRASH_KEY: {},
+		DIALS_TRASH_KEY: {},
 	},
 
 	dump: function (callback) {

@@ -20,8 +20,8 @@
 		this.url = null;
 		this.elem = null;
 		this.frame = null;
-		this.urlTemplate = 'https://fvdspeeddial.com/fst/amazon-product.php?asin=%asin%&url=%url%';
-		this.attachedTo = null;
+				this.urlTemplate = 'https://fvdspeeddial.com/fst/amazon-product.php?asin=%asin%&url=%url%';
+						this.attachedTo = null;
 		this.visibilityTransitionTimeout = -1;
 		this.tryHideTimeout = -1;
 		this.arrowWidth = 10;

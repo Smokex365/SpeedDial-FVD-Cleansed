@@ -1,6 +1,8 @@
 import { dhtmlXMenuObject } from './contextmenu/dhtmlxmenu.js';
 import { _ } from '../localizer.js';
 import { _b } from '../utils.js';
+import { userStorageKey } from '../sync/user.js';
+import { DIALS_TRASH_KEY, defaultGroupGlobalIDs } from '../constants.js';
 
 const ContextMenus = function (fvdSpeedDial) {
 	this.fvdSpeedDial = fvdSpeedDial;
@@ -249,9 +251,27 @@ ContextMenus.prototype = {
 			that._speedDialGroupManageGroupsMenu = new dhtmlXMenuObject();
 			that._speedDialGroupManageGroupsMenu.renderAsContextMenu();
 			that.rebuildSpeedDialGroupManageGroupsMenu();
+			const UserInfo = that.fvdSpeedDial.localStorage.getItem(userStorageKey);
+			let isPremiumUser = false;
+
+			if (UserInfo && UserInfo?.user?.premium?.active) {
+				isPremiumUser = true;
+			}
+
+			let recommendGroupId = null;
+
+			that.fvdSpeedDial.StorageSD.groupIdByGlobalId(defaultGroupGlobalIDs.recommend, (_recommendId) => {
+				recommendGroupId = _recommendId;
+			});
+
 			that._speedDialGroupManageGroupsMenu.attachEvent('onContextMenu', function (x, elemId) {
 				const groupId = elemId.replace('group_', '');
 				const menu = that._speedDialGroupManageGroupsMenu;
+
+				if (+groupId === recommendGroupId && !isPremiumUser) {
+					menu.setItemDisabled('edit');
+					menu.setItemDisabled('remove');
+				}
 
 				menu.setCheckboxState(
 					'default_group',
@@ -289,7 +309,7 @@ ContextMenus.prototype = {
 				const groupId = fvdSpeedDial.SpeedDial._getGroupByItem(elem);
 				const menu = that._speedDialGroupContextMenu;
 
-				if (groupId == 0) {
+				if (+groupId === 0 || (+groupId === recommendGroupId && !isPremiumUser)) {
 					menu.setItemDisabled('edit');
 					menu.setItemDisabled('remove');
 					//menu.setItemDisabled( "sync_group" );
@@ -297,12 +317,6 @@ ContextMenus.prototype = {
 					menu.setItemEnabled('edit');
 					menu.setItemEnabled('remove');
 					//menu.setItemEnabled( "sync_group" );
-				}
-
-				if (groupId == 3) {
-					menu.setItemDisabled('edit');
-				} else {
-					menu.setItemEnabled('edit');
 				}
 
 				menu.setCheckboxState(
@@ -477,6 +491,21 @@ ContextMenus.prototype = {
 											translate: 'dial',
 										},
 										function () {
+											const saveGlobalIdInTrash = function (globalId) {
+												const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+												const currentUserId = currentUserInfo?.user?.user_id;
+												const trash = fvdSpeedDial.Prefs.get(DIALS_TRASH_KEY, {});
+												const currentUserTrash = trash[currentUserId] || [];
+												fvdSpeedDial.Prefs.set(DIALS_TRASH_KEY, {
+													...trash,
+													[currentUserId]: [...currentUserTrash, globalId],
+												});
+											};
+
+											fvdSpeedDial.StorageSD.getDial(dialId, function (d) {
+												saveGlobalIdInTrash(d.global_id);
+											});
+
 											fvdSpeedDial.StorageSD.deleteDial(dialId, function () {
 												fvdSpeedDial.SpeedDial.dialRemoveAnimate(dialId);
 											});

@@ -12,6 +12,7 @@ import collectAndSendReport from './js/crashreport.js';
 import { refreshIdleInterval } from './js/bg/poweroffidle.js';
 import { sendEvent } from './js/bg/analytics.js';
 import Sync from './js/sync/bg.js';
+import UserInfoSync from './js/sync/user.js';
 import HiddenCaptureQueueModule from './js/capture/hiddencapturequeue.js';
 import ContextMenu from './js/bg/contextmenu.js';
 import ThumbMakerModule from './js/thumbmaker/bg.js';
@@ -25,6 +26,7 @@ import { EventType } from './js/types.js';
 import PowerOffModule from './js/poweroff.js';
 import UpdateDials from './js/bg/updatedialsModule.js';
 import { default as FvdSpeedDialModule } from './js/speedDialCore.js';
+import Analytics from './js/bg/google-analytics.js';
 class Worker {
     constructor() {
         this.fvdSpeedDial = new FvdSpeedDialModule(this.addEventListener, { mode: "worker" });
@@ -41,6 +43,7 @@ class Worker {
         });
     }
     init() {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const { fvdSpeedDial } = this;
             yield fvdSpeedDial.Backup.localStorageCheck();
@@ -59,17 +62,20 @@ class Worker {
             catch (ex) {
                 console.warn(ex);
             }
+            if (((_a = this.onInstalledDetails) === null || _a === void 0 ? void 0 : _a.reason) === 'update') {
+                fvdSpeedDial.Prefs.set('sd.enable_search', fvdSpeedDial.UserInfoSync.getIsSearchEnable());
+            }
             this.browserAction();
         });
     }
     refetchDials() {
-        const lastRequestDate = this.fvdSpeedDial.localStorage.getItem('last-refetch');
+        const { localStorage, UpdateDialsModule, Prefs } = this.fvdSpeedDial;
+        const lastRequestDate = localStorage.getItem('last-refetch');
         const currentDate = new Date();
-        if (this.fvdSpeedDial.Prefs.get('sd.enable_update_recommended') === 'enabled') {
+        if (Prefs.get('sd.enable_update_recommended') === 'enabled') {
             if (!lastRequestDate || isDifferentDay(new Date(lastRequestDate), currentDate)) {
-                const refetchModule = new UpdateDials(this.fvdSpeedDial);
-                refetchModule.update();
-                this.fvdSpeedDial.localStorage.setItem('last-refetch', currentDate.toString());
+                UpdateDialsModule.update();
+                localStorage.setItem('last-refetch', currentDate.toString());
             }
         }
     }
@@ -83,6 +89,8 @@ class Worker {
         fvdSpeedDial.Utils = Utils;
         fvdSpeedDial.SpeedDial = new SpeedDialBgModule(fvdSpeedDial);
         fvdSpeedDial.ThumbMaker = new ThumbMakerModule(fvdSpeedDial);
+        fvdSpeedDial.UpdateDialsModule = new UpdateDials(fvdSpeedDial);
+        fvdSpeedDial.UserInfoSync = new UserInfoSync(fvdSpeedDial);
         fvdSpeedDial.Sync = new Sync(fvdSpeedDial);
         fvdSpeedDial.PowerOff = new PowerOffModule(fvdSpeedDial);
         fvdSpeedDial.HiddenCaptureQueue = new HiddenCaptureQueueModule(fvdSpeedDial);
@@ -228,6 +236,12 @@ class Worker {
                 });
                 return true;
             }
+            else if (message.action === 'sync:getaccountinfo') {
+                fvdSpeedDial.Sync.getAccountInfo(function (info) {
+                    sendResponse(info);
+                });
+                return true;
+            }
             else if (message.action === 'sync:start') {
                 fvdSpeedDial.Sync.startSync(message.type, function (state) {
                     sendResponse(state);
@@ -290,7 +304,6 @@ class Worker {
                 }
             }
             else if (message.action === 'miscDataSet' && message.name === 'sd.background') {
-                console.log('To front page!!!!');
             }
             if (message.action === 'pref:changed' &&
                 (message.name === 'poweroff.enabled' || message.name === 'poweroff.hidden')) {
@@ -318,13 +331,15 @@ class Worker {
     }
     onInstalledListener() {
         const { fvdSpeedDial } = this;
-        const { onInstalledDetails, fvdSpeedDial: { localStorage, Utils }, } = this;
+        const { onInstalledDetails, fvdSpeedDial: { localStorage, Utils, StorageSD, Prefs }, } = this;
         if (onInstalledDetails) {
             if (onInstalledDetails.reason === 'install') {
                 localStorage.setItem('installVersion', chrome.runtime.getManifest().version);
+                Analytics.fireInstallEvent();
             }
             else if (onInstalledDetails.reason === 'update') {
                 Utils.releaseNotes(fvdSpeedDial, true);
+                Analytics.fireUpdateEvent();
             }
         }
     }
@@ -342,7 +357,6 @@ class Worker {
                 url: url,
             }, function (tabs) {
                 if (!tabs) {
-                    console.log('Fail get tab', url, chrome.runtime.lastError);
                     return;
                 }
                 for (let i = 0; i < tabs.length; i++) {

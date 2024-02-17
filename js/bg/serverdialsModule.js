@@ -1,5 +1,7 @@
-import { Utils, _b } from '../utils.js';
+import { Utils, _b, getDomainName, randomColor } from '../utils.js';
 import debug from '../debug.js';
+import { DIALS_TRASH_KEY, GROUPS_TRASH_KEY, defaultGroupGlobalIDs } from '../constants.js';
+import { userStorageKey } from '../sync/user.js';
 
 const escapeStringRegexp = function (string) {
 	if (typeof string !== 'string') {
@@ -64,14 +66,15 @@ const config = {
 
 class ServerDials {
 	fvdSpeedDial;
-	serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
-	mapFunction = null;
+		serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
+			mapFunction = null;
 	mapClass = null;
 	installTime = null;
 	userType = null;
 	clientSoftware = null;
 	country = null;
 	listeners = [];
+	avoidToExcludeGroups = [defaultGroupGlobalIDs.recommend];
 	onDialsUpdate = {
 		addListener: (fn) => {
 			if (this.listeners.indexOf(fn) === -1) {
@@ -94,7 +97,7 @@ class ServerDials {
 	};
 	constructor(fvdSpeedDial) {
 		this.fvdSpeedDial = fvdSpeedDial;
-		const { StorageSD } = this.fvdSpeedDial;
+		const { StorageSD, Prefs, localStorage } = this.fvdSpeedDial;
 
 		this.onDialsUpdate.addListener(function (dials) {
 			let defaultGroupId;
@@ -155,20 +158,31 @@ class ServerDials {
 			const serverGroupsIds = {};
 
 			this.init = function (serverDials, cb) {
-				debug.log('init serverdials mapper', serverDials);
 				const serverGroupsMap = {};
 
 				if (!serverDials) {
-					console.warn('serverDials is', serverDials);
 					serverDials = [];
 				}
 
-				serverDials.forEach(function (serverDial) {
+				const currentUserInfo = localStorage.getItem(userStorageKey);
+				const trashedDials = Prefs.get(DIALS_TRASH_KEY, {});
+				const trashedGroups = Prefs.get(GROUPS_TRASH_KEY, {});
+				const currentUserDialsTrash = trashedDials[currentUserInfo?.user?.user_id] || [];
+				const currentUserGroupsTrash = trashedGroups[currentUserInfo?.user?.user_id] || [];
+
+				const filteredDials = serverDials.filter((dial) => !currentUserDialsTrash.includes(dial.globalId));
+
+				const isNewRecommendDial = filteredDials.some((dial) => dial.group.globalId === defaultGroupGlobalIDs.recommend);
+
+				filteredDials.forEach(function (serverDial) {
 					serverGroupsMap[serverDial.group.globalId] = serverDial.group;
 				});
-				const serverGroupsGlobalIds = Object.keys(serverGroupsMap);
 
-				debug.log('found server groups', serverGroupsGlobalIds);
+				
+				const serverGroupsGlobalIds = Object.keys(serverGroupsMap).filter((group) => !currentUserGroupsTrash.includes(group) 
+				|| (group === defaultGroupGlobalIDs.recommend // to bring back recommend group 
+					&& isNewRecommendDial)); // if there are any new recommend dials (not removed yet)
+
 				Utils.Async.each(
 					serverGroupsGlobalIds,
 					function (serverGroupGlobalId, next) {
@@ -222,13 +236,36 @@ class ServerDials {
 					title: serverDial.title,
 					thumb_url: serverDial.previewUrl,
 					group_id: serverGroupsIds[serverDial.group.globalId],
+					group_globalId: serverDial.group.globalId,
 				};
 
 				if (serverDial.previewUrl) {
 					dial.thumb_url = serverDial.previewUrl;
 					dial.thumb_source_type = 'url';
 				} else {
-					dial.thumb_source_type = 'screen';
+					dial.thumb_source_type = 'custom_preview';
+					dial.preview_style = dial?.preview_style || randomColor();
+					const hasProtocol = String(dial.display_url).includes('http://') || String(dial.display_url).includes('https://');
+					const domainName = getDomainName(hasProtocol ? dial.display_url : `http://${dial.display_url}`).replace('www.', '').split('.').join(' ');
+					const titleSplittedBySpace = dial?.title?.split(/[\s,-:_.]+/) || [];
+
+					if (titleSplittedBySpace.length) {
+						dial.previewTitle = titleSplittedBySpace.filter((word) => domainName.includes(word.toLowerCase())).join(' ')
+							.replace(' com', '')
+							.replace(' tv', '')
+							.replace(' io', '')
+							.replace(' net', '')
+							.replace(' fr', '')
+							.replace(' es', '')
+							.replace(' ro', '')
+							.replace(' ru', '')
+							.replace(' us', '')
+							.replace(' pl', '')
+							.replace(' uk', '')
+							.replace(' ca', '');
+					} else {
+						dial.previewTitle = domainName;
+					}
 				}
 
 				return dial;
@@ -327,7 +364,7 @@ class ServerDials {
 			},
 		]);
 	}
-	fetch(params, cb, excludeGlobalIds) {
+	fetch(params, cb, excludeGlobalIds, ignoreHistory = false) {
 		const self = this;
 
 		params = params || {};
@@ -340,8 +377,7 @@ class ServerDials {
 			params.country = this.country;
 		}
 
-		const exclude =
-			excludeGlobalIds?.length > 0 ? excludeGlobalIds : this.getExcludeDialsGlobalIds();
+		const exclude = excludeGlobalIds?.length > 0 ? excludeGlobalIds : this.getExcludeDialsGlobalIds();
 
 		if (exclude.length && !params.dontExclude) {
 			params.exclude = exclude.join(',');
@@ -367,17 +403,24 @@ class ServerDials {
 				return response.json();
 			})
 			.then((dials) => {
-				self.addToExcludeDialsGlobalIds(Object.keys(dials));
+				const toExcludeGlobalIdCondidates = Object.entries(dials).reduce((acc, [globalId, dial]) => {
+					if (this.avoidToExcludeGroups.includes(dial[0].group.globalId)) {
+						return acc;
+					}
+					
+					return [...acc, globalId];
+				}, []);
+				self.addToExcludeDialsGlobalIds(Object.keys(toExcludeGlobalIdCondidates));
 				debug.log('Loaded dials count: ', Object.keys(dials).length);
-				// fetch(new Request('https://geoloc.tempest.com', fetchParams))
-				fetch(new Request('', fetchParams))
+
+				fetch(new Request('https://geoloc.tempest.com', fetchParams))
 					.then((res) => {
 						return res.json();
 					})
 					.then((geo) => {
-						dialPicker.pickDials(dials, geo.cc, (result) => {
-							console.log('dialPicker.pickDials:', 'dials', dials);
-							console.log('dialPicker.pickDials:', 'result', result);
+						dialPicker.pickDials(dials, geo.cc, ignoreHistory, (result) => {
+							debug.log('dialPicker.pickDials:', 'dials', dials);
+							debug.log('dialPicker.pickDials:', 'result', result);
 
 							self._mapResult(result, function (err, result) {
 								if (err) {
@@ -466,7 +509,7 @@ const dialPicker = {
 		}
 		return selectedChoice;
 	},
-	pickDials: function (dials, location, cb) {
+	pickDials: function (dials, location, ignoreHistory, cb) {
 		const self = this;
 		let result = [];
 		const addAnyWayDials = [];
@@ -486,8 +529,7 @@ const dialPicker = {
 				delete dials[globalId];
 			}
 
-			const dialsWithAllowedCountries =
-				dialChoices.filter((dial) => dial.allowedCountries.length > 0) || [];
+			const dialsWithAllowedCountries = dialChoices.filter((dial) => dial.allowedCountries.length > 0) || [];
 
 			dialsWithAllowedCountries.forEach((dial) => {
 				if (dial.allowedCountries.includes(location)) {
@@ -534,6 +576,7 @@ const dialPicker = {
 								return !choice.noHistoryOnly;
 							});
 							historySearch.getChoices(choices, function (err, historyChoices) {
+
 								if (err) {
 									return debug.log('Fail to search in history', err, historyChoices);
 								}
@@ -553,7 +596,7 @@ const dialPicker = {
 										result.push(dial);
 									}
 								} else if (historyChoices.length === 1) {
-									result.push(historyChoices[0]);
+									result.push({ ...historyChoices[0], globalId });
 								}
 
 								eachNext();
@@ -651,17 +694,17 @@ HistorySearch.prototype.getChoices = function (dialsChoices, cb) {
 	const self = this;
 	const choices = [];
 	const startLookUpTime = new Date().getTime();
-
+	
 	dialsChoices.forEach(function (dialChoice) {
 		if (!dialChoice.checkHost) {
 			// debug.log('checkHost is not provided for', dialChoice, 'skip');
 			return;
 		}
-
+		
 		const visitsCount = self.getVisitsCountBySign(dialChoice.checkHost);
-
+		
 		// debug.log('Count visits:', dialChoice.checkHost, visitsCount);
-
+		
 		if (visitsCount >= config.minVisits) {
 			// this url was found in history, add dial for this url
 			debug.log('Host', dialChoice.checkHost, 'found in the history, add choice', dialChoice);

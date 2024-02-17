@@ -47,6 +47,24 @@ const Sync = {
 			}
 		);
 	},
+	getAccountInfo: function (cb) {
+		chrome.runtime.sendMessage(
+			{
+				action: 'sync:getaccountinfo',
+			},
+			function (info) {
+				const lastError = chrome.runtime.lastError;
+
+				if (lastError) {
+					console.log(lastError.message);
+					// 'Could not establish connection. Receiving end does not exist.'
+					cb(null);
+				}
+
+				cb(info);
+			}
+		);
+	},
 	startSync: function (type, cb) {
 		cb = cb || function () {};
 		chrome.runtime.sendMessage(

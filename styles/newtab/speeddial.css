@@ -219,6 +219,16 @@ input {
 	background-position: center center !important;
 }
 
+.newtabCell .body .preview-image .custom-preview {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	font-size: 20px;
+	color: #ffffff;
+}
+
 .newtabCell .body .preview-image {
 	position: absolute;
 	left: 2px;
@@ -304,9 +314,9 @@ input {
 
 .newtabCell .add, .newtabCell .add-standart{
 	border-radius: 4px;
-	font-size: 11px;
+	font-size: 8px;
 	position: absolute; 
-	padding: 2px 3px
+	padding: 1px 2px
 }
 
 .newtabCell .add {

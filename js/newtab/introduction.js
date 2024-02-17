@@ -46,6 +46,10 @@ const IntroductionModule = function (fvdSpeedDial) {
 				text: _('newtab_introduction_slide_configure_checkbox_recently_closed'),
 				option: 'sd.enable_recently_closed',
 			},
+			show_recommended: {
+				text: _('newtab_introduction_slide_configure_checkbox_show_recommended'),
+				option: 'sd.enable_show_recommended',
+			},
 		},
 	});
 
@@ -178,7 +182,14 @@ const IntroductionModule = function (fvdSpeedDial) {
 				for (const key in data.checkboxes) {
 					const item = data.checkboxes[key];
 
-					const checked = _b(Prefs.get(item.option)) ? 'checked' : '';
+					let checked = _b(Prefs.get(item.option)) ? 'checked' : '';
+
+					if (item.option === 'sd.enable_show_recommended') {
+						checked = 'checked';
+					}
+
+					const disabled = item.option === 'sd.enable_show_recommended' ? ' disabled' : '';
+
 					const checkbox
 						= '<label><input type="checkbox" option="'
 						+ item.option
@@ -187,6 +198,7 @@ const IntroductionModule = function (fvdSpeedDial) {
 						+ key
 						+ '" '
 						+ checked
+						+ disabled
 						+ ' />'
 						+ item.text
 						+ '</label>';
@@ -214,7 +226,12 @@ const IntroductionModule = function (fvdSpeedDial) {
 									checked++;
 								}
 
-								checkbox.removeAttribute('disabled');
+								const option = checkbox.getAttribute('option');
+
+								if (option !== 'sd.enable_show_recommended') {
+									checkbox.removeAttribute('disabled');
+								}
+
 							}
 
 							if (checked < 2) {

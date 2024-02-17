@@ -29,6 +29,7 @@ import StorageSD from '../storage.js';
 import MostVisitedModule from '../storage/mostvisited.js';
 import RecentlyClosedModule from '../storage/recentlyclosed.js';
 import Sync from '../sync/tab.js';
+import UserInfoSync from '../sync/user.js';
 import Templates from '../templates.js';
 import DialogsModule from '../dialogs.js';
 import HiddenCaptureQueueModule from '../capture/hiddencapturequeue.js';
@@ -49,6 +50,7 @@ class NewtabModule {
             yield fvdSpeedDial.init();
             fvdSpeedDial.Templates = Templates;
             fvdSpeedDial.Sync = Sync;
+            fvdSpeedDial.UserInfoSync = new UserInfoSync(fvdSpeedDial);
             fvdSpeedDial.SpeedDial = new SpeedDialModule(fvdSpeedDial);
             fvdSpeedDial.SpeedDialMisc = new SpeedDialMiscModule(fvdSpeedDial);
             fvdSpeedDial.ContextMenus = new ContextMenus(fvdSpeedDial);
@@ -100,6 +102,10 @@ class NewtabModule {
                 if (message.action === 'previousSession:button') {
                     fvdSpeedDial.SpeedDial.sessionRestore = message.sessionId;
                     fvdSpeedDial.SpeedDial.sheduleRebuildGroupsList();
+                }
+                if (['user:login', 'user:logout'].includes(message.action)) {
+                    fvdSpeedDial.SpeedDialMisc.refreshSearchPanel();
+                    fvdSpeedDial.ContextMenus.init();
                 }
             }
         });

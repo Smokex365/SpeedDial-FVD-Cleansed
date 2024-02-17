@@ -666,6 +666,27 @@ export const Utils = {
 		]);
 	},
 
+	setCustomPreview(elem, styles, title) {
+		if (!elem || !styles || !title) {
+			return;
+		}
+
+		const previewWrapper = document.createElement('div');
+		const previewTitleElement = document.createElement('p');
+		const previewTitle = String(title).charAt(0).toUpperCase() + String(title).slice(1);
+		previewTitleElement.innerText = previewTitle;
+		previewWrapper.appendChild(previewTitleElement);
+		previewWrapper.classList.add('custom-preview');
+
+		if (previewTitle.length >= 20) {
+			previewWrapper.style.fontSize = window.screen.availWidth > 1400 ? '18px' : '15px';
+		}
+
+		// previewWrapper.style.color = styles.color || '#ffffff';
+		// previewWrapper.style.backgroundColor = styles.backgroundColor || '#000000';
+		elem.appendChild(previewWrapper);
+	},
+
 	imageUrlToDataUrlOld: function (url, callback, format, quality) {
 		const img = new Image();
 
@@ -1053,7 +1074,7 @@ export const Utils = {
 						} else {
 							// looking for an incognito window
 							chrome.windows.getAll(function (windows) {
-								console.log('existing windows', windows);
+								// console.log('existing windows', windows);
 								for (let i = 0; i !== windows.length; i++) {
 									if (windows[i].incognito) {
 										win = windows[i];
@@ -1136,7 +1157,7 @@ export const Utils = {
 	},
 
 	getInstallVersion: function (fvdSpeedDial) {
-		return parseInt(String(fvdSpeedDial.localStorage['installVersion']).split('.').join('')) || 0;
+		return parseInt(String(fvdSpeedDial.localStorage.storage['installVersion']).split('.').join('')) || 8153;
 	},
 
 	getCurrentVersion: function () {
@@ -1589,3 +1610,70 @@ DD.prototype = {
 		return new _dragAndDropElem(params);
 	},
 };
+
+export function getCleanUrl(url) {
+	url = String(url);
+
+	url = url.split('://').pop();
+	url = url.split('urllink=').pop();
+	url = url.split('http%3A%2F%2F').pop();
+	url = url.split('https%3A%2F%2F').pop();
+	url = url.split('s.click.').join('');
+	url = url.split('rover.').join('');
+	url = url.split('%2E').join('.');
+	url = url.split('%2F').join('/');
+	return url;
+}
+
+export function getDomainName(url) {
+	const urlObject = new URL(url);
+
+	return urlObject.host;
+}
+
+export function randomColor() {
+	let hex = Math.floor(Math.random()*16777215).toString(16);
+
+	/* sometimes the returned value does not have 
+	* the 6 digits needed, so we do it again until
+	* it does 
+	*/
+
+	while (hex.length<6) {
+		hex = Math.floor(Math.random()*16777215).toString(16);
+	}
+
+	let red = parseInt(hex.substring(0,2),16);
+	let green = parseInt(hex.substring(2,4),16);
+	let blue = parseInt(hex.substring(4,6),16);
+
+	while (red > 150) {
+		red = red - 40;
+	}
+
+	while (green > 120) {
+		green = green - 40;
+	}
+
+	while (blue > 120) {
+		blue = blue - 40;
+	}
+
+	const brightness = red*0.299 + green*0.587 + blue*0.114;
+
+	/* if (red*0.299 + green*0.587 + blue*0.114) > 180 
+		* use #000000 else use #ffffff 
+		*/
+
+	if (brightness > 180) {
+		return { 
+			backgroundColor: `rgb(${red}, ${green}, ${blue})`,
+			color: '#000000',
+		};
+	} else {
+		return {
+			backgroundColor: `rgb(${red}, ${green}, ${blue})`,
+			color: '#ffffff',
+		};
+	}
+}

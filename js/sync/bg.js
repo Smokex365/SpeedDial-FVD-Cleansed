@@ -1,6 +1,7 @@
 import Broadcaster from '../_external/broadcaster.js';
 import { Utils, _b } from '../utils.js';
 import AppLog from '../log.js';
+import { EventType } from '../types.js';
 
 const TempStore = {
 	_key: function (id) {
@@ -30,7 +31,7 @@ const TempStore = {
 };
 
 const Sync = function (fvdSpeedDial) {
-	const { Prefs } = fvdSpeedDial;
+	const { Prefs, UserInfoSync } = fvdSpeedDial;
 	const fvdSynchronizerName = 'EverSync';
 	const fvdSynchronizerIds = [
 		// Chrome Webstore EverSync ID
@@ -100,6 +101,7 @@ const Sync = function (fvdSpeedDial) {
 			port.postMessage(data);
 		} catch (ex) {
 			console.warn(ex);
+			return callback(null);
 		}
 	}
 
@@ -125,6 +127,16 @@ const Sync = function (fvdSpeedDial) {
 			function (response) {
 				callback(response && response.has);
 			}
+		);
+	};
+
+	this.getAccountInfo = function (callback) {
+		requestWithCallback({
+			action: 'getAccountInfo',
+		},
+		function (response) {
+			callback(response && response.info);
+		}
 		);
 	};
 
@@ -411,7 +423,7 @@ const Sync = function (fvdSpeedDial) {
 			},
 			function (result) {
 				if (callback) {
-					callback(result.state);
+					callback(result?.state);
 				}
 			}
 		);
@@ -462,14 +474,14 @@ const Sync = function (fvdSpeedDial) {
 	}
 
 	function processPortMessage(message) {
-		const { StorageSD } = fvdSpeedDial;
+		const { StorageSD, UserInfoSync } = fvdSpeedDial;
 		switch (message.action) {
 			case 'saveTempData':
 				const id = message.data.id;
 				const value = message.data.value;
 
 				TempStore.append(id, value);
-				console.log('Got a chunk', id);
+				// console.log('Got a chunk', id);
 				sendResponse(message.requestId, {
 					id: id,
 				});
@@ -644,7 +656,7 @@ const Sync = function (fvdSpeedDial) {
 				break;
 
 			case 'updateMass':
-				console.log('OBtained message', message);
+				// console.log('OBtained message', message);
 				StorageSD.syncUpdateMass(message.globalIds, message.data, function () {
 					if (message.requestId) {
 						sendResponse(message.requestId, {});
@@ -862,6 +874,13 @@ const Sync = function (fvdSpeedDial) {
 			case '_response':
 				callRequestResponse(message.requestId, message);
 				break;
+			
+			case 'sync:logout':
+				UserInfoSync.triggerOnLogout();
+				break;
+			case 'sync:login':
+				UserInfoSync.triggerOnLogin(message.data);
+				break;
 		}
 	}
 
@@ -881,7 +900,7 @@ const Sync = function (fvdSpeedDial) {
 			results.forEach(function (extension) {
 				if (
 					extension.enabled
-					&& (extension.name === fvdSynchronizerName || fvdSynchronizerIds.indexOf(extension.id) >= 0)
+					&& (extension.name.includes(fvdSynchronizerName) || fvdSynchronizerIds.indexOf(extension.id) >= 0)
 				) {
 					id = extension.id;
 				}
@@ -889,6 +908,82 @@ const Sync = function (fvdSpeedDial) {
 			callback(id);
 		});
 	}
+
+	const that = this;
+
+	function connectToSynchronizer(params = {}) {
+
+		if (port !== null || fvdSpeedDial?.PowerOff?.isHidden()) {
+			return;
+		}
+
+		getSynchronizerId((id) => {
+			if (!id) {
+				return;
+			}
+
+			try {
+				port = chrome.runtime.connect(id, {
+					name: 'SpeedDial',
+				});
+				port.onMessage.addListener(processPortMessage);
+				port.onDisconnect.addListener(function () {
+					console.info('port.onDisconnect');
+
+					if (params.disconnectCallback) {
+						params.disconnectCallback();
+					}
+
+					setTimeout(() => {
+						console.info('Recconnect', params.reconnect || 0);
+						connectToSynchronizer({
+							reconnect: 1 + (params.reconnect || 0),
+						});
+					}, 100);
+
+					setActivity(false);
+					port = null;
+				});
+
+				that.getAccountInfo(function (info) {
+					UserInfoSync.setUserInfo(info);
+		
+					if (!info?.user?.premium?.active) {
+						Prefs.set('sd.enable_search', true);
+					} else {
+						Prefs.set('sd.enable_search', UserInfoSync.getIsSearchEnable());
+					}
+				});
+				
+			} catch (error) {
+				console.warn(error);
+			}
+		});
+	}
+
+	fvdSpeedDial.addEventListener(
+		EventType.LOAD,
+		function () {
+			connectToSynchronizer();
+
+			setTimeout(() => {
+				connectToSynchronizer();
+			}, 3e3);
+
+			function installCallback(ext) {
+				getSynchronizerId(function (id) {
+					if (id) {
+						if (id === ext.id) {
+							connectToSynchronizer();
+						}
+					}
+				});
+			}
+	  
+			  chrome.management.onEnabled.addListener(installCallback);
+			  chrome.management.onInstalled.addListener(installCallback);
+		}
+	);
 
 	chrome.runtime.onConnectExternal.addListener(function (_p) {
 
@@ -922,7 +1017,19 @@ const Sync = function (fvdSpeedDial) {
 		}
 
 		setActivity(true);
+
+		that.getAccountInfo(function (info) {
+			UserInfoSync.setUserInfo(info);
+
+			if (!info?.user?.premium?.active) {
+				Prefs.set('sd.enable_search', true);
+			} else {
+				Prefs.set('sd.enable_search', UserInfoSync.getIsSearchEnable());
+			}
+		});
 	});
+
+	
 
 	Broadcaster.onMessage.addListener(function (msg, sender, sendResponse) {
 		if (port) {

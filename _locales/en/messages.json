@@ -55,6 +55,9 @@
 	"newtab_introduction_slide_configure_checkbox_recently_closed": {
 		"message": "Show Recently Closed Tabs"
 	},
+	"newtab_introduction_slide_configure_checkbox_show_recommended": {
+		"message": "Show Recommended Tabs <span class=\"checkbox-description\">(to support free version, removable for premium)</span>"
+	},
 	"newtab_introduction_last_step": {
 		"message": "Last step"
 	},
@@ -224,7 +227,7 @@
 		"message": "Clicks"
 	},
 	"newtab_popular_group_title": {
-		"message": "Popular"
+		"message": "Most Visited"
 	},
 	"newtab_mostvisited_interval_all_time": {
 		"message": "All Time"

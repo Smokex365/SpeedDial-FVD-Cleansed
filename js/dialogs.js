@@ -1,5 +1,5 @@
 import Dialog from './newtab/dialogs/simple-dialog.js';
-import { _b, Utils } from './utils.js';
+import { _b, getCleanUrl, Utils } from './utils.js';
 import { _ } from './localizer.js';
 import importTranslate from './importtranslators.js';
 import ToolTip from './tooltip.js';
@@ -7,6 +7,9 @@ import Config from './config.js';
 import DialSearch from './newtab/searchoverlay.js';
 import DragLists from './newtab/draglists.js';
 import HistoryComplete from './historycomplete.js';
+import Analytics from './bg/google-analytics.js';
+import { userStorageKey } from './sync/user.js';
+import { defaultGroupGlobalIDs } from './constants.js';
 
 const ManageGroupsModule = function (fvdSpeedDial) {
 	this.fvdSpeedDial = fvdSpeedDial;
@@ -37,6 +40,19 @@ const ManageGroupsModule = function (fvdSpeedDial) {
 		divIcons.appendChild(iconEdit);
 		group.appendChild(divIcons);
 		(function (group, dbGroup) {
+			const UserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+			let isPremiumUser = false;
+
+			if (UserInfo && UserInfo?.user?.premium?.active) {
+				isPremiumUser = true;
+			}
+
+			if (dbGroup.global_id === defaultGroupGlobalIDs.recommend && !isPremiumUser) {
+				iconEdit.remove();
+				iconRemove.remove();
+				return;
+			}
+
 			iconRemove.addEventListener(
 				'mousedown',
 				function (event) {
@@ -1087,7 +1103,7 @@ DialogsModule.prototype = {
 												dial.group_id = groupsRelations[dial.group_id];
 
 												if (dial.screen_maked === 1) {
-													dial.screen_maked = 0; // screen not transferred and need to remake
+													dial.screen_maked = 0; // screen not transfered and need to remake
 												}
 
 												StorageSD.addDial(dial, function (result) {
@@ -1450,7 +1466,7 @@ DialogsModule.prototype = {
 										position: group.position,
 									},
 									function (result) {
-										console.log('added group', group);
+										// console.log('added group', group);
 
 										if (result.result) {
 											Sync.addDataToSync({
@@ -2175,6 +2191,18 @@ DialogsModule.prototype = {
 
 																SpeedDial.sheduleFullRebuild();
 															}, 200);
+
+															// GA dial add event track
+															StorageSD.getGroupTitleById(groupValue, (groupTitle) => {
+																const GADialAddParams = {
+																	title,
+																	url: getCleanUrl(url),
+																	dial_id: result.id,
+																	group: groupTitle,
+																	group_id:groupValue,
+																};
+																Analytics.fireAddDialEvent(GADialAddParams);
+															});
 														}
 
 														sdUserPicsPreviewsAfterAdd();

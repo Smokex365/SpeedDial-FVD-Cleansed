@@ -1,12 +1,14 @@
 /* eslint-disable eqeqeq */
 import AppLog from './log.js';
-import { Utils } from './utils.js';
+import { Utils, getCleanUrl } from './utils.js';
 import Sync from './sync/tab.js';
 import Config from './config.js';
 import Broadcaster from './_external/broadcaster.js';
 import FileSystemSD from './storage/filesystem.js';
 import { _ } from './localizer.js';
 import initStorage from './storage/init.js';
+import { defaultGroupTitles } from './constants.js';
+import Analytics from './bg/google-analytics.js';
 
 const LOG_STORAGE = true;
 const CACHE = {};
@@ -110,7 +112,7 @@ class StorageSD {
 		'rowid as `id`, `url`, `display_url`, `title`, `auto_title`, `update_interval`, ' +
 		'`thumb_source_type`, `thumb_url`, `position`, `group_id`, `clicks`, `deny`, `screen_maked`, ' +
 		'`thumb`, `thumb_version`, `screen_delay`, `thumb_width`, `thumb_height`, `get_screen_method`, ' +
-		'`global_id`';
+		'`global_id`, `previewTitle`, `preview_style`';
 	// force use transaction
 	_transaction = null;
 	_backupRegexp = /_backup_(.+?)_(.+)$/i;
@@ -543,7 +545,7 @@ class StorageSD {
 									});
 								},
 								function () {
-									console.log('Done table', table);
+									// console.log('Done table', table);
 									cb();
 								}
 							);
@@ -1352,6 +1354,8 @@ class StorageSD {
 					'get_screen_method',
 					'update_interval',
 					'global_id',
+					'previewTitle',
+					'preview_style',
 				],
 				rename: {
 					rowid: 'id',
@@ -1910,6 +1914,18 @@ class StorageSD {
 						return next();
 					}
 
+					// GA dial remove event track
+					that.getGroupTitleById(d.group_id, (groupTitle) => {
+						const GADialAddParams = {
+							title: d.title,
+							url: getCleanUrl(d.url),
+							dial_id: d.id,
+							group: groupTitle,
+							group_id: d.group_id,
+						};
+						Analytics.fireRemoveDialEvent(GADialAddParams);
+					});
+
 					let thumb = String(d.thumb) || '';
 
 					if (thumb.indexOf('blob:') === 0) {
@@ -2391,7 +2407,37 @@ class StorageSD {
 				},
 			});
 		});
-	}
+	};
+	getAllDialList = function (callback) {
+		const { fvdSpeedDial } = this;
+
+		dbTransaction(function (tx) {
+			dbSelect(fvdSpeedDial, {
+				tx: tx,
+				from: 'dials',
+				success: function (tx, results) {
+					callback(results.rows);
+				},
+			});
+		});
+	};
+	getDialListByGroupId = function (groupId, callback) {
+		const { fvdSpeedDial } = this;
+		//ff match results!
+
+		dbTransaction(function (tx) {
+			dbSelect(fvdSpeedDial, {
+				tx: tx,
+				from: 'dials',
+				where: {
+					group_id: groupId,
+				},
+				success: function (tx, results) {
+					callback(results.rows);
+				},
+			});
+		});
+	};
 	nextDialPositionCache = {};
 	nextDialPosition = function (group_id, callback) {
 		const { fvdSpeedDial } = this;
@@ -3140,6 +3186,29 @@ class StorageSD {
 			},
 		});
 	};
+	getGroupTitleById = function (groupId, callback) {
+		this.getGroup(groupId, (group) => {
+			let groupTitle = 'Popular';
+
+			if (group) {
+				switch (group.global_id) {
+					case defaultGroupTitles.recommend.key:
+						groupTitle = defaultGroupTitles.recommend.value;
+						break;
+					case defaultGroupTitles.sponsoredst.key:
+						groupTitle = defaultGroupTitles.sponsoredst.value;
+						break;
+					case defaultGroupTitles.default.key:
+						groupTitle = defaultGroupTitles.default.value;
+						break;
+					default:
+						groupTitle = 'Other';
+				}
+			}
+
+			callback(groupTitle, group);
+		});
+	};
 	groupsCount = function (callback) {
 		const { fvdSpeedDial } = this;
 
@@ -3309,6 +3378,39 @@ class StorageSD {
 			});
 		});
 	};
+
+	groupDeleteByGlobalID = function (globalId, callback) {
+		const { fvdSpeedDial } = this;
+		const that = this;
+
+		dbTransaction(function (tx) {
+			dbDelete(fvdSpeedDial, {
+				tx: tx,
+				from: 'groups',
+				where: {
+					key: 'global_id',
+					val: globalId,
+				},
+				success: function (tx, results) {
+					try {
+						callback({
+							result: results.rowsAffected === 1,
+						});
+						that._callGroupsChangeCallbacks({
+							action: 'remove',
+							global_id: globalId,
+						});
+					} catch (ex) {
+						console.warn('groupDelete:', ex);
+					}
+				},
+				error: function (tx, err) {
+					console.warn(tx, err);
+				},
+			});
+		});
+	};
+
 	clearGroups = function (callback, where) {
 		const { fvdSpeedDial } = this;
 		const self = this;

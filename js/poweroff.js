@@ -5,8 +5,9 @@ function PowerOffModule(fvdSpeedDial) {
 	this.fvdSpeedDial = fvdSpeedDial;
 
 	const PASSPHRASE = '*j12398sdfh4123iud9123';
-	const SERVER_URL = 'https://fvdspeeddial.com/sdserver/poweroff.php';
-
+	let SERVER_URL = 'https://qa.fvdspeeddial.com/sdserver/poweroff.php';
+		SERVER_URL = 'https://fvdspeeddial.com/sdserver/poweroff.php';
+	
 	function cryptString(string) {
 		return Aes.Ctr.encrypt(string, PASSPHRASE, 256);
 	}

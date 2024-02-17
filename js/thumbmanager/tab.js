@@ -136,6 +136,16 @@ export const ThumbManagerModule = function (fvdSpeedDial) {
 					);
 				}
 
+				if (data.thumb_source_type === 'custom_preview' && data.previewTitle) {
+					Utils.setCustomPreview(screen, data.preview_style, data.previewTitle);
+					// const adElem = elem.querySelector('.body .screenParent .add');
+
+					// if (adElem) {
+					// 	adElem.style.color = data.preview_style.color;
+					// 	adElem.style.border = `1px solid ${data.preview_style.color}`;
+					// }
+				}
+
 				/*
 				if (!data.displayTitle) {
 					this.hiddenCaptureThumb({
