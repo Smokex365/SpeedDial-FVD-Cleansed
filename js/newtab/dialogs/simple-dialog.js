@@ -358,8 +358,8 @@ Dialog.prototype = {
 			'webkitTransitionEnd',
 			function (event) {
 				try {
-					document.body.removeChild(that._wrapper);
-					document.body.removeChild(that._overlay);
+					that._wrapper && document.body.removeChild(that._wrapper);
+					that._overlay && document.body.removeChild(that._overlay);
 
 					that.container = null;
 					that.header = null;

@@ -13,7 +13,10 @@ window.addEventListener(
 					host = host.replace(/^www\./, '');
 
 					if (host === 'gearbest.com') {
-						return 'https://fvdspeeddial.com/load.php?url=' + encodeURIComponent(url);
+						let fvdUrl = 'https://qa.fvdspeeddial.com/load.php?url=';
+												fvdUrl = 'https://fvdspeeddial.com/load.php?url=';
+						
+						return fvdUrl + encodeURIComponent(url);
 					}
 				}
 			} catch (ex) {

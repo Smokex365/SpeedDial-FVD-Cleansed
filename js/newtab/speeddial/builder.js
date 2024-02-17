@@ -1,12 +1,14 @@
 import UniClick from '../../_external/uniclick.js';
 import Templates from '../../templates.js';
 import { _ } from '../../localizer.js';
-import { _b, Utils } from '../../utils.js';
+import { _b, getCleanUrl, Utils } from '../../utils.js';
 import SpeedDial from '../speeddial.js';
 import Scrolling from '../scrolling.js';
 import RecentlyClosed from '../../storage/recentlyclosed.js';
 import Sync from '../../sync/tab.js';
 import Config from '../../config.js';
+import { defaultGroupTitles } from '../../constants.js';
+import Analytics from '../../bg/google-analytics.js';
 
 const mirrorSurfaceDistance = 0;
 const CLICK_SCREEN_OVER = 100;
@@ -709,6 +711,34 @@ SpeedDialBuilderModule.prototype = {
 			item.addEventListener(
 				'click',
 				function (event) {
+					fvdSpeedDial.StorageSD.getGroupTitleById(groupId, (groupTitle) => {
+						const metricParams = {
+							dial_group: groupTitle,
+						};
+
+						const dialsRequiredGroups = [defaultGroupTitles.recommend.value, defaultGroupTitles.sponsoredst.value];
+
+						if (dialsRequiredGroups.includes(groupTitle)) {
+							fvdSpeedDial.StorageSD.getDialListByGroupId(groupId, (groupDials) => {
+								metricParams.items = groupDials.map((item) => ({
+									item_name: item.title,
+									item_url: fvdSpeedDial.SpeedDialMisc.getCleanRedirectTxt(item.display_url),
+								}));
+								Analytics.fireGroupVisitEvent(metricParams);
+							});
+						} else {
+							Analytics.fireGroupVisitEvent(metricParams);
+						}
+
+						// after group clicking, fires tab update listener, that fires GA page_view event
+						// by bellow logic preventing fake page view event;
+						fvdSpeedDial.localStorage.setItem('preventPageViewEvent', true);
+						setTimeout(() => {
+							fvdSpeedDial.localStorage.setItem('preventPageViewEvent', false);
+						}, 1000);
+
+					});
+
 					SpeedDial.setCurrentGroupId(groupId);
 				},
 				false
@@ -860,7 +890,7 @@ SpeedDialBuilderModule.prototype = {
 	},
 	_assignEvents: function (cell, data, displayType, displayMode) {
 		const {
-			fvdSpeedDial: { SpeedDial, StorageSD, Prefs, Dialogs, MostVisited },
+			fvdSpeedDial: { SpeedDial, SpeedDialMisc, StorageSD, Prefs, Dialogs, MostVisited },
 		} = this;
 
 		let clickEventAssigned = false;
@@ -950,6 +980,33 @@ SpeedDialBuilderModule.prototype = {
 
 				if (displayType === 'speeddial') {
 					if (allowAddClick) {
+						StorageSD.getGroupTitleById(data.group_id, (groupTitle, group) => {
+							const url = getCleanUrl(data.display_url);
+							const displayURL = SpeedDial.checkAdMarketplace(data.url, { ignoreVersion: true });
+							const redirectURL = SpeedDial.checkAdMarketplace(url, { ignoreVersion: true });
+							let affiliation = 'none';
+
+							if (redirectURL.includes('ampxdirect.com') || displayURL.includes('ampxdirect.com')) {
+								affiliation = 'admk';
+							}
+
+							if (redirectURL.includes('v2i8b.com') || displayURL.includes('v2i8b.com')) {
+								affiliation = 'snmx';
+							}
+
+							if (redirectURL.includes('kelkoogroup.net') || displayURL.includes('kelkoogroup.net')) {
+								affiliation = 'kelk';
+							}
+
+							Analytics.fireDialClickEvent({
+								title: data.title,
+								url: data.display_url ? url :  getCleanUrl(data.url),
+								affiliation,
+								dial_id: data.id,
+								group: groupTitle,
+								group_id: data.group_id,
+							});
+						});
 						SpeedDial.addDialClick(data.id);
 						allowAddClick = false;
 						setTimeout(function () {
@@ -1167,7 +1224,6 @@ SpeedDialBuilderModule.prototype = {
 							cell,
 							function (draggedOn) {
 								const dialId = fvdSpeedDial.SpeedDial._getDialIdByCell(cell);
-								console.log(fvdSpeedDial);
 
 								StorageSD.getDial(dialId, console.log);
 

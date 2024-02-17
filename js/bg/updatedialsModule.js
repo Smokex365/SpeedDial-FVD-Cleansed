@@ -1,14 +1,11 @@
 import { Utils } from '../utils.js';
 import ServerDialsModule from './serverdialsModule.js';
 import Broadcaster from '../_external/broadcaster.js';
+import { DIALS_TRASH_KEY, GROUPS_TRASH_KEY, defaultGroupGlobalIDs } from '../constants.js';
+import { userStorageKey } from '../sync/user.js';
 
 class UpdateDials {
 	fvdSpeedDial;
-	// serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
-	// looking for function that keeps adding sponsored ads
-	serverUrl = '';
-	// geolocationUrl = 'https://geoloc.tempest.com';
-	geolocationUrl = '';
 
 	constructor(fvdSpeedDial) {
 		this.fvdSpeedDial = fvdSpeedDial;
@@ -17,12 +14,18 @@ class UpdateDials {
 	update() {
 		const fvdSpeedDial = this.fvdSpeedDial;
 		const dialsCreated = [];
-		const allowedGroups = ['sponsoredst', 'recommend'];
+		// const removedGroups = fvdSpeedDial.Prefs.get('fvd.groups_trash');
+		const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+		const removedDials = fvdSpeedDial.Prefs.get(DIALS_TRASH_KEY, {});
+		const currentUserRemovedDials = removedDials[currentUserInfo?.user?.user_id] || [];
+		const allowedGroups = Object.values(defaultGroupGlobalIDs).filter((globalID) => globalID !== defaultGroupGlobalIDs.popular);
 		const allowedGroupIds = [];
 		let excludeGlobalIds = [];
 		let allowedExitingDials = [];
 		let serverDials = [];
+		let dbExistingDials = [];
 		const serverDialsModule = new ServerDialsModule(fvdSpeedDial);
+
 
 		Utils.Async.chain([
 			function (next) {
@@ -39,8 +42,8 @@ class UpdateDials {
 			// taking allowed group dials and preventing them from exclude
 			function (next) {
 				fvdSpeedDial.StorageSD.listDials(null, null, null, (_exitingDials) => {
-					allowedExitingDials =
-						_exitingDials?.filter((d) => allowedGroupIds.includes(d.group_id)) || [];
+					dbExistingDials = _exitingDials;
+					allowedExitingDials = _exitingDials?.filter((d) => allowedGroupIds.includes(d.group_id)) || [];
 
 					const dialsToFetchIds = allowedExitingDials.map((d) => d.global_id);
 
@@ -65,8 +68,41 @@ class UpdateDials {
 
 						next();
 					},
-					excludeGlobalIds
+					excludeGlobalIds,
+					true // True to ignor browser history check
 				);
+			},
+			// only default, sponsoredst and recommend group dials to update
+			function (next) {
+				serverDials = serverDials.filter((dial) => allowedGroups.includes(dial.group_globalId));
+				next();
+			},
+			// ignoring removed groups by user
+			/**function (next) {
+				serverDials = serverDials.filter((dial) => !removedGroups.includes(dial.group_globalId));
+				next();
+			},*/
+			// ignoring removed dials by user
+			function (next) {
+				serverDials = serverDials.filter((dial) => !currentUserRemovedDials.includes(dial.global_id));
+				next();
+			},
+			// Remove groups by user trash if login/logout
+			function (next) {
+				const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+				const userID = currentUserInfo?.user?.user_id;
+				const groupsTrash = fvdSpeedDial.Prefs.get(GROUPS_TRASH_KEY) || [];
+
+				const groupsRemoveProcess = (groupGlobalId, done) => {
+					fvdSpeedDial.StorageSD.groupDeleteByGlobalID(groupGlobalId, done);
+				};
+
+				if (groupsTrash[userID]) {
+					Utils.Async.arrayProcess(groupsTrash[userID], groupsRemoveProcess, next);
+				} else {
+					next();
+				}
+
 			},
 			// Removing dials by server
 			function (next) {
@@ -74,8 +110,8 @@ class UpdateDials {
 
 				for (const dial of allowedExitingDials) {
 					if (
-						!serverDials.some((d) => d.global_id === dial.global_id) &&
-						dial.global_id.length < 10
+						!serverDials.some((d) => d.global_id === dial.global_id)
+						&& dial.global_id.length <= 10
 					) {
 						dialsToRemove.push(dial);
 					}
@@ -153,6 +189,7 @@ class UpdateDials {
 									dialExists.id,
 									{
 										...dialData,
+										preview_style: dialExists?.preview_style || dialData?.preview_style,
 										thumb: dataUrl,
 										thumb_width: Math.round(thumbSize.width),
 										thumb_height: Math.round(thumbSize.height),
