@@ -125,7 +125,7 @@ require = (function e(t, n, r) {
 							},
 						},
 						amazon: {
-							url: 'https://completion.amazon.com/search/complete?method=completion&mkt=1&client=amazon-search-ui&x=String&search-alias=aps&q={query}&qs=&cf=1&fb=1&sc=1',
+							url: 'https://amazon.com/s?k={query}',
 							parse: function (xhr) {
 								const r = xhr.responseText;
 								let items = [];

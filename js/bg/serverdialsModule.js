@@ -66,7 +66,8 @@ const config = {
 
 class ServerDials {
 	fvdSpeedDial;
-		serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
+		// serverUrl = 'http://fvdspeeddial.com/fst/dials.php';
+		serverUrl = '';
 			mapFunction = null;
 	mapClass = null;
 	installTime = null;
