@@ -226,6 +226,9 @@
 	"newtab_dial_clicks": {
 		"message": "Clicks"
 	},
+	"newtab_dial_info": {
+		"message": "Sponsored"
+	},
 	"newtab_popular_group_title": {
 		"message": "Most Visited"
 	},
@@ -924,12 +927,6 @@
 	},
 	"options_import": {
 		"message": "Import"
-	},
-	"options_export_file": {
-		"message": "Export File"
-	},
-	"options_import_file": {
-		"message": "Import File"
 	},
 	"options_display_popular_group": {
 		"message": "Display popular group"

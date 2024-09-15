@@ -7,7 +7,7 @@
 	background: rgba(0, 0, 0, 0.8);
 	z-index: 10;
 	opacity: 0;
-	transition:  200ms ease opacity;
+
 	-webkit-transition: 200ms ease opacity;
 }
 

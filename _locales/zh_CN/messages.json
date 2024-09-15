@@ -196,6 +196,9 @@
 	"newtab_dial_clicks": {
 		"message": "点击量"
 	},
+	"newtab_dial_info": {
+		"message": "赞助"
+	},
 	"newtab_popular_group_title": {
 		"message": "流行"
 	},

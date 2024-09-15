@@ -208,6 +208,9 @@
 	"newtab_dial_clicks": {
 		"message": "Переходи"
 	},
+	"newtab_dial_info": {
+		"message": "Спонсорований"
+	},
 	"newtab_popular_group_title": {
 		"message": "Популярні"
 	},

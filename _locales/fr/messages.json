@@ -894,6 +894,9 @@
 	"newtab_dial_clicks": {
 		"message": "Clics"
 	},
+	"newtab_dial_info": {
+		"message": "Sponsorisé"
+	},
 	"newtab_dials_search_input_placeholder": {
 		"message": "Rechercher dans Speed Dial"
 	},
