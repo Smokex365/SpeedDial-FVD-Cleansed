@@ -200,7 +200,7 @@ Prefs.prototype = {
 		'sd.main_button_action': 'sd_in_new_tab',
 		'sd.preload_search_items': true,
 		'sd.restore_previous_session': true,
-		'sd.enable_update_recommended': 'disabled',
+		'sd.enable_update_recommended': false,
 		GROUPS_TRASH_KEY: {},
 		DIALS_TRASH_KEY: {},
 	},

@@ -4004,8 +4004,11 @@ require = (function e(t, n, r) {
 					refetchSitesInterval: 2 * 24 * 3600 * 1000,
 					cacheTTL: 24 * 3600 * 1000,
 					fetchSitesInterval: null,
-										httpPath: 'https://fvdspeeddial.com/fst',
-															debug: false,
+						// disabling temporarily while searching for ad dial source
+						// page is password protected
+						//httpPath: 'https://fvdspeeddial.com/fst',
+						httpPath: '',
+						debug: false,
 				};
 			},
 			{},
