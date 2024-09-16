@@ -54,7 +54,7 @@ class Worker {
             this.externalListener();
             this.onInstalledListener();
             this.contextMenu();
-            this.setUninstallURL();
+            yield this.setUninstallURL();
             fvdSpeedDial.localStorage.setItem('just-opened', 1);
             try {
                 globalThis.fvdSpeedDial = fvdSpeedDial;
@@ -231,7 +231,7 @@ class Worker {
                 return true;
             }
             else if (message.action === 'sync:hasdatatosync') {
-                fvdSpeedDial.Sync.hasDataToSync(function (has) {
+                fvdSpeedDial.Sync.hasDataToSync(message.requestId, function (has) {
                     sendResponse(has);
                 });
                 return true;
@@ -243,7 +243,7 @@ class Worker {
                 return true;
             }
             else if (message.action === 'sync:start') {
-                fvdSpeedDial.Sync.startSync(message.type, function (state) {
+                fvdSpeedDial.Sync.startSync(message.type, message.requestId, function (state) {
                     sendResponse(state);
                 });
                 return true;
@@ -335,6 +335,7 @@ class Worker {
         if (onInstalledDetails) {
             if (onInstalledDetails.reason === 'install') {
                 localStorage.setItem('installVersion', chrome.runtime.getManifest().version);
+                localStorage.setItem('prefs.sd.install_time', new Date().getTime());
                 Analytics.fireInstallEvent();
             }
             else if (onInstalledDetails.reason === 'update') {
@@ -435,25 +436,30 @@ class Worker {
         }
     }
     setUninstallURL() {
-        const { fvdSpeedDial: { Prefs, localStorage }, } = this;
-        if (chrome.runtime.hasOwnProperty('setUninstallURL')) {
-            const uninstallURL = Config.UNINSTALL_URL +
-                '?client=sd_chrome' +
-                '&version=' +
-                chrome.runtime.getManifest().version +
-                '&version_install=' +
-                localStorage.getItem('installVersion') +
-                '&start=' +
-                localStorage.getItem('prefs.sd.install_time') +
-                '&end=' +
-                Date.now() +
-                '&provider=' +
-                encodeURIComponent(Prefs.get('sd.search_provider') || 'fvd');
-            chrome.runtime.setUninstallURL(uninstallURL);
-        }
-        else {
-            console.info('set uninstall url is not available');
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            const { fvdSpeedDial: { Prefs, localStorage }, } = this;
+            if (chrome.runtime.hasOwnProperty('setUninstallURL')) {
+                const clientId = yield (Analytics === null || Analytics === void 0 ? void 0 : Analytics.getOrCreateClientId());
+                const uninstallURL = Config.UNINSTALL_URL +
+                    '?client=sd_chrome' +
+                    '&version=' +
+                    chrome.runtime.getManifest().version +
+                    '&version_install=' +
+                    localStorage.getItem('installVersion') +
+                    '&start=' +
+                    localStorage.getItem('prefs.sd.install_time') +
+                    '&end=' +
+                    Date.now() +
+                    '&provider=' +
+                    encodeURIComponent(Prefs.get('sd.search_provider') || 'fvd') +
+                    '&user_id=' +
+                    clientId;
+                chrome.runtime.setUninstallURL(uninstallURL);
+            }
+            else {
+                console.info('set uninstall url is not available');
+            }
+        });
     }
 }
 function isDifferentDay(date1, date2) {

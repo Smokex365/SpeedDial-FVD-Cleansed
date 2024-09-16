@@ -14,10 +14,9 @@ class UpdateDials {
 	update() {
 		const fvdSpeedDial = this.fvdSpeedDial;
 		const dialsCreated = [];
-		// const removedGroups = fvdSpeedDial.Prefs.get('fvd.groups_trash');
 		const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
-		const removedDials = fvdSpeedDial.Prefs.get(DIALS_TRASH_KEY, {});
-		const currentUserRemovedDials = removedDials[currentUserInfo?.user?.user_id] || [];
+		const currentUserId = currentUserInfo?.user?.user_id;
+
 		const allowedGroups = Object.values(defaultGroupGlobalIDs).filter((globalID) => globalID !== defaultGroupGlobalIDs.popular);
 		const allowedGroupIds = [];
 		let excludeGlobalIds = [];
@@ -41,9 +40,9 @@ class UpdateDials {
 			},
 			// taking allowed group dials and preventing them from exclude
 			function (next) {
-				fvdSpeedDial.StorageSD.listDials(null, null, null, (_exitingDials) => {
-					dbExistingDials = _exitingDials;
-					allowedExitingDials = _exitingDials?.filter((d) => allowedGroupIds.includes(d.group_id)) || [];
+				fvdSpeedDial.StorageSD.listDials(null, null, null, (_existingDials) => {
+					dbExistingDials = _existingDials;
+					allowedExitingDials = _existingDials?.filter((d) => allowedGroupIds.includes(d.group_id)) || [];
 
 					const dialsToFetchIds = allowedExitingDials.map((d) => d.global_id);
 
@@ -52,6 +51,37 @@ class UpdateDials {
 					excludeGlobalIds = dialsToExcludeIds?.filter((d) => !dialsToFetchIds.includes(d));
 					next();
 				});
+			},
+			// Sync local groups/dials with trash
+			function (next) {
+				// Groups trash globalIDs
+				const removedGroupsTrash = fvdSpeedDial.Prefs.get(GROUPS_TRASH_KEY, {});
+				const currentUserRemovedGroups = removedGroupsTrash[currentUserId] || [];
+				// Dials trash globalIDs
+				const removedDialsTrash = fvdSpeedDial.Prefs.get(DIALS_TRASH_KEY, {});
+				const currentUserRemovedDials = removedDialsTrash[currentUserId] || [];
+
+				fvdSpeedDial.StorageSD.groupsList(function (groups) {
+					const localGroupsGlobalIDs = groups?.map((group) => group.global_id);
+					// eslint-disable-next-line max-len
+					const newGroupsTrash = currentUserRemovedGroups.filter((globalId) => !localGroupsGlobalIDs.includes(globalId) && !['recommend', 'sponsoredst'].includes(globalId));
+					fvdSpeedDial.Prefs.set(GROUPS_TRASH_KEY, {
+						...removedGroupsTrash,
+						[currentUserId]: newGroupsTrash,
+					});
+
+				});
+
+				fvdSpeedDial.StorageSD.listDials(null, null, null, (_existingDials) => {
+					const localDialsGlobalIDs = _existingDials?.map((d) => d.global_id);
+					const newDialsTrash = currentUserRemovedDials.filter((globalId) => !localDialsGlobalIDs.includes(globalId));
+					fvdSpeedDial.Prefs.set(DIALS_TRASH_KEY, {
+						...removedDialsTrash,
+						[currentUserId]: newDialsTrash,
+					});
+				});
+
+				next();
 			},
 			// fetching allowed group dials
 			function (next) {
@@ -84,21 +114,26 @@ class UpdateDials {
 			},*/
 			// ignoring removed dials by user
 			function (next) {
+				// Dials trash globalIDs
+				const removedDialsTrash = fvdSpeedDial.Prefs.get(DIALS_TRASH_KEY, {});
+				const currentUserRemovedDials = removedDialsTrash[currentUserId] || [];
 				serverDials = serverDials.filter((dial) => !currentUserRemovedDials.includes(dial.global_id));
 				next();
 			},
 			// Remove groups by user trash if login/logout
 			function (next) {
-				const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
-				const userID = currentUserInfo?.user?.user_id;
-				const groupsTrash = fvdSpeedDial.Prefs.get(GROUPS_TRASH_KEY) || [];
+				// Groups trash globalIDs
+				const removedGroupsTrash = fvdSpeedDial.Prefs.get(GROUPS_TRASH_KEY, {});
+				const currentUserRemovedGroups = removedGroupsTrash[currentUserId] || [];
 
 				const groupsRemoveProcess = (groupGlobalId, done) => {
-					fvdSpeedDial.StorageSD.groupDeleteByGlobalID(groupGlobalId, done);
+					if (!serverDials.some((dial) => dial.group_globalId === groupGlobalId)) {
+						fvdSpeedDial.StorageSD.groupDeleteByGlobalID(groupGlobalId, done);
+					}
 				};
 
-				if (groupsTrash[userID]) {
-					Utils.Async.arrayProcess(groupsTrash[userID], groupsRemoveProcess, next);
+				if (currentUserRemovedGroups?.length) {
+					Utils.Async.arrayProcess(currentUserRemovedGroups, groupsRemoveProcess, next);
 				} else {
 					next();
 				}
@@ -111,7 +146,7 @@ class UpdateDials {
 				for (const dial of allowedExitingDials) {
 					if (
 						!serverDials.some((d) => d.global_id === dial.global_id)
-						&& dial.global_id.length <= 10
+						&& dial.global_id.length <= 14
 					) {
 						dialsToRemove.push(dial);
 					}
@@ -179,29 +214,31 @@ class UpdateDials {
 						});
 					} else {
 						// editing dial if exists
-						fvdSpeedDial.ThumbMaker.getImageDataPath(
-							{
-								imgUrl: dialData.thumb_url,
-								screenWidth: 364,
-							},
-							function (dataUrl, thumbSize) {
-								fvdSpeedDial.StorageSD.updateDial(
-									dialExists.id,
-									{
-										...dialData,
-										preview_style: dialExists?.preview_style || dialData?.preview_style,
-										thumb: dataUrl,
-										thumb_width: Math.round(thumbSize.width),
-										thumb_height: Math.round(thumbSize.height),
-									},
-									function () {
-										chrome.runtime.sendMessage({
-											action: 'forceRebuild',
-										});
-									}
-								);
-							}
-						);
+						if ([defaultGroupGlobalIDs.sponsoredst, defaultGroupGlobalIDs.recommend].includes(dialData.group_globalId)) {
+							fvdSpeedDial.ThumbMaker.getImageDataPath(
+								{
+									imgUrl: dialData.thumb_url,
+									screenWidth: 364,
+								},
+								function (dataUrl, thumbSize) {
+									fvdSpeedDial.StorageSD.updateDial(
+										dialExists.id,
+										{
+											...dialData,
+											preview_style: dialExists?.preview_style || dialData?.preview_style,
+											thumb: dataUrl,
+											thumb_width: Math.round(thumbSize.width),
+											thumb_height: Math.round(thumbSize.height),
+										},
+										function () {
+											chrome.runtime.sendMessage({
+												action: 'forceRebuild',
+											});
+										}
+									);
+								}
+							);
+						}
 
 						done();
 					}

@@ -226,6 +226,9 @@
 	"newtab_dial_clicks": {
 		"message": "Clicks"
 	},
+	"newtab_dial_info": {
+		"message": "Sponsored"
+	},
 	"newtab_popular_group_title": {
 		"message": "Most Visited"
 	},

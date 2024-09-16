@@ -2,7 +2,7 @@
 
 This is a "forked" version of the [Speed Dial [FVD] - New Tab Page](https://chrome.google.com/webstore/detail/speed-dial-fvd-new-tab-pa/llaficoajjainaijghjlofdfmbjpebpa?hl=en). Since the developer, nimbus had decided to start doing ad redirects I've decided to remove them. If they get their act together or Google removes/forces them to stop then I'll remove this.
 
-Currently based on version 81.6.6.
+Currently based on version 81.8.1.
 
 Current Modifications:
 

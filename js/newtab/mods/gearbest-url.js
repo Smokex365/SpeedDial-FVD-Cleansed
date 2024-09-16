@@ -14,7 +14,7 @@ window.addEventListener(
 
 					if (host === 'gearbest.com') {
 						let fvdUrl = 'https://qa.fvdspeeddial.com/load.php?url=';
-							fvdUrl = 'https://fvdspeeddial.com/load.php?url=';
+												fvdUrl = 'https://fvdspeeddial.com/load.php?url=';
 						
 						return fvdUrl + encodeURIComponent(url);
 					}

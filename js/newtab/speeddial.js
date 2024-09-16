@@ -2097,8 +2097,7 @@ SpeedDialModule.prototype = {
 		const location = Search.getLocationSync();
 
 		if (['us', 'fr', 'gb', 'de', 'it', 'es', 'pl', 'ca'].includes(location)) {
-			// don't allow ads for any country domains
-			allow = false;
+			allow = true;
 		}
 
 		return allow;
@@ -2123,11 +2122,7 @@ SpeedDialModule.prototype = {
 						if (index !== -1 && index <= 20) {
 							const uriComponent = encodeURIComponent(url);
 
-							// eslint-disable-next-line max-len
-							// removed amazon redirect link (https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01HFT00MQRCSGPE9G2RC5AFHW6&url=https://amazon.com)
-							const customUSAmazonLink = 'https://amazon.com';
-
-							redirectURL = location === 'us' && val.domain === 'amazon.' ? customUSAmazonLink : String(val.url);
+							redirectURL = String(val.url);
 							redirectURL = redirectURL.replace('{cu}', uriComponent);
 							redirectURL = redirectURL.replace('{fbu}', uriComponent);
 							redirectURL = redirectURL.replace('{ext}', location === 'gb' ? 'co.uk' : location);

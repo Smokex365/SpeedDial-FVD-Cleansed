@@ -1663,7 +1663,7 @@ body[hidegroupcounter='1'] .groupCount {
 	color: #fff;
 	background: #ccc;
 }
-.searchLogo[provider='fvd'] {
+.searchLogo {
 	background-image: url(/images/provider/fvd.png);
 }
 .searchLogo[provider='yandex'] {
@@ -1733,16 +1733,4 @@ body[hidegroupcounter='1'] .groupCount {
 }
 #searchList li.provider-bing {
 	background-image: url(/images/provider/bing.png);
-}
-#searchList li.provider-google {
-	background-image: url(/images/provider/google.png);
-}
-#searchList li.provider-reddit {
-	background-image: url(/images/provider/reddit.png);
-}
-#searchList li.provider-duckduckgo {
-	background-image: url(/images/provider/duckduckgo.png);
-}
-#searchList li.provider-youtube {
-	background-image: url(/images/provider/youtube.png);
 }

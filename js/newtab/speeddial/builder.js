@@ -1,7 +1,7 @@
 import UniClick from '../../_external/uniclick.js';
 import Templates from '../../templates.js';
 import { _ } from '../../localizer.js';
-import { _b, getCleanUrl, Utils } from '../../utils.js';
+import { _b, getCleanUrl, Utils, isAffiliatedURL } from '../../utils.js';
 import SpeedDial from '../speeddial.js';
 import Scrolling from '../scrolling.js';
 import RecentlyClosed from '../../storage/recentlyclosed.js';
@@ -78,7 +78,7 @@ SpeedDialBuilderModule.prototype = {
 		cell.setAttribute('type', displayType);
 		const textNode = cell.getElementsByClassName('text')[0];
 
-		if (data.url.includes("kelkoogroup.net/permanentLinkGo")) {
+		if (isAffiliatedURL(data.url)) {
 			const editButton = cell.getElementsByClassName('edit')[0];
 			const speedDialIcons = cell.getElementsByClassName('speedDialIcons')[0];
 			speedDialIcons.removeChild(editButton);
@@ -554,18 +554,26 @@ SpeedDialBuilderModule.prototype = {
 			cell.setAttribute('displayDialBg', data.displayDialBg);
 		}
 
-		if (data.url.includes("kelkoogroup.net/permanentLinkGo")) {
+		if (isAffiliatedURL(data.url)) {
 			const screen = cell.querySelector(".screen");
 			const add = document.createElement("span");
-			add.textContent = "Ad";
+			const imgWrapper = document.createElement("span");
+			const addImg = document.createElement("img");
+			addImg.src = '/images/info.svg';
+			addImg.width = 20;
+			addImg.height = 20;
+			imgWrapper.setAttribute("data-tooltip", _('newtab_dial_info'));
+			imgWrapper.className = 'info-icon-wrapper';
+			imgWrapper.appendChild(addImg);
+			add.appendChild(imgWrapper);
 			add.className = Prefs.get('sd.display_mode') === 'fancy' ? "add" : "add-standart";
 			screen.appendChild(add);
 		}
 
-		if(Prefs.get('sd.display_mode') === "standard" && data.url.includes("kelkoogroup.net/permanentLinkGo")) {
+		if (Prefs.get('sd.display_mode') === "standard" && isAffiliatedURL(data.url)) {
 			const speedDialIcons = cell.querySelector(".speedDialIcons");
 			const editButton = speedDialIcons.querySelector(".edit");
-			speedDialIcons.removeChild(editButton)
+			speedDialIcons.removeChild(editButton);
 		}
 
 		const body = cell.getElementsByClassName('body')[0];

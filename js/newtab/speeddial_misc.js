@@ -1611,7 +1611,7 @@ SpeedDialMisc.prototype = {
 	requestRList: false,
 // contains list of redirected domains; tracking related functions
 	allowRList: [
-			],
+	],
 	checkRList: function (dials, timeout) {
 		if (!this.needUpdateRList()) {
 			return;

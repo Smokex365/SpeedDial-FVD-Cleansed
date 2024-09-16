@@ -3,16 +3,108 @@ import { EventType } from '../types.js';
 import { Utils } from '../utils.js';
 
 const Search = function (fvdSpeedDial) {
-	const that = this;
 	this.fvdSpeedDial = fvdSpeedDial;
-	fvdSpeedDial.addEventListener(EventType.LOAD, function () {
-		that.init();
-	});
+	fvdSpeedDial.addEventListener(EventType.LOAD, function () {});
+};
+/* TODO new search functions - monitor */
+Search.prototype = {
+	_searchURL: 'https://search.fvdspeeddial.com/results.aspx?gd=SY1002769&searchsource=69&q={q}',
+	doSearch: async function (query) {
+		let url;
+
+		if (!query) {
+			const q = document.getElementById('q');
+
+			if (q.hasAttribute('clickUrl')) {
+				query = {
+					click_url: q.getAttribute('clickUrl'),
+				};
+			} else {
+				query = q.value;
+			}
+		}
+
+		if (typeof query === 'object' && query.click_url) {
+			url = query.click_url;
+		} else {
+			await Analytics.fireSearchEvent(query, 'fvd');
+
+			if (String(query).trim().length === 0) {
+				return false;
+			}
+
+			url = this._searchURL;
+			url = url.replace('{q}', encodeURIComponent(query));
+		}
+
+		document.location = url;
+	},
+	getLocationSync: function () {
+		const {
+			fvdSpeedDial: { Prefs },
+		} = this;
+		let location = Prefs.get('serviceLocation');
+
+		if (!location) {
+			location = chrome.i18n.getUILanguage();
+		}
+
+		location = String(location || '').toLowerCase();
+		return location;
+	},
+	getLocationByBrowser: function () {
+		const {
+			fvdSpeedDial: { Prefs },
+		} = this;
+		const locales = Prefs.get('definedLocationsList');
+		const localesTimeout = parseInt(Prefs.get('definedLocationsListTimeout')) || 0;
+
+		if (localesTimeout > Date.now()) {
+			if (typeof locales === 'string') {
+				this._locale.locales = locales.split(',');
+			} else if (typeof locales === 'object') {
+				this._locale.locales = Object.assign([], locales);
+			}
+		} else {
+			chrome.i18n.getAcceptLanguages(locations => {
+				const locales = [];
+
+				for (const location of locations) {
+					locales.push(location.split('-').shift().toLowerCase());
+				}
+				Prefs.set('definedLocationsList', locales);
+				Prefs.set('definedLocationsListTimeout', Date.now() + this._locale.timeout);
+				this._locale.locales = locales;
+			});
+		}
+	},
+	getLocationByIP: function () {
+		const {
+			fvdSpeedDial: { Prefs },
+		} = this;
+		const location = Prefs.get('serviceLocation');
+		const localesTimeout = parseInt(Prefs.get('serviceLocationListTimeout')) || 0;
+
+		if (location && localesTimeout > Date.now()) {
+			this._locale.ip = location;
+		} else {
+			Utils.getUserCountry(country => {
+				if (country) {
+					country = String(country).toLowerCase();
+					Prefs.set('serviceLocation', country);
+					Prefs.set('serviceLocationListTimeout', Date.now() + this._locale.timeout);
+					this._locale.ip = country;
+				}
+			});
+		}
+	},
 };
 
-Search.prototype = {
-	// set defaultProvider to google; originally fvd
-	_defaultProvider: 'google',
+export default Search;
+
+/**
+ * Search.prototype = {
+	_defaultProvider: 'fvd',
 	_ui: {},
 	_menuState: false,
 	_searchProviders: {
@@ -271,6 +363,7 @@ Search.prototype = {
 			}
 
 			const providerData = this._searchProviders[provider];
+
 			await Analytics.fireSearchEvent(query, providerData?.name);
 
 			if (String(query).trim().length === 0) {
@@ -426,4 +519,4 @@ Search.prototype = {
 		}
 	},
 };
-export default Search;
+ */

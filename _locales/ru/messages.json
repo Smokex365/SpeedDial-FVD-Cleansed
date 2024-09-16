@@ -226,6 +226,9 @@
 	"newtab_dial_clicks": {
 		"message": "Клики"
 	},
+	"newtab_dial_info": {
+		"message": "Спонсируемый"
+	},
 	"newtab_popular_group_title": {
 		"message": "Популярные"
 	},

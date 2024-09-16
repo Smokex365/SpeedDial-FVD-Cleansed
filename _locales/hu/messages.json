@@ -193,6 +193,9 @@
 	"newtab_dial_clicks": {
 		"message": "Kattintások"
 	},
+	"newtab_dial_info": {
+		"message": "Szponzorált"
+	},
 	"newtab_popular_group_title": {
 		"message": "Népszerű"
 	},

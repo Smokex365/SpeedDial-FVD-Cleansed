@@ -3,6 +3,49 @@ import { Utils, _b } from '../utils.js';
 import AppLog from '../log.js';
 import { EventType } from '../types.js';
 
+const MemoryCache = {
+	_data: {},
+	set: function (key, value, timeoutValue) {
+		timeoutValue = timeoutValue || 300000;
+		const self = this;
+		let obj = {};
+
+
+		if (this._data[key]) {
+			try {
+				clearTimeout(this._data[key].timeout);
+			} catch (ex) {
+			}
+			obj = this._data[key];
+		} else {
+			this._data[key] = obj;
+		}
+
+		obj.timeout = setTimeout(function () {
+			self._data[key] = null;
+		}, timeoutValue);
+		obj.value = value;
+	},
+	del: function (key) {
+		if (!this._data[key]) {
+			return;
+		}
+
+		try {
+			clearTimeout(this._data[key].timeout);
+		} catch (ex) {
+		}
+		delete this._data[key];
+	},
+	get: function (key) {
+		if (!this._data[key]) {
+			return null;
+		}
+
+		return this._data[key].value;
+	},
+};
+
 const TempStore = {
 	_key: function (id) {
 		return '_tmp_store_' + id;
@@ -15,7 +58,7 @@ const TempStore = {
 		}
 
 		MemoryCache.del(this._key(id));
-		return value.join('');
+		return [value[0]].join('');
 	},
 	append: function (id, value) {
 		let currentValue = MemoryCache.get(this._key(id));
@@ -41,86 +84,140 @@ const Sync = function (fvdSpeedDial) {
 	];
 
 	let active = false;
-	let port = null;
+	const port = null;
+	const responsePorts = {
+		['workerPort']: {
+			active: false,
+			port: null,
+			pendingRequests: [],
+		},
+	};
 	let lastTransactionId = 0;
 	let lastRequestId = 0;
 	const pendingRequests = [];
 	const PENDING_REQUESTS_TIMEOUT = 1000 * 5 * 60; // max life time of pending requests
 
-	function setActivity(newActivity) {
+	function setActivity(newActivity, currentPort) {
+		currentPort.active = newActivity;
 		active = newActivity;
 
-		Broadcaster.sendMessage({ action: 'sync:activitystatechanged' });
+		if (typeof window === 'object') {
+			Broadcaster.sendMessage({ action: 'sync:activitystatechanged' });
+		}
 	}
 
 	this.clearExpiredRequests = () => {
 		const now = new Date().getTime();
-		const ids = [];
 
-		pendingRequests.forEach(function (request) {
-			if (now - request.time >= PENDING_REQUESTS_TIMEOUT) {
-				ids.push(request.id);
-			}
-		});
+		Object.entries(responsePorts).forEach(function (key, portData) {
+			const ids = [];
 
-		ids.forEach(function (id) {
-			removePendingRequest(id);
+			portData.pendingRequests.forEach(function (request) {
+				if (now - request.time >= PENDING_REQUESTS_TIMEOUT) {
+					ids.push(request.id);
+				}
+			});
+
+			ids.forEach(function (id) {
+				removePendingRequest(key, id);
+			});
 		});
 	};
 
-	function removePendingRequest(id) {
+	function removePendingRequest(currentPortKey, id) {
 		let index = -1;
 
-		for (let i = 0; i !== pendingRequests.length; i++) {
-			if (pendingRequests[i].id === id) {
+		for (let i = 0; i !== responsePorts[currentPortKey].pendingRequests.length; i++) {
+			if (responsePorts[currentPortKey].pendingRequests[i].id === id) {
 				index = i;
 				break;
 			}
 		}
 
 		if (index !== -1) {
-			pendingRequests.splice(index, 1);
+			responsePorts[currentPortKey].pendingRequests.splice(index, 1);
 		}
 	}
 
-	function requestWithCallback(data, callback) {
-		if (!port) {
+	function requestWithCallback(currentPort, data, callback) {
+		if (!currentPort?.port || (!currentPort?.port && !responsePorts['workerPort']?.port)) {
 			return callback(null);
 		}
-
+		
 		lastRequestId++;
 		data.requestId = lastRequestId;
-
-		pendingRequests.push({
+		
+		const toRequestPort = currentPort || responsePorts['workerPort'];
+		
+		if (!toRequestPort.pendingRequests) {
+			toRequestPort.pendingRequests = [];
+		}
+		
+		toRequestPort.pendingRequests.push({
 			id: lastRequestId,
 			callback: callback,
 			time: new Date().getTime(),
 		});
 
 		try {
-			port.postMessage(data);
+			toRequestPort.port.postMessage(data);
+			return true;
 		} catch (ex) {
 			console.warn(ex);
 			return callback(null);
 		}
 	}
 
-	function callRequestResponse(requestId, data) {
-		pendingRequests.forEach(function (request) {
-			if (request.id === requestId) {
-				request.callback(data);
-			}
-		});
+	function getCurrentPortByRequestId(requestId) {
+		// eslint-disable-next-line max-len
+		const currentPortKey = Object.keys(responsePorts).find((portDataKey) => responsePorts[portDataKey].pendingRequests.find((request) => request.id === requestId));
 
-		removePendingRequest(requestId);
+		if (currentPortKey && responsePorts[currentPortKey].active) {
+			return currentPortKey;
+		}
+
+		const withoutRequestIdPortKey = Object.keys(responsePorts).find((portKey) => responsePorts[portKey].active);
+		return withoutRequestIdPortKey || responsePorts['workerPort'];
+	}
+
+	function callRequestResponse(requestId, data) {
+		const currentPortKey = getCurrentPortByRequestId(requestId);
+
+		if (responsePorts[currentPortKey]) {
+			responsePorts[currentPortKey].pendingRequests.forEach(function (request) {
+				if (request.id === requestId) {
+					request.callback(data);
+				}
+			});
+		}
+
+
+		removePendingRequest(currentPortKey, requestId);
 	}
 
 	this.isActive = function () {
-		return active;
+		return Object.values(responsePorts).some((port) => port.active);
 	};
 
-	this.hasDataToSync = function (callback) {
+	this.hasDataToSync = function (requestId, callback) {
+		const currentPortKey = getCurrentPortByRequestId(requestId);
+
+		let currentPort = null;
+
+		if (responsePorts[currentPortKey] && responsePorts[currentPortKey].active) {
+			currentPort = responsePorts[currentPortKey];
+		} else {
+			const activePort = Object.values(responsePorts).find((acPort) => acPort.active);
+
+			if (activePort) {
+				currentPort = activePort;
+			} else {
+				currentPort = responsePorts['workerPort'];
+			}
+		}
+
 		requestWithCallback(
+			currentPort,
 			{
 				action: 'hasToSyncData',
 			},
@@ -130,8 +227,8 @@ const Sync = function (fvdSpeedDial) {
 		);
 	};
 
-	this.getAccountInfo = function (callback) {
-		requestWithCallback({
+	this.getAccountInfo = function (currentPort, callback) {
+		requestWithCallback(currentPort, {
 			action: 'getAccountInfo',
 		},
 		function (response) {
@@ -140,7 +237,7 @@ const Sync = function (fvdSpeedDial) {
 		);
 	};
 
-	this.groupSyncChanged = function (groupId, callback) {
+	this.groupSyncChanged = function (groupId, requestId, callback) {
 		// need sync group as new and all it dials.
 		fvdSpeedDial.StorageSD.getGroup(groupId, function (group) {
 			if (group.sync === 1) {
@@ -148,6 +245,7 @@ const Sync = function (fvdSpeedDial) {
 					function (chainCallback) {
 						// remove data from sync
 						Sync.removeSyncData(
+							requestId,
 							{
 								category: ['deleteGroups'],
 								data: group.global_id,
@@ -164,6 +262,7 @@ const Sync = function (fvdSpeedDial) {
 								dials,
 								function (dial, arrayProcessCallback) {
 									Sync.removeSyncData(
+										requestId,
 										{
 											category: ['deleteDials'],
 											data: dial.global_id,
@@ -192,7 +291,8 @@ const Sync = function (fvdSpeedDial) {
 												data: group.global_id,
 												syncAnyWay: true,
 											},
-											arrayProcessCallback
+											arrayProcessCallback,
+											requestId
 										);
 									} else {
 										arrayProcessCallback();
@@ -210,7 +310,8 @@ const Sync = function (fvdSpeedDial) {
 								category: ['specialActions'],
 								data: 'merge_group:' + groupId + ':' + group.global_id,
 							},
-							chainCallback
+							chainCallback,
+							requestId
 						);
 					},
 					function () {
@@ -224,6 +325,7 @@ const Sync = function (fvdSpeedDial) {
 					function (chainCallback) {
 						// remove data from sync
 						Sync.removeSyncData(
+							requestId,
 							{
 								category: ['groups', 'newGroups'],
 								data: group.global_id,
@@ -234,6 +336,7 @@ const Sync = function (fvdSpeedDial) {
 
 					function (chainCallback) {
 						Sync.removeSyncData(
+							requestId,
 							{
 								category: ['specialActions'],
 								data: 'merge_group:' + groupId + ':' + group.global_id,
@@ -250,7 +353,8 @@ const Sync = function (fvdSpeedDial) {
 								data: group.global_id,
 								syncAnyWay: true,
 							},
-							chainCallback
+							chainCallback,
+							requestId
 						);
 					},
 
@@ -265,7 +369,8 @@ const Sync = function (fvdSpeedDial) {
 											data: dial.global_id,
 											syncAnyWay: true,
 										},
-										arrayProcessCallback
+										arrayProcessCallback,
+										requestId
 									);
 								},
 								chainCallback
@@ -274,10 +379,12 @@ const Sync = function (fvdSpeedDial) {
 					},
 
 					function () {
-						chrome.runtime.sendMessage({
-							message: 'displayNoSyncGroupAlert',
-							needActiveTab: true,
-						});
+						if (typeof window === 'object') {
+							chrome.runtime.sendMessage({
+								message: 'displayNoSyncGroupAlert',
+								needActiveTab: true,
+							});
+						}
 
 						if (callback) {
 							callback();
@@ -312,10 +419,14 @@ const Sync = function (fvdSpeedDial) {
 		});
 	};
 
-	this.removeSyncData = function (params, callback) {
+
+	this.removeSyncData = function (requestId, params, callback) {
 		let category = params.category;
 
-		if (!active) {
+		const cuppertPortKey = getCurrentPortByRequestId(requestId);
+		const currentPort = responsePorts[cuppertPortKey];
+
+		if (!currentPort.active) {
 			if (callback) {
 				callback();
 			}
@@ -328,6 +439,7 @@ const Sync = function (fvdSpeedDial) {
 		}
 
 		requestWithCallback(
+			currentPort,
 			{
 				action: 'removeSyncData',
 				data: params.data,
@@ -347,11 +459,23 @@ const Sync = function (fvdSpeedDial) {
 		});
 	};
 
-	this.addDataToSync = function (params, callback) {
+	this.addDataToSync = function (params, callback, requestId) {
 		let category = params.category;
 		const _data = params.data;
+		const currentPortKey = getCurrentPortByRequestId(requestId);
+		let currentPort = currentPortKey !== 'workerPort' ? responsePorts[currentPortKey] : null;
 
-		if (!active) {
+		if (!currentPort) {
+			const windowScopedPortKey = Object.keys(responsePorts).find((portKey) => responsePorts[portKey].active && portKey !== 'workerPort');
+
+			if (windowScopedPortKey) {
+				currentPort = responsePorts[windowScopedPortKey];
+			} else {
+				currentPort = responsePorts['workerPort'];
+			}
+		}
+
+		if (!currentPort?.active) {
 			if (callback) {
 				callback();
 			}
@@ -399,6 +523,7 @@ const Sync = function (fvdSpeedDial) {
 
 			function () {
 				requestWithCallback(
+					currentPort,
 					{
 						action: 'addDataToSync',
 						data: data,
@@ -414,9 +539,15 @@ const Sync = function (fvdSpeedDial) {
 		]);
 	};
 
-	this.startSync = function (type, callback) {
+	this.startSync = function (type, requestId, callback) {
 		type = type || 'main';
+
+		const currentPortKey = getCurrentPortByRequestId(requestId);
+
+		const currentPort = responsePorts[currentPortKey] || Object.values(responsePorts)[Object.values(responsePorts).length - 1];
+
 		requestWithCallback(
+			currentPort,
 			{
 				action: 'startSync',
 				type: type,
@@ -473,8 +604,8 @@ const Sync = function (fvdSpeedDial) {
 		fvdSpeedDial.StorageSD.restoreBackup(id, callback);
 	}
 
-	function processPortMessage(message) {
-		const { StorageSD, UserInfoSync } = fvdSpeedDial;
+	function processPortMessage(message, currentPort) {
+		const { StorageSD, UserInfoSync, localStorage } = fvdSpeedDial;
 		switch (message.action) {
 			case 'saveTempData':
 				const id = message.data.id;
@@ -482,7 +613,7 @@ const Sync = function (fvdSpeedDial) {
 
 				TempStore.append(id, value);
 				// console.log('Got a chunk', id);
-				sendResponse(message.requestId, {
+				sendResponse(currentPort, message.requestId, {
 					id: id,
 				});
 				break;
@@ -490,7 +621,7 @@ const Sync = function (fvdSpeedDial) {
 			// transactions
 			case 'startTransaction':
 				createTransaction(function (id) {
-					sendResponse(message.requestId, {
+					sendResponse(currentPort, message.requestId, {
 						transId: id,
 					});
 				});
@@ -498,13 +629,13 @@ const Sync = function (fvdSpeedDial) {
 
 			case 'rollbackTransaction':
 				rollbackTransaction(message.transId, function () {
-					sendResponse(message.requestId, {});
+					sendResponse(currentPort, message.requestId, {});
 				});
 				break;
 
 			case 'commitTransaction':
 				commitTransaction(message.transId, function () {
-					sendResponse(message.requestId, {});
+					sendResponse(currentPort, message.requestId, {});
 				});
 				break;
 
@@ -521,7 +652,7 @@ const Sync = function (fvdSpeedDial) {
 			case 'clearGroupsAndDials':
 				AppLog.info('sync clear groups and dials');
 				clearGroupsAndDials(function () {
-					sendResponse(message.requestId, {});
+					sendResponse(currentPort, message.requestId, {});
 				});
 				break;
 
@@ -543,14 +674,32 @@ const Sync = function (fvdSpeedDial) {
 				StorageSD.restoreTablesData(
 					message.data,
 					function () {
-						sendResponse(message.requestId, {});
+						sendResponse(currentPort, message.requestId, {});
 					},
 					function (current, max) {
-						port.postMessage({
-							action: 'restoreBackupProgress',
-							current: current,
-							max: max,
-						});
+						const currentPortKey = getCurrentPortByRequestId(message.requestId);
+
+						let currentPort = null;
+
+						if (responsePorts[currentPortKey] && responsePorts[currentPortKey].active) {
+							currentPort = responsePorts[currentPortKey];
+						} else {
+							const activePort = Object.values(responsePorts).find((rPort) => rPort.active);
+
+							if (activePort) {
+								currentPort = activePort;
+							}
+						}
+
+						
+
+						if (currentPort) {
+							currentPort.port.postMessage({
+								action: 'restoreBackupProgress',
+								current: current,
+								max: max,
+							});
+						}
 					}
 				);
 				break;
@@ -567,13 +716,13 @@ const Sync = function (fvdSpeedDial) {
 				}
 
 				StorageSD.groupsRawList(message, function (list) {
-					sendResponse(message.requestId, { list: list });
+					sendResponse(currentPort, message.requestId, { list: list });
 				});
 				break;
 
 			case 'queryDialThumb':
 				StorageSD.getDialThumb(message.global_id, function (thumb) {
-					sendResponse(message.requestId, {
+					sendResponse(currentPort, message.requestId, {
 						thumb: thumb,
 					});
 				});
@@ -589,7 +738,7 @@ const Sync = function (fvdSpeedDial) {
 					}
 
 					fvdSpeedDial.StorageSD.dialsRawList(message, function (list) {
-						sendResponse(message.requestId, {
+						sendResponse(currentPort, message.requestId, {
 							list: list,
 						});
 					});
@@ -604,7 +753,7 @@ const Sync = function (fvdSpeedDial) {
 						global_id: message.serverGroup.global_id,
 					},
 					function () {
-						sendResponse(message.requestId);
+						sendResponse(currentPort, message.requestId);
 					}
 				);
 				break;
@@ -619,10 +768,10 @@ const Sync = function (fvdSpeedDial) {
 						StorageSD.dialCanSync(message.serverDial.global_id, function (can) {
 							if (can) {
 								StorageSD.syncSaveDial(message.serverDial, function (saveInfo) {
-									sendResponse(message.requestId, { saveInfo: saveInfo });
+									sendResponse(currentPort, message.requestId, { saveInfo: saveInfo });
 								});
 							} else {
-								sendResponse(message.requestId, { saveInfo: null });
+								sendResponse(currentPort, message.requestId, { saveInfo: null });
 							}
 						});
 					}
@@ -633,33 +782,37 @@ const Sync = function (fvdSpeedDial) {
 				StorageSD.groupCanSync(message.group.global_id, function (can) {
 					if (can) {
 						StorageSD.syncSaveGroup(message.group, function () {
-							sendResponse(message.requestId);
+							sendResponse(currentPort, message.requestId);
 						});
 					} else {
-						sendResponse(message.requestId);
+						sendResponse(currentPort, message.requestId);
 					}
 				});
 				break;
 
 			case 'moveDial':
 				StorageSD.moveDial(message.id, message.groupId, function () {
-					sendResponse(message.requestId);
+					sendResponse(currentPort, message.requestId);
 				});
 				break;
 
 			case 'saveDial':
-				StorageSD.syncSaveDial(message.dial, function (saveInfo) {
-					sendResponse(message.requestId, {
+				chrome.runtime.sendMessage({
+					action: 'windowScopeSaveDial',
+					dial: message.dial,
+				}, function (saveInfo) {
+					sendResponse(currentPort, message.requestId, {
 						saveInfo: saveInfo,
 					});
 				});
+				return true;
 				break;
 
 			case 'updateMass':
 				// console.log('OBtained message', message);
 				StorageSD.syncUpdateMass(message.globalIds, message.data, function () {
 					if (message.requestId) {
-						sendResponse(message.requestId, {});
+						sendResponse(currentPort, message.requestId, {});
 					}
 				});
 				break;
@@ -668,7 +821,7 @@ const Sync = function (fvdSpeedDial) {
 				const notRemoveGroups = message.groupsIds;
 
 				StorageSD.syncRemoveGroups(notRemoveGroups, function (removed) {
-					sendResponse(message.requestId, {
+					sendResponse(currentPort, message.requestId, {
 						removed: removed,
 					});
 				});
@@ -678,26 +831,29 @@ const Sync = function (fvdSpeedDial) {
 				const notRemoveDials = message.dialsIds;
 
 				StorageSD.syncRemoveDials(notRemoveDials, function (removeInfo) {
-					sendResponse(message.requestId, { removeInfo: removeInfo });
+					sendResponse(currentPort, message.requestId, { removeInfo: removeInfo });
 				});
 				break;
 
 			case 'fixGroupsPositions':
 				StorageSD.syncFixGroupsPositions(function () {
-					sendResponse(message.requestId);
+					sendResponse(currentPort, message.requestId);
 				});
 				break;
 
 			case 'fixDialsPositions':
 				StorageSD.syncFixDialsPositions(message.groupId, function () {
-					sendResponse(message.requestId);
+					sendResponse(currentPort, message.requestId);
 				});
 				break;
 
 			case 'rebuild':
-				chrome.runtime.sendMessage({
-					action: 'forceRebuild',
-				});
+				if (typeof window === 'object') {
+					chrome.runtime.sendMessage({
+						action: 'forceRebuild',
+					});
+				}
+				
 				// need to refresh default group id
 				const activeGroupId = Prefs.get('sd.default_group');
 
@@ -715,11 +871,11 @@ const Sync = function (fvdSpeedDial) {
 			case 'syncAllGroupContents':
 				StorageSD.syncGetGroupId(message.groupGlobalId, function (id) {
 					if (id) {
-						new Sync().groupSyncChanged(id, function () {
-							sendResponse(message.requestId);
+						new Sync().groupSyncChanged(id, message.requestId, function () {
+							sendResponse(currentPort, message.requestId);
 						});
 					} else {
-						sendResponse(message.requestId);
+						sendResponse(currentPort, message.requestId);
 					}
 				});
 				break;
@@ -732,7 +888,8 @@ const Sync = function (fvdSpeedDial) {
 								category: ['groups'],
 								data: message.groupGlobalId,
 							},
-							chainCallback
+							chainCallback,
+							message.requestId
 						);
 					},
 					function () {
@@ -746,11 +903,12 @@ const Sync = function (fvdSpeedDial) {
 												category: ['dials', 'newDials'],
 												data: dial.global_id,
 											},
-											arrayProcessCallback
+											arrayProcessCallback,
+											message.requestId
 										);
 									},
 									function () {
-										sendResponse(message.requestId);
+										sendResponse(currentPort, message.requestId);
 									}
 								);
 							});
@@ -762,7 +920,7 @@ const Sync = function (fvdSpeedDial) {
 			case 'setGroupSync':
 				StorageSD.syncGetGroupId(message.global_id, function (groupId) {
 					if (!groupId) {
-						sendResponse(message.requestId);
+						sendResponse(currentPort, message.requestId);
 					} else {
 						StorageSD.groupUpdate(
 							groupId,
@@ -770,7 +928,7 @@ const Sync = function (fvdSpeedDial) {
 								sync: message.value,
 							},
 							function () {
-								sendResponse(message.requestId);
+								sendResponse(currentPort, message.requestId);
 							}
 						);
 					}
@@ -779,7 +937,7 @@ const Sync = function (fvdSpeedDial) {
 
 			case 'dialCanSync':
 				StorageSD.dialCanSync(message.global_id, function (can) {
-					sendResponse(message.requestId, { can: can });
+					sendResponse(currentPort, message.requestId, { can: can });
 				});
 				break;
 
@@ -800,14 +958,23 @@ const Sync = function (fvdSpeedDial) {
 						});
 					},
 					function () {
-						sendResponse(message.requestId, result);
+						sendResponse(currentPort, message.requestId, result);
 					},
 				]);
 				break;
 
+			case 'localStorage.get':
+				const fvdSpeedDialLastUpdateTime = localStorage.getItem(message.data.key);
+				sendResponse(currentPort, message.requestId, { result: fvdSpeedDialLastUpdateTime });
+				break;
+
+			case 'localStorage.set':
+				localStorage.setItem(message.data.key, message.data.value);
+				break;
+
 			case 'Deny.dump':
 				StorageSD.denyList(function (result) {
-					sendResponse(message.requestId, { result: result });
+					sendResponse(currentPort, message.requestId, { result: result });
 				});
 				break;
 
@@ -828,7 +995,7 @@ const Sync = function (fvdSpeedDial) {
 
 			case 'Prefs.dump':
 				Prefs.dump(dump => {
-					sendResponse(message.requestId, { result: dump });
+					sendResponse(currentPort, message.requestId, { result: dump });
 				});
 				break;
 			case 'Prefs.set':
@@ -839,36 +1006,28 @@ const Sync = function (fvdSpeedDial) {
 				break;
 
 			case 'miscItemGet':
-				StorageSD.getMisc(message.data.key, function (result) {
-					if (String(result).indexOf('filesystem') === 0) {
-						FileSystemSD.readAsDataURLbyURL(result, function (err, data) {
-							//var blob = fvdSpeedDial.Utils.dataURIToBlob(data);
-							sendResponse(message.requestId, { result: data });
-						});
-					} else {
-						sendResponse(message.requestId, { result: result });
-					}
+				chrome.runtime.sendMessage({
+					action: 'windowScopeMiscItemGet',
+					data: {
+						key: message.data.key,
+					},
+				}, function ({ result }) {
+					sendResponse(currentPort, message.requestId, { result });
 				});
+				return true;
+
 				break;
 
 			case 'miscItemSet':
+				chrome.runtime.sendMessage({
+					action: 'windowScopeMiscItemSet',
+					data: {
+						key: message.data.key,
+						val: message.data.val,
+					},
+				});
 
-				if (
-					message.data.key === 'sd.background'
-					&& String(message.data.val).indexOf('https:') === 0
-				) {
-
-					Utils.imageUrlToDataUrl(message.data.val, function (dataUrl) {
-						Prefs.set('sd.background_url', message.data.val);
-						fvdSpeedDial.StorageSD.setMisc('sd.background', dataUrl);
-					});
-				} else {
-					if (String(message.data.val).indexOf('/images/newtab/firefox') !== -1) {
-						message.data.val = '/images/newtab/fancy_bg.jpg';
-					}
-
-					fvdSpeedDial.StorageSD.setMisc(message.data.key, message.data.val);
-				}
+				return true;
 
 				break;
 			case '_response':
@@ -884,13 +1043,13 @@ const Sync = function (fvdSpeedDial) {
 		}
 	}
 
-	function sendResponse(requestId, message) {
+	function sendResponse(currentPort, requestId, message) {
 		message = message || {};
 
 		message.action = '_response';
 		message.requestId = requestId;
 
-		port.postMessage(message);
+		currentPort.port.postMessage(message);
 	}
 
 	function getSynchronizerId(callback) {
@@ -911,91 +1070,29 @@ const Sync = function (fvdSpeedDial) {
 
 	const that = this;
 
-	function connectToSynchronizer(params = {}) {
-
-		if (port !== null || fvdSpeedDial?.PowerOff?.isHidden()) {
-			return;
-		}
-
-		getSynchronizerId((id) => {
-			if (!id) {
-				return;
-			}
-
-			try {
-				port = chrome.runtime.connect(id, {
-					name: 'SpeedDial',
-				});
-				port.onMessage.addListener(processPortMessage);
-				port.onDisconnect.addListener(function () {
-					console.info('port.onDisconnect');
-
-					if (params.disconnectCallback) {
-						params.disconnectCallback();
-					}
-
-					setTimeout(() => {
-						console.info('Recconnect', params.reconnect || 0);
-						connectToSynchronizer({
-							reconnect: 1 + (params.reconnect || 0),
-						});
-					}, 100);
-
-					setActivity(false);
-					port = null;
-				});
-
-				that.getAccountInfo(function (info) {
-					UserInfoSync.setUserInfo(info);
-		
-					if (!info?.user?.premium?.active) {
-						Prefs.set('sd.enable_search', true);
-					} else {
-						Prefs.set('sd.enable_search', UserInfoSync.getIsSearchEnable());
-					}
-				});
-				
-			} catch (error) {
-				console.warn(error);
-			}
-		});
-	}
-
-	fvdSpeedDial.addEventListener(
-		EventType.LOAD,
-		function () {
-			connectToSynchronizer();
-
-			setTimeout(() => {
-				connectToSynchronizer();
-			}, 3e3);
-
-			function installCallback(ext) {
-				getSynchronizerId(function (id) {
-					if (id) {
-						if (id === ext.id) {
-							connectToSynchronizer();
-						}
-					}
-				});
-			}
-	  
-			  chrome.management.onEnabled.addListener(installCallback);
-			  chrome.management.onInstalled.addListener(installCallback);
-		}
-	);
-
 	chrome.runtime.onConnectExternal.addListener(function (_p) {
 
+
 		if (!_p.sender) {
-			console.log('Sender not specified');
 			return;
 		}
 
-		port = _p;
-		port.onMessage.addListener(processPortMessage);
-		port.onDisconnect.addListener(function () {
-			setActivity(false);
+
+		if (_p?.sender?.documentId && !responsePorts[_p?.sender?.documentId]) {
+			responsePorts[_p?.sender?.documentId] = {
+				port: null,
+				active: false,
+				pendingRequests: [],
+			};
+		}
+
+		const currentPort = responsePorts[_p?.sender?.documentId || 'workerPort'];
+
+		currentPort.port = _p;
+		currentPort.port.onMessage.addListener((message) => processPortMessage(message, currentPort, responsePorts, _p?.sender?.documentId));
+		currentPort.port.onDisconnect.addListener(function () {
+			setActivity(false, currentPort);
+			// currentPort.active = false;
 		});
 
 		if (fvdSpeedDial.PowerOff.isHidden()) {
@@ -1003,7 +1100,7 @@ const Sync = function (fvdSpeedDial) {
 			return;
 		}
 
-		port.postMessage({
+		currentPort.port.postMessage({
 			action: 'activate',
 			apiv: 2,
 		});
@@ -1011,14 +1108,15 @@ const Sync = function (fvdSpeedDial) {
 		if (!_b(Prefs.get('sd.synced_after_install'))) {
 			console.info('needInitialSync');
 			Prefs.set('sd.synced_after_install', true);
-			port.postMessage({
+			currentPort.port.postMessage({
 				action: 'needInitialSync',
 			});
 		}
 
-		setActivity(true);
+		setActivity(true, currentPort);
+		currentPort.active = true;
 
-		that.getAccountInfo(function (info) {
+		that.getAccountInfo(currentPort, function (info) {
 			UserInfoSync.setUserInfo(info);
 
 			if (!info?.user?.premium?.active) {

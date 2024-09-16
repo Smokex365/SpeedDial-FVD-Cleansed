@@ -1677,3 +1677,9 @@ export function randomColor() {
 		};
 	}
 }
+
+const affiliatedURLS = ['https://ww55.affinity.net/sssdomweb', 'kelkoogroup.net/permanentLinkGo'];
+
+export function isAffiliatedURL(url) {
+	return affiliatedURLS.some((affURL) => url.includes(affURL));
+}

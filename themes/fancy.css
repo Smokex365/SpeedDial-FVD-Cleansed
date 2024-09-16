@@ -12,7 +12,7 @@
 }
 
 #speedDialContent .newtabCell {
-	-webkit-transform-style: preserve-3d;
+	/* -webkit-transform-style: preserve-3d; */
 }
 
 #speedDialContent .newtabCell[fadeOut='1'] {
