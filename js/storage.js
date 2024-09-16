@@ -331,9 +331,11 @@ class StorageSD {
 						callback();
 					}
 
-					Broadcaster.sendMessage({
-						action: 'storage = connected',
-					});
+					if (typeof window === 'object') {
+						Broadcaster.sendMessage({
+							action: 'storage = connected',
+						});
+					}
 				});
 			});
 		});
@@ -1820,19 +1822,21 @@ class StorageSD {
 						},
 
 						function (chainCallback) {
+							const currentData = oldData || dial;
+
 							if (
-								(nullThumbSrc && dial.thumb_source_type === 'url') ||
-								(dial._previewUrl && dial.thumb_source_type === 'local_file') ||
-								(dial._previewUrl && dial.thumb_source_type === 'screen')
+								(nullThumbSrc && currentData?.thumb_source_type === 'url') ||
+								(currentData?._previewUrl && currentData?.thumb_source_type === 'local_file') ||
+								(currentData?._previewUrl && currentData?.thumb_source_type === 'screen')
 							) {
 								// need to grab thumb from url
-								let loadContentUrl = dial.thumb_url;
+								let loadContentUrl = currentData.thumb_url;
 
 								if (
-									(dial._previewUrl && dial.thumb_source_type === 'local_file') ||
-									(dial._previewUrl && dial.thumb_source_type === 'screen')
+									(currentData?._previewUrl && currentData?.thumb_source_type === 'local_file') ||
+									(currentData?._previewUrl && currentData?.thumb_source_type === 'screen')
 								) {
-									loadContentUrl = dial._previewUrl;
+									loadContentUrl = currentData._previewUrl;
 								}
 
 								ThumbMaker.getImageDataPath(
@@ -2176,6 +2180,25 @@ class StorageSD {
 
 							setObj = that.prepareDataType('dial', setObj);
 
+							if (Object.keys(setObj).length === 1 && setObj.global_id) {
+								that._callDialsChangeCallbacks({
+									action: 'update',
+									data: {
+										id: dialId,
+										data: data,
+									},
+								});
+
+								if (callback) {
+									callback({
+										result: false,
+										dial: data,
+									});
+								}
+
+								return;
+							}
+
 							dbUpdate(fvdSpeedDial, {
 								tx: tx,
 								table: 'dials',
@@ -2251,6 +2274,8 @@ class StorageSD {
 								}
 							},
 						});
+					} else {
+						callback(false);
 					}
 				},
 			});
@@ -3312,6 +3337,18 @@ class StorageSD {
 			},
 			function () {
 				const setObj = dbGenerateSet(strings, dataArray);
+
+				if (Object.keys(setObj).length === 1 && setObj.global_id) {
+					callback({
+						result: true,
+					});
+
+					that._callGroupsChangeCallbacks({
+						action: 'update',
+					});
+
+					return;
+				}
 
 				dbTransaction(function (tx) {
 					dbUpdate(fvdSpeedDial, {
@@ -4376,6 +4413,11 @@ function dbUpdate(fvdSpeedDial, obj) {
 
 	if (DATABASE_TYPE === 'storage.local') {
 		fvdSpeedDial.StorageLocal.upd(obj);
+		return;
+	}
+
+	if (param.set && Object.keys(param.set).length === 1 && param.set.global_id) {
+		console.log('Skip to update those dial', param);
 		return;
 	}
 

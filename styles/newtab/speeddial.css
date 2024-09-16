@@ -135,8 +135,8 @@ input {
 	text-overflow: ellipsis;
 	height: 18px;
 	-webkit-transition-duration: 200ms;
-	//max-width: 95%;
-  padding: 0 5px;
+	max-width: 95%;
+    padding: 0 5px;
 	text-align: center; /* Task 1351 */
 }
 
@@ -320,10 +320,59 @@ input {
 }
 
 .newtabCell .add {
-	border: 1px solid #E5E4E2;
-	color: #E5E4E2;
+	display: none;
 	bottom: 3px;
-	right: 3px;
+	right: 6px;
+	padding: 2px;
+	border-radius: 100%;
+	font-size: 0;
+}
+
+.newtabCell:hover .add {
+	display: inline-block;
+}
+
+.newtabCell .add:hover {
+	background-color: #fff;
+}
+
+.newtabCell .add .info-icon-wrapper {
+	position: relative;
+	display: block;
+}
+
+.newtabCell .add .info-icon-wrapper::before {
+	content: attr(data-tooltip);
+	position: absolute;
+	top: -100%;
+	left: 100%;
+	transform: translate(-100%, -80%);
+	width: fit-content;
+	padding: 8px;
+	border-radius: 5px;
+	background: #000;
+	color: #fff;
+	text-align: center;
+	font-size: 12px;
+	display: none;
+	z-index: 5;
+}
+
+.newtabCell .add .info-icon-wrapper::after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translate(-56%, -180%);
+	border: 10px solid #000;
+	border-color: black transparent transparent transparent;
+	display: none;
+	z-index: 5;
+}
+
+.newtabCell .add:hover .info-icon-wrapper::before,
+.newtabCell .add:hover .info-icon-wrapper::after {
+	display: block;
 }
 
 .newtabCell .add-standart {

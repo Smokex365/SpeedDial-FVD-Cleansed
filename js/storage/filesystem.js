@@ -100,7 +100,7 @@ const RedundancyStorage = {
 	},
 };
 
-const FileSystemSD = function () {
+export const FileSystemSD = function () {
 	const self = this;
 	// can be "restoring" or "normal"
 	// "restoring" means restore previous corruptions
@@ -112,10 +112,19 @@ const FileSystemSD = function () {
 			return callback(_fs);
 		}
 
-		webkitRequestFileSystem(window.PERSISTENT, 1024 * 1024 * 1024, function (fs) {
-			_fs = fs;
-			callback(fs);
-		});
+		const FS_TYPE = typeof window === 'object' ? window.PERSISTENT : 1;
+		const FS_SIZE = 1024 * 1024 * 1024;
+
+		if (typeof webkitRequestFileSystem === 'function') {
+			// eslint-disable-next-line no-undef
+			webkitRequestFileSystem(FS_TYPE, FS_SIZE, function (fs) {
+				_fs = fs;
+				callback(fs);
+			});
+		  } else {
+			// console.warn('webkitRequestFileSystem is', typeof webkitRequestFileSystem);
+			return;
+		  }
 	}
 
 	function _parseDir(path) {

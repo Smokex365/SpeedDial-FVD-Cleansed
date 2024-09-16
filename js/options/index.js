@@ -36,9 +36,12 @@ import StorageAppsModule from '../storage/apps.js';
 import ThumbMakerModule from '../thumbmaker/tab.js';
 import ToolTip from '../tooltip.js';
 import Broadcaster from '../_external/broadcaster.js';
+import { FileSystemSD } from '../storage/filesystem.js';
+import { Utils } from '../utils.js';
 class SettingModule {
     constructor() {
         this.fvdSpeedDial = new FvdSpeedDialModule(this.addEventListener, { mode: "page" });
+        this.FileSystem = new FileSystemSD();
         this.init();
     }
     init() {
@@ -122,7 +125,8 @@ class SettingModule {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18;
         const { fvdSpeedDial } = this;
         const { ToolTip, Dialogs, Options, StorageSD, Prefs, PowerOff, CSS, SpeedDialMisc, ContextMenus } = fvdSpeedDial;
-        Broadcaster.onMessage.addListener(function (msg) {
+        Broadcaster.onMessage.addListener(function (msg, sender, sendResponse) {
+            const that = this;
             if (msg.action === 'poweroff:hide') {
                 if (!PowerOff.isHidden()) {
                     Prefs.set('poweroff.hidden', true);
@@ -135,6 +139,41 @@ class SettingModule {
                 globalThis.navigation.reload();
                 SpeedDialMisc.refreshSearchPanel();
                 ContextMenus.init();
+            }
+            if (msg.action === 'windowScopeMiscItemGet') {
+                fvdSpeedDial.StorageSD.getMisc(msg.data.key, function (result) {
+                    if (String(result).indexOf('filesystem') === 0) {
+                        that.FileSystem.readAsDataURLbyURL(result, function (err, data) {
+                            sendResponse({ result: data });
+                        });
+                    }
+                    else {
+                        sendResponse({ result: result });
+                    }
+                });
+                return true;
+            }
+            if (msg.action === 'windowScopeMiscItemSet') {
+                if (msg.data.key === 'sd.background'
+                    && String(msg.data.val).indexOf('https:') === 0) {
+                    Utils.imageUrlToDataUrl(msg.data.val, function (dataUrl) {
+                        fvdSpeedDial.Prefs.set('sd.background_url', msg.data.val);
+                        fvdSpeedDial.StorageSD.setMisc('sd.background', dataUrl);
+                    });
+                }
+                else {
+                    if (String(msg.data.val).indexOf('/images/newtab/firefox') !== -1) {
+                        msg.data.val = '/images/newtab/fancy_bg.jpg';
+                    }
+                    fvdSpeedDial.StorageSD.setMisc(msg.data.key, msg.data.val);
+                }
+                return true;
+            }
+            if (msg.action === 'windowScopeSaveDial') {
+                fvdSpeedDial.StorageSD.syncSaveDial(msg.dial, function (saveInfo) {
+                    sendResponse(saveInfo);
+                });
+                return true;
             }
         });
         window.addEventListener("unload", function () {

@@ -15,7 +15,7 @@ const TempStore = {
 		}
 
 		MemoryCache.del(this._key(id));
-		return value.join('');
+		return [value[0]].join('');
 	},
 	append: function (id, value) {
 		let currentValue = MemoryCache.get(this._key(id));
@@ -41,16 +41,26 @@ const Sync = function (fvdSpeedDial) {
 	];
 
 	let active = false;
-	let port = null;
+	const port = null;
+	const responsePorts = {
+		['workerPort']: {
+			active: false,
+			port: null,
+			pendingRequests: [],
+		},
+	};
 	let lastTransactionId = 0;
 	let lastRequestId = 0;
 	const pendingRequests = [];
 	const PENDING_REQUESTS_TIMEOUT = 1000 * 5 * 60; // max life time of pending requests
 
-	function setActivity(newActivity) {
+	function setActivity(newActivity, currentPort) {
+		currentPort.active = newActivity;
 		active = newActivity;
 
+		if (typeof window === 'object') {
 		Broadcaster.sendMessage({ action: 'sync:activitystatechanged' });
+		}
 	}
 
 	this.clearExpiredRequests = () => {

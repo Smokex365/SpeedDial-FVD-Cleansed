@@ -1,6 +1,6 @@
 import { dhtmlXMenuObject } from './contextmenu/dhtmlxmenu.js';
 import { _ } from '../localizer.js';
-import { _b } from '../utils.js';
+import { _b, isAffiliatedURL } from '../utils.js';
 import { userStorageKey } from '../sync/user.js';
 import { DIALS_TRASH_KEY, defaultGroupGlobalIDs } from '../constants.js';
 
@@ -421,7 +421,7 @@ ContextMenus.prototype = {
 							that._speedDialCellMenu.setItemEnabled('move_to_gr_' + groups[i].id);
 						}
 
-						if (data.url.includes("kelkoogroup.net/permanentLinkGo")) {
+						if (isAffiliatedURL(data.url)) {
 							that._speedDialCellMenu.setItemDisabled('edit');
 						} else {
 							that._speedDialCellMenu.setItemEnabled('edit');
@@ -541,7 +541,7 @@ ContextMenus.prototype = {
 						break;
 					case 'copy_url':
 						fvdSpeedDial.StorageSD.getDial(dialId, function (data) {
-							if (data.url.includes("kelkoogroup.net/permanentLinkGo")) {
+							if (isAffiliatedURL(data.url)) {
 								fvdSpeedDial.Utils.copyToClipboard(data.display_url);
 							} else {
 								fvdSpeedDial.Utils.copyToClipboard(data.url);

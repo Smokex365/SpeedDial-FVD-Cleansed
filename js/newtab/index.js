@@ -37,9 +37,11 @@ import ThumbMakerModule from '../thumbmaker/tab.js';
 import BottomTextModule from './mods/bottom-text.js';
 import DialSearchModule from './mods/dial-search.js';
 import { Utils } from '../utils.js';
+import { FileSystemSD } from '../storage/filesystem.js';
 class NewtabModule {
     constructor() {
         this.fvdSpeedDial = new FvdSpeedDialModule(this.addEventListener, { mode: "page" });
+        this.FileSystem = new FileSystemSD();
         this.init();
     }
     init() {
@@ -98,6 +100,7 @@ class NewtabModule {
             console.log('Obtained connection', port);
         });
         chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+            const that = this;
             if (typeof message === 'object') {
                 if (message.action === 'previousSession:button') {
                     fvdSpeedDial.SpeedDial.sessionRestore = message.sessionId;
@@ -107,6 +110,41 @@ class NewtabModule {
                     fvdSpeedDial.SpeedDialMisc.refreshSearchPanel();
                     fvdSpeedDial.ContextMenus.init();
                 }
+            }
+            if (message.action === 'windowScopeMiscItemGet') {
+                fvdSpeedDial.StorageSD.getMisc(message.data.key, function (result) {
+                    if (String(result).indexOf('filesystem') === 0) {
+                        that.FileSystem.readAsDataURLbyURL(result, function (err, data) {
+                            sendResponse({ result: data });
+                        });
+                    }
+                    else {
+                        sendResponse({ result: result });
+                    }
+                });
+                return true;
+            }
+            if (message.action === 'windowScopeMiscItemSet') {
+                if (message.data.key === 'sd.background'
+                    && String(message.data.val).indexOf('https:') === 0) {
+                    Utils.imageUrlToDataUrl(message.data.val, function (dataUrl) {
+                        fvdSpeedDial.Prefs.set('sd.background_url', message.data.val);
+                        fvdSpeedDial.StorageSD.setMisc('sd.background', dataUrl);
+                    });
+                }
+                else {
+                    if (String(message.data.val).indexOf('/images/newtab/firefox') !== -1) {
+                        message.data.val = '/images/newtab/fancy_bg.jpg';
+                    }
+                    fvdSpeedDial.StorageSD.setMisc(message.data.key, message.data.val);
+                }
+                return true;
+            }
+            if (message.action === 'windowScopeSaveDial') {
+                fvdSpeedDial.StorageSD.syncSaveDial(message.dial, function (saveInfo) {
+                    sendResponse(saveInfo);
+                });
+                return true;
             }
         });
     }

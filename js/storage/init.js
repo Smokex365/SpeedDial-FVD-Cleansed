@@ -180,9 +180,11 @@ const initStorage = function (fvdSpeedDial, tx, databaseBackup, callback) {
 												thumb_height: Math.round(thumbSize.height),
 											},
 											function () {
-												chrome.runtime.sendMessage({
-													action: 'forceRebuild',
-												});
+												if (typeof window === 'object') {
+													chrome.runtime.sendMessage({
+														action: 'forceRebuild',
+													});
+												}
 											}
 										);
 									}
@@ -198,10 +200,13 @@ const initStorage = function (fvdSpeedDial, tx, databaseBackup, callback) {
 				function () {
 					AppLog.info('Created', dialsCreated.length, ' default dials');
 
-					Broadcaster.sendMessage({
-						action: 'defaultDialsCreated',
-						dials: dialsCreated,
-					});
+					if (typeof window === 'object') {
+						Broadcaster.sendMessage({
+							action: 'defaultDialsCreated',
+							dials: dialsCreated,
+						});
+					}
+					
 					callback2();
 				},
 			]);

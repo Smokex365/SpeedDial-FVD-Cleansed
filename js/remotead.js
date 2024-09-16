@@ -183,8 +183,6 @@ const RemoteAdClass = new function () {
 				cache = JSON.parse(cache);
 
 				if (cacheTTL(cache) > 0) {
-					console.log("CACHE!");
-
 					return callback(cache.data);
 				}
 			} catch (ex) {

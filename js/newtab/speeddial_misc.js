@@ -1,1748 +1,2731 @@
-import '../_external/jquery.js';
-import '../_external/speechify.js';
-
-import Shortcut from '../_external/shortcut.js';
 import Broadcaster from '../_external/broadcaster.js';
-import { _ } from '../localizer.js';
+import { _b, FVDEventEmitter, Utils } from '../utils.js';
 import Config from '../config.js';
-import { Utils, _b } from '../utils.js';
-import { start_drop_down, end_drop_down } from './dropdown.js';
+import { _ } from '../localizer.js';
+import lightCollapsedMessage from './light_collapsed_message.js';
+import DragAndDrop from './speeddial/draganddrop.js';
+import SpeedDialBuilderModule from './speeddial/builder.js';
+import { ThumbManagerModule } from '../thumbmanager/tab.js';
+import ThumbManagerBgModule from '../thumbmanager/bg.js';
+import { Log } from '../../extras/log.js';
+import Analytics from '../bg/google-analytics.js';
+import { defaultGroupGlobalIDs, DIALS_TRASH_KEY, GROUPS_TRASH_KEY, newTabUrls } from '../constants.js';
+import { userStorageKey } from '../sync/user.js';
 
-const SpeedDialMisc = function (fvdSpeedDial) {
+let _loadLog = new Log();
+
+const GroupsModule = function (fvdSpeedDial) {
 	this.fvdSpeedDial = fvdSpeedDial;
-	Broadcaster.onMessage.addListener(msg => {
-		if (msg.action === 'pref:changed') {
-			this._prefsListener(msg.name, msg.value);
-		} else if (msg.action === 'sync:syncdatachanged') {
-			this._syncDataChangedListener();
+	this.getGroupFont = function () {
+		let group = document.querySelector('#groupsBox .group');
+		let style;
+		let needRemoveGroup = false;
+
+		if (!group) {
+			group = document.createElement('div');
+			group.className = 'group';
+			document.querySelector('#groupsBox').appendChild(group);
+			style = window.getComputedStyle(group);
+			needRemoveGroup = true;
+		} else {
+			style = window.getComputedStyle(group);
 		}
-	});
+
+		const font = style.font;
+
+		if (needRemoveGroup) {
+			group.parentNode.removeChild(group);
+		}
+
+		return font;
+	};
+	this.rebuildGroupsList = function () {
+		const { fvdSpeedDial } = this;
+		const { StorageSD, SpeedDial, Dialogs } = fvdSpeedDial;
+
+		const l = new Log();
+
+		l.profile.start('total');
+		l.profile.start('preparations');
+		// for speed dial we build groups list with add button
+		// for most visited we build three options: all time, last month, last week
+		// for recently closed build nothing
+		// const that = new SpeedDial();
+		let isAdditionalListOpened = false;
+
+		const elements = document.getElementsByClassName('additionalGroupsList');
+
+		if (elements.length) {
+			if (elements[0].getAttribute('active') === 1) {
+				isAdditionalListOpened = true;
+			}
+		}
+
+		document
+			.getElementById('speedDialGroupsWrapper')
+			.setAttribute('type', SpeedDial.currentDisplayType());
+
+		let groupsBox = document.getElementById('groupsBox');
+		const tmpContainer = groupsBox.cloneNode(true);
+		// remove childs
+
+		while (tmpContainer.firstChild) {
+			tmpContainer.removeChild(tmpContainer.firstChild);
+		}
+		l.profile.end('preparations');
+
+		if (SpeedDial.currentDisplayType() === 'speeddial') {
+			let countInPopularGroup = 0;
+
+			Utils.Async.chain([
+				function (chainCallback) {
+					if (_b(fvdSpeedDial.Prefs.get('sd.display_popular_group'))) {
+						l.profile.start('fetch total count dials');
+						StorageSD.countDials(
+							{
+								uniqueUrl: true,
+							},
+							function (count) {
+								l.profile.end('fetch total count dials');
+								countInPopularGroup = Math.min(
+									fvdSpeedDial.Prefs.get('sd.all_groups_limit_dials'),
+									count
+								);
+								chainCallback();
+							}
+						);
+					} else {
+						chainCallback();
+					}
+				},
+
+				function () {
+					l.profile.start('fetch groups list');
+					StorageSD.groupsList(function (groups) {
+						// check if current group found
+						const currentGroupId = fvdSpeedDial.SpeedDial.currentGroupId();
+
+						let groupFound = false;
+
+						for (let i = 0; i !== groups.length; i++) {
+							if (groups[i].id === currentGroupId) {
+								groupFound = true;
+								break;
+							}
+						}
+
+						if (currentGroupId === 0) {
+							// popular group always exists
+							groupFound = true;
+						}
+
+						if (!groupFound) {
+							// group not found, try to set first group in list to current
+							if (!groups.length) {
+								// do nothing
+								return;
+							}
+
+							fvdSpeedDial.SpeedDial.setCurrentGroupId(groups[0].id);
+							// and rebuild dial with new group
+							fvdSpeedDial.SpeedDial.sheduleFullRebuild();
+							return;
+						}
+
+						l.profile.start('building groups html');
+
+						const sdMenu = document.querySelector('#searchBar .activeContent');
+						// 100 is a space that should remain between groups and the right window border
+						let groupsBoxMaxWidth
+							= SpeedDial._viewportWidth()
+							// groups container left margin
+							- 20
+							- document.getElementById('fastMenuToggleButton').offsetWidth
+							// offset between fast menu and right browser's border
+							- 15
+							// additional groups button width
+							- 20
+							// add group button width
+							- 18
+							// left margin between add group button and other groups
+							- 12
+							// right margin of the add group button
+							- SpeedDial._groupElemMargin
+							// correction parameter
+							//-10
+							- 10;
+
+						if (_b(fvdSpeedDial.Prefs.get('sd.main_menu_displayed'))) {
+							groupsBoxMaxWidth -= sdMenu.offsetWidth;
+						}
+
+						const restoreSessionText = _('restore_previous_session');
+
+						const groupsFont = fvdSpeedDial.SpeedDial.Groups.getGroupFont();
+						let groupsActiveWidth = 0;
+						let maxGroupsInMainList = 0;
+
+						function incActiveWidth(text) {
+							let groupSize
+								= SpeedDial._groupElemXPadding * 2
+								+ Utils.measureText(groupsFont, text)
+								+ SpeedDial._groupElemMargin;
+
+							if (text === restoreSessionText) {
+								groupSize += 23;
+							} else {
+								if (groupSize > SpeedDial._groupElemMaxWidth) {
+									groupSize = SpeedDial._groupElemMaxWidth;
+								}
+							}
+
+							groupsActiveWidth += groupSize;
+						}
+
+						if (SpeedDial.sessionRestore) {
+							const item = fvdSpeedDial.SpeedDial.Builder.groupsItem(restoreSessionText, 'restore');
+
+							// add context menu
+							//fvdSpeedDial.fvdSpeedDial.ContextMenus.assignToElem( item, "speeddialGroup" );
+							tmpContainer.appendChild(item);
+
+							incActiveWidth(item.textContent);
+						}
+
+						// first add popular group if need
+						if (_b(fvdSpeedDial.Prefs.get('sd.display_popular_group'))) {
+							let defGroupName = _('newtab_popular_group_title');
+
+							if (_b(fvdSpeedDial.Prefs.get('sd.enable_dials_counter'))) {
+								defGroupName += ' (' + countInPopularGroup + ')';
+							}
+
+							const item = fvdSpeedDial.SpeedDial.Builder.groupsItem(defGroupName, 0);
+
+							// add context menu
+							fvdSpeedDial.ContextMenus.assignToElem(item, 'speeddialGroup');
+							tmpContainer.appendChild(item);
+
+							incActiveWidth(item.textContent);
+						}
+
+						for (let i = 0; i !== groups.length; i++) {
+							//incActiveWidth(groups[i].name + " ("+groups[i].count_dials+")");
+
+							let name = groups[i].name;
+
+							if (_b(fvdSpeedDial.Prefs.get('sd.enable_dials_counter'))) {
+								name += ' (' + groups[i].count_dials + ')';
+							}
+
+							incActiveWidth(name);
+
+							if (groupsActiveWidth >= groupsBoxMaxWidth) {
+								break;
+							}
+
+							maxGroupsInMainList++;
+						}
+
+						const groupsInMainListCount = maxGroupsInMainList;
+
+						const groupsInMainList = groups.splice(0, groupsInMainListCount);
+						const groupsInAdditionalList = groups;
+
+						for (let i = 0; i !== groupsInMainList.length; i++) {
+							const item = fvdSpeedDial.SpeedDial.Builder.groupsItem(
+								groupsInMainList[i].name,
+								groupsInMainList[i].id,
+								groupsInMainList[i].count_dials
+							);
+							fvdSpeedDial.ContextMenus.assignToElem(item, 'speeddialGroup');
+							tmpContainer.appendChild(item);
+						}
+
+						if (groupsInAdditionalList.length > 0) {
+							// add button for open additional groups list
+							const additionalGroupsButton
+								= fvdSpeedDial.SpeedDial.Builder.groupsAdditionalGroupsButton();
+
+							tmpContainer.appendChild(additionalGroupsButton);
+
+							const additionalList
+								= fvdSpeedDial.SpeedDial.Builder.groupsAdditionalList(groupsInAdditionalList);
+
+							additionalList.setAttribute('active', 0);
+
+							tmpContainer.appendChild(additionalList);
+
+							fvdSpeedDial.Scrolling.additionalGroupsListOpen = false;
+						}
+
+						// add group add item
+						const item = document.createElement('div');
+						item.setAttribute('class', 'group add');
+						const image = document.createElement('div');
+
+						image.setAttribute('class', 'image');
+						item.appendChild(image);
+
+						item.addEventListener(
+							'click',
+							function (event) {
+								Dialogs.addGroup();
+							},
+							true
+						);
+
+						tmpContainer.appendChild(item);
+
+						groupsBox = document.getElementById('groupsBox');
+						groupsBox.parentNode.replaceChild(tmpContainer, groupsBox);
+						l.profile.end('building groups html');
+
+						if (isAdditionalListOpened) {
+							SpeedDial.Groups.displayAdditionalList({
+								disableAnimation: true,
+							});
+						}
+
+						setTimeout(function () {
+							fvdSpeedDial.ContextMenus.rebuildSpeedDialCellMenu();
+						}, 0);
+
+						try {
+							const currentGroupId = SpeedDial.currentGroupId();
+							const item = document.getElementById('group_select_' + currentGroupId);
+
+							document.getElementById('groupsBoxContainer').scrollLeft = item.offsetLeft;
+						} catch (ex) {
+							console.warn(ex);
+						}
+						l.profile.end('total');
+
+						//console.log("**Groups**\n", l.toString());// #Debug
+						if (_loadLog) {
+							_loadLog.profile.end('Total Loading');
+							console.info('** Total Loading **\n', _loadLog.toString());
+							_loadLog = null;
+						}
+					});
+				},
+			]);
+		} else if (SpeedDial.currentDisplayType() === 'mostvisited') {
+			for (let i = 0; i !== SpeedDial._mostVisitedIntervals.length; i++) {
+				const interval = SpeedDial._mostVisitedIntervals[i];
+				const item = fvdSpeedDial.SpeedDial.Builder.groupsItem(
+					_('newtab_mostvisited_interval_' + interval),
+					interval
+				);
+
+				tmpContainer.appendChild(item);
+			}
+			groupsBox.parentNode.replaceChild(tmpContainer, groupsBox);
+		} else {
+			groupsBox.parentNode.replaceChild(tmpContainer, groupsBox);
+		}
+	};
+	this.displayAdditionalList = function (params) {
+		params = params || {};
+		const that = this;
+
+		try {
+			const listElem = document.getElementsByClassName('additionalGroupsList')[0];
+
+			if (listElem.getAttribute('active') === 1) {
+				this.closeAdditionalList();
+				return;
+			}
+
+			const btn = document.getElementsByClassName('additionalGroupsButton')[0];
+			const pos = Utils.getOffset(btn);
+
+			//listElem.style.left = pos.left + "px";
+
+			if (document.body.clientWidth - pos.left > listElem.offsetWidth + 30) {
+				listElem.style.left = pos.left + 'px';
+			} else {
+				listElem.style.left = pos.left - listElem.offsetWidth - 20 + 'px';
+			}
+
+			if (params.disableAnimation) {
+				listElem.setAttribute('disableanim', 1);
+				setTimeout(function () {
+					listElem.removeAttribute('disableanim');
+				}, 500);
+			}
+
+			listElem.setAttribute('active', 1);
+			document.addEventListener('click', that.closeAdditionalList, false);
+			$('.additionalGroupsElemList').scrollTo('.additionalGroupsElemList [current=1]');
+
+			fvdSpeedDial.Scrolling.additionalGroupsListOpen = true;
+		} catch (ex) {
+			console.warn(ex);
+		}
+	};
+
+	this.closeAdditionalList = function () {
+		try {
+			const listElem = document.getElementsByClassName('additionalGroupsList')[0];
+
+			listElem.setAttribute('active', 0);
+			document.removeEventListener('click', fvdSpeedDial.SpeedDial.Groups.closeAdditionalList);
+
+			fvdSpeedDial.Scrolling.additionalGroupsListOpen = false;
+		} catch (ex) {
+			console.warn(ex);
+		}
+	};
+};
+const SpeedDialModule = function (fvdSpeedDial) {
+	this.fvdSpeedDial = fvdSpeedDial;
+	this.DragAndDrop = new DragAndDrop(fvdSpeedDial);
+	this.Groups = new GroupsModule(this.fvdSpeedDial);
+	this.Builder = new SpeedDialBuilderModule(this.fvdSpeedDial);
+	this.ThumbManager = new ThumbManagerModule(this.fvdSpeedDial);
+	this.ThumbManagerBg = new ThumbManagerBgModule(this.fvdSpeedDial);
 };
 
-SpeedDialMisc.prototype = {
-	_optionsOpened: false,
-	_needRebuild: false,
-	_checkNeedRebuildInterval: false,
+SpeedDialModule.prototype = new FVDEventEmitter();
 
-	settingsInvalidated: [],
-	settingsInvalidatedIntervalCheck: null,
+SpeedDialModule.prototype = {
+	_displayType: null, // (speeddial, mostvisited, recentlyclosed)
+	// currently opened group in this speeddial tab
+	_nowOpenedGroup: null,
+	_cellsSizes: {
+		big: 364,
+		medium: 210,
+		small: 150,
+	},
+	_mostVisitedIntervals: ['all_time', 'month', 'week'],
+	_displayModesList: ['speeddial', 'mostvisited', 'recentlyclosed'],
+	_topLineHeight: 3,
+	_dialBodyPadding: 5, // 5px - is padding in dial body
+	_cellsSizeRatio: 1.6,
+	_cellsMarginX: 20,
+	_cellsMarginY: {
+		standard_speeddial: 70,
+		fancy_speeddial: 30,
 
-	allRefreshesSettings: ['speedDial', 'mostVisited', 'recentlyClosed'],
-	partPrefs: {},
+		standard_mostvisited: 70,
+		fancy_mostvisited: 50,
+	},
+	_groupElemMaxWidth: 150,
+	_groupElemMargin: 5,
+	_groupElemXPadding: 5,
+	//_groupElemLetterWidth: 6,
+	_listElemMarginX: 15,
+	_listElemMarginY: 15,
+	_listElemSize: {
+		// for recentlyclosed and speeddial
+		height: 15,
+		width: 522,
+	},
+	_listElemSizeMostVisited: {
+		// for mostvisited
+		height: 29,
+		width: 522,
+	},
+	_needRebuild: false, // sign to need rebuild all dials list
+	_needRebuildGroupsList: false, // sign to need rebuild groups listing
+	_needCSSRefresh: false,
+	_needBackgroundRefresh: false,
+	_rebuildCheckerIntervalInst: null,
+	_cellsRebuildCallback: null,
+	_firstRebuildDone: false,
+	justAddedId: null,
+	sessionRestore: false,
+	fancySpecialDecrementCount: 0, // this value used for fixing fancy dials list
+	// some events
+	onBuildStart: new FVDEventEmitter(),
+	onBuildCompleted: new FVDEventEmitter(),
+	onGroupChange: new FVDEventEmitter(),
 
-	_showRateMessageAfterDaysCount: 1,
-
-	refreshSearchPanel: function () {
+	cellsMarginY: function () {
 		const { fvdSpeedDial } = this;
 
-		if (_b(fvdSpeedDial.Prefs.get('sd.enable_search'))) {
-			const cseSearchBox = document.getElementById('cse-search-box');
+		let factor = 0;
+		const displayMode = fvdSpeedDial.Prefs.get('sd.display_mode');
 
-			if (cseSearchBox) {
-				cseSearchBox.style.display = 'block';
-				document.body.setAttribute('searchEnabled', 1);
+		if (displayMode === 'standard') {
+			const urls = _b(fvdSpeedDial.Prefs.get('sd.show_urls_under_dials'));
+			const title = _b(fvdSpeedDial.Prefs.get('sd.show_icons_and_titles_above_dials'));
 
-				chrome.i18n.getAcceptLanguages(function (languages) {
-					if (languages.indexOf('ru') !== -1 && languages.indexOf('ru') < 3) {
-						// document.querySelector(".searchForm button span").textContent = _("newtab_search_on_yandex");
-					}
-				});
-			}
-		} else {
-			const cseSearchBox = document.getElementById('cse-search-box');
-
-			if (cseSearchBox) {
-				cseSearchBox.style.display = 'none';
-				document.body.setAttribute('searchEnabled', 0);
+			if (!urls && !title) {
+				factor = -47;
+			} else if (!urls) {
+				factor -= 20;
+			} else if (!title) {
+				factor -= 20;
 			}
 		}
+
+		return (
+			this._cellsMarginY[
+				fvdSpeedDial.Prefs.get('sd.display_mode') + '_' + this.currentDisplayType()
+			] + factor
+		);
 	},
 
-	unHighlightSearch: function () {
-		document.querySelector('#searchFormContainer')
-			&& document.querySelector('#searchFormContainer').classList.remove('highlight');
+	has3D: function () {
+		const { fvdSpeedDial } = this;
+
+		if (fvdSpeedDial.localStorage.getItem('has3dCss')) {
+			return true;
+		}
+
+		const has = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
+
+		if (!has) {
+			// chrome 61 canary doesn't have m11 m11 key in a WebKitCSSMatrix instance
+			// use another approach to detect if css transforms are available
+			const el = document.createElement('div');
+
+			document.body.insertBefore(el, null);
+			el.style.transform = 'translate3d(1px,1px,1px)';
+			const transformValue = window.getComputedStyle(el).getPropertyValue('transform');
+
+			document.body.removeChild(el);
+
+			if (!transformValue) {
+				return false;
+			}
+		}
+
+		if (document.getElementById('test3d').offsetLeft === 0) {
+			return false;
+		}
+
+		// cache 3d css state
+		fvdSpeedDial.localStorage.setItem('has3dCss', 1);
+		return true;
 	},
 
-	doSearch: function (query) {
-		const {
-			fvdSpeedDial: { Search },
-		} = this;
-		Search.doSearch(query);
-	},
+	refreshEnableMirrors: function () {
+		const { fvdSpeedDial } = this;
 
-	showCenterScreenNotification: function (text) {
-		const notification = document.getElementById('center-screen-notification');
+		const sdContent = document.getElementById('speedDialContent');
 
-		notification.style.display = 'block';
-		notification.getElementsByClassName('notification-message')[0].innerHTML = text;
-		setTimeout(function () {
-			notification.setAttribute('appear', 1);
-		}, 0);
-		setTimeout(function () {
-			notification.removeAttribute('appear');
-			setTimeout(function () {
-				notification.style.display = 'none';
-			}, 500);
-		}, 3000);
+		if (sdContent) {
+			if (_b(fvdSpeedDial.Prefs.get('sd.display_mirror'))) {
+				sdContent.setAttribute('enablemirrors', '1');
+			} else {
+				sdContent.setAttribute('enablemirrors', '0');
+			}
+		} else {
+			console.warn('element not found');
+		}
 	},
 
 	init: function () {
 		const { fvdSpeedDial } = this;
-		const { SpeedDial, Dialogs, PowerOffClient, Apps } = fvdSpeedDial;
+		const { SpeedDial, CSS } = fvdSpeedDial;
+
 		const that = this;
 
-		this.refreshSearchPanel();
-				$('#q').speechify({
-			lang: chrome.i18n.getUILanguage(),
-			onResult: () => {
-				this.doSearch();
-			},
-			build: data => {
-				data.icon.attr('title', _('newtab_voice_search'));
-			},
-		});
-		
-		const searchForm = document.querySelector('.searchForm');
+		this.refreshEnableMirrors();
 
-		searchForm
-			&& searchForm.addEventListener(
-				'submit',
-				event => {
-					this.doSearch();
-					event.stopPropagation();
-					event.preventDefault();
+		if (!_b(fvdSpeedDial.Prefs.get('sd.fancy_size_adjusted'))) {
+			Utils.Async.chain([
+				function (next) {
+					const min = that.getMinCellWidth();
+
+					let v = that.getMaxCellWidth();
+
+					const minCols = fvdSpeedDial.Prefs.get('sd.fancy_init_min_columns');
+
+					while (v >= min) {
+						fvdSpeedDial.Prefs.set('sd.custom_dial_size_fancy', v);
+
+						if (fvdSpeedDial.SpeedDial.cellsInRowMax('auto', 'fancy').cols >= minCols) {
+							break;
+						}
+
+						v--;
+					}
+
+					if (fvdSpeedDial.Prefs.get('sd.display_mode') === 'fancy') {
+						return CSS._updateThemeActions('fancy', next);
+					}
+
+					next();
 				},
-				false
-			);
-
-		const inputSearch = document.getElementById('q');
-
-		inputSearch
-			&& inputSearch.addEventListener(
-				'dblclick',
-				function (event) {
-					event.stopPropagation();
-				},
-				false
-			);
-
-		inputSearch
-			&& inputSearch.addEventListener(
-				'focus',
 				function () {
-					searchForm.setAttribute('active', 1);
+					fvdSpeedDial.Prefs.set('sd.fancy_size_adjusted', true);
 				},
-				false
-			);
+			]);
+		}
 
-		inputSearch
-			&& inputSearch.addEventListener(
-				'blur',
-				function () {
-					searchForm.removeAttribute('active');
-				},
-				false
-			);
-		// need call immedately
-		this._setupIconsMenu();
-		this.setExpandedState();
-		this.setCustomSearchState();
-		this.refreshMenu();
+		// init css adjuster
+		CSS.stylesheets.push(document.styleSheets[0]);
 
-		this.settingsInvalidatedIntervalCheck = setInterval(function () {
-			if (that.settingsInvalidated.length !== 0) {
-				const toRefresh = that.settingsInvalidated;
+		// immedately actions
+		// refresh current type expand state
+		this.refreshExpandState();
 
-				that.settingsInvalidated = [];
-				that.refreshSettingsWindow(toRefresh);
-			}
-		}, 200);
+		// refresh background
+		this.refreshBackground();
 
-		this._initialOptionsSetup();
+		// refresh CSS
+		this.refreshCSS();
 
-		document.addEventListener(
-			'click',
+		// start need rebuild checker interval
+		this._rebuildCheckerIntervalInst = setInterval(this._needRebuildChecker, 100);
+
+		window.addEventListener(
+			'resize',
 			function (event) {
-				that._handlerDocumentClick.call(that, event);
+				that.sheduleRebuild();
+				that.sheduleRebuildGroupsList();
 			},
 			true
 		);
 
-		this._checkNeedRebuildInterval = setInterval(function () {
-			if (that._needRebuild) {
-				that._needRebuild = false;
-				that._setupLabelsBelowIcons();
-				that._setupIconsMenu();
-			}
-		}, 100);
+		window.addEventListener(
+			'keydown',
+			function (event) {
+				if (event.ctrlKey) {
+					const digits = [49, 50, 51, 52, 53, 54, 55, 56, 57, 48];
+					const num = digits.indexOf(event.keyCode);
 
-		// check need display rate message
-		if (!_b(fvdSpeedDial.Prefs.get('sd.dont_display_rate_message')) && !Config.HIDE_RATE_MESSAGE) {
-			setTimeout(function () {
-				const installTime = fvdSpeedDial.Prefs.get('sd.install_time');
-
-				if (installTime !== null) {
-					const now = new Date().getTime();
-					const days = Math.floor((now - installTime) / (1000 * 3600 * 24));
-
-					if (days >= that._showRateMessageAfterDaysCount) {
-						that.showOptions('rateMessage', document.getElementById('searchBar'), null, null, true);
+					if (num !== -1) {
+						event.preventDefault();
+						event.stopPropagation();
+						that.openDialByNum(num, event);
 					}
 				}
-			}, 5000);
-		}
+			},
+			true
+		);
 
-		if (_b(fvdSpeedDial.Prefs.get('display_themes_message'))) {
-			setTimeout(function () {
-				//that.showOptions( "themesInstallMessage", document.getElementById( "searchBar" ), null,  null, true );
-			}, 8000);
-		}
+		// init drag and drop
+		this.DragAndDrop.init();
 
-		// set listeners
+		function trackGAPageViewEvent(tab) {
+			if (tab.active) {
+				const groupID = SpeedDial.currentGroupId();
+				let isDisplayDials = fvdSpeedDial.Prefs.get('sd.speeddial_expanded');
+				
+				if (typeof isDisplayDials === undefined) {
+					isDisplayDials = true;
+				}
 
-		document.getElementById('enableSpeedDial_yes')
-			&& document.getElementById('enableSpeedDial_yes').addEventListener(
-				'click',
-				() => {
-					this.confirmSetting(
-						document.getElementById('enableSpeedDial_yes').parentNode,
-						'enableSpeedDial',
-						true
-					);
-				},
-				false
-			);
+				fvdSpeedDial.StorageSD.getGroupTitleById(groupID, (groupTitle, group) => {
+					const sendItems = isDisplayDials && group && Object.values(defaultGroupGlobalIDs).includes(group.global_id);
 
-		document.getElementById('enableSpeedDial_no')
-			&& document.getElementById('enableSpeedDial_no').addEventListener(
-				'click',
-				() => {
-					this.confirmSetting(
-						document.getElementById('enableSpeedDial_no').parentNode,
-						'enableSpeedDial',
-						false
-					);
-				},
-				false
-			);
+					fvdSpeedDial.StorageSD.getDialListByGroupId(groupID, (dials) => {
+						const params = {
+							page_location: tab.url,
+							display_dial_group: isDisplayDials ? 'yes' : 'no',
+							dial_group: isDisplayDials ? groupTitle : undefined,
+							items: sendItems ? dials.map((item) => ({
+								item_name: item.title,
+								item_url: fvdSpeedDial.SpeedDialMisc.getCleanRedirectTxt(item.display_url),
+							})) : undefined,
+						};
 
-		document.getElementById('defaultSpeedDial')
-			&& document.getElementById('defaultSpeedDial').addEventListener(
-				'change',
-				() => {
-					this.changeDefaultDisplayType(
-						'speeddial',
-						document.getElementById('defaultSpeedDial').checked
-					);
-				},
-				false
-			);
-
-		document.getElementById('speedDialColumns')
-			&& document.getElementById('speedDialColumns').addEventListener(
-				'focus',
-				() => {
-					this.rebuildColumnsField(['speedDialColumns']);
-				},
-				false
-			);
-
-		document.getElementById('sdButtonManageGroups')
-			&& document.getElementById('sdButtonManageGroups').addEventListener(
-				'click',
-				() => {
-					this.hideOptions();
-					Dialogs.manageGroups();
-				},
-				false
-			);
-
-		document.getElementById('enableMostVisited_yes')
-			&& document.getElementById('enableMostVisited_yes').addEventListener(
-				'click',
-				() => {
-					this.confirmSetting(
-						document.getElementById('enableMostVisited_yes').parentNode,
-						'enableMostVisited',
-						true
-					);
-				},
-				false
-			);
-
-		document.getElementById('enableMostVisited_no')
-			&& document.getElementById('enableMostVisited_no').addEventListener(
-				'click',
-				() => {
-					this.confirmSetting(
-						document.getElementById('enableMostVisited_no').parentNode,
-						'enableMostVisited',
-						false
-					);
-				},
-				false
-			);
-
-		document.getElementById('defaultMostVisited')
-			&& document.getElementById('defaultMostVisited').addEventListener(
-				'change',
-				() => {
-					this.changeDefaultDisplayType(
-						'mostvisited',
-						document.getElementById('defaultMostVisited').checked
-					);
-				},
-				false
-			);
-
-		document.getElementById('mostVisitedColumns')
-			&& document.getElementById('mostVisitedColumns').addEventListener(
-				'focus',
-				() => {
-					this.rebuildColumnsField(['mostVisitedColumns']);
-				},
-				false
-			);
-
-		document.getElementById('mostvisitedButtonSync')
-			&& document.getElementById('mostvisitedButtonSync').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.syncMostVisited();
-					document.getElementById('doneflushMostVisitedCache').setAttribute('active', 1);
-					setTimeout(function () {
-						document.getElementById('doneflushMostVisitedCache').removeAttribute('active');
-					}, 2000);
-				},
-				false
-			);
-
-		document.getElementById('mostvisitedButtonRestoreRemoved')
-			&& document.getElementById('mostvisitedButtonRestoreRemoved').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.mostVisitedRestoreRemoved();
-				},
-				false
-			);
-
-		document.getElementById('enableRecentlyClosed_yes')
-			&& document.getElementById('enableRecentlyClosed_yes').addEventListener(
-				'click',
-				() => {
-					this.confirmSetting(
-						document.getElementById('enableRecentlyClosed_yes').parentNode,
-						'enableRecentlyClosed',
-						true
-					);
-				},
-				false
-			);
-
-		document.getElementById('enableRecentlyClosed_no')
-			&& document.getElementById('enableRecentlyClosed_no').addEventListener(
-				'click',
-				() => {
-					this.confirmSetting(
-						document.getElementById('enableRecentlyClosed_no').parentNode,
-						'enableRecentlyClosed',
-						false
-					);
-				},
-				false
-			);
-
-		document.getElementById('defaultRecentlyClosed')
-			&& document.getElementById('defaultRecentlyClosed').addEventListener(
-				'change',
-				() => {
-					this.changeDefaultDisplayType(
-						'recentlyclosed',
-						document.getElementById('defaultRecentlyClosed').checked
-					);
-				},
-				false
-			);
-
-		document.getElementById('recentlyClosedColumns')
-			&& document.getElementById('recentlyClosedColumns').addEventListener(
-				'focus',
-				() => {
-					this.rebuildColumnsField(['recentlyClosedColumns']);
-				},
-				false
-			);
-
-		document.getElementById('sdCbCanTurnOffNewTabPopup')
-			&& document.getElementById('sdCbCanTurnOffNewTabPopup').addEventListener(
-				'click',
-				function (event) {
-					fvdSpeedDial.Prefs.set(
-						'sd.display_can_turn_off_newtab_popup',
-						!document.getElementById('sdCbCanTurnOffNewTabPopup').checked
-					);
-				},
-				false
-			);
-
-		if (document.getElementById('rateMessage')) {
-			const items = document.getElementById('rateMessage').getElementsByClassName('click');
-
-			for (let i = 0; i !== items.length; i++) {
-				items[i].addEventListener('click', () => {
-					this.openChromeStorePage();
-				});
-			}
-		}
-
-		document.getElementById('sdCBDontDisplayMigrateMessage')
-			&& document.getElementById('sdCBDontDisplayMigrateMessage').addEventListener(
-				'click',
-				() => {
-					this.setRateMessageNotDisplayState(
-						document.getElementById('sdCBDontDisplayMigrateMessage').checked
-					);
-				},
-				false
-			);
-
-		document.getElementById('sdDontDisplayThemesMessage')
-			&& document.getElementById('sdDontDisplayThemesMessage').addEventListener(
-				'click',
-				function () {
-					fvdSpeedDial.Prefs.set(
-						'display_themes_message',
-						!document.getElementById('sdDontDisplayThemesMessage').checked
-					);
-				},
-				false
-			);
-
-		document.getElementById('searchBar')
-			&& document.getElementById('searchBar').addEventListener(
-				'dblclick',
-				() => {
-					this.processDblClick(event);
-				},
-				false
-			);
-		const buttonsIds = ['buttonSpeedDial', 'buttonMostVisited', 'buttonRecentlyClosed'];
-
-		buttonsIds.forEach(buttonId => {
-			document.getElementById(buttonId)
-				&& document.getElementById(buttonId).addEventListener(
-					'mouseover',
-					() => {
-						this.mouseOverButton(document.getElementById(buttonId));
-					},
-					false
-				);
-
-			document.getElementById(buttonId)
-				&& document.getElementById(buttonId).addEventListener(
-					'mouseout',
-					() => {
-						this.mouseOutButton(document.getElementById(buttonId));
-					},
-					false
-				);
-		});
-		document.getElementById('sdSetDisplayTypeSpeedDial')
-			&& document.getElementById('sdSetDisplayTypeSpeedDial').addEventListener(
-				'click',
-				function () {
-					SpeedDial.setCurrentDisplayType('speeddial');
-				},
-				false
-			);
-
-		document.getElementById('sdSetDisplayTypeSpeedDial')
-			&& document.getElementById('sdSetDisplayTypeSpeedDial').addEventListener(
-				'click',
-				function () {
-					SpeedDial.setCurrentDisplayType('speeddial');
-				},
-				false
-			);
-
-		document.getElementById('speedDialExpand')
-			&& document.getElementById('speedDialExpand').addEventListener(
-				'click',
-				function () {
-					if (PowerOffClient.isHidden()) {
-						return;
-					}
-
-					fvdSpeedDial.Prefs.toggle('sd.speeddial_expanded');
-				},
-				false
-			);
-
-		document.getElementById('speedDialHide')
-			&& document.getElementById('speedDialHide').addEventListener(
-				'click',
-				function () {
-					if (PowerOffClient.isHidden()) {
-						return;
-					}
-
-					fvdSpeedDial.Prefs.toggle('sd.speeddial_expanded');
-				},
-				false
-			);
-
-		document.getElementById('sdOpenFastOptions')
-			&& document.getElementById('sdOpenFastOptions').addEventListener(
-				'click',
-				e => {
-					this.showOptions('speedDialOptions', document.getElementById('sdOpenFastOptions'), e);
-				},
-				false
-			);
-
-		document.getElementById('sdSetDisplayTypeMostVisited')
-			&& document.getElementById('sdSetDisplayTypeMostVisited').addEventListener(
-				'click',
-				function () {
-					SpeedDial.setCurrentDisplayType('mostvisited');
-				},
-				false
-			);
-
-		document.getElementById('mostVisitedExpand')
-			&& document.getElementById('mostVisitedExpand').addEventListener(
-				'click',
-				function () {
-					if (PowerOffClient.isHidden()) {
-						return;
-					}
-
-					fvdSpeedDial.Prefs.toggle('sd.mostvisited_expanded');
-				},
-				false
-			);
-
-		document.getElementById('mostVisitedHide')
-			&& document.getElementById('mostVisitedHide').addEventListener(
-				'click',
-				function () {
-					if (PowerOffClient.isHidden()) {
-						return;
-					}
-
-					fvdSpeedDial.Prefs.toggle('sd.mostvisited_expanded');
-				},
-				false
-			);
-
-		document.getElementById('mostVisitedOpenFastOptions')
-			&& document.getElementById('mostVisitedOpenFastOptions').addEventListener(
-				'click',
-				e => {
-					this.showOptions(
-						'mostVisitedOptions',
-						document.getElementById('mostVisitedOpenFastOptions'),
-						e
-					);
-				},
-				false
-			);
-
-		document.getElementById('sdSetDisplayTypeRecentlyClosed')
-			&& document.getElementById('sdSetDisplayTypeRecentlyClosed').addEventListener(
-				'click',
-				function () {
-					SpeedDial.setCurrentDisplayType('recentlyclosed');
-				},
-				false
-			);
-
-		document.getElementById('recentlyClosedExpand')
-			&& document.getElementById('recentlyClosedExpand').addEventListener(
-				'click',
-				function () {
-					if (PowerOffClient.isHidden()) {
-						return;
-					}
-
-					fvdSpeedDial.Prefs.toggle('sd.recentlyclosed_expanded');
-				},
-				false
-			);
-
-		document.getElementById('recentlyClosedHide')
-			&& document.getElementById('recentlyClosedHide').addEventListener(
-				'click',
-				function () {
-					if (PowerOffClient.isHidden()) {
-						return;
-					}
-
-					fvdSpeedDial.Prefs.toggle('sd.recentlyclosed_expanded');
-				},
-				false
-			);
-
-		document.getElementById('recentlyClosedOpenFastOptions')
-			&& document.getElementById('recentlyClosedOpenFastOptions').addEventListener(
-				'click',
-				e => {
-					this.showOptions(
-						'recentlyClosedOptions',
-						document.getElementById('recentlyClosedOpenFastOptions'),
-						e
-					);
-				},
-				false
-			);
-
-		document.getElementById('buttonSettings')
-			&& document.getElementById('buttonSettings').addEventListener(
-				'click',
-				function () {
-					document.location = 'options.html';
-				},
-				false
-			);
-
-		fvdSpeedDial.Sync.isActive(function (active) {
-			if (!active) {
-				document.getElementById('buttonSync')
-					&& document.getElementById('buttonSync').removeAttribute('hidden');
-			}
-		});
-
-		document.getElementById('buttonSync')
-			&& document.getElementById('buttonSync').addEventListener(
-				'click',
-				function () {
-					fvdSpeedDial.Sync.syncAddonOptionsUrl(function (url) {
-						if (url) {
-							chrome.tabs.create({
-								url: url,
-								active: true,
-							});
-							fvdSpeedDial.Sync.startSync('main', function (state) {
-								if (state === 'syncActive') {
-									// sync active on another driver
-									Dialogs.alert(
-										_('dlg_alert_sync_on_another_driver_title'),
-										_('dlg_alert_sync_on_another_driver_text')
-									);
-								}
-							});
-						} else {
-							document.location = 'options.html#sync';
-						}
+						Analytics.fireTabViewEvent(params);
 					});
-				},
-				false
-			);
 
-		document.getElementById('fastMenuToggleButton')
-			&& document.getElementById('fastMenuToggleButton').addEventListener(
-				'click',
-				() => {
-					this.toggleMenu();
-				},
-				false
-			);
+				});
 
-		document.getElementById('speedDialWrapper')
-			&& document.getElementById('speedDialWrapper').addEventListener(
-				'dblclick',
-				function (event) {
-					SpeedDial.wrapperDblClick(event);
-				},
-				false
-			);
-
-		document.getElementById('q')
-			&& document.getElementById('q').addEventListener(
-				'focus',
-				function (event) {
-					document.getElementById('q').parentNode.setAttribute('focused', '1');
-				},
-				false
-			);
-
-		document.getElementById('q')
-			&& document.getElementById('q').addEventListener(
-				'blur',
-				function (event) {
-					document.getElementById('q').parentNode.setAttribute('focused', '0');
-				},
-				false
-			);
-
-		document.getElementById('sdCbSetListViewTypeTitle')
-			&& document.getElementById('sdCbSetListViewTypeTitle').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.setListViewType();
-				},
-				false
-			);
-
-		document.getElementById('sdCbSetListViewTypeUrl')
-			&& document.getElementById('sdCbSetListViewTypeUrl').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.setListViewType();
-				},
-				false
-			);
-
-		document.getElementById('sdListMenuAddDial')
-			&& document.getElementById('sdListMenuAddDial').addEventListener(
-				'click',
-				function (event) {
-					Dialogs.addDial();
-				},
-				false
-			);
-
-		document.getElementById('mostVisitedListMenuOpenAllLinks')
-			&& document.getElementById('mostVisitedListMenuOpenAllLinks').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.openAllCurrentMostVisitedLinks();
-				},
-				false
-			);
-
-		document.getElementById('mostVisitedListMenuRemoveAllLinks')
-			&& document.getElementById('mostVisitedListMenuRemoveAllLinks').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.removeAllCurrentMostVisitedLinks();
-				},
-				false
-			);
-
-		document.getElementById('recentlyClosedListMenuOpenAllLinks')
-			&& document.getElementById('recentlyClosedListMenuOpenAllLinks').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.openAllCurrentRecentlyClosedLinks();
-				},
-				false
-			);
-
-		document.getElementById('recentlyClosedListMenuRemoveAllLinks')
-			&& document.getElementById('recentlyClosedListMenuRemoveAllLinks').addEventListener(
-				'click',
-				function (event) {
-					SpeedDial.removeAllCurrentRecentlyClosedLinks();
-				},
-				false
-			);
-
-		document.getElementById('no3dSwtichToStandard')
-			&& document.getElementById('no3dSwtichToStandard').addEventListener(
-				'click',
-				function (event) {
-					fvdSpeedDial.Prefs.set('sd.display_mode', 'standard');
-				},
-				false
-			);
-
-		document.getElementById('changeBackgroundBlock')
-			&& document.getElementById('changeBackgroundBlock').addEventListener(
-				'click',
-				function (event) {
-					frameWin.gFVDSSDSettings.displayWindow('fvdsd_sd', 'paneSdBackground');
-				},
-				false
-			);
-
-		document.getElementById('appsPanelOpenButton')
-			&& document.getElementById('appsPanelOpenButton').addEventListener(
-				'click',
-				function (event) {
-					Apps.toggle();
-				},
-				false
-			);
-
-		this.refreshSyncButtonState();
-
-		console.info('Shortcut', Shortcut);
-
-		Shortcut.add('ctrl+enter', function () {
-			SpeedDial.toggleExpand();
-			return false;
-		});
+			}
+		}
 
 		setTimeout(() => {
-			this.unHighlightSearch();
-		}, 3000);
+			fvdSpeedDial.ContextMenus.setGlobalMenu(that.currentDisplayType());
+		});
+
+		let updateStop = false;
+
+		function onBrowserTabUpdated(tab) {
+			if (tab.status === 'complete' && tab.title !== tab.url && newTabUrls.includes(tab.url)) {
+				if (!updateStop) updateStop = true;
+				else return false;
+
+				setTimeout(() => {
+					updateStop = false;
+					trackGAPageViewEvent(tab);
+				}, 1000);
+			}
+		}
+
+		
+		//Send google analytic page_view event on tab created
+		chrome.tabs.onUpdated.addListener(function (tabId, change, tab) {
+			if (!fvdSpeedDial.localStorage.getItem('preventPageViewEvent')) {
+				onBrowserTabUpdated(tab);
+			}
+		});
+
+		// full rebuild when tab activated
+		chrome.tabs.onActivated.addListener(function (info) {
+			chrome.tabs.getCurrent(function (tab) {
+				trackGAPageViewEvent(tab);
+
+				if (tab.id === info.tabId) {
+					if (document.body.hasAttribute('dial-search-show-results')) {
+						// if the search is active don't rebuild page
+						return;
+					}
+
+					that.sheduleFullRebuild();
+				}
+			});
+		});
+
+		if (_b(fvdSpeedDial.Prefs.get('sd.first_dial_page_open'))) {
+			setTimeout(function () {
+				//fvdSpeedDial.Apps.display();
+			}, 0);
+			fvdSpeedDial.Prefs.set('sd.first_dial_page_open', false);
+		}
+
+		this.correctPerspectiveOrigin();
+
+		window.addEventListener(
+			'scroll',
+			function () {
+				that.correctPerspectiveOrigin();
+			},
+			false
+		);
+
+		document.getElementById('cbNotDisplayCollapsedWithPowerOff').addEventListener(
+			'click',
+			function () {
+				setTimeout(function () {
+					fvdSpeedDial.Prefs.set('collapsed_message.with_poweroff.display', false);
+				}, 0);
+			},
+			false
+		);
+
+		document.getElementById('cbNotDisplayCollapsedWithoutPowerOff').addEventListener(
+			'click',
+			function () {
+				setTimeout(function () {
+					fvdSpeedDial.Prefs.set('collapsed_message.without_poweroff.display', false);
+				}, 0);
+			},
+			false
+		);
+
+		document.querySelector('#searchBar .rightMenu .showHide').addEventListener(
+			'click',
+			function () {
+				that.toggleExpand();
+			},
+			false
+		);
+
+		document.querySelector('#speedDialCollapsedContent .aboutPowerOff').addEventListener(
+			'click',
+			function () {
+				window.open(chrome.runtime.getURL('/options.html#poweroff'));
+			},
+			false
+		);
+
+		this.refreshCollapsedMessages();
+
+		// foce show group
+		const forceShowGroupId = Utils.getQueryValue('show_group_id');
+
+		if (forceShowGroupId) {
+			that.setCurrentGroupId(forceShowGroupId);
+		}
+
+		// clear hash
+		document.location.hash = '#';
+
+		// message listener
+
+		Broadcaster.onMessage.addListener(function (message) {
+			switch (message.action) {
+				case 'syncStartNotification':
+					document.getElementById('buttonSync').setAttribute('sync', 1);
+					break;
+				case 'syncEndNotification':
+					document.getElementById('buttonSync').removeAttribute('sync');
+					break;
+				case 'pref:changed':
+					that._prefsListener(message.name, message.value);
+					break;
+				case 'forceRebuild':
+					Utils.Async.chain([
+						function (next) {
+							if (message.needDisplayType) {
+								if (message.needDisplayType !== fvdSpeedDial.SpeedDial.currentDisplayType()) {
+									return;
+								}
+							}
+
+							if (!message.needActiveTab) {
+								return next();
+							}
+
+							Utils.isActiveTab(function (active) {
+								if (!active) {
+									return;
+								}
+
+								next();
+							});
+						},
+						function () {
+							SpeedDial.sheduleFullRebuild();
+						},
+					]);
+					break;
+				case 'foundRecentlyClosed':
+					Utils.Async.chain([
+						function (next) {
+							if (!message.needActiveTab) {
+								return;
+							}
+
+							Utils.isActiveTab(function (active) {
+								if (!active) {
+									return;
+								}
+
+								next();
+							});
+						},
+						function () {
+							if (fvdSpeedDial.SpeedDial.currentDisplayType() === 'recentlyclosed') {
+								SpeedDial.sheduleFullRebuild();
+							} else {
+								// else rebuild only misc content
+								fvdSpeedDial.SpeedDialMisc.sheduleRebuild();
+							}
+						},
+					]);
+					break;
+			}
+		});
 	},
 
-	resetDropDown: function () {
-		end_drop_down();
-		setTimeout(function () {
-			start_drop_down();
-		}, 500);
+	refreshCollapsedMessages: function () {
+		const { fvdSpeedDial } = this;
+
+		if (!_b(fvdSpeedDial.Prefs.get('collapsed_message.with_poweroff.display'))) {
+			document.querySelector(
+				'#speedDialCollapsedContent .collapsedMessagePoweroffDisabled'
+			).style.display = 'none';
+		}
+
+		if (!_b(fvdSpeedDial.Prefs.get('collapsed_message.without_poweroff.display'))) {
+			document.querySelector(
+				'#speedDialCollapsedContent .collapsedMessagePoweroffEnabled'
+			).style.display = 'none';
+		}
+	},
+
+	getMaxCellWidth: function () {
+		let max = 0;
+
+		for (const k in this._cellsSizes) {
+			const size = this._cellsSizes[k];
+
+			if (size > max) {
+				max = size;
+			}
+		}
+
+		return max;
+	},
+
+	getMinCellWidth: function () {
+		let min = 9999;
+
+		for (const k in this._cellsSizes) {
+			const size = this._cellsSizes[k];
+
+			if (size < min) {
+				min = size;
+			}
+		}
+
+		return min;
+	},
+
+	openSizeSetup: function () {
+		window.open(chrome.runtime.getURL('/options.html#setup-custom-size'));
+	},
+
+	dialRemoveAnimate: function (dialId) {
+		const cell = document.getElementById('dialCell_' + dialId);
+
+		if (cell) {
+			const that = this;
+
+			cell.addEventListener(
+				'webkitTransitionEnd',
+				function (event) {
+					that.sheduleFullRebuild();
+				},
+				true
+			);
+
+			cell.style.opacity = 0;
+			cell.style.webkitTransform = 'scale(0.5)';
+		}
+	},
+
+	dialMoveToGroup: function (dialId, groupId) {
+		const { fvdSpeedDial } = this;
+
+		fvdSpeedDial.StorageSD.moveDial(dialId, groupId, function (result) {
+			if (result.result) {
+				fvdSpeedDial.Sync.addDataToSync({
+					category: 'dials',
+					data: dialId,
+					translate: 'dial',
+				});
+
+				if (fvdSpeedDial.SpeedDial.currentGroupId() === 0) {
+					SpeedDial.sheduleFullRebuild();
+				} else {
+					fvdSpeedDial.SpeedDial.dialRemoveAnimate(dialId);
+				}
+
+				fvdSpeedDial.StorageSD.dialGlobalId(dialId, function (dialGlobalId) {
+					fvdSpeedDial.Sync.removeSyncData({
+						category: ['deleteDials'],
+						data: dialGlobalId,
+					});
+				});
+			}
+		});
+	},
+
+	setListViewType: function () {
+		const { fvdSpeedDial } = this;
+
+		let selectedElem = document.querySelector('[name=listViewType]:checked');
+		let type;
+
+		if (selectedElem) {
+			type = selectedElem.value;
+			fvdSpeedDial.Prefs.set('sd.list_view_type', type);
+		} else {
+			selectedElem = document.querySelector(
+				'[name=listViewType][value=' + fvdSpeedDial.Prefs.get('sd.list_view_type') + ']'
+			);
+			selectedElem.checked = true;
+			type = selectedElem.value;
+		}
+
+		const elements = document.getElementsByClassName('newtabListElem');
+		let altType;
+
+		if (type === 'url') {
+			altType = 'title';
+		} else {
+			altType = 'url';
+		}
+
+		for (let i = 0; i !== elements.length; i++) {
+			const elem = elements[i];
+			const textNode = elem.getElementsByClassName('text')[0];
+
+			textNode.textContent = elem.getAttribute('_' + type);
+			elem.setAttribute('title', elem.getAttribute('_' + altType));
+		}
+	},
+
+	refreshSpeedDialWrapperHeight: function () {
+		const wrapper = document.getElementById('speedDialWrapper');
+
+		wrapper.style.height = '';
+
+		const currentHeight = wrapper.offsetHeight;
+		//var topHeight = document.getElementById( "speedDialTop" ).offsetHeight;
+		const bodyHeight = document.body.offsetHeight;
+		const speedDialHeight = bodyHeight - this._topLineHeight;
+		// height that not calcs, it's height of panels that occlude speed dial content, such as widgets panel
+		let extraHeight = 0;
+
+		if (wrapper.hasAttribute('extraheight')) {
+			extraHeight = parseInt(wrapper.getAttribute('extraheight'));
+		}
+
+		if (currentHeight > speedDialHeight) {
+			// no do anything
+			wrapper.style.height = currentHeight + 20 - extraHeight + 'px';
+		} else {
+			wrapper.style.height = speedDialHeight - extraHeight + 'px';
+		}
+	},
+
+	correctPerspectiveOrigin: function () {
+		let originValue = 100;
+
+		originValue += Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+		document.getElementById('cellsContainer').style.webkitPerspectiveOrigin
+			= '50% ' + originValue + 'px';
+	},
+
+	correctPerspective: function (params) {
+		const { fvdSpeedDial } = this;
+
+		params = params || {};
+
+		if (!params._correctAttempt) {
+			params._correctAttempt = 1;
+		}
+
+		if (params._correctAttempt > 10) {
+			return;
+		}
+
+		params._correctAttempt++;
+
+		//experimental
+		if (!this.getExpandState()) {
+			// do not correct for collapsed speed dial
+			return;
+		}
+
+		let that = this;
+		let pers = 600;
+		let fixedPerspective = false;
+
+		if (fvdSpeedDial.Prefs.get('sd.display_mode') !== 'fancy') {
+			fixedPerspective = true;
+		} else if (this.currentDisplayType() === 'mostvisited') {
+			//  fixedPerspective = true;
+		} else if (this._currentSettingsColumnsCount() !== 'auto') {
+			const maxCols = that.cellsInRowMax('auto', null, {
+				objects: document.getElementById('cellsContainer').childNodes.length,
+			}).cols;
+
+			if (maxCols !== this._currentSettingsColumnsCount()) {
+				fixedPerspective = true;
+			}
+		}
+
+		if (fixedPerspective) {
+			document.getElementById('cellsContainer').style.webkitPerspective = pers + 'px';
+			return;
+		}
+
+		that = this;
+		let iter = 0;
+		const els = document.querySelectorAll(".newtabCell[row='0']");
+		const viewPortWidth = that._viewportWidth();
+		/*
+			console.log( viewPortWidth, els.length, that.cellsInRowMax( "auto", null, {
+				objects: document.getElementById("cellsContainer").childNodes.length
+			} ).cols );
+				*/
+		let el = els[els.length - 1];
+		const firstEl = els[0];
+		let rect = el.getBoundingClientRect();
+
+		if (rect.right === 0) {
+			// wait for rendering
+			setTimeout(function () {
+				that.correctPerspective(params);
+			}, 0);
+			return;
+		}
+
+		let lastValueWhenInBorders = 0;
+		const alreadyCheckedPers = {};
+		const cellsContainer = document.getElementById('cellsContainer');
+
+		cellsContainer.style.webkitPerspective = pers + 'px';
+		while (true) {
+			iter++;
+
+			if (iter > 100 || alreadyCheckedPers[pers] > 5) {
+				if (lastValueWhenInBorders) {
+					cellsContainer.style.webkitPerspective = lastValueWhenInBorders + 'px';
+				}
+
+				break;
+			}
+
+			if (!alreadyCheckedPers[pers]) {
+				alreadyCheckedPers[pers] = 0;
+			}
+
+			alreadyCheckedPers[pers]++;
+
+			// correct perspective
+			const delta = 20;
+
+			el = els[els.length - 1];
+
+			rect = el.getBoundingClientRect();
+
+			const normWDelta = 25;
+			const wDelta = viewPortWidth - rect.right;
+
+			if (wDelta < normWDelta && wDelta > 0 && rect.left > 0) {
+				break;
+			}
+
+			let inBorders = false;
+
+			if (wDelta < 0) {
+				pers += delta;
+			} else {
+				if (firstEl.getBoundingClientRect().left > normWDelta) {
+					inBorders = true;
+					lastValueWhenInBorders = pers;
+				}
+
+				pers -= delta;
+			}
+
+			const scaleRatio = rect.width / el.offsetWidth;
+
+			// check side dials max scale
+			if (
+				inBorders
+				&& scaleRatio <= Config.FANCY_SIDE_DIALS_MAX_SCALE
+				&& scaleRatio >= Config.FANCY_SIDE_DIALS_MIN_SCALE
+			) {
+				break;
+			}
+
+			cellsContainer.style.webkitPerspective = pers + 'px';
+		}
+	},
+
+	rebuildCells: function (params) {
+		const { fvdSpeedDial } = this;
+		const { SpeedDial, MostVisited, RecentlyClosed } = fvdSpeedDial;
+
+		this.onBuildStart.callListeners(params);
+		const l = new Log();
+
+		l.profile.start('preparing tasks');
+		l.profile.start('total');
+		const that = this;
+
+		params = params || {};
+
+		const rebuildCellsParams = params;
+		const speedDialContent = document.getElementById('speedDialContent');
+
+		if (!params.doNotZeroFancySpecialDecrementCount) {
+			this.fancySpecialDecrementCount = 0;
+		}
+
+		speedDialContent.setAttribute('style', fvdSpeedDial.Prefs.get('sd.display_mode'));
+
+		// collapse if need
+		this.refreshExpandState({ ifcollapsed: true });
+
+		const displayType = this.currentDisplayType();
+		const thumbsMode = this.currentThumbsMode();
+		const cellSize = this._currentCellSize();
+		let countInRow = null;
+
+		document.body.setAttribute('thumbsmode', thumbsMode);
+		document.body.setAttribute('displaymode', fvdSpeedDial.Prefs.get('sd.display_mode'));
+		document.body.setAttribute('displaytype', displayType);
+
+		let activeScrollingType = fvdSpeedDial.Scrolling.activeScrollingType();
+
+		let container = null;
+
+		let tmpContainer = null;
+
+		// hide containers
+		function _getContainer() {
+			const listContainer = that._listContainer();
+			const cellsContainer = that._cellsContainer();
+			let c;
+
+			if (that.currentThumbsMode() === 'list') {
+				c = listContainer;
+			} else {
+				c = cellsContainer;
+			}
+
+			return c;
+		}
+		container = _getContainer();
+		tmpContainer = container.cloneNode(true);
+		// clear container
+		while (tmpContainer.firstChild) {
+			tmpContainer.removeChild(tmpContainer.firstChild);
+		}
+		const finishBuildCallback = function (params) {
+			speedDialContent.style.width = '';
+			tmpContainer.style.width = '';
+			l.profile.start('finishBuildCallback');
+			document.body.setAttribute('scrollingtype', activeScrollingType);
+
+			if (that.currentThumbsMode() !== 'list') {
+				const containerSize = that._dialsAreaSize({
+					objects: tmpContainer.childNodes.length,
+					cols: countInRow,
+				});
+
+				if (containerSize.width && activeScrollingType === 'vertical') {
+					tmpContainer.style.width = containerSize.width + 'px';
+				}
+			}
+
+			if (that._cellsRebuildCallback) {
+				that._cellsRebuildCallback();
+			}
+
+			if (displayType === 'recentlyclosed') {
+				document.getElementById('groupsWidthSetter').setAttribute('hidden', true);
+			} else {
+				document.getElementById('groupsWidthSetter').removeAttribute('hidden');
+			}
+
+			if (thumbsMode === 'list') {
+				that._cellsContainer().setAttribute('hidden', true);
+				document.getElementById('listContainerParent').removeAttribute('hidden');
+			} else {
+				that._listContainer().setAttribute('hidden', true);
+				document.getElementById('listContainerParent').setAttribute('hidden', true);
+			}
+
+			// magick
+			container = _getContainer();
+			container.parentNode.replaceChild(tmpContainer, container);
+			tmpContainer.removeAttribute('hidden');
+
+			setTimeout(function () {
+				that.refreshExpandState();
+			}, 0);
+
+			if (thumbsMode === 'list') {
+				// hide all list view menus
+				const listViewMenus = document.getElementsByClassName('listViewMenu');
+
+				for (let i = 0; i !== listViewMenus.length; i++) {
+					listViewMenus[i].setAttribute('hidden', true);
+				}
+
+				document.getElementById('listNoItemsToDisplay').setAttribute('hidden', true);
+
+				if (params) {
+					if (params.noitems) {
+						document.getElementById('listNoItemsToDisplay').removeAttribute('hidden');
+						document.getElementById('listViewTypeSelector').setAttribute('hidden', true);
+						return;
+					}
+				}
+
+				document.getElementById('listViewTypeSelector').removeAttribute('hidden');
+
+				//if( displayType == "speeddial" ){
+				const listContainerParent = document.getElementById('listContainerParent');
+				const size = that.Builder.listViewContainerSize(tmpContainer, countInRow);
+
+				tmpContainer.style.height = size.height + 'px';
+				tmpContainer.style.width = size.width + 'px';
+
+				if (size.width !== 0) {
+					listContainerParent.style.width = size.width + 'px';
+				}
+
+				that.setListViewType();
+
+				const neededMenu = document.getElementById(displayType + 'ListViewMenu');
+
+				neededMenu.removeAttribute('hidden');
+			} else {
+				document.getElementById('listViewTypeSelector').setAttribute('hidden', true);
+
+				// correct perspective
+				that.correctPerspective();
+
+				if (fvdSpeedDial.Scrolling.activeScrollingType() === 'vertical') {
+					tmpContainer.style.height
+						= SpeedDial.Builder.cellsContainerHeight(
+							tmpContainer.childNodes.length,
+							that.cellsInRowMax(null, null, {
+								objects: tmpContainer.childNodes.length,
+							}).cols,
+							cellSize
+						) + 'px';
+				}
+
+				if (activeScrollingType === 'horizontal') {
+					const rows = parseInt(tmpContainer.getAttribute('rows'), 10);
+					const cell = tmpContainer.childNodes[0];
+					const cellWidth = cell.offsetWidth;
+					const cellsPerRow = Math.ceil(tmpContainer.childNodes.length / rows);
+
+					speedDialContent.style.width = cellWidth * cellsPerRow + 'px';
+				}
+			}
+
+			// set height of speeddial wrapper
+			//that.refreshSpeedDialWrapperHeight();
+			if (fvdSpeedDial.Prefs.get('sd.display_mode') === 'fancy' && !that.has3D()) {
+				if (_b(fvdSpeedDial.Prefs.get('sd.no3d_first'))) {
+					fvdSpeedDial.Prefs.set('sd.no3d_first', false);
+					return fvdSpeedDial.Prefs.set('sd.display_mode', 'standard');
+				}
+
+				document.getElementById('cellsContainer').setAttribute('hidden', true);
+				document.getElementById('listContainer').setAttribute('hidden', true);
+				document.getElementById('no3dmessage').removeAttribute('hidden');
+			} else {
+				document.getElementById('no3dmessage').setAttribute('hidden', true);
+			}
+
+			that.Builder.refreshLastRow();
+
+			l.profile.end('finishBuildCallback');
+			l.profile.end('total');
+			//console.log("** rebuildCells **\n", l.toString()); // #Debug
+
+			that.onBuildCompleted.callListeners(rebuildCellsParams);
+		};
+
+		if (thumbsMode === 'list') {
+			tmpContainer.style.height = '';
+		}
+
+		let gridParams = this.cellsInRowMax();
+
+		countInRow = gridParams.cols;
+		l.profile.end('preparing tasks');
+
+		if (this.currentDisplayType() === 'speeddial') {
+			const groupId = this.currentGroupId();
+			let order = null;
+			let limit = null;
+
+			if (parseInt(groupId, 10) === 0) {
+				order = '`clicks` DESC';
+				limit = fvdSpeedDial.Prefs.get('sd.all_groups_limit_dials');
+			}
+
+			Utils.Async.chain([
+				function (next) {
+					if (params.dials) {
+						return next();
+					}
+
+					l.profile.start('fetch dials from db');
+					fvdSpeedDial.StorageSD.listDials(order, groupId, limit, function (data) {
+						l.profile.end('fetch dials from db');
+						params.dials = data;
+						fvdSpeedDial.SpeedDialMisc.checkRList(data);
+						next();
+					});
+				},
+				function (next) {
+					fvdSpeedDial.Templates.initPromise().then(() => {
+						next();
+					});
+				},
+				function () {
+					const data = params.dials;
+
+					if (that.currentThumbsMode() !== 'list') {
+						const displayDialBg = fvdSpeedDial.Prefs.get('sd.display_dial_background');
+
+						l.profile.start('build cells html');
+						gridParams = that.cellsInRowMax(null, null, {
+							objects: data.length,
+						});
+
+						if (fvdSpeedDial.Scrolling.activeScrollingType() === 'horizontal' && !gridParams.rows) {
+							activeScrollingType = 'vertical';
+						}
+
+						countInRow = gridParams.cols;
+
+						if (gridParams.rows) {
+							countInRow = Math.ceil(data.length / gridParams.rows);
+
+							if (_b(fvdSpeedDial.Prefs.get('sd.display_plus_cells'))) {
+								countInRow++;
+							}
+						}
+
+						const countRowsFilled = Math.ceil(data.length / countInRow);
+
+						tmpContainer.setAttribute('rows', countRowsFilled);
+						const lastRow = [];
+						let plusCellsCount = countRowsFilled * countInRow - data.length;
+
+						for (const i in data) {
+							const dialData = data[i];
+							dialData.displayDialBg = displayDialBg;
+							const cell = that.Builder.cell(
+								dialData,
+								i,
+								countInRow,
+								displayType,
+								thumbsMode,
+								cellSize,
+								countRowsFilled
+							);
+
+							if (plusCellsCount !== 0 && cell.getAttribute('row') === countRowsFilled - 1) {
+								lastRow.push(cell);
+							}
+
+							let needAnimateAppear = false;
+
+							if (dialData.id === that.justAddedId) {
+								// need to animate dial appearing
+								//cell.style.webkitTransform += " scale(0)";
+								cell.style.opacity = 0;
+								that.justAddedId = null;
+								needAnimateAppear = true;
+							}
+
+							tmpContainer.appendChild(cell);
+
+							if (needAnimateAppear) {
+								(function (cell) {
+									setTimeout(function () {
+										cell.style.webkitTransform = cell.style.webkitTransform.replace('scale(0)', '');
+										cell.style.opacity = '';
+										// scroll to new dial if this is not visible
+										Utils.scrollToElem(cell);
+									}, 0);
+								})(cell);
+							}
+						}
+
+						if (_b(fvdSpeedDial.Prefs.get('sd.display_plus_cells'))) {
+							// add plus cells
+							if (plusCellsCount === 0) {
+								plusCellsCount = parseInt(countInRow);
+							}
+
+							let i = data.length;
+							for (let j = 0; j < plusCellsCount; j++, i++) {
+								const cell = that.Builder.plusCell(i, countInRow, cellSize, countRowsFilled);
+
+								cell.setAttribute('id', 'plus_cell_' + j);
+								tmpContainer.appendChild(cell);
+								lastRow.push(cell);
+							}
+						}
+
+						l.profile.end('build cells html');
+					} else {
+						const countInCol = that.Builder.listElemCountInCol(countInRow, data.length);
+
+						for (let i = 0; i !== data.length; i++) {
+							const elem = that.Builder.listElem(i, countInCol, data[i], displayType, {
+								countInRow: countInRow,
+								total: data.length,
+							});
+
+							tmpContainer.appendChild(elem);
+						}
+					}
+
+					finishBuildCallback();
+				},
+			]);
+		} else if (this.currentDisplayType() === 'mostvisited') {
+			const interval = this.currentGroupId();
+
+			if (this.currentThumbsMode() !== 'list') {
+				MostVisited.getData(
+					{
+						interval: interval,
+						type: 'host',
+						count: fvdSpeedDial.Prefs.get('sd.max_most_visited_records'),
+					},
+					function (data) {
+						if (gridParams.rows) {
+							countInRow = Math.ceil(data.length / gridParams.rows);
+						}
+
+						if (fvdSpeedDial.Prefs.get('sd.display_mode') === 'fancy') {
+							// rendering more cols than dials are available for mostivited
+							// produces skewed dials UI (#1855)
+							countInRow = Math.min(countInRow, data.length);
+						}
+
+						for (let i = 0; i !== data.length; i++) {
+							const row = data[i];
+
+							(function (i) {
+								MostVisited.extendData(row, function (mvData) {
+									const cell = that.Builder.cell(
+										mvData,
+										i,
+										countInRow,
+										displayType,
+										thumbsMode,
+										cellSize
+									);
+
+									tmpContainer.appendChild(cell);
+
+									if (i === data.length - 1) {
+										finishBuildCallback();
+									}
+								});
+							})(i);
+						}
+
+						if (!data.length) {
+							finishBuildCallback();
+						}
+					}
+				);
+			} else {
+				MostVisited.getData(
+					{
+						interval: interval,
+						type: 'host',
+						count: fvdSpeedDial.Prefs.get('sd.max_most_visited_records'),
+					},
+					function (data) {
+						const countInCol = that.Builder.listElemCountInCol(countInRow, data.length);
+
+						for (let i = 0; i !== data.length; i++) {
+							const row = data[i];
+
+							(function (i) {
+								MostVisited.extendData(row, function (mvData) {
+									const cell = that.Builder.listElem(i, countInCol, mvData, displayType, {
+										countInRow: countInRow,
+										total: data.length,
+									});
+
+									tmpContainer.appendChild(cell);
+
+									if (i === data.length - 1) {
+										finishBuildCallback();
+									}
+								});
+							})(i);
+						}
+
+						if (!data.length) {
+							finishBuildCallback({
+								noitems: true,
+							});
+						}
+					}
+				);
+			}
+		} else if (this.currentDisplayType() === 'recentlyclosed') {
+			RecentlyClosed.getData(
+				{
+					count: fvdSpeedDial.Prefs.get('sd.max_recently_closed_records'),
+				},
+				function (data) {
+					const countInCol = that.Builder.listElemCountInCol(countInRow, data.length);
+
+					for (let i = 0; i !== data.length; i++) {
+						const cell = that.Builder.listElem(i, countInCol, data[i], displayType, {
+							countInRow: countInRow,
+							total: data.length,
+						});
+
+						tmpContainer.appendChild(cell);
+					}
+					finishBuildCallback({
+						noitems: data.length === 0,
+					});
+				}
+			);
+		}
+	},
+
+	removeGroup: function (groupId, callback, params) {
+		const { fvdSpeedDial } = this;
+		const { Dialogs } = fvdSpeedDial;
+
+		const saveGroupGlobalIdInTrash = function (globalId) {
+			const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+			const trash = fvdSpeedDial.Prefs.get(GROUPS_TRASH_KEY) || {};
+			const currentUserId = currentUserInfo?.user?.user_id;
+			const currentUserTrash = trash[currentUserId] || [];
+			fvdSpeedDial.Prefs.set(GROUPS_TRASH_KEY, {
+				...trash,
+				[currentUserId]: [...currentUserTrash, globalId],
+			});
+		};
+
+		const saveDialGlobalIdInTrash = function (globalId) {
+			const currentUserInfo = fvdSpeedDial.localStorage.getItem(userStorageKey);
+			const currentUserId = currentUserInfo?.user?.user_id;
+			const trash = fvdSpeedDial.Prefs.get(DIALS_TRASH_KEY, {});
+			const currentUserTrash = trash[currentUserId] || [];
+			fvdSpeedDial.Prefs.set(DIALS_TRASH_KEY, {
+				...trash,
+				[currentUserId]: [...currentUserTrash, globalId],
+			});
+		};
+
+		const removeFromBase = function () {
+			Utils.Async.chain([
+				function (chainCallback) {
+					fvdSpeedDial.Sync.addDataToSync(
+						{
+							category: 'deleteGroups',
+							data: groupId,
+							translate: 'group',
+						},
+						function () {
+							fvdSpeedDial.StorageSD.groupDelete(groupId, chainCallback);
+						}
+					);
+				},
+
+				function () {
+					// first remove all dials in group
+					fvdSpeedDial.StorageSD.listDials(null, groupId, null, function (dials) {
+						Utils.Async.arrayProcess(
+							dials,
+							function (dial, apCallback) {
+								saveDialGlobalIdInTrash(dial.global_id);
+								fvdSpeedDial.StorageSD.deleteDial(dial.id);
+
+								apCallback();
+							},
+							function () {
+								if (callback) {
+									callback(true);
+								}
+							}
+						);
+					});
+				},
+			]);
+		};
+
+		fvdSpeedDial.StorageSD.groupsCount(function (countGroups) {
+			if (countGroups === 1) {
+				Dialogs.alert(
+					_('dlg_alert_cannot_remove_group_title'),
+					_('dlg_alert_cannot_remove_group_text')
+				);
+
+				if (callback) {
+					callback(false);
+				}
+			} else {
+				fvdSpeedDial.StorageSD.getGroup(groupId, function (group) {
+					if (group !== null) {
+						if (group.count_dials === 0 || (params && params.noConfirmIfHaveDials)) {
+							saveGroupGlobalIdInTrash(group.global_id);
+							removeFromBase();
+
+							if (callback) {
+								callback(true);
+							}
+						} else {
+							Dialogs.confirm(
+								_('dlg_confirm_remove_group_title'),
+								_('dlg_confirm_remove_group_text').replace('%count%', group.count_dials),
+								function (result) {
+									if (result) {
+										saveGroupGlobalIdInTrash(group.global_id);
+										removeFromBase();
+									}
+
+									if (callback) {
+										callback(result);
+									}
+								}
+							);
+						}
+					}
+				});
+			}
+		});
+	},
+
+	currentGroupId: function () {
+		const { fvdSpeedDial } = this;
+
+		if (this.currentDisplayType() === 'speeddial') {
+			if (this._nowOpenedGroup !== null) {
+				return this._nowOpenedGroup;
+			}
+
+			let id = parseInt(fvdSpeedDial.Prefs.get('sd.default_group'));
+
+			if (id === -1 || isNaN(id)) {
+				id = parseInt(fvdSpeedDial.Prefs.get('sd.last_opened_group'));
+			}
+
+			this._nowOpenedGroup = parseInt(id);
+			return id;
+		} else if (this.currentDisplayType() === 'mostvisited') {
+			return fvdSpeedDial.Prefs.get('sd.most_visited_interval');
+		} else {
+			return null;
+		}
+	},
+
+	setCurrentGroupId: function (id) {
+		const { fvdSpeedDial } = this;
+
+		if (this.currentDisplayType() === 'speeddial') {
+			if (this.currentGroupId() === id) {
+				return;
+			}
+
+			this._nowOpenedGroup = parseInt(id);
+			fvdSpeedDial.Prefs.set('sd.last_opened_group', id);
+		} else if (this.currentDisplayType() === 'mostvisited') {
+			if (this.currentGroupId() === id) {
+				return;
+			}
+
+			fvdSpeedDial.Prefs.set('sd.most_visited_interval', id);
+		} else {
+			return;
+		}
+
+		fvdSpeedDial.HiddenCaptureQueue.empty();
+
+		this.onGroupChange.callListeners();
+		this.sheduleRebuild();
+		this.sheduleRebuildGroupsList();
+	},
+
+	setCurrentThumbsMode: function (mode) {
+		const { fvdSpeedDial } = this;
+
+		switch (this.currentDisplayType()) {
+			case 'speeddial':
+				fvdSpeedDial.Prefs.set('sd.thumbs_type', mode);
+				break;
+			case 'mostvisited':
+				fvdSpeedDial.Prefs.set('sd.thumbs_type_most_visited', mode);
+				break;
+		}
+	},
+
+	currentThumbsMode: function () {
+		const { fvdSpeedDial } = this;
+
+		switch (this.currentDisplayType()) {
+			case 'speeddial':
+				return fvdSpeedDial.Prefs.get('sd.thumbs_type');
+				break;
+			case 'mostvisited':
+				return fvdSpeedDial.Prefs.get('sd.thumbs_type_most_visited');
+				break;
+			case 'recentlyclosed':
+				// always list
+				return 'list';
+				break;
+		}
+	},
+
+	cirlceDisplayType: function (direction) {
+		const { fvdSpeedDial } = this;
+
+		let index;
+
+		direction = direction || 1;
+
+		const list = this._displayModesList.slice();
+
+		if (!_b(fvdSpeedDial.Prefs.get('sd.enable_top_sites'))) {
+			index = list.indexOf('speeddial');
+
+			list.splice(index, 1);
+		}
+
+		if (!_b(fvdSpeedDial.Prefs.get('sd.enable_recently_closed'))) {
+			index = list.indexOf('recentlyclosed');
+
+			list.splice(index, 1);
+		}
+		}
+
+		if (!_b(fvdSpeedDial.Prefs.get('sd.enable_most_visited'))) {
+			index = list.indexOf('mostvisited');
+
+			list.splice(index, 1);
+		}
+
+		const mode = this.currentDisplayType();
+		const modeIndex = list.indexOf(mode);
+		let nextModeIndex = modeIndex + direction;
+
+		if (nextModeIndex >= list.length) {
+			nextModeIndex = 0;
+		} else if (nextModeIndex < 0) {
+			nextModeIndex = list.length - 1;
+		}
+
+		const nextMode = list[nextModeIndex];
+
+		this.setCurrentDisplayType(nextMode);
+	},
+
+	setCurrentDisplayType: function (type) {
+		const { fvdSpeedDial } = this;
+
+		this._displayType = type;
+		fvdSpeedDial.Prefs.set('sd.last_selected_display_type', type);
+
+		fvdSpeedDial.ContextMenus.setGlobalMenu(type);
+
+		this.sheduleFullRebuild();
+		this.refreshShowHideButton();
+	},
+
+	currentDisplayType: function () {
+		const { fvdSpeedDial } = this;
+
+		if (this._displayType === null) {
+			if (fvdSpeedDial.Prefs.get('sd.display_type') === 'last_selected') {
+				this._displayType = fvdSpeedDial.Prefs.get('sd.last_selected_display_type');
+			} else {
+				this._displayType = fvdSpeedDial.Prefs.get('sd.display_type');
+			}
+		}
+
+		return this._displayType;
+	},
+
+	cellsInRowMax: function (settingsColumnsCount, displayMode, additional) {
+		const { fvdSpeedDial } = this;
+
+		displayMode = displayMode || fvdSpeedDial.Prefs.get('sd.display_mode');
+
+		additional = additional || {};
+
+		if (typeof additional.objects === 'undefined') {
+			additional.objects = -1;
+		} else if (typeof additional.objects === 'function') {
+			additional.objects = additional.objects();
+		}
+
+		settingsColumnsCount = settingsColumnsCount || this._currentSettingsColumnsCount();
+
+		let count = null;
+		let countRows = null;
+
+		if (this.currentThumbsMode() === 'list') {
+			if (settingsColumnsCount !== 'auto') {
+				const autoCount = this.cellsInRowMax('auto').cols;
+
+				if (settingsColumnsCount > autoCount) {
+					settingsColumnsCount = autoCount;
+				}
+
+				return {
+					cols: settingsColumnsCount,
+				};
+			}
+
+			const documentWidth = this._viewportWidth();
+
+			count = Math.floor(documentWidth / (this._listElemSize.width + this._listElemMarginX));
+
+			if (count <= 0) {
+				count = 1;
+			}
+
+			return {
+				cols: count,
+			};
+		} else {
+			if (settingsColumnsCount !== 'auto') {
+				if (fvdSpeedDial.Scrolling.activeScrollingType() === 'horizontal') {
+					return {
+						rows: settingsColumnsCount,
+					};
+				} else {
+					return {
+						cols: settingsColumnsCount,
+					};
+				}
+			}
+
+			const documentWidth = this._viewportWidth();
+			const sdWrapper = document.getElementById('speedDialWrapper');
+			let documentHeight = this._viewportHeightForHorizScroll();
+			// reduce height of overdraw panels
+
+			if (sdWrapper.hasAttribute('extraheight')) {
+				documentHeight -= parseInt(sdWrapper.getAttribute('extraheight'));
+			}
+
+			const cellSize = this._currentCellSize();
+			const cellsMarginY = this.cellsMarginY();
+			let effectiveCellSize = cellSize.height;
+
+			//if( _b( fvdSpeedDial.Prefs.get( "sd.show_urls_under_dials" ) ) ){
+			effectiveCellSize += 34;
+			//}
+
+			//if( _b( fvdSpeedDial.Prefs.get( "sd.show_icons_and_titles_above_dials" ) ) ){
+			effectiveCellSize += 21;
+			//}
+
+			countRows = Math.floor(documentHeight / (effectiveCellSize + this._cellsMarginX));
+
+			count = Math.floor(documentWidth / (cellSize.width + this._cellsMarginX));
+
+			if (displayMode === 'fancy') {
+				count--;
+
+				if (this.fancySpecialDecrementCount) {
+					count -= this.fancySpecialDecrementCount;
+				}
+			}
+
+			if (count <= 0) {
+				count = 1;
+			}
+
+			if (fvdSpeedDial.Scrolling.activeScrollingType() === 'horizontal') {
+				if (additional.objects >= 0) {
+					if (countRows * count > additional.objects) {
+						// work as with vertical mode
+						countRows = null;
+					}
+				}
+			} else {
+				countRows = null;
+			}
+		}
+
+		const result = {
+			cols: count,
+			rows: countRows,
+		};
+
+		// fixing fancy mode displaying if number of cols more than count displaying dials
+		if (
+			displayMode === 'fancy'
+			&& !_b(fvdSpeedDial.Prefs.get('sd.display_plus_cells'))
+			&& result.cols
+			&& additional.objects >= 0
+		) {
+			if (result.cols > additional.objects) {
+				result.cols = additional.objects;
+			}
+		}
+
+		return result;
 	},
 
 	sheduleRebuild: function () {
 		this._needRebuild = true;
 	},
 
-	processDblClick: function (event) {
+	sheduleFullRebuild: function (params) {
 		const { fvdSpeedDial } = this;
 
-		if (event.target.id === 'searchBar' || event.target.className === 'dialIcons') {
-			const currValue = _b(fvdSpeedDial.Prefs.get('sd.search_bar_expanded'));
-
-			fvdSpeedDial.Prefs.set('sd.search_bar_expanded', !currValue);
-		}
+		fvdSpeedDial.SpeedDialMisc.sheduleRebuild();
+		this.sheduleRebuildGroupsList();
+		this.sheduleRebuild();
 	},
 
-	setCustomSearchState: function () {
+	makeThumb: function (dialId, url, type, delay, saveImage) {
 		const { fvdSpeedDial } = this;
 
-		const disabled = _b(fvdSpeedDial.Prefs.get('sd.disable_custom_search'));
-		const form = document.getElementsByClassName('searchForm')[0];
-
-		if (form) {
-			if (disabled) {
-				form.setAttribute('hidden', true);
-			} else {
-				form.removeAttribute('hidden');
-			}
-		}
-	},
-
-	openChromeStorePage: function () {
-		window.open(Config.STORE_URL);
-	},
-
-	setRateMessageNotDisplayState: function (state) {
-		const { fvdSpeedDial } = this;
-
-		fvdSpeedDial.Prefs.set('sd.dont_display_rate_message', state);
-	},
-
-	setExpandedState: function () {},
-
-	toggleMenu: function () {
-		const { fvdSpeedDial } = this;
-
-		const state = !_b(fvdSpeedDial.Prefs.get('sd.main_menu_displayed'));
-
-		fvdSpeedDial.Prefs.set('sd.main_menu_displayed', state);
-	},
-
-	refreshMenu: function () {
-		const { fvdSpeedDial } = this;
-
-		if (!document.getElementById('searchBar')) {
-			return;
+		if (typeof saveImage === 'undefined') {
+			saveImage = true;
 		}
 
-		const menu = document.getElementById('searchBar').getElementsByClassName('activeContent')[0];
-		const active = _b(fvdSpeedDial.Prefs.get('sd.main_menu_displayed')) ? '1' : '0';
-
-		menu.setAttribute('active', active);
-		document.body.setAttribute('menuactive', active);
-	},
-
-	mouseOverButton: function (elem) {
-		const texts = document.getElementsByClassName('subText');
-
-		for (let i = 0; i !== texts.length; i++) {
-			if (texts[i].parentNode === elem) {
-				continue;
-			}
-
-			texts[i].style.display = 'none';
-		}
-	},
-
-	mouseOutButton: function () {
-		const texts = document.getElementsByClassName('subText');
-
-		for (let i = 0; i !== texts.length; i++) {
-			texts[i].style.display = '';
-		}
-	},
-
-	showOptions: function (id, toElem, event, pos, waitForOtherOpened, openCallback) {
 		const that = this;
-		const elems = document.getElementsByClassName('popupOptions');
 
-		if (waitForOtherOpened) {
-			let wait = false;
-
-			const introductionOverlay = document.getElementById('introductionOverlay');
-
-			if (introductionOverlay && introductionOverlay.hasAttribute('appear')) {
-				wait = true;
-			}
-
-			for (let i = 0; i !== elems.length; i++) {
-				if (elems[i].getAttribute('active') === '1') {
-					wait = true;
-				}
-			}
-
-			if (wait) {
-				if (typeof waitForOtherOpened === 'function') {
-					return waitForOtherOpened();
-				}
-
-				const args = arguments;
-
-				return setTimeout(function () {
-					that.showOptions.apply(that, args);
-				}, 1000);
-			}
-		}
-
-		pos = pos || 'left';
-
-		if (id === null) {
-			switch (SpeedDial.currentDisplayType()) {
-				case 'speeddial':
-					id = 'speedDialOptions';
-					break;
-				case 'mostvisited':
-					id = 'mostVisitedOptions';
-					break;
-				case 'recentlyclosed':
-					id = 'recentlyClosedOptions';
-					break;
-			}
-		}
-
-		let left;
-		let top;
-
-		if (toElem) {
-			const offset = Utils.getOffset(toElem);
-
-			left = offset.left + 0;
-			top = offset.top + toElem.offsetHeight;
-
-			if (pos === 'left') {
-				left += toElem.offsetWidth;
-			}
-		} else {
-			top = pos.top;
-			left = pos.left;
-		}
-
-		let optionsOpened = false;
-
-		for (let i = 0; i !== elems.length; i++) {
-			if (elems[i].id === id && elems[i].getAttribute('active') !== '1') {
-				// check options already active, toggle effect
-				elems[i].setAttribute('active', '1');
-				elems[i].setAttribute('collapsed', '0');
-				elems[i].style.top = top + 'px';
-
-				if (pos === 'left') {
-					left -= elems[i].offsetWidth;
-				}
-
-				elems[i].style.left = left + 'px';
-				optionsOpened = true;
-
-				continue;
-			}
-
-			elems[i].setAttribute('active', '0');
-		}
-
-		if (event) {
-			event.stopPropagation();
-		}
-
-		if (openCallback) {
-			openCallback();
-		}
-
-		this._optionsOpened = optionsOpened;
+		chrome.tabs.query({ currentWindow: true, active: true }, tabs => {
+			const [ tab ] = tabs;
+			fvdSpeedDial.ThumbMaker.screenTab({
+				tabId: tab.id,
+				type: type,
+				dialId: dialId,
+				width: that.getMaxCellWidth() * window.devicePixelRatio,
+				url: url,
+				delay: delay,
+				saveImage: saveImage,
+			});
+			chrome.tabs.update(tab.id, {
+				url: url,
+			});
+		});
 	},
 
-	hideOptions: function () {
-		const elems = document.getElementsByClassName('popupOptions');
-		let foundActive = false;
-
-		for (let i = 0; i !== elems.length; i++) {
-			if (elems[i].getAttribute('active') === '1') {
-				elems[i].setAttribute('active', '0');
-				foundActive = true;
-			}
-		}
-
-		if (foundActive) {
-			// search not confirmed settings
-			const confirms = document.getElementsByClassName('confirm');
-
-			for (let i = 0; i !== confirms.length; i++) {
-				if (confirms[i].getAttribute('appear') === '1') {
-					this.confirmSetting(confirms[i], confirms[i].getAttribute('for'), false);
-				}
-			}
-		}
-
-		this._optionsOpened = false;
-	},
-
-	confirmSetting: function (confirm, settingId, action) {
-		const setting = document.getElementById(settingId);
-
-		if (action) {
-			this.ss(setting.getAttribute('sname'), setting.checked, 'bool');
-		} else {
-			if (setting.getAttribute('type') === 'checkbox') {
-				setting.checked = !setting.checked;
-			}
-		}
-
-		confirm.setAttribute('appear', '0');
-	},
-
-	rebuildGroupsList: function () {
+	openAllDialsInGrop: function (groupId) {
 		const { fvdSpeedDial } = this;
+		const { StorageSD } = fvdSpeedDial;
 
-		const settings = fvdSpeedDial.Prefs;
-		const listId = 'defaultGroupSpeedDial';
-		const list = document.getElementById(listId);
+		const that = this;
 
-		if (list) {
-			fvdSpeedDial.StorageSD.groupsList(function (groups) {
-				list.options.length = 0;
+		// open all dials in group in background tab
+		StorageSD.listDials(null, groupId, null, function (dials) {
+			try {
+				for (let i = 0; i !== dials.length; i++) {
+					Utils.Opener.backgroundTab(dials[i].url);
+					that.addDialClick(dials[i].id);
+				}
+			} catch (ex) {
+				console.warn(ex);
+			}
+		});
+	},
 
-				list.options[list.options.length] = new Option(_('newtab_last_used_group'), -1);
-				list.options[list.options.length] = new Option(_('newtab_popular_group_title'), 0);
-				for (let i = 0; i !== groups.length; i++) {
-					const group = groups[i];
+	refreshAllDialsInGroup: function (groupId) {
+		const { fvdSpeedDial } = this;
+		const { StorageSD } = fvdSpeedDial;
 
-					list.options[list.options.length] = new Option(
-						Utils.cropLength(group.name, 18),
-						group.id
+		groupId = parseInt(groupId);
+
+		const that = this;
+
+		if (groupId === 0) {
+			StorageSD.listDials(
+				'',
+				groupId,
+				fvdSpeedDial.Prefs.get('sd.all_groups_limit_dials'),
+				function (dials) {
+					const ids = [];
+
+					dials.forEach(function (dial) {
+						ids.push(dial.id);
+					});
+
+					StorageSD.resetAutoDialsForGroup(
+						{
+							ids: ids,
+						},
+						function () {
+							that.sheduleRebuild();
+						}
 					);
 				}
-
-				list.value = settings.get('sd.default_group');
-			});
+			);
 		} else {
-			console.warn('element not found by id', listId);
-		}
-	},
-
-	rebuildColumnsField: function (fields) {
-		const { fvdSpeedDial } = this;
-
-		if (typeof fields === 'undefined' || fields === null) {
-			fields = ['speedDialColumns', 'mostVisitedColumns', 'recentlyClosedColumns'];
-		}
-
-		for (let i = 0; i !== fields.length; i++) {
-			let thumbsType = 'list';
-
-			if (fields[i] === 'speedDialColumns') {
-				thumbsType = fvdSpeedDial.Prefs.get('sd.thumbs_type');
-			} else if (fields[i] === 'mostVisitedColumns') {
-				thumbsType = fvdSpeedDial.Prefs.get('sd.thumbs_type_most_visited');
-			}
-
-			let columnsAuto = fvdSpeedDial.SpeedDial.cellsInRowMax('auto');
-
-			if (columnsAuto.rows) {
-				columnsAuto = columnsAuto.rows;
-			} else {
-				columnsAuto = columnsAuto.cols;
-			}
-
-			let title = _('newtab_number_of_columns');
-
-			if (thumbsType === 'list' || fvdSpeedDial.Prefs.get('sd.display_mode') === 'fancy') {
-			} else if (fvdSpeedDial.Prefs.get('sd.scrolling') === 'horizontal') {
-				title = _('newtab_number_of_rows');
-			}
-
-			const titleId = fields[i] + 'Title';
-			const titleEl = document.getElementById(titleId);
-
-			if (titleEl) {
-				titleEl.textContent = title;
-			} else {
-				console.warn('element not found by id', titleId);
-			}
-
-			const field = document.getElementById(fields[i]);
-
-			if (field) {
-				const preValue = fvdSpeedDial.Prefs.get(field.getAttribute('sname'));
-				let numOfColumns = columnsAuto;
-
-				if (preValue !== 'auto') {
-					if (preValue > columnsAuto || isNaN(numOfColumns)) {
-						numOfColumns = preValue;
-					}
-				}
-
-				field.options.length = 1;
-				for (let columnNum = 1; columnNum <= numOfColumns; columnNum++) {
-					field.options[field.options.length] = new Option(columnNum, columnNum);
-				}
-				field.value = preValue;
-			} else {
-				console.warn('element not found by id', fields[i]);
-			}
-		}
-	},
-
-	ss: function (key, value) {
-		const { fvdSpeedDial } = this;
-
-		fvdSpeedDial.Prefs.set(key, value);
-	},
-
-	changeDefaultDisplayType: function (type, set) {
-		if (!set) {
-			type = 'last_selected';
-		}
-
-		this.ss('sd.display_type', type);
-	},
-
-	refreshSyncButtonState: function () {
-		const { fvdSpeedDial } = this;
-
-		fvdSpeedDial.Sync.hasDataToSync(function (has) {
-			document.getElementById('buttonSync').setAttribute('hasUpdates', has ? 1 : 0);
-		});
-	},
-
-	refreshSettingsWindow: function (toRefresh = this.allRefreshesSettings) {
-		const { fvdSpeedDial } = this;
-
-		const settings = fvdSpeedDial.Prefs;
-
-		const enableSpeedDial = settings.get('sd.enable_top_sites');
-		const enableMostVisited = settings.get('sd.enable_most_visited');
-		const enableRecentlyClosed = settings.get('sd.enable_recently_closed');
-
-		if (toRefresh.indexOf('speedDial' !== -1)) {
-			// build groups
-			this.rebuildGroupsList();
-
-			const def = settings.get('sd.display_type') === 'speeddial';
-			const allGroupsMax = settings.get('sd.all_groups_limit_dials');
-			const thumbsType = settings.get('sd.thumbs_type');
-			// const defaultGroup = settings.get("sd.default_group");
-
-			document.getElementById('enableSpeedDial').checked = enableSpeedDial;
-
-			if (_b(enableSpeedDial)) {
-				if (!_b(enableMostVisited) && !_b(enableRecentlyClosed)) {
-					document.getElementById('enableSpeedDial').setAttribute('disabled', true);
-				} else {
-					document.getElementById('enableSpeedDial').removeAttribute('disabled');
-				}
-			}
-
-			const defaultSpeedDial = document.getElementById('defaultSpeedDial');
-			defaultSpeedDial && (defaultSpeedDial.checked = def);
-			const maxGroupsSpeedDial = document.getElementById('maxGroupsSpeedDial');
-			maxGroupsSpeedDial && (maxGroupsSpeedDial.value = allGroupsMax);
-			const elementId = 'thumbsSpeedDial' + Utils.ucfirst(thumbsType);
-			const element = document.getElementById(elementId);
-
-			if (element) {
-				element.checked = true;
-			} else {
-				console.warn('element not found by id', elementId);
-			}
-
-			// this.rebuildColumnsField(['speedDialColumns']);
-			const columns = document.getElementById('speedDialColumns');
-
-			columns && (columns.value = settings.get('sd.top_sites_columns'));
-		}
-
-		if (toRefresh.indexOf('mostVisited' !== -1)) {
-			const def = settings.get('sd.display_type') === 'mostvisited';
-			const showLast = settings.get('sd.max_most_visited_records');
-
-			const thumbsType = settings.get('sd.thumbs_type_most_visited');
-			const cacheLifeTime = settings.get('sd.most_visited_cache_life_time');
-
-			document.getElementById('enableMostVisited').checked = enableMostVisited;
-
-			if (_b(enableMostVisited)) {
-				if (!_b(enableSpeedDial) && !_b(enableRecentlyClosed)) {
-					document.getElementById('enableMostVisited').setAttribute('disabled', true);
-				} else {
-					document.getElementById('enableMostVisited').removeAttribute('disabled');
-				}
-			}
-
-			const defaultMostVisited = document.getElementById('defaultMostVisited');
-			defaultMostVisited && (defaultMostVisited.checked = def);
-
-			const showLastMostVisited = document.getElementById('showLastMostVisited');
-			showLastMostVisited && (showLastMostVisited.value = showLast);
-
-			const thumbsMostVisited = document.getElementById(
-				'thumbsMostVisited' + Utils.ucfirst(thumbsType)
-			);
-			thumbsMostVisited && (thumbsMostVisited.checked = true);
-
-			const cacheLifeTimeMostVisited = document.getElementById('cacheLifeTimeMostVisited');
-			cacheLifeTimeMostVisited && (cacheLifeTimeMostVisited.value = cacheLifeTime);
-
-			const columns = document.getElementById('mostVisitedColumns');
-
-			if (columns) {
-				this.rebuildColumnsField(['mostVisitedColumns']);
-				columns.value = settings.get('sd.most_visited_columns');
-			}
-		}
-
-		if (toRefresh.indexOf('recentlyClosed' !== -1)) {
-			const def = settings.get('sd.display_type') === 'recentlyclosed';
-			const showLast = settings.get('sd.max_recently_closed_records');
-
-			document.getElementById('enableRecentlyClosed').checked = enableRecentlyClosed;
-
-			if (_b(enableRecentlyClosed)) {
-				if (!_b(enableSpeedDial) && !_b(enableMostVisited)) {
-					document.getElementById('enableRecentlyClosed').setAttribute('disabled', true);
-				} else {
-					document.getElementById('enableRecentlyClosed').removeAttribute('disabled');
-				}
-			}
-
-			const defaultRecentlyClosed = document.getElementById('defaultRecentlyClosed');
-			defaultRecentlyClosed && (defaultRecentlyClosed.checked = def);
-
-			const showLastRecentlyClosed = document.getElementById('showLastRecentlyClosed');
-			showLastRecentlyClosed && (showLastRecentlyClosed.value = showLast);
-
-			const columns = document.getElementById('recentlyClosedColumns');
-
-			if (columns) {
-				this.rebuildColumnsField(['recentlyClosedColumns']);
-				columns.value = settings.get('sd.recentlyclosed_columns');
-			}
-		}
-	},
-	_handlerDocumentClick: function (event) {
-		try {
-			if (this._optionsOpened && event.target.className !== 'buttonSmall options') {
-				// check if click in options window
-				let closeOptions = true;
-				let elem = event.target;
-
-				do {
-					if (elem.className && elem.className.indexOf('popupOptions') !== -1) {
-						closeOptions = false;
-						break;
-					}
-				} while ((elem = elem.parentNode));
-
-				if (closeOptions) {
-					this.hideOptions();
-				}
-			}
-		} catch (ex) {
-			console.warn(ex);
-		}
-	},
-	_syncDataChangedListener: function () {
-		this.refreshSyncButtonState();
-	},
-	_prefsListener: function (name, value) {
-		const { fvdSpeedDial } = this;
-
-		if (!this.partPrefs[name]) {
-			if (name === 'sd.display_type' || name === 'sd.display_mode') {
-				this.settingsInvalidated = this.allRefreshesSettings;
-			} else if (name === 'sd.disable_custom_search') {
-				this.setCustomSearchState();
-			} else if (name === 'sd.search_bar_expanded') {
-				this.setExpandedState();
-			} else if (
-				['sd.speeddial_expanded', 'sd.mostvisited_expanded', 'sd.recentlyclosed_expanded'].indexOf(
-					name
-				) !== -1
-			) {
-				// rebuild icons
-				this._setupIconsMenu();
-			}
-		} else {
-			if (
-				['sd.enable_top_sites', 'sd.enable_most_visited', 'sd.enable_recently_closed'].indexOf(
-					name
-				) !== -1
-			) {
-				if (!value) {
-					this.resetDropDown();
-					this.hideOptions();
-				}
-
-				this.settingsInvalidated = this.allRefreshesSettings;
-			} else {
-				const partToUpdate = this.partPrefs[name];
-
-				if (this.settingsInvalidated.indexOf(partToUpdate) === -1) {
-					this.settingsInvalidated.push(partToUpdate);
-				}
-			}
-		}
-
-		if (name === 'sd.main_menu_displayed') {
-			this.refreshMenu();
-		}
-
-		if (name === 'sd.enable_search') {
-			this.refreshSearchPanel();
-		}
-	},
-
-	_setupIconsMenu: function () {
-		const { fvdSpeedDial } = this;
-
-		const buttonSpeedDial = document.getElementById('buttonSpeedDial');
-		const buttonMostVisited = document.getElementById('buttonMostVisited');
-		const buttonRecentlyClosed = document.getElementById('buttonRecentlyClosed');
-
-		const currentType = fvdSpeedDial.SpeedDial.currentDisplayType();
-
-		if (buttonSpeedDial) {
-			buttonSpeedDial.setAttribute('active', currentType === 'speeddial' ? '1' : '0');
-
-			buttonSpeedDial.setAttribute(
-				'expanded',
-				_b(fvdSpeedDial.Prefs.get('sd.speeddial_expanded')) ? '1' : '0'
-			);
-
-			if (_b(fvdSpeedDial.Prefs.get('sd.enable_top_sites'))) {
-				buttonSpeedDial.removeAttribute('hidden');
-			} else {
-				buttonSpeedDial.setAttribute('hidden', true);
-			}
-		}
-
-		if (buttonMostVisited) {
-			buttonMostVisited.setAttribute('active', currentType === 'mostvisited' ? '1' : '0');
-			buttonMostVisited.setAttribute(
-				'expanded',
-				_b(fvdSpeedDial.Prefs.get('sd.mostvisited_expanded')) ? '1' : '0'
-			);
-
-			if (_b(fvdSpeedDial.Prefs.get('sd.enable_most_visited'))) {
-				buttonMostVisited.removeAttribute('hidden');
-			} else {
-				buttonMostVisited.setAttribute('hidden', true);
-			}
-		}
-
-		if (buttonRecentlyClosed) {
-			buttonRecentlyClosed.setAttribute('active', currentType === 'recentlyclosed' ? '1' : '0');
-
-			buttonRecentlyClosed.setAttribute(
-				'expanded',
-				_b(fvdSpeedDial.Prefs.get('sd.recentlyclosed_expanded')) ? '1' : '0'
-			);
-
-			if (_b(fvdSpeedDial.Prefs.get('sd.enable_recently_closed'))) {
-				buttonRecentlyClosed.removeAttribute('hidden');
-			} else {
-				buttonRecentlyClosed.setAttribute('hidden', true);
-			}
-		}
-	},
-
-	_setupLabelsBelowIcons: function () {
-		const { fvdSpeedDial } = this;
-		const { MostVisited, RecentlyClosed } = fvdSpeedDial;
-
-		const speedDialText = document
-			.getElementById('buttonSpeedDial')
-			.getElementsByClassName('subText')[0];
-		const mostVisitedText = document
-			.getElementById('buttonMostVisited')
-			.getElementsByClassName('subText')[0];
-		const recentlyClosedText = document
-			.getElementById('buttonRecentlyClosed')
-			.getElementsByClassName('subText')[0];
-
-		// const displayType = fvdSpeedDial.SpeedDial.currentDisplayType();
-
-		fvdSpeedDial.StorageSD.countDials(function (count) {
-			speedDialText.textContent = _('newtab_speeddial_label').replace('%count%', count);
-		});
-
-		if (_b(fvdSpeedDial.Prefs.get('sd.enable_most_visited'))) {
-			MostVisited.getAvailableCount(
-				fvdSpeedDial.Prefs.get('sd.most_visited_interval'),
-				function (count) {
-					mostVisitedText.textContent = _('newtab_most_visited_label').replace('%count%', count);
-				}
-			);
-		}
-
-		RecentlyClosed.getAvailableCount(function (count) {
-			recentlyClosedText.textContent = _('newtab_recently_closed_label').replace('%count%', count);
-		});
-	},
-
-	_initialOptionsSetup: function () {
-		const { fvdSpeedDial } = this;
-
-		// setup transitions
-		const options = document.getElementsByClassName('popupOptions');
-
-		for (let i = 0; i !== options.length; i++) {
-			const option = options[i];
-
-			option.setAttribute('collapsed', '1');
-			option.addEventListener(
-				'webkitTransitionEnd',
-				function (event) {
-					if (event.target.getAttribute('active') === 0) {
-						event.target.setAttribute('collapsed', '1');
-					}
+			StorageSD.resetAutoDialsForGroup(
+				{
+					groupId: groupId,
 				},
-				true
-			);
-			option.addEventListener(
-				'click',
-				function (event) {
-					event.stopPropagation();
-				},
-				false
+				function () {
+					that.sheduleRebuild();
+				}
 			);
 		}
+	},
 
-		this.refreshSettingsWindow();
+	addDialClick: function (dialId) {
+		const { fvdSpeedDial } = this;
+		const { StorageSD } = fvdSpeedDial;
+
 		const that = this;
-		// set events to settings elements
-		const settings = document.getElementsByClassName('setting');
 
-		for (let i = 0; i !== settings.length; i++) {
-			const setting = settings[i];
-
-			if (setting.getAttribute('confirm')) {
-				(function (setting) {
-					setting.onchange = function () {
-						const confirms = document.getElementsByClassName('confirm');
-
-						for (let i = 0; i !== confirms.length; i++) {
-							if (confirms[i].getAttribute('for') === setting.id) {
-								if (confirms[i].getAttribute('appear') !== '1') {
-									confirms[i].setAttribute('appear', '1');
-								} else {
-									confirms[i].setAttribute('appear', '0');
-								}
-
-								break;
-							}
-						}
-					};
-				})(setting);
-				continue;
+		StorageSD.getDial(dialId, function (data) {
+			if (!data) {
+				return false;
 			}
 
-			const stype = setting.getAttribute('stype');
-			const sname = setting.getAttribute('sname');
+			if (
+				!_b(fvdSpeedDial.Prefs.get('sd.display_quick_menu_and_clicks'))
+				|| !_b(fvdSpeedDial.Prefs.get('sd.display_clicks'))
+			) {
+				return false;
+			}
 
-			if (setting.getAttribute('type') === 'checkbox') {
-				(function (setting, stype, sname) {
-					setting.onchange = function () {
-						that.ss(sname, setting.checked, stype);
-					};
-				})(setting, stype, sname);
-			} else if (setting.getAttribute('type') === 'radio') {
-				(function (setting, stype, sname) {
-					setting.onchange = function () {
-						that.ss(sname, setting.value, stype);
-					};
-				})(setting, stype, sname);
-			} else if (setting.getAttribute('type') === 'text') {
-				(function (setting, stype, sname) {
-					if (stype === 'int') {
-						setting.onkeypress = function (event) {
-							const numbers = '0123456789';
+			const newClicks = data.clicks + 1;
 
-							if (event.charCode === 0) {
-								return true;
-							}
+			StorageSD.updateDial(
+				dialId,
+				{
+					clicks: newClicks,
+				},
+				function () {
+					try {
+						const cell = that._getSpeedDialCellById(dialId);
+						const clicksCount = cell.getElementsByClassName('clicksCount')[0];
 
-							const letter = String.fromCharCode(event.charCode);
-
-							return numbers.indexOf(letter) !== -1;
-						};
+						clicksCount.textContent = newClicks;
+					} catch (ex) {
+						console.warn(ex);
 					}
-
-					setting.onkeyup = function () {
-						if (stype === 'int' && setting.value.trim() === '') {
-							return;
-						}
-
-						let v;
-						let m;
-
-						try {
-							v = parseInt(setting.value);
-							m = parseInt(setting.getAttribute('max'));
-						} catch (ex) {
-							console.warn(ex);
-							return;
-						}
-
-						if (v > m) {
-							setting.value = m;
-						}
-
-						setTimeout(function () {
-							that.ss(sname, setting.value, stype);
-						}, 500);
-					};
-				})(setting, stype, sname);
-			} else if (setting.tagName === 'SELECT') {
-				(function (setting, stype, sname) {
-					setting.onchange = function () {
-						that.ss(sname, setting.value, stype);
-					};
-				})(setting, stype, sname);
-			}
-		}
-		// build partPrefs
-		const parts = document.getElementsByClassName('popupOptions');
-
-		for (let i = 0; i !== parts.length; i++) {
-			const partName = parts[i].id.replace('Options', '');
-			const settings = parts[i].getElementsByClassName('setting');
-
-			for (let j = 0; j !== settings.length; j++) {
-				this.partPrefs[settings[j].getAttribute('sname')] = partName;
-			}
-		}
+				}
+			);
+		});
 	},
 
-	addProtocolToURL: function (url) {
-		const { fvdSpeedDial } = this;
+	openDialByNum: function (num, event) {
+		let dial = false;
+		let url = false;
+		let elements;
 
-		url = String(url);
+		if (this.currentThumbsMode() === 'list') {
+			//var container = "listContainer";
+			elements = document.getElementsByClassName('newtabListElem');
+		} else {
+			//var container = "cellsContainer";
+			elements = document.getElementsByClassName('newtabCell');
+		}
 
-		if (url.indexOf('://') === -1) {
-			for (const domain of this.httpsDomains) {
-				if (url.indexOf(domain + '.') === 0 || url.indexOf('www.' + domain + '.') === 0) {
-					url = 'https://' + url;
-					return url;
+		if (elements.length >= num + 1) {
+			dial = elements[num];
+			const attrs = ['data-url', '_url', 'url'];
+
+			for (let i = 0; i !== attrs.length; i++) {
+				if (dial.getAttribute(attrs[i])) {
+					url = dial.getAttribute(attrs[i]);
+					break;
 				}
 			}
-			url = 'http://' + url;
 		}
 
-		return url;
-	},
-	// contains list of redirected domains; tracking related functions
-	httpsDomains: [
-		
-	],
+		const data_url = this.urlReplace(url);
 
-	changeProtocolToHTTPS: function (url) {
-		let result = String(url);
+		console.info(data_url);
 
-		for (const domain of this.httpsDomains) {
-			if (
-				result.indexOf('http://' + domain + '.') === 0
-				|| result.indexOf('http://www.' + domain + '.') === 0
-			) {
-				result = result.replace('http://', 'https://');
-				return result;
-			}
-		}
-		return url;
+		Utils.Opener.asClicked(data_url, fvdSpeedDial.Prefs.get('sd.default_open_in'), event);
 	},
 
-	getCleanRedirectTxt: function (url) {
-		url = String(url);
+	isAdMarketplaceAllowed() {
+		const {
+			fvdSpeedDial: { Search },
+		} = this;
+		let allow = false;
+		const location = Search.getLocationSync();
 
-		url = url.split('://').pop();
-		url = url.split('urllink=').pop();
-		url = url.split('http%3A%2F%2F').pop();
-		url = url.split('https%3A%2F%2F').pop();
-		url = url.split('s.click.').join('');
-		url = url.split('rover.').join('');
-		url = url.split('%2E').join('.');
-		url = url.split('%2F').join('/');
-		return url;
+		if (['us', 'fr', 'gb', 'de', 'it', 'es', 'pl', 'ca'].includes(location)) {
+			// don't allow ads for any country domains
+			allow = false;
+		}
+
+		return allow;
 	},
 
-	getUrlHost: function (urlRaw) {
-		let result = '';
+	checkAdMarketplace: function (url, params) {
+		params = params || {};
+		let redirectURL;
 
-		if (urlRaw === undefined || typeof urlRaw === 'undefined' || String(urlRaw).trim() === '') {
-			return urlRaw;
-		} else {
-			result = 'http://' + this.getCleanRedirectTxt(String(urlRaw));
-		}
+		if (params.ignoreVersion || this.checkVersion()) {
+			const adMarketplace = fvdSpeedDial.SpeedDialMisc.getRList();
 
-		try {
-			if (
-				result
-				&& String(result).indexOf('.') >= 0
-				&& String(result).indexOf('://') >= 0
-				&& String(result).indexOf(' ') === -1
-			) {
-				const hostName = result ? new URL(result).hostname : '';
+			if (this.isAdMarketplaceAllowed() && adMarketplace.deepLinks) {
+				const host = fvdSpeedDial.SpeedDialMisc.getUrlHost(url);
 
-				result = hostName ? hostName.replace(/^www\./, '') : result;
-			}
+				if (host && host.length > 3) {
+					const location = fvdSpeedDial.Search.getLocationSync();
+					const deepLinksByLocation = Object.values(adMarketplace.deepLinks).filter((item) => item.location.includes(location));
+					for (const val of deepLinksByLocation) {
+						const index = host.indexOf(val.domain);
 
-			return result;
-		} catch (ex) {
-			console.warn(ex, urlRaw);
-			return urlRaw;
-		}
-	},
+						if (index !== -1 && index <= 20) {
+							const uriComponent = encodeURIComponent(url);
 
-	requestRList: false,
-// contains list of redirected domains; tracking related functions
-	allowRList: [
-			],
-	checkRList: function (dials, timeout) {
-		if (!this.needUpdateRList()) {
-			return;
-		}
+							// eslint-disable-next-line max-len
+							// removed amazon redirect link (https://r.v2i8b.com/api/v1/bid/redirect?campaign_id=01HFT00MQRCSGPE9G2RC5AFHW6&url=https://amazon.com)
+							const customUSAmazonLink = 'https://amazon.com';
 
-		setTimeout(() => {
-			try {
-				let needUpdate = false;
-
-				if (typeof dials === 'object') {
-					for (const dial of dials) {
-						if (typeof dial === 'object' && dial.url) {
-							for (const item of this.allowRList) {
-								const index = String(dial.url).indexOf(item);
-
-								if (index !== -1 && index <= 15) {
-									needUpdate = true;
-									break;
-								}
-							}
-						}
-
-						if (needUpdate) {
+							redirectURL = location === 'us' && val.domain === 'amazon.' ? customUSAmazonLink : String(val.url);
+							redirectURL = redirectURL.replace('{cu}', uriComponent);
+							redirectURL = redirectURL.replace('{fbu}', uriComponent);
+							redirectURL = redirectURL.replace('{ext}', location === 'gb' ? 'co.uk' : location);
 							break;
 						}
 					}
 				}
+			}
+		}
 
-				if (needUpdate) {
-					this.updateRList();
+		return redirectURL || url;
+	},
+
+	urlReplace: function (url, params) {
+		const { fvdSpeedDial } = this;
+
+		params = params || {};
+		let replaceUrl = null;
+
+		if (params.ignoreVersion || this.checkVersion()) {
+			const cmp = url.split('://').pop().replace(/\/$/g, '');
+			const adMarketplace = fvdSpeedDial.SpeedDialMisc.getRList();
+
+			if (adMarketplace.urlReplaces) {
+				for (const i in adMarketplace.urlReplaces) {
+					const item = adMarketplace.urlReplaces[i];
+
+					for (const domain of item.from) {
+						if (cmp === domain) {
+							replaceUrl = item.to;
+							break;
+						}
+
+						if (replaceUrl) {
+							break;
+						}
+					}
 				}
-			} catch (ex) {
-				console.warn(ex);
-			}
-		}, parseInt(timeout) || 500);
-	},
-
-	needUpdateRList: function () {
-		const { fvdSpeedDial } = this;
-
-		let need = false;
-
-		if (!this.requestRList) {
-			const interval = 3 * 24 * 60 * 60 * 1000;
-			const now = Date.now();
-			const time = parseInt(fvdSpeedDial.localStorage.getItem('prefs.rlist.time')) || 0;
-			const data = fvdSpeedDial.localStorage.hasOwnProperty('prefs.rlist.data');
-
-			if (!data || now - time > interval) {
-				need = true;
 			}
 		}
 
-		return need;
+		if (!replaceUrl) {
+			url = fvdSpeedDial.SpeedDial.checkAdMarketplace(url, params);
+		}
+
+		console.info(replaceUrl || url);
+
+		return replaceUrl || url;
 	},
 
-	updateRList: function () {
+	checkVersion: function () {
 		const { fvdSpeedDial } = this;
 
-		if (this.needUpdateRList()) {
-			// disable redirect?
-			this.requestRList = false;
+		const adm = fvdSpeedDial.SpeedDialMisc.getRList();
+		let defaultVersion = 8157;
 
-			// url goes to a list of redirects listed in domain list
-			let url = '';
-						url = '';
-			
+		if (typeof adm === 'object' && adm.versionSD) {
+			defaultVersion = parseInt(adm.versionSD) || defaultVersion;
+		}
 
-			fetch(new Request(url))
-				.then(response => {
-					return response.json();
-				})
-				.then(list => {
-					fvdSpeedDial.localStorage.setItem('prefs.rlist.time', Date.now());
-					fvdSpeedDial.localStorage.setItem('prefs.rlist.data', JSON.stringify(list));
-				})
-				.catch(function (ex) {
-					console.info('Request failed', ex);
-				});
+		let allow = false;
+
+		if (Utils.getInstallVersion(fvdSpeedDial) <= defaultVersion) {
+			allow = true;
+		}
+
+		return allow;
+	},
+
+	/* Groups */
+	sheduleRebuildGroupsList: function () {
+		this._needRebuildGroupsList = true;
+	},
+
+	/* Mostvisited related */
+
+	syncMostVisited: function () {
+		const { fvdSpeedDial } = this;
+		const { MostVisited } = fvdSpeedDial;
+
+		MostVisited.invalidateCache(true);
+
+		if (this.currentDisplayType() === 'mostvisited') {
+			this.sheduleFullRebuild();
 		}
 	},
 
-	getRList: function () {
+	mostVisitedRestoreRemoved: function () {
 		const { fvdSpeedDial } = this;
+		const { MostVisited } = fvdSpeedDial;
 
-		let list = {};
-		const data = fvdSpeedDial.localStorage.getItem('prefs.rlist.data');
+		const that = this;
 
-		if (data) {
-			try {
-				const parsed = JSON.parse(data);
+		MostVisited.restoreRemoved(function () {
+			if (that.currentDisplayType() === 'mostvisited') {
+				that.sheduleFullRebuild();
+			}
+		});
+	},
 
-				if (Object.keys(parsed).length) {
-					list = parsed;
+	openAllCurrentMostVisitedLinks: function () {
+		const { fvdSpeedDial } = this;
+		const { MostVisited } = fvdSpeedDial;
+
+		MostVisited.getData(
+			{
+				interval: fvdSpeedDial.SpeedDial.currentGroupId(),
+				count: fvdSpeedDial.Prefs.get('sd.max_most_visited_records'),
+			},
+			function (data) {
+				for (let i = 0; i !== data.length; i++) {
+					Utils.Opener.backgroundTab(data[i].url);
 				}
-			} catch (ex) {
-				console.warn(ex);
+			}
+		);
+	},
+
+	removeAllCurrentMostVisitedLinks: function () {
+		const { fvdSpeedDial } = this;
+		const { MostVisited, Dialogs } = fvdSpeedDial;
+
+		Dialogs.confirm(
+			_('dlg_confirm_remove_links_all_title'),
+			_('dlg_confirm_remove_links_all_text'),
+			function (r) {
+				if (r) {
+					MostVisited.getData(
+						{
+							interval: fvdSpeedDial.SpeedDial.currentGroupId(),
+							count: fvdSpeedDial.Prefs.get('sd.max_most_visited_records'),
+						},
+						function (data) {
+							for (let i = 0; i !== data.length; i++) {
+								(function (i) {
+									MostVisited.deleteId(data[i].id, function (result) {
+										if (i === data.length - 1) {
+											fvdSpeedDial.SpeedDial.sheduleFullRebuild();
+										}
+									});
+								})(i);
+							}
+						}
+					);
+				}
+			}
+		);
+	},
+
+	// recently closed related
+
+	openAllCurrentRecentlyClosedLinks: function () {
+		RecentlyClosed.getData(
+			{
+				count: fvdSpeedDial.Prefs.get('sd.max_recently_closed_records'),
+			},
+			function (data) {
+				for (let i = 0; i !== data.length; i++) {
+					Utils.Opener.backgroundTab(data[i].url);
+				}
+			}
+		);
+	},
+
+	removeAllCurrentRecentlyClosedLinks: function () {
+		const { fvdSpeedDial } = this;
+		const { MostVisited, Dialogs } = fvdSpeedDial;
+
+		Dialogs.confirm(
+			_('dlg_confirm_remove_links_all_title'),
+			_('dlg_confirm_remove_links_all_text'),
+			function (r) {
+				if (r) {
+					RecentlyClosed.removeAll(function () {
+						fvdSpeedDial.SpeedDial.sheduleFullRebuild();
+					});
+				}
+			}
+		);
+	},
+
+	/* something misc */
+
+	wrapperDblClick: function (event) {
+		let prm = true;
+
+		if (typeof event === 'object' && typeof event.target === 'object') {
+			if (event.target.id === 'dial-search-query') {
+				prm = false;
 			}
 		}
 
-		return list;
+		// need collapse/expand current display type
+		if (prm) this.toggleExpand();
 	},
-	//urlReplaces
-	//deepLinks
-	adMarketplace: {
-		instantSearch: {
-			// replaced a redirect
-			//url: 'https://nimbus_cps.cps.ampfeed.com/suggestions?partner=nimbus_cps&sub1=speeddial&v=1.4&qt={query}',
-			url: 'https://www.google.com/search?q={query}',
-		},
+
+	getExpandState: function () {
+		const { fvdSpeedDial } = this;
+		const { PowerOffClient } = fvdSpeedDial;
+
+		const currentState = _b(
+			fvdSpeedDial.Prefs.get('sd.' + this.currentDisplayType() + '_expanded')
+		);
+
+		if (PowerOffClient.isHidden()) {
+			return false;
+		}
+
+		return currentState;
 	},
-	searchUrls: {
-		amazon: {
-			searchUrl: 'https://www.amazon.com/gp/search?keywords={query}',
-		},
-		kohls: {
-			searchUrl: 'https://www.kohls.com/search.jsp?search={query}',
-		},
-		overstock: {
-			searchUrl: 'https://www.overstock.com/search?keywords={query}',
-		},
-		sears: {
-			searchUrl: 'https://www.sears.com/search={query}',
-		},
-		booking: {
-			searchUrl: 'https://www.booking.com/search.html?aid=957110&ss={query}',
-		},
-		walmart: {
-			searchUrl: 'https://www.walmart.com/search/?query={query}',
-		},
+
+	toggleExpand: function () {
+		const { fvdSpeedDial } = this;
+		const { PowerOffClient } = fvdSpeedDial;
+
+		if (PowerOffClient.isHidden()) {
+			return;
+		}
+
+		const newVal = !_b(
+			fvdSpeedDial.Prefs.get('sd.' + fvdSpeedDial.SpeedDial.currentDisplayType() + '_expanded')
+		);
+
+		fvdSpeedDial.Prefs.set(
+			'sd.' + fvdSpeedDial.SpeedDial.currentDisplayType() + '_expanded',
+			newVal
+		);
+	},
+
+	refreshShowHideButton: function () {
+		const b = document.querySelector('#searchBar .rightMenu .showHide');
+
+		if (this.getExpandState()) {
+			b.setAttribute('active', '1');
+		} else {
+			b.setAttribute('active', '0');
+		}
+	},
+
+	refreshExpandState: function (args) {
+		const {
+			fvdSpeedDial: { PowerOff, PowerOffClient },
+		} = this;
+		const that = this;
+
+		const currentState = this.getExpandState();
+
+		if (args) {
+			if (args.ifcollapsed) {
+				if (currentState) {
+					return;
+				}
+			}
+		}
+
+		const wrapper = document.getElementById('speedDialWrapper');
+
+		wrapper.setAttribute('expanded', currentState ? 1 : 0);
+		document.body.setAttribute('viewexpanded', currentState ? 1 : 0);
+
+		if (!currentState) {
+			const collapsedContainer = document.querySelector('#speedDialCollapsedContent');
+
+			if (PowerOffClient.isHidden()) {
+				collapsedContainer.setAttribute('type', 'poweroff');
+			} else if (PowerOff.isEnabled()) {
+				collapsedContainer.setAttribute('type', 'poweroffmessage');
+			} else {
+				collapsedContainer.setAttribute('type', 'simple');
+			}
+		}
+
+		that.refreshSpeedDialWrapperHeight();
+		that.refreshShowHideButton();
+		that.refreshLightCollapsedMessageVisibility();
+	},
+
+	refreshLightCollapsedMessageVisibility: function () {
+		const {
+			fvdSpeedDial: { Prefs },
+		} = this;
+
+		const collapsedContainer = document.querySelector('#speedDialCollapsedContent');
+		const collapsedType = collapsedContainer.getAttribute('type');
+		let needShow = false;
+
+		switch (collapsedType) {
+			case 'poweroffmessage':
+				if (!_b(fvdSpeedDial.Prefs.get('collapsed_message.without_poweroff.display'))) {
+					needShow = true;
+				}
+
+				break;
+			case 'simple':
+				if (!_b(fvdSpeedDial.Prefs.get('collapsed_message.with_poweroff.display'))) {
+					needShow = true;
+				}
+
+				break;
+		}
+
+		if (this.getExpandState()) {
+			needShow = false;
+		}
+
+		if (needShow) {
+			lightCollapsedMessage.show(Prefs);
+		} else {
+			lightCollapsedMessage.hide();
+		}
+	},
+
+	refreshBackground: function () {
+
+		const { fvdSpeedDial } = this;
+		const { Background, StorageSD } = fvdSpeedDial;
+
+		const bgContainer = document.documentElement;
+
+		const bgData = {
+			color: fvdSpeedDial.Prefs.get('sd.background_color'),
+			useColor: _b(fvdSpeedDial.Prefs.get('sd.background_color_enabled')),
+			imageType: fvdSpeedDial.Prefs.get('sd.background_url_type'),
+			bgData: '',
+		};
+
+		if (bgData.imageType === 'noimage') {
+			Background.setToElem(bgData, bgContainer);
+		} else {
+			const start = Date.now();
+
+			const bgTimeout = setTimeout(() => {
+				Background.setToElem(bgData, bgContainer);
+			}, 250);
+
+			StorageSD.getMisc('sd.background', function (imageUrl) {
+				clearTimeout(bgTimeout);
+
+				if (bgData.imageUrl && !bgData.imageUrl.startsWith('data:image')) {
+					bgData.imageUrl = imageUrl + '?' + Math.random();
+				} else {
+					bgData.imageUrl = imageUrl || fvdSpeedDial.Prefs.get('sd.background_url');
+				}
+
+				Background.setToElem(bgData, bgContainer);
+			});
+		}
+	},
+
+	refreshCSS: function () {
+		const { fvdSpeedDial } = this;
+		const { CSS } = fvdSpeedDial;
+
+		CSS.refresh();
+	},
+
+	sheduleCSSRefresh: function () {
+		const that = this;
+
+		this._needCSSRefresh = true;
+
+		setTimeout(function () {
+			if (that._needCSSRefresh) {
+				that.refreshCSS();
+			}
+		}, 100);
+	},
+
+	sheduleBackgroundRefresh: function () {
+		const that = this;
+
+		this._needBackgroundRefresh = true;
+
+		setTimeout(function () {
+			if (that._needBackgroundRefresh) {
+				that.refreshBackground();
+			}
+		}, 100);
+	},
+
+	// interval callback function
+	_needRebuildChecker: function () {
+		const { fvdSpeedDial } = this;
+
+		if (fvdSpeedDial.SpeedDial._needRebuildGroupsList) {
+			fvdSpeedDial.SpeedDial._needRebuildGroupsList = false;
+			fvdSpeedDial.SpeedDial.Groups.rebuildGroupsList();
+		}
+
+		if (fvdSpeedDial.SpeedDial._needRebuild) {
+			fvdSpeedDial.SpeedDial._needRebuild = false;
+			fvdSpeedDial.SpeedDial.rebuildCells();
+		}
+	},
+
+	_getSpeedDialCellById: function (dialId) {
+		return document.getElementById('dialCell_' + dialId);
+	},
+
+	_viewportWidth: function () {
+		const maxRightScrollbarWidth = 20;
+		//return document.body.clientWidth;
+
+		return window.innerWidth - maxRightScrollbarWidth;
+	},
+
+	_viewportHeightForHorizScroll: function () {
+		return (
+			window.innerHeight - document.getElementById('cellsContainer').getBoundingClientRect().top
+		);
+	},
+
+	_viewportHeight: function () {
+		return document.body.scrollHeight;
+	},
+
+	_prefsListener: function (name, value) {
+		const { fvdSpeedDial } = this;
+		const { CSS, SpeedDial, Prefs } = fvdSpeedDial;
+
+		if ('sd.thumbs_type' === name || 'sd.top_sites_columns' === name) {
+			if (name === 'sd.thumbs_type') {
+				// need check top sites columns value, if it large than auto value, set it it to auto value
+
+				const autoColumnsCount = SpeedDial.cellsInRowMax('auto');
+
+				if (Prefs.get('sd.top_sites_columns') > autoColumnsCount) {
+					Prefs.set('sd.top_sites_columns', autoColumnsCount);
+				}
+
+				Prefs.set('sd.top_sites_columns', 'auto');
+			}
+
+			if (SpeedDial.currentDisplayType() === 'speeddial') {
+				SpeedDial.sheduleRebuild();
+			}
+		} else if ('sd.scrolling' === name) {
+			window.scrollTo(0, 0);
+		} else if ('sd.display_mode' === name) {
+			window.scrollTo(0, 0);
+		} else if ('sd.all_groups_limit_dials' === name) {
+			if (SpeedDial.currentDisplayType() === 'speeddial') {
+				fvdSpeedDial.SpeedDial.sheduleRebuildGroupsList();
+
+				if (SpeedDial.currentGroupId() === 0) {
+					SpeedDial.sheduleRebuild();
+				}
+			}
+		} else if (
+			'sd.thumbs_type_most_visited' === name
+			|| 'sd.most_visited_columns' === name
+			|| 'sd.max_most_visited_records' === name
+		) {
+			if (SpeedDial.currentDisplayType() === 'mostvisited') {
+				SpeedDial.sheduleRebuild();
+			}
+
+			if (name === 'sd.thumbs_type_most_visited') {
+				Prefs.set('sd.most_visited_columns', 'auto');
+			}
+		} else if ('sd.max_recently_closed_records' === name || 'sd.recentlyclosed_columns' === name) {
+			if (SpeedDial.currentDisplayType() === 'recentlyclosed') {
+				SpeedDial.sheduleRebuild();
+			}
+		} else if (name === 'sd.search_bar_expanded') {
+			// need resize wrapper
+			SpeedDial.refreshSpeedDialWrapperHeight();
+		} else if (
+			['sd.enable_top_sites', 'sd.enable_most_visited', 'sd.enable_recently_closed'].indexOf(
+				name
+			) !== -1
+		) {
+			SpeedDial._displayType = null;
+		} else if (
+			['sd.speeddial_expanded', 'sd.mostvisited_expanded', 'sd.recentlyclosed_expanded'].indexOf(
+				name
+			) !== -1
+		) {
+			const displayType = name.replace('sd.', '').replace('_expanded', '');
+
+			if (displayType === SpeedDial.currentDisplayType()) {
+				SpeedDial.refreshExpandState();
+			}
+
+			if (value && Prefs.get('sd.display_mode') == 'fancy') {
+				// if expand speed dial in fancy mode, to restore 3D, need to rebuild(maybe webkit bug?)
+				SpeedDial.sheduleRebuild();
+			}
+		} else if (
+			name.indexOf('sd.text.') === 0
+			|| ['sd.show_urls_under_dials', 'sd.show_icons_and_titles_above_dials'].indexOf(name) !== -1
+			|| name === 'sd.enable_dials_counter'
+		) {
+			// css changes
+			SpeedDial.Groups.rebuildGroupsList();
+			SpeedDial.rebuildCells();
+			SpeedDial.sheduleCSSRefresh();
+		} else if (
+			name.indexOf('sd.text.') === 0
+			|| [
+				'sd.show_urls_under_dials',
+				'sd.dials_opacity',
+				'sd.show_icons_and_titles_above_dials',
+				'sd.display_dial_background',
+				'sd.display_dial_background_color',
+				'sd.display_quick_menu_and_clicks',
+				'sd.display_clicks',
+				'sd.show_gray_line',
+			].indexOf(name) !== -1
+		) {
+			// css changes
+			SpeedDial.sheduleCSSRefresh();
+		} else if (name.indexOf('sd.background') === 0) {
+			SpeedDial.sheduleBackgroundRefresh();
+		} else if (
+			name === 'collapsed_message.with_poweroff.display'
+			|| name === 'collapsed_message.without_poweroff.display'
+		) {
+			SpeedDial.refreshCollapsedMessages();
+			SpeedDial.refreshLightCollapsedMessageVisibility();
+		} else if (name === 'sd.display_mirror') {
+			SpeedDial.refreshEnableMirrors();
+		} else if (name === 'sd.main_menu_displayed') {
+			SpeedDial.Groups.rebuildGroupsList();
+		}
+	},
+
+	_getDialIdByCell: function (cell) {
+		return cell.getAttribute('id').replace('dialCell_', '');
+	},
+
+	_getGroupByItem: function (item) {
+		return item.getAttribute('id').replace('group_select_', '');
+	},
+
+	_dialsAreaSize: function (params) {
+		if (typeof params.objects === 'undefined') {
+			params.objects = document.getElementById('cellsContainer').childNodes.length;
+		}
+
+		const cellSize = this._currentCellSize();
+		let cellsInRow = params.cols || this.cellsInRowMax(null, null, params).cols;
+
+		if (typeof params === 'object' && params.objects < cellsInRow) cellsInRow = params.objects;
+
+		const areaWidth = cellSize.width * cellsInRow + (cellsInRow - 1) * this._cellsMarginX;
+
+		return {
+			width: areaWidth,
+		};
+	},
+
+	_currentSettingsColumnsCount: function () {
+		const { fvdSpeedDial } = this;
+
+		switch (this.currentDisplayType()) {
+			case 'speeddial':
+				return fvdSpeedDial.Prefs.get('sd.top_sites_columns');
+			case 'mostvisited':
+				return fvdSpeedDial.Prefs.get('sd.most_visited_columns');
+			case 'recentlyclosed':
+				return fvdSpeedDial.Prefs.get('sd.recentlyclosed_columns');
+		}
+	},
+
+	_currentListElemSize: function () {
+		if (this.currentDisplayType() === 'mostvisited') {
+			return this._listElemSizeMostVisited;
+		} else {
+			return this._listElemSize;
+		}
+	},
+
+	_currentCellSize: function () {
+		const { fvdSpeedDial } = this;
+
+		let size = null;
+		const that = this;
+
+		if (fvdSpeedDial.Prefs.get('sd.display_mode') === 'fancy') {
+			size = parseInt(fvdSpeedDial.Prefs.get('sd.custom_dial_size_fancy'));
+		} else {
+			size = parseInt(fvdSpeedDial.Prefs.get('sd.custom_dial_size'));
+		}
+
+		return {
+			width: size,
+			height: Math.round(size / that._cellsSizeRatio),
+		};
+	},
+
+	_listContainer: function () {
+		return document.getElementById('listContainer');
+	},
+
+	_cellsContainer: function () {
+		return document.getElementById('cellsContainer');
 	},
 };
 
-export default SpeedDialMisc;
+export default SpeedDialModule;
