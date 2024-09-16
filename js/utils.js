@@ -1,4570 +1,1685 @@
-/* eslint-disable eqeqeq */
-import AppLog from './log.js';
-import { Utils, getCleanUrl } from './utils.js';
-import Sync from './sync/tab.js';
+import Prefs from './prefs.js';
 import Config from './config.js';
-import Broadcaster from './_external/broadcaster.js';
-import FileSystemSD from './storage/filesystem.js';
-import { _ } from './localizer.js';
-import initStorage from './storage/init.js';
-import { defaultGroupTitles } from './constants.js';
-import Analytics from './bg/google-analytics.js';
 
-const LOG_STORAGE = true;
-const CACHE = {};
-const DATABASE_TYPE = /*LS.getItem('global.database.mode') ||*/ 'indexed.db'; // 'storage.local'
-const tablesDefaultValues = {
-	dials: { thumb_version: 0, get_screen_method: 'manual' },
-	mostvisited_extended: { thumb_version: 0, get_screen_method: 'manual' },
-	deny: {},
-	misc: {},
-	groups: { sync: 1 },
-};
-
-function checkLocalFile(url, thumb_source_type, thumb_url, cb) {
-	const res = {};
-
-	if (thumb_source_type && thumb_source_type !== 'screen') {
-		return cb(null);
+export function _b(v) {
+	if (typeof v === 'boolean') {
+		return v;
 	}
 
-	if (url.indexOf('file://') === 0) {
-		if (thumb_source_type) {
-			res.thumb_source_type = thumb_source_type;
+	return v === 'true';
+}
+
+export function _isb(v) {
+	if (typeof v === 'boolean') {
+		return true;
+	}
+
+	return v === 'true' || v === 'false';
+}
+
+export function _r(v) {
+	if (_isb(v)) {
+		return _b(v);
+	}
+
+	return v;
+}
+
+export function _array(list) {
+	const result = [];
+
+	for (let i = 0; i !== list.length; i++) {
+		result.push(list[i]);
+	}
+
+	return result;
+}
+
+if (typeof window !== 'undefined') {
+	Element.prototype.insertAfter = function (newElem, targetElem) {
+		if (this.lastChild === targetElem) {
+			this.appendChild(newElem);
+		} else {
+			this.insertBefore(newElem, targetElem.nextSibling);
+		}
+	};
+}
+
+export function FVDEventEmitter() {
+	const callbacks = [];
+
+	this.addListener = function (listener) {
+		callbacks.push(listener);
+	};
+
+	this.removeListener = function (listener) {
+		const index = callbacks.indexOf(listener);
+
+		if (index !== -1) {
+			callbacks.splice(index, 1);
+		}
+	};
+
+	this.callListeners = function () {
+		const args = arguments;
+		const toRemove = [];
+
+		callbacks.forEach(function (callback) {
+			try {
+				callback.apply(window, args);
+			} catch (ex) {
+				console.warn(ex);
+				toRemove.push(callback);
+			}
+		});
+		toRemove.forEach(function (callback) {
+			const index = callbacks.indexOf(callback);
+
+			if (index > -1) {
+				callbacks.splice(index, 1);
+			}
+		});
+	};
+}
+
+export const Utils = {
+	measureTextCanvases: {},
+	hostRegExp: /^https?:\/\/(?:[^@:/]*@)?([^:/]+)/,
+
+	getRandomString: function (length) {
+		length = length || 5;
+		let text = '';
+		const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+		for (let i = 0; i < length; i++)
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+		return text;
+	},
+
+	debounce: function (func, wait, immediate) {
+		let timeout;
+
+		return function () {
+			const context = this;
+			const args = arguments;
+			const later = function () {
+				timeout = null;
+
+				if (!immediate) func.apply(context, args);
+			};
+			const callNow = immediate && !timeout;
+
+			clearTimeout(timeout);
+			timeout = setTimeout(later, wait);
+
+			if (callNow) func.apply(context, args);
+		};
+	},
+
+	measureText: function (canvasFontDefinition, text) {
+		let canvas;
+
+		if (this.measureTextCanvases[canvasFontDefinition]) {
+			canvas = this.measureTextCanvases[canvasFontDefinition];
+		} else {
+			canvas = document.createElement('canvas');
+			this.measureTextCanvases[canvasFontDefinition] = canvas;
 		}
 
-		if (thumb_url) {
-			res.thumb_url = thumb_url;
+		const ctx = canvas.getContext('2d');
+
+		ctx.font = canvasFontDefinition;
+		return ctx.measureText(text).width;
+	},
+
+	getChromeVersion: function () {
+		const match = navigator.userAgent.match(/Chrome\/([0-9\.]+)/i);
+
+		if (!match) {
+			return null;
 		}
 
-		// process add local file to speed dial
+		return match[1];
+	},
+
+	isActiveTab: function (cb) {
+		chrome.tabs.getCurrent(function (tab) {
+			if (tab) {
+				cb(tab.active);
+			}
+		});
+	},
+
+	getRandomInt: function (min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+
+	clone: function (obj) {
+		return JSON.parse(JSON.stringify(obj));
+	},
+
+	shuffle: function (inputArr) {
+		const valArr = [];
+		let k = '';
+		let i = 0;
+		let strictForIn = false;
+		let populateArr = [];
+
+		for (k in inputArr) {
+			// Get key and value arrays
+			if (inputArr.hasOwnProperty(k)) {
+				valArr.push(inputArr[k]);
+
+				if (strictForIn) {
+					delete inputArr[k];
+				}
+			}
+		}
+		valArr.sort(function () {
+			return 0.5 - Math.random();
+		});
+
+		// BEGIN REDUNDANT
+		this.php_js = this.php_js || {};
+		this.php_js.ini = this.php_js.ini || {};
+		// END REDUNDANT
+		strictForIn
+			= this.php_js.ini['phpjs.strictForIn']
+			&& this.php_js.ini['phpjs.strictForIn'].local_value
+			&& this.php_js.ini['phpjs.strictForIn'].local_value !== 'off';
+		populateArr = strictForIn ? inputArr : populateArr;
+
+		for (i = 0; i < valArr.length; i++) {
+			// Repopulate the old array
+			populateArr[i] = valArr[i];
+		}
+
+		return strictForIn || populateArr;
+	},
+
+	getUserCountry: function (cb) {
+		const xhr = new XMLHttpRequest();
+
+		xhr.open('GET', 'https://everhelper.pro/spec/country.php');
+		xhr.onload = function () {
+			cb(xhr.responseText);
+		};
+		xhr.send(null);
+	},
+
+	getUserClientDetails: function (cb) {
+		const xhr = new XMLHttpRequest();
+
+		xhr.open('GET', 'https://everhelper.pro/spec/country.php?detailed=1');
+		xhr.onload = function () {
+			cb(null, JSON.parse(xhr.responseText));
+		};
+		xhr.send(null);
+	},
+
+	hasEqualElements: function (a, b) {
+		for (let i = 0; i !== a.length; i++) {
+			if (b.indexOf(a[i]) !== -1) {
+				return true;
+			}
+		}
+
+		return false;
+	},
+
+	validateText: function (type, text) {
+		switch (type) {
+			case 'email':
+				const re
+					= /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+				return re.test(text);
+				break;
+		}
+	},
+
+	getQueryValue: function (variable) {
+		const query = window.location.hash.substring(1);
+		const vars = query.split('&');
+
+		for (let i = 0; i < vars.length; i++) {
+			const pair = vars[i].split('=');
+
+			if (decodeURIComponent(pair[0]) === variable) {
+				return decodeURIComponent(pair[1]);
+			}
+		}
+
+		return null;
+	},
+
+	arrayDiff: function (a1, a2) {
+		return a1.filter(function (i) {
+			return !(a2.indexOf(i) > -1);
+		});
+	},
+
+	urlToCompareForm: function (url) {
+		url = url.toLowerCase();
+		url = url.replace(/https?:\/\//i, '');
+		url = url.replace(/^www\./i, '');
+		url = url.replace(/\/+$/i, '');
+
+		return url;
+	},
+
+	isValidUrl: function (url) {
+		if (url.indexOf('file:///') === 0) {
+			return true;
+		}
+
 		try {
-			res.title = url.match(/[\/\\]([^\/\\?]+)[^\/\\]*$/i)[1];
+			const parsed = this.parseUrl(url);
+
+			if (!parsed.host) {
+				return false;
+			}
+
+			/*
+        if( parsed.host.indexOf(".") == -1 ){
+          return false;
+        }
+        */
+
+			if (parsed.host.length < 2) {
+				return false;
+			}
+
+			return true;
 		} catch (ex) {
 			console.warn(ex);
-			res.title = url;
+			return false;
 		}
+	},
 
-		if (/(\.jpe?g|\.gif|\.png)$/i.test(url) && false) {
-			res.thumb_url = url;
-			res.thumb_source_type = 'url';
-			Utils.imageUrlToDataUrl(res.thumb_url, function (th, size) {
-				if (!th || !size) {
-					console.error('Fail to read image', res.thumb_url);
-					return cb(null);
-				}
+	getMainDomain: function (domain) {
+		const parts = String(domain || '').split('.');
+		let result = '';
+		const countParts = parts.length;
 
-				res.thumb = th;
-				res.thumb_width = size.width;
-				res.thumb_height = size.height;
-				cb(res);
-			});
-		} else if (/(\.html?|\.pdf)$/i.test(url)) {
-			cb(res);
+		if (parts.length > 1) {
+			result = parts[countParts - 2] + '.' + parts[countParts - 1];
 		} else {
-			// not allowed for auto screen use standard image for local file
-			res.screen_maked = 1; // use force url
-			res.thumb_url = 'https://s3.amazonaws.com/fvd-data/sdpreview/local_file.png';
-			Utils.imageUrlToDataUrl(res.thumb_url, function (th, size) {
-				res.thumb = th;
-				res.thumb_width = size.width;
-				res.thumb_height = size.height;
-				cb(res);
-			});
-			res.thumb_source_type = 'url';
-		}
-	} else {
-		cb(null);
-	}
-}
-class StorageSD {
-	constructor(fvdSpeedDial) {
-		this.fvdSpeedDial = fvdSpeedDial;
-	}
-	onDataChanged = {
-		listeners: [],
-		addListener: function (listener) {
-			if (this.listeners.indexOf(listener) < 0) {
-				this.listeners.push(listener);
-			}
-		},
-		dispatch: function () {
-			for (const listener of this.listeners) {
-				try {
-					listener();
-				} catch (err) {
-					console.error('Fail to call listener Storage.onDataChanged: ', err);
-				}
-			}
-		},
-	};
-	_connection = null;
-	_dbName = 'fvdSpeedDialDataBase';
-	_estimatedSize = 500 * 1024 * 1024;
-	// state of establishing connection and doing the inital actions
-	connecting = false;
-	connectionPromise = Promise.resolve(null);
-	// callbacks
-	_groupsChangeCallbacks = [];
-	_dialsChangeCallbacks = [];
-	_standardThumbDirUrl = '/images/newtab/dials_standard';
-	_dialFieldsToFetch =
-		'rowid as `id`, `url`, `display_url`, `title`, `auto_title`, `update_interval`, ' +
-		'`thumb_source_type`, `thumb_url`, `position`, `group_id`, `clicks`, `deny`, `screen_maked`, ' +
-		'`thumb`, `thumb_version`, `screen_delay`, `thumb_width`, `thumb_height`, `get_screen_method`, ' +
-		'`global_id`, `previewTitle`, `preview_style`';
-	// force use transaction
-	_transaction = null;
-	_backupRegexp = /_backup_(.+?)_(.+)$/i;
-	_requiredTables = ['deny', 'dials', 'groups', 'misc', 'mostvisited_extended'];
-	isIncognito = false;
-	_defaultDials = [
-		{
-			group: {
-				name: _('bg_default_group_name'),
-				global_id: 'default',
-				sync: 1,
-			},
-			dials: 'server',
-		},
-	];
-	prepareDataType = function (table, data = {}) {
-		const prepared = Object.assign(data);
-		const tables = {
-			dial: {
-				number: [
-					'id',
-					'group_id',
-					'clicks',
-					'deny',
-					'position',
-					'screen_delay',
-					'screen_maked',
-					'thumb_version',
-					'thumb_height',
-					'thumb_width',
-				],
-			},
-		};
-
-		if (typeof table === 'string' && tables.hasOwnProperty(table)) {
-			for (const type in tables[table]) {
-				if (type === 'number') {
-					for (const field of tables[table][type]) {
-						if (prepared.hasOwnProperty(field) && prepared[field] != null) {
-							const value = parseInt(prepared[field]);
-
-							if (!isNaN(value)) {
-								prepared[field] = value;
-							}
-						}
-					}
-				}
-			}
+			result = parts[countParts - 1];
 		}
 
-		return prepared;
-	};
-	createForOneTransaction = function (callback) {
-		const transactionStorage = new StorageSD();
+		return result;
+	},
 
-		transactionStorage._connection = this._connection;
-		transactionStorage._connection.transaction(function (tx) {
-			transactionStorage._transaction = tx;
-			callback(transactionStorage);
-		});
-	};
-	backupTables = function (tables, postfix, callback) {
-		AppLog.info('Create backup of tables', tables, postfix);
-		const that = this;
+	isIdenticalUrls: function (url1, url2) {
+		url1 = this.urlToCompareForm(url1);
+		url2 = this.urlToCompareForm(url2);
 
-		Utils.Async.arrayProcess(
-			tables,
-			function (table, arrayProcessCallback) {
-				that.transaction(function (tx) {
-					tx.executeSql(
-						'CREATE TABLE IF NOT EXISTS _backup_' +
-							postfix +
-							'_' +
-							table +
-							' AS SELECT * FROM ' +
-							table,
-						[],
-						function () {
-							arrayProcessCallback();
-						}
-					);
-				});
-			},
-			callback
-		);
-	};
-	removeBackup = function (postfix, callback) {
-		AppLog.info('Remove backup with postfix', postfix);
-		const regexp = this._backupRegexp;
-		const that = this;
+		return url1 === url2;
+	},
 
-		this._getTables(function (tables) {
-			Utils.Async.arrayProcess(
-				tables,
-				function (table, arrayProcessCallback) {
-					const matches = table.match(regexp);
-
-					if (matches && (matches[1] === postfix || !postfix)) {
-						that.transaction(function (tx) {
-							AppLog.info('remove backup - drop table', table);
-							tx.executeSql('DROP TABLE ' + table, [], arrayProcessCallback);
-						});
-					} else {
-						arrayProcessCallback();
-					}
-				},
-				callback
-			);
-		});
-	};
-	restoreBackupInitial = function (callback) {
-		const that = this;
-		const regexp = this._backupRegexp;
-
-		this._getTables(function (tables) {
-			const backupPostfixes = [];
-
-			Utils.Async.arrayProcess(
-				tables,
-				function (table, arrayProcessCallback) {
-					const matches = table.match(regexp);
-
-					if (matches && backupPostfixes.indexOf(matches[1]) === -1) {
-						backupPostfixes.push(matches[1]);
-					}
-
-					arrayProcessCallback();
-				},
-				function () {
-					if (!backupPostfixes.length) {
-						callback();
-					} else {
-						const restorePostfix = backupPostfixes.shift();
-
-						AppLog.info('restore initial backup with postfix', restorePostfix);
-						that.restoreBackup(restorePostfix, function () {
-							Utils.Async.arrayProcess(
-								backupPostfixes,
-								function (postfix, arrayProcessCallback) {
-									that.removeBackup(postfix, arrayProcessCallback);
-								},
-								callback
-							);
-						});
-					}
-				}
-			);
-		});
-	};
-	restoreBackup = function (postfix, callback) {
-		AppLog.info('restore backup with postfix', postfix);
-		const that = this;
-		const regexp = this._backupRegexp;
-
-		this._getTables(function (tables) {
-			Utils.Async.arrayProcess(
-				tables,
-				function (table, arrayProcessCallback) {
-					const matches = table.match(regexp);
-
-					if (matches && matches[1] === postfix) {
-						const tableOrig = matches[2];
-
-						that.transaction(function (tx) {
-							Utils.Async.chain([
-								function (chainCallback) {
-									AppLog.info('backup - cleanup original table', tableOrig);
-									tx.executeSql('DELETE FROM ' + tableOrig, [], chainCallback);
-								},
-								function (chainCallback) {
-									AppLog.info('backup - insert from', table, 'to', tableOrig);
-									tx.executeSql(
-										'INSERT INTO ' + tableOrig + ' SELECT * FROM ' + table,
-										[],
-										chainCallback
-									);
-								},
-								function (chainCallback) {
-									AppLog.info('backup - drop table', table);
-									tx.executeSql('DROP TABLE ' + table, [], chainCallback);
-								},
-								function () {
-									arrayProcessCallback();
-								},
-							]);
-						});
-					} else {
-						arrayProcessCallback();
-					}
-				},
-				function () {
-					that._getTables(function (tables) {
-						AppLog.info('tables after backup restore', tables);
-						callback();
-					});
-				}
-			);
-		});
-	};
-	connect = (callback) => {
-		const that = this;
-
-		if (that.connecting) {
-			return that.connectionPromise.then(callback);
-		}
-
-		that.connecting = true;
-		that.connectionPromise = new Promise(function (resolve, reject) {
-			that._connection = openDatabase(that._dbName, '1.0', '', that._estimatedSize);
-			that._createTables(function (result) {
-				that.restoreBackupInitial(function () {
-					that.connecting = false;
-					resolve();
-
-					if (callback) {
-						callback();
-					}
-
-					Broadcaster.sendMessage({
-						action: 'storage = connected',
-					});
-				});
-			});
-		});
-	};
-	createOrReuseTransaction = function (tx, callback) {
-		if (tx) {
-			return callback(tx);
-		} else {
-			return this.transaction(callback);
-		}
-	};
-	transaction = function (callback) {
-		const self = this;
-
-		if (this._transaction) {
-			callback(this._transaction);
-		} else {
-			self._connection.transaction(callback, function (err) {
-				// ugly way of comparement(messages) but code is always 0 for SQLError
-				if (err.message !== 'database has been closed') {
-					return console.error('Fail to get a transaction(not recoverable)', err);
-				}
-
-				self.connect(function () {
-					self._connection.transaction(callback, function (err) {
-						console.error("Can't get a transaction even after reconnect", err);
-					});
-				});
-			});
-		}
-	};
-	resetAllDialsClicks = function (cb) {
-		const self = this;
-
-		dbTransaction(function (tx) {
-			dbUpdate(fvdSpeedDial, {
-				tx: tx,
-				table: 'dials',
-				set: {
-					clicks: 0,
-				},
-				success: function (tx, results) {
-					self.onDataChanged.dispatch();
-					cb();
-				},
-			});
-		});
-	};
-	restoreTableRow = function (tx, table, row, cb) {
-		const { fvdSpeedDial } = this;
-		const fields = [];
-		const questions = [];
-		const values = [];
-		const self = this;
-
-		for (const k in row) {
-			fields.push(k);
-			questions.push('?');
-			values.push(row[k]);
-		}
-		const transactionCreated = !tx;
-
-		self.createOrReuseTransaction(tx, function () {
-			dbTransaction(function (tx) {
-				Utils.Async.chain([
-					function (next) {
-						const insertSet = {};
-
-						for (const i in fields) insertSet[fields[i]] = values[i];
-
-						if (insertSet.rowid && !insertSet.id) insertSet.id = insertSet.rowid;
-
-						dbInsert(fvdSpeedDial, {
-							tx: tx,
-							table: table,
-							set: insertSet,
-							success: function (tx, res) {
-								if (table !== 'dials') {
-									return next();
-								}
-
-								if (!row.thumb) {
-									// thumb not found, probably kind of a bug, but now just ignore this preview
-									return next();
-								}
-
-								if (row.thumb.indexOf('data:') !== 0) {
-									if (row.thumb_source_type === 'url' && row.thumb_url) {
-										// need to fetch thumb from url
-										Utils.imageUrlToDataUrl(row.thumb_url, function (th, size) {
-											if (!th || !size) {
-												console.info('Fail to fetch thumb from', row.thumb_url);
-												transactionCreated && next();
-												return;
-											}
-
-											fvdSpeedDial.StorageSD.updateDial(
-												res.insertId,
-												{
-													thumb: th,
-													thumb_width: size.width,
-													thumb_height: size.height,
-												},
-												function () {
-													transactionCreated && next();
-												}
-											);
-										});
-									} else {
-										transactionCreated && next();
-										/*
-										fvdSpeedDial.StorageSD.updateDial(
-											res.insertId,
-											{
-												screen_maked: 0,
-											},
-											function () {
-												transactionCreated && next();
-											}
-										);
-										*/
-									}
-								} else {
-									// save data uri to file, by update dial thumb
-									fvdSpeedDial.StorageSD.updateDial(
-										res.insertId,
-										{
-											thumb: row.thumb,
-										},
-										function () {
-											transactionCreated && next();
-										}
-									);
-								}
-
-								if (!transactionCreated) {
-									// prevent staling transaction by async requests
-									next();
-								}
-							},
-							error: function (tx, error) {
-								console.log('Fail', error);
-								return next(); // Task
-							},
-						});
-					},
-					function () {
-						cb();
-					},
-				]);
-			});
-		});
-	};
-	restoreTableData = function (tx, table, tableData, cb, rowDoneCb) {
-		const self = this;
-		const { fvdSpeedDial } = this;
-
-		rowDoneCb = rowDoneCb || function () {};
-		const transactionCreated = !tx;
-
-		Utils.Async.chain([
-			function (next) {
-				if (tx) {
-					return next();
-				}
-
-				self.transaction(function (_tx) {
-					tx = _tx;
-					next();
-				});
-			},
-			function () {
-				dbTransaction(function (tx) {
-					dbDelete(fvdSpeedDial, {
-						tx: tx,
-						from: String(table),
-						force: true,
-						success: function (tx) {
-							if (table === 'dials') {
-								Broadcaster.sendMessage({
-									action: 'storage:dialsCleared',
-								});
-							}
-
-							let rowIndex = 0;
-							const globalIds = [];
-
-							Utils.Async.eachSeries(
-								tableData,
-								function (row, apc2) {
-									console.info('Restoring row', rowIndex, 'of', table);
-
-									if (row && typeof row === 'object' && row.global_id) {
-										if (globalIds.indexOf(row.global_id) !== -1) {
-											//skip
-											rowIndex++;
-											//rowDoneCb();
-											apc2();
-										} else {
-											globalIds.push(row.global_id);
-										}
-									}
-
-									self.restoreTableRow(transactionCreated ? null : tx, table, row, function () {
-										console.info('Restored row', rowIndex, 'of', table);
-										rowIndex++;
-										rowDoneCb();
-										apc2();
-									});
-								},
-								function () {
-									// console.log('Done table', table);
-									cb();
-								}
-							);
-						},
-					});
-				});
-			},
-		]);
-	};
-	// restore tables data
-	restoreTablesDataInOneTransaction = function (data, callback, progressCallback, tx) {
-		const tables = [];
-		let totalRows = 0;
-		let count = 0;
-
-		for (const table in data) {
-			tables.push(table);
-			totalRows += data[table].length;
-		}
-		const that = this;
-		console.info('Start restoring db data in one transaction');
-
-		that.createOrReuseTransaction(tx, function (tx) {
-			Utils.Async.eachSeries(
-				tables,
-				function (table, apc1) {
-					console.info('Restoring table', table);
-					that.restoreTableData(
-						tx,
-						table,
-						data[table],
-						function () {
-							//console.log("Restored data for", table);
-							apc1();
-						},
-						function () {
-							count++;
-
-							if (progressCallback) {
-								progressCallback(count, totalRows);
-							}
-						}
-					);
-				},
-				function () {
-					//console.log("Restore in one transaction finished");
-					callback();
-				}
-			);
-		});
-	};
-	restoreTablesData = function (data, callback, progressCallback) {
-		const tables = [];
-		let totalRows = 0;
-		let count = 0;
-
-		for (const table in data) {
-			tables.push(table);
-			totalRows += data[table].length;
-		}
-		const that = this;
-
-		Utils.Async.eachSeries(
-			tables,
-			function (table, apc1) {
-				that.restoreTableData(null, table, data[table], apc1, function () {
-					count++;
-
-					if (progressCallback) {
-						progressCallback(count, totalRows);
-					}
-				});
-			},
-			function () {
-				callback();
-			}
-		);
-	};
-	fullDump = function (cb) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-		const tables = ['deny', 'dials', 'groups', 'misc'];
-		const data = {};
-
-		Utils.Async.arrayProcess(
-			tables,
-			function (table, next) {
-				dbTransaction(function (tx) {
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: table,
-						success: function (tx, results) {
-							data[table] = self._resultsToArray(results);
-							next();
-						},
-					});
-				});
-			},
-			function () {
-				cb(null, data);
-			}
-		);
-	};
-	// dump functions
-	dump = function (dumpToJsonCallback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		Utils.Async.chain([
-			function (callback, dataObject) {
-				dbTransaction(function (tx) {
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: 'dials',
-						success: function (tx, results) {
-							dataObject.dials = that._resultsToArray(results);
-							callback();
-						},
-					});
-				});
-			},
-			function (callback, dataObject) {
-				dbTransaction(function (tx) {
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: 'groups',
-						success: function (tx, results) {
-							dataObject.groups = that._resultsToArray(results);
-							callback();
-						},
-					});
-				});
-			},
-			function (callback, dataObject) {
-				dbTransaction(function (tx) {
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: 'deny',
-						success: function (tx, results) {
-							dataObject.deny = that._resultsToArray(results);
-							callback();
-						},
-					});
-				});
-			},
-			function (callback, dataObject) {
-				dumpToJsonCallback(dataObject);
-			},
-		]);
-	};
-	resetAutoDialsForGroup = function (params, callback) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-		let whereIn = false;
-		const where = {
-			// get_screen_method: 'auto',
-			thumb_source_type: 'screen',
-		};
-
-		if (!isNaN(params.groupId)) {
-			where.group_id = parseInt(params.groupId);
-		}
-
-		if (params.ids) {
-			whereIn = {
-				key: 'id',
-				arr: params.ids,
-			};
-		}
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				where: where,
-				whereIn: whereIn,
-				limit: parseInt(params.limit) || false,
-				success: function (tx, results_s) {
-					Utils.Async.arrayProcess(
-						results_s.rows,
-						function (dial, arrayProcessCallback) {
-							dbUpdate(fvdSpeedDial, {
-								tx: tx,
-								table: 'dials',
-								set: {
-									thumb: '',
-									screen_maked: 0,
-								},
-								where: {
-									key: 'id',
-									val: dial.id,
-								},
-								success: function (tx, results) {
-									arrayProcessCallback();
-								},
-								error: function (tx, error) {
-									//console.error("Query failed", error);
-									arrayProcessCallback();
-								},
-							});
-						},
-						function () {
-							self.onDataChanged.dispatch();
-							callback();
-						}
-					);
-				},
-			});
-		});
-	};
-	setAutoUpdateGlobally = function (params, cb) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-		const whereObj = {
-			thumb_source_type: 'screen',
-			get_screen_method: 'auto',
-		};
-
-		if (params && typeof params === 'object' && typeof params.where === 'object' && params.where) {
-			for (const k in params.where) {
-				whereObj[k] = params.where[k];
-			}
-		}
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['global_id'],
-				where: whereObj,
-				success: function (tx, results_s) {
-					const globalIds = [];
-					for (let i = 0; results_s.rows.length !== i; i++) {
-						globalIds.push(results_s.rows[i].global_id);
-					}
-					Utils.Async.arrayProcess(
-						globalIds,
-						function (globalId, next) {
-							dbUpdate(fvdSpeedDial, {
-								tx: tx,
-								table: 'dials',
-								set: {
-									update_interval: params.interval,
-								},
-								where: {
-									key: 'global_id',
-									val: globalId,
-								},
-								success: function (tx, results) {
-									next();
-								},
-								error: function (error) {
-									next();
-								},
-							});
-						},
-						function () {
-							for (let i = 0; i !== globalIds.length; i++) {
-								Sync.addDataToSync({
-									category: ['dials'],
-									data: globalIds[i],
-								});
-							}
-							self.onDataChanged.dispatch();
-							cb(globalIds);
-						}
-					);
-				},
-			});
-		});
-	};
-	turnOffAutoUpdateGlobally = function (cb) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['global_id'],
-				where: {
-					'thumb_source_type': 'screen',
-					'get_screen_method': 'auto',
-					'update_interval !': '',
-				},
-				success: function (tx, results_s) {
-					const globalIds = [];
-
-					for (let i = 0; results_s.rows.length !== i; i++) {
-						globalIds.push(results_s.rows[i].global_id);
-					}
-					Utils.Async.arrayProcess(
-						globalIds,
-						function (globalId, next) {
-							dbUpdate(fvdSpeedDial, {
-								tx: tx,
-								table: 'dials',
-								set: {
-									update_interval: '',
-								},
-								where: {
-									key: 'global_id',
-									val: globalId,
-								},
-								success: function (tx, results) {
-									next();
-								},
-								error: function (error) {
-									next();
-								},
-							});
-						},
-						function () {
-							for (let i = 0; i !== globalIds.length; i++) {
-								Sync.addDataToSync({
-									category: ['dials'],
-									data: globalIds[i],
-								});
-							}
-							self.onDataChanged.dispatch();
-							cb(globalIds);
-						}
-					);
-				},
-			});
-		});
-	};
-	setAutoPreviewGlobally = function (params, callback) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['global_id', 'thumb_source_type', 'get_screen_method'],
-				where: {
-					OR: {
-						thumb_source_type: 'url',
-						get_screen_method: 'manual',
-					},
-				},
-				success: function (tx, results_s) {
-					const globalIds = [];
-
-					for (let i = 0; results_s.rows.length !== i; i++) {
-						globalIds.push(results_s.rows[i].global_id);
-					}
-					Utils.Async.arrayProcess(
-						globalIds,
-						function (globalId, next) {
-							dbUpdate(fvdSpeedDial, {
-								tx: tx,
-								table: 'dials',
-								set: {
-									get_screen_method: 'auto',
-									thumb_source_type: 'screen',
-									screen_maked: 0,
-									thumb: '',
-								},
-								where: {
-									key: 'global_id',
-									val: globalId,
-								},
-								success: function (tx, results) {
-									next();
-								},
-								error: function (error) {
-									next();
-								},
-							});
-						},
-						function () {
-							for (let i = 0; i !== globalIds.length; i++) {
-								Sync.addDataToSync({
-									category: ['dials'],
-									data: globalIds[i],
-								});
-							}
-							self.onDataChanged.dispatch();
-							callback(globalIds);
-						}
-					);
-				},
-			});
-		});
-	};
-	// dial functions
-	dialGlobalId = function (id, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				field: ['global_id'],
-				where: { rowid: id },
-				success: function (tx, results) {
-					let globalId = null;
-
-					if (results.rows.length === 1) {
-						globalId = results.rows[0].global_id;
-					}
-
-					callback(globalId);
-				},
-			});
-		});
-	};
-	listDialsIdsByGroup = function (groupId, callback) {
-		groupId = parseInt(groupId);
-
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				field: ['rowid', 'global_id'],
-				where: { group_id: groupId },
-				success: function (tx, results) {
-					const data = [];
-
-					for (let i = 0; i !== results.rows.length; i++) {
-						const dial = results.rows[i];
-
-						data.push({
-							id: dial.rowid,
-							global_id: dial.global_id,
-						});
-					}
-					callback(data);
-				},
-			});
-		});
-	};
-	getDialsToPreviewUpdate = function (cb) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				//fields: ['id', 'rowid', 'update_interval', 'last_preview_update', 'url'],
-				where: {
-					'update_interval !': '',
-					'thumb_source_type': 'screen',
-				},
-				success: function (tx, results) {
-					const data = [];
-					const now = new Date().getTime();
-
-					for (let i = 0; i !== results.rows.length; i++) {
-						const dial = results.rows[i];
-
-						if (!dial.last_preview_update) {
-							dbUpdate(fvdSpeedDial, {
-								tx: tx,
-								table: 'dials',
-								set: {
-									last_preview_update: now,
-								},
-								where: {
-									key: 'id',
-									val: dial.rowid,
-								},
-							});
-							continue;
-						}
-
-						let interval = String(dial.update_interval || '').split('|');
-
-						switch (interval[1]) {
-							case 'minutes':
-								interval = interval[0] * 60;
-								break;
-							case 'hours':
-								interval = interval[0] * 3600;
-								break;
-							case 'days':
-								interval = interval[0] * 3600 * 24;
-								break;
-							default:
-								continue;
-						}
-						interval *= 1000;
-
-						//if (now - dial.last_preview_update < interval) {
-						if (now - dial.last_preview_update < interval - 15e3) {
-							//Task #1002
-							continue;
-						}
-
-						data.push({
-							id: dial.rowid,
-							url: dial.url,
-						});
-						dbUpdate(fvdSpeedDial, {
-							tx: tx,
-							table: 'dials',
-							set: {
-								last_preview_update: dial.rowid,
-							},
-							where: {
-								key: 'id',
-								val: dial.rowid,
-							},
-						});
-					}
-					cb(data);
-				},
-			});
-		});
-	};
-	searchDials = function (query, params, cb) {
-		const that = this;
-		const { fvdSpeedDial } = this;
-
-		if (typeof params === 'function') {
-			cb = params;
-			params = {};
-		}
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: String(that._dialFieldsToFetch).replace('rowid as `id`', '`rowid`, `id`'),
-				where: {
-					OR: {
-						'url~': query,
-						'title~': query,
-						'auto_title~': query,
-					},
-				},
-				limit: params.limit || 20,
-				order: '!clicks',
-				success: function (tx, results) {
-					const data = [];
-
-					for (let i = 0; i !== results.rows.length; i++)
-						if (!results.rows[i].deny) {
-							const dial = results.rows[i];
-
-							that._prepareDialData(dial);
-							data.push(dial);
-						}
-					cb(null, data);
-				},
-				error: function (tx, error) {
-					console.error('FAIL', error);
-					cb(error);
-				},
-			});
-		});
-	};
-	listDials = function (orderBy, groupId, limit, callback, withoutThumbs) {
-		groupId = parseInt(groupId);
-
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		if (typeof orderBy === 'function') {
-			callback = orderBy;
-			orderBy = null;
-		}
-
-		if (typeof callback !== 'function' && typeof withoutThumbs === 'function') {
-			const thumbs = typeof callback !== 'number' ? _b(callback) : parseInt(callback) || 50;
-
-			callback = withoutThumbs;
-			withoutThumbs = thumbs;
-		}
-
-		if (!orderBy) {
-			orderBy = 'position';
-		}
-
-		const whereArr = { deny: 0 };
-
-		if (groupId && groupId > 0) {
-			whereArr['group_id'] = groupId;
-		}
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: String(that._dialFieldsToFetch).replace('rowid as `id`', '`rowid`, `id`'),
-				rename: { rowid: 'id' },
-				order: orderBy,
-				where: whereArr,
-				group: groupId === 0 ? 'url' : false,
-				limit: parseInt(limit) ? parseInt(limit) : false,
-				success: function (tx, results) {
-					const data = [];
-
-					for (let i = 0; i !== results.rows.length; i++) {
-						const dial = results.rows[i];
-						that._prepareDialData(dial);
-						data.push(dial);
-					}
-
-					that.checkIncognito(() => {
-						if (
-							typeof withoutThumbs === 'undefined' ||
-							!withoutThumbs ||
-							DATABASE_TYPE === 'storage.local'
-						) {
-							that.getDialsPreview(data, callback, withoutThumbs);
-						} else {
-							callback(data);
-						}
-					});
-				},
-				error: function (tx, error) {
-					console.error('FAIL', error);
-				},
-			});
-		});
-	};
-	getSyncGroupsList = function (val, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: { sync: val },
-				success: function (tx, results) {
-					const list = [];
-					const full = [];
-
-					for (const k in results.rows) {
-						list.push(results.rows[k].id);
-						full.push(results.rows[k]);
-					}
-					callback(list, full);
-				},
-			});
-		}, 1);
-	};
-
-	dialsRawList = function (params, callback) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-
+	isIdenticalHosts: function (host1, host2, params) {
 		params = params || {};
 
-		if (typeof params.fetchThumb === 'undefined') {
-			params.fetchThumb = true;
+		if (params.ignoreSubDomains) {
+			host1 = this.getMainDomain(host1);
+			host2 = this.getMainDomain(host2);
 		}
 
-		const query = {
-			from: 'dials',
-			whereIn: params.whereIn ? params.whereIn : false,
-			limit: params.limit ? params.limit : false,
+		host1 = this.urlToCompareForm(host1);
+		host2 = this.urlToCompareForm(host2);
+
+		return host1 === host2;
+	},
+
+	httpBuildQuery: function (data) {
+		const arr = [];
+
+		for (const k in data) {
+			arr.push(k + '=' + encodeURIComponent(data[k]));
+		}
+		return arr.join('&');
+	},
+
+	buildUrlFromParsed: function (parsed) {
+		let url = parsed.scheme + '://';
+
+		if (parsed.user && parsed.pass) {
+			url += parsed.user + ':' + parsed.pass + '@';
+		} else if (parsed.user) {
+			url += parsed.user + '@';
+		}
+
+		url += parsed.host;
+
+		if (parsed.path) {
+			url += parsed.path;
+		}
+
+		if (parsed.query) {
+			url += '?' + parsed.query;
+		}
+
+		if (parsed.fragment) {
+			url += '#' + parsed.query;
+		}
+
+		return url;
+	},
+
+	typeToExt: function (type) {
+		switch (type) {
+			case 'image/png':
+				return 'png';
+			case 'image/jpeg':
+				return 'jpg';
+			case 'image/gif':
+				return 'gif';
+		}
+	},
+
+	b64toBlob: function (b64Data, contentType, sliceSize) {
+		contentType = contentType || '';
+		sliceSize = sliceSize || 512;
+
+		const byteCharacters = atob(b64Data);
+		const byteArrays = [];
+
+		for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+			const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+			const byteNumbers = new Array(slice.length);
+
+			for (let i = 0; i < slice.length; i++) {
+				byteNumbers[i] = slice.charCodeAt(i);
+			}
+
+			const byteArray = new Uint8Array(byteNumbers);
+
+			byteArrays.push(byteArray);
+		}
+
+		return new Blob(byteArrays, { type: contentType });
+	},
+
+	dataURIToBlob: function (url) {
+		url = url.replace(/^data:/, '');
+		const tmp = url.split(';');
+		const contentType = tmp[0];
+
+		url = tmp[1].split(',')[1];
+		return this.b64toBlob(url, contentType);
+	},
+
+	parseUrlHost: function (url) {
+		const m = url.match(this.hostRegExp);
+
+		if (!m) {
+			throw new Error('Fail to parse host');
+		}
+
+		return m[1];
+	},
+
+	parseUrl: function (str, component) {
+		const key = [
+			'source',
+			'scheme',
+			'authority',
+			'userInfo',
+			'user',
+			'pass',
+			'host',
+			'port',
+			'relative',
+			'path',
+			'directory',
+			'file',
+			'query',
+			'fragment',
+		];
+		const ini = (this.php_js && this.php_js.ini) || {};
+		const mode = (ini['phpjs.parse_url.mode'] && ini['phpjs.parse_url.mode'].local_value) || 'php';
+		let parser = {
+			php: /^(?:([^:\/?#]+):)?(?:\/\/()(?:(?:()(?:([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?()(?:(()(?:(?:[^?#\/]*\/)*)()(?:[^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+			strict:
+				/^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+			loose:
+				/^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/\/?)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/, // Added one optional slash to post-scheme to catch file:/// (should restrict this)
 		};
 
-		if (params.where) {
-			query.whereSQL = typeof params.where === 'object' ? params.where.join(' AND ') : params.where;
+		const m = parser[mode].exec(str);
+		const uri = {};
+		let i = 14;
+
+		while (i--) {
+			if (m[i]) {
+				uri[key[i]] = m[i];
+			}
 		}
 
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				success: function (tx, groupsList) {
-					self._rawList(query, function (list) {
-						for (const kd in list) {
-							for (const kg in groupsList.rows) {
-								if (list[kd].group_id === groupsList.rows[kg].id) {
-									list[kd].group_global_id = groupsList.rows[kg].global_id;
-									break;
-								}
-							}
+		if (component) {
+			return uri[component.replace('PHP_URL_', '').toLowerCase()];
+		}
+
+		if (mode !== 'php') {
+			const name
+				= (ini['phpjs.parse_url.queryKey'] && ini['phpjs.parse_url.queryKey'].local_value)
+				|| 'queryKey';
+
+			parser = /(?:^|&)([^&=]*)=?([^&]*)/g;
+			uri[name] = {};
+			uri[key[12]].replace(parser, function ($0, $1, $2) {
+				if ($1) {
+					uri[name][$1] = $2;
+				}
+			});
+		}
+
+		delete uri.source;
+		return uri;
+	},
+
+	scrollToElem: function (elem) {
+		const viewportHeight = window.innerHeight;
+		const currentTopStart = document.body.scrollTop;
+		const currentTopEnd = currentTopStart + viewportHeight;
+
+		const elemOffset = this.getOffset(elem);
+
+		if (elemOffset.top > currentTopStart && elemOffset.top + elem.offsetHeight < currentTopEnd) {
+			return; // no need scroll
+		}
+
+		let scrollAmount = 0;
+
+		if (elemOffset.top < currentTopStart) {
+			scrollAmount = elemOffset.top;
+		} else {
+			scrollAmount = elemOffset.top + elem.offsetHeight - viewportHeight;
+		}
+
+		document.body.scrollTop = scrollAmount;
+	},
+
+	getBoundingClientRect: function (elem) {
+		const r = elem.getBoundingClientRect();
+
+		return {
+			top: r.top + window.scrollY,
+			bottom: r.bottom + window.scrollY,
+			left: r.left + window.scrollX,
+			right: r.right + window.scrollX,
+			width: r.width,
+			height: r.height,
+		};
+	},
+
+	getOffset: function (obj) {
+		let curleft = 0;
+		let curtop = 0;
+
+		if (obj.offsetParent) {
+			do {
+				curleft += obj.offsetLeft;
+				curtop += obj.offsetTop;
+			} while ((obj = obj.offsetParent));
+		}
+
+		return {
+			left: curleft,
+			top: curtop,
+		};
+	},
+
+	isChildOf: function (elem, parent) {
+		while (true) {
+			if (elem === parent) {
+				return true;
+			}
+
+			if (elem.parentNode) {
+				elem = elem.parentNode;
+			} else {
+				return false;
+			}
+		}
+	},
+
+	copyToClipboard: function (text) {
+		const clipboardholder = document.createElement('textarea');
+
+		clipboardholder.style.width = '0px';
+		clipboardholder.style.height = '0px';
+		clipboardholder.style.opacity = 0;
+		document.body.appendChild(clipboardholder);
+		clipboardholder.value = text;
+		clipboardholder.select();
+		document.execCommand('Copy');
+		document.body.removeChild(clipboardholder);
+	},
+
+	ucfirst: function (str) {
+		const firstLetter = str.slice(0, 1);
+
+		return firstLetter.toUpperCase() + str.substring(1);
+	},
+
+	cropLength: function (str, len) {
+		if (str.length <= len) {
+			return str;
+		}
+
+		return str.substring(0, len) + '...';
+	},
+
+	setScreenPreview: function (elem, screen, nocache, norepeat, data) {
+		if (typeof screen === 'string' && screen.indexOf('filesystem:') === 0) {
+			if (nocache) {
+				screen += '?' + nocache;
+			}
+		}
+
+		elem.style.background = '';
+		elem.style.background = 'url(' + screen + ')';
+		//elem.style.backgroundSize = "contain";
+		elem.style.backgroundSize = '100%';
+		elem.style.backgroundPosition = 'top left';
+		elem.style.backgroundRepeat = 'no-repeat';
+		try {
+			if (
+				typeof data === 'object'
+				&& ((data.thumb_width === 30 && data.thumb_height === 30)
+					|| (typeof data.thumbSize === 'object'
+						&& data.thumbSize.width === 30
+						&& data.thumbSize.height === 30))
+			) {
+				elem.classList.add('preview-image-undefined');
+			}
+		} catch (ex) {
+			console.warn(ex);
+		}
+	},
+
+	removeScreenPreview: function (elem) {
+		if (elem) {
+			elem.style.background = '';
+			elem.style.backgroundSize = '';
+			elem.style.backgroundPosition = '';
+			elem.style.backgroundRepeat = '';
+		}
+	},
+
+	setUrlPreview: function (elemParams, picParams, nocache) {
+		if (typeof picParams.url === 'string' && picParams.url.indexOf('filesystem:') === 0) {
+			if (nocache) {
+				picParams.url += '?' + nocache;
+			}
+		}
+
+		this.Async.chain([
+			function (callback2) {
+				if (!picParams.size) {
+					const img = new Image();
+
+					img.onload = function () {
+						picParams.size = {
+							width: img.width,
+							height: img.height,
+						};
+
+						callback2();
+					};
+					img.onerror = function () {
+						picParams.size = {
+							width: 0,
+							height: 0,
+						};
+
+						callback2();
+					};
+
+					img.src = picParams.url;
+				} else {
+					callback2();
+				}
+			},
+
+			function () {
+				elemParams.elem.style.background = 'url(' + picParams.url + ')';
+				elemParams.elem.style.backgroundPosition = 'center center';
+
+				if (
+					picParams.size.width
+					&& picParams.size.height
+					&& picParams.size.width < elemParams.size.width
+					&& picParams.size.height < elemParams.size.height
+				) {
+					elemParams.elem.style.backgroundSize = '';
+				} else {
+					elemParams.elem.style.backgroundSize = 'contain';
+				}
+
+				elemParams.elem.style.backgroundRepeat = 'no-repeat';
+			},
+		]);
+	},
+
+	setCustomPreview(elem, styles, title) {
+		if (!elem || !styles || !title) {
+			return;
+		}
+
+		const previewWrapper = document.createElement('div');
+		const previewTitleElement = document.createElement('p');
+		const previewTitle = String(title).charAt(0).toUpperCase() + String(title).slice(1);
+		previewTitleElement.innerText = previewTitle;
+		previewWrapper.appendChild(previewTitleElement);
+		previewWrapper.classList.add('custom-preview');
+
+		if (previewTitle.length >= 20) {
+			previewWrapper.style.fontSize = window.screen.availWidth > 1400 ? '18px' : '15px';
+		}
+
+		// previewWrapper.style.color = styles.color || '#ffffff';
+		// previewWrapper.style.backgroundColor = styles.backgroundColor || '#000000';
+		elem.appendChild(previewWrapper);
+	},
+
+	imageUrlToDataUrlOld: function (url, callback, format, quality) {
+		const img = new Image();
+
+		img.onload = function () {
+			const canvas = document.createElement('canvas');
+			const ctx = canvas.getContext('2d');
+
+			canvas.width = img.width;
+			canvas.height = img.height;
+
+			ctx.drawImage(img, 0, 0, img.width, img.height);
+
+			if (img.width * img.height < 1024 * 1024) {
+				// limitations due to chrome bug
+				// older limitations were 300x300, but now it seems to work with larger pictures
+				format = 'image/png';
+			}
+
+			format = format || 'image/jpeg';
+			quality = quality || 90;
+
+			callback(canvas.toDataURL(format, quality), {
+				width: img.width,
+				height: img.height,
+			});
+		};
+		img.onerror = function () {
+			callback(null);
+		};
+		img.setAttribute('crossorigin', 'anonymous');
+		img.src = url;
+	},
+
+	toDataUrl: async blob => {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.addEventListener('error', () => reject(false), { passive: true });
+			reader.addEventListener('load', () => resolve(reader.result), { passive: true });
+			reader.readAsDataURL(blob);
+		});
+	},
+
+	imageUrlToDataUrl: function (url, callback, format, quality) {
+		const { toDataUrl } = this;
+		
+		const size  = {};
+
+		fetch(url)
+			.then(response => {
+				return response.blob();
+			})
+			.then(blob => {
+				return createImageBitmap(blob);
+			})
+			.then(imageBitmap => {
+				const { width, height } = imageBitmap;
+				size.width = width;
+				size.height = height;
+				// create canvas
+				const canvas = new OffscreenCanvas(width, height);
+				// get 2D context
+				const context = canvas.getContext('2d');
+				// import the bitmap onto the canvas
+				context.drawImage(imageBitmap, 0, 0, width, height);
+				format = format || 'image/png';
+				quality = quality || 90;
+				return canvas.convertToBlob({ type: format, quality });
+			})
+			.then(blob => {
+				return toDataUrl(blob);
+			})
+			.then(dataUrl => {
+				// console.info('dataUrl', dataUrl.substring(0, 50), '...');
+				callback(dataUrl, size);
+			})
+			.catch(function (ex) {
+				console.warn('Request failed', ex);
+				callback(null, {});
+			});
+	},
+
+	getUrlContent: function (url, callback) {
+		const req = new XMLHttpRequest();
+
+		req.open('GET', url);
+		req.onload = function () {
+			callback(req.responseText);
+		};
+		req.onerror = function () {
+			callback(null);
+		};
+		req.send();
+	},
+
+	cacheTitle: {},
+	getTitleReq: false,
+	getTitleForUrl: function (url, callback, abort) {
+		const that = this;
+
+		if (that.cacheTitle[url]) {
+			return callback(this.cacheTitle[url]);
+		}
+
+		if (
+			abort
+			&& typeof that.getTitleReq === 'object'
+			&& typeof that.getTitleReq.abort === 'function'
+		) {
+			try {
+				that.getTitleReq.abort();
+			} catch (ex) {
+				console.warn(ex);
+			}
+		}
+
+		const req = new XMLHttpRequest();
+
+		req.open('GET', url);
+		req.onload = function () {
+			const tmp = document.createElement('div');
+
+			tmp.innerHTML = req.responseText;
+			try {
+				const title = tmp.getElementsByTagName('title')[0];
+
+				that.cacheTitle[url] = title.textContent;
+				callback(title.textContent);
+			} catch (ex) {
+				console.warn(ex);
+				callback(null);
+			}
+		};
+		req.onerror = function () {
+			callback(null);
+		};
+
+		try {
+			req.send();
+		} catch (ex) {
+			console.info(ex);
+		}
+
+		if (abort) that.getTitleReq = req;
+	},
+
+	setAutoTextForTextField: function (elem, text) {
+		elem.addEventListener(
+			'focus',
+			function () {
+				if (elem.hasAttribute('autoText')) {
+					elem.removeAttribute('autoText');
+					elem.value = '';
+				}
+			},
+			false
+		);
+
+		elem.addEventListener(
+			'blur',
+			function () {
+				if (elem.value === '') {
+					elem.setAttribute('autoText', 1);
+					elem.value = text;
+				}
+			},
+			false
+		);
+
+		if (elem.value === '') {
+			elem.setAttribute('autoText', 1);
+			elem.value = text;
+		}
+	},
+
+	Async: {
+		chain: function (callbacksChain) {
+			const dataObject = {};
+			const f = function () {
+				if (callbacksChain.length > 0) {
+					const nextCallback = callbacksChain.shift();
+
+					nextCallback(f, dataObject);
+				}
+			};
+
+			f();
+		},
+		each: function (dataArray, callback, finishCallback) {
+			let itemsProcessed = 0;
+
+			dataArray.forEach(function (item) {
+				callback(
+					item,
+					function () {
+						itemsProcessed++;
+
+						if (itemsProcessed === dataArray.length) {
+							finishCallback();
 						}
-						// preparations
-						list.forEach(function (dial) {
-							// fix bug when update_interval set to undefined(maybe with sync)
-							if (dial.update_interval === 'undefined') {
-								dial.update_interval = '';
-							}
+					},
+					itemsProcessed
+				);
+			});
+		},
+		eachSeries: function (dataArray, callback, finishCallback) {
+			return this.arrayProcess(dataArray, callback, finishCallback, true);
+		},
+		arrayProcess: function (dataArray, callback, finishCallback, noTimeout) {
+			let iterationsWithoutTimeout = 0;
+			const f = function (i) {
+				if (i >= dataArray.length) {
+					finishCallback();
+				} else {
+					if (noTimeout) {
+						callback(dataArray[i], function () {
+							f(i + 1);
 						});
-
-						if (params.fetchThumb) {
-							// need to replace filesystem urls by data uris
-							// because rawList request is used for sync
-							Utils.Async.arrayProcess(
-								list,
-								function (dial, next) {
-									if (params.fetchOnlyCustomThumb) {
-										if (
-											dial.thumb_source_type === 'local_file' ||
-											(dial.thumb_source_type === 'screen' && dial.get_screen_method === 'manual')
-										) {
-											// fetch allowed
-										} else {
-											return setTimeout(next, 0);
-										}
-									}
-
-									self._resolveDialThumb(dial, function (dataUrl) {
-										//dial.thumb = dataUrl; Task 951
-										next();
-									});
-								},
-								function () {
-									callback(list);
-								}
-							);
+					} else {
+						if (iterationsWithoutTimeout < 20) {
+							iterationsWithoutTimeout++;
+							callback(dataArray[i], function () {
+								f(i + 1);
+							});
 						} else {
-							return callback(list);
+							iterationsWithoutTimeout = 0;
+							setTimeout(function () {
+								callback(dataArray[i], function () {
+									f(i + 1);
+								});
+							}, 0);
+						}
+					}
+				}
+			};
+
+			f(0);
+		},
+
+		cc: function (stateFunction) {
+			const rf = function (result) {
+				if (result === 'break') {
+					return;
+				}
+
+				stateFunction(rf);
+			};
+
+			stateFunction(rf);
+		},
+	},
+
+	UI: {
+		showAndHide: function (elem, timeout) {
+			timeout = timeout | 3000;
+			elem.style.opacity = 1;
+			setTimeout(function () {
+				elem.style.opacity = 0;
+			}, timeout);
+		},
+	},
+
+	Opener: {
+		modificators: [],
+		addModificator: function (fn) {
+			if (this.modificators.indexOf(fn) === -1) {
+				this.modificators.push(fn);
+			}
+		},
+		removeModificator: function (fn) {
+			const index = this.modificators.indexOf(fn);
+
+			if (index >= 0) {
+				this.modificators.splice(index, 1);
+			}
+		},
+		prepareUrl: function (url) {
+			this.modificators.forEach(function (modificator) {
+				const modifiedUrl = modificator(url);
+
+				if (modifiedUrl) {
+					url = modifiedUrl;
+				}
+			});
+			return url;
+		},
+		asClicked: function (url, def, event) {
+			let action = def;
+
+			if (event.button === 0) {
+				// ctrlKey for win/linux, metaKey for mac
+				if (event.ctrlKey || event.metaKey) {
+					if (event.shiftKey) {
+						//action = "new";
+						action = 'window';
+					} else {
+						action = 'background';
+					}
+				} else if (event.shiftKey) {
+					action = 'new';
+				}
+			} else if (event.button === 1) {
+				action = 'background';
+			}
+
+			this.byAction(action, url);
+
+			return action;
+		},
+
+		byAction: function (action, url) {
+			switch (action) {
+				case 'current':
+					this.currentTab(url);
+					break;
+				case 'new':
+					this.newTab(url);
+					break;
+				case 'background':
+					this.backgroundTab(url);
+					break;
+				case 'window':
+					this.newWindow(url);
+					break;
+			}
+		},
+
+		activeTab: function (url) {
+			url = this.prepareUrl(url);
+			chrome.tabs.query(
+				{
+					active: true,
+				},
+				function (tabs) {
+					chrome.tabs.update(tabs[0].id, {
+						url: url,
+					});
+				}
+			);
+		},
+
+		currentTab: function (url) {
+			url = this.prepareUrl(url);
+			chrome.tabs.getCurrent(function (tab) {
+				chrome.tabs.update(tab.id, {
+					url: url,
+				});
+			});
+		},
+
+		newTab: function (url) {
+			url = this.prepareUrl(url);
+			chrome.tabs.create({
+				url: url,
+				active: true,
+			});
+		},
+
+		backgroundTab: function (url) {
+			url = this.prepareUrl(url);
+			chrome.tabs.create({
+				url: url,
+				active: false,
+			});
+		},
+
+		newWindow: function (url) {
+			url = this.prepareUrl(url);
+
+			chrome.windows.create({
+				url: url,
+			});
+		},
+
+		incognitoTab: function (url) {
+			url = this.prepareUrl(url);
+			let win;
+
+			Utils.Async.chain([
+				function (next) {
+					chrome.windows.getCurrent(function (currentWindow) {
+						// check if current window is incognito
+						if (currentWindow.incognito) {
+							win = currentWindow;
+							next();
+						} else {
+							// looking for an incognito window
+							chrome.windows.getAll(function (windows) {
+								// console.log('existing windows', windows);
+								for (let i = 0; i !== windows.length; i++) {
+									if (windows[i].incognito) {
+										win = windows[i];
+										break;
+									}
+								}
+								next();
+							});
 						}
 					});
 				},
-			});
-		}, 1);
-	};
-	_resolveDialThumb = function (dial, cb, params) {
-		const self = this;
-
-		if (typeof dial.thumb !== 'string' || dial.thumb.indexOf('filesystem:') === -1) {
-			return cb(dial.thumb);
-		}
-
-		self.getDialsPreview(
-			[dial],
-			function (list) {
-				const response = list.shift();
-
-				cb(response.thumb);
-			},
-			null,
-			params
-		);
-	};
-	getDialThumb = function (globalId, cb) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				//fields: ['thumb'],
-				where: {
-					global_id: globalId,
-				},
-				success: function (tx, results) {
-					if (results.rows.length === 1) {
-						const dial = results.rows[0];
-
-						self._resolveDialThumb(
-							dial,
-							function (thumb) {
-								cb(thumb);
-							},
-							{ format: 'dataurl' }
-						);
-					} else {
-						cb(null);
-					}
-				},
-				error: function (tx, ex) {
-					console.warn(tx, ex);
-				},
-			});
-		});
-	};
-	getDial = function (id, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		if (!isNaN(id)) {
-			id = parseInt(id);
-		} else {
-			console.warn('dial id', id);
-		}
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: [
-					'id',
-					'rowid',
-					'url',
-					'display_url',
-					'title',
-					'auto_title',
-					'thumb_source_type',
-					'thumb_url',
-					'position',
-					'group_id',
-					'clicks',
-					'deny',
-					'screen_maked',
-					'thumb',
-					'screen_delay',
-					'thumb_width',
-					'thumb_height',
-					'get_screen_method',
-					'update_interval',
-					'global_id',
-					'previewTitle',
-					'preview_style',
-				],
-				rename: {
-					rowid: 'id',
-				},
-				where: {
-					rowid: id,
-				},
-				success: function (tx, results) {
-					if (results.rows.length === 1) {
-						const dial = results.rows[0];
-
-						that._prepareDialData(dial);
-						that.getDialsPreview([dial], function (list) {
-							callback(list.shift());
+				function () {
+					if (win) {
+						chrome.tabs.create({
+							windowId: win.id,
+							url: url,
+							active: true,
 						});
 					} else {
-						callback(null);
+						// incognito window not found, let's create it
+						chrome.windows.create({
+							url: url,
+							incognito: true,
+							focused: true,
+						});
 					}
 				},
-			});
-		});
-	};
+			]);
+		},
+	},
 
-	getDialDataList = function (dialId, dataList, callback) {
-		const { fvdSpeedDial } = this;
+	hexToRGBA: function (hex, opacity) {
+		return (
+			'rgba('
+			+ (hex = hex.replace('#', ''))
+				.match(new RegExp('(.{' + hex.length / 3 + '})', 'g'))
+				.map(function (l) {
+					return parseInt(hex.length % 2 ? l + l : l, 16);
+				})
+				.concat(opacity || 1)
+				.join(',')
+			+ ')'
+		);
+	},
 
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: dataList,
-				where: {
-					id: parseInt(dialId),
-				},
-				success: function (tx, results) {
-					if (results.rows.length === 1) {
-						callback(results.rows[0]);
+	reloadAllTimeout: false,
+
+	reloadAllPages: function (timeout, except) {
+		const ts = this;
+
+		timeout = timeout || 0;
+
+		if (typeof except !== 'object') except = [except || 'none'];
+
+		clearTimeout(ts.reloadAllTimeout);
+
+		ts.reloadAllTimeout = setTimeout(function () {
+			ts.reloadAddonPages();
+		}, timeout);
+	},
+
+	reloadAddonPages: function (callback) {
+		const tabs = [];
+		const extId = chrome.runtime.getURL('');
+
+		chrome.tabs.query({}, function (allTabs) {
+			for (const i in allTabs) {
+				if (allTabs[i].url === 'chrome://newtab/' || allTabs[i].url.indexOf(extId) !== -1) {
+					tabs.push(allTabs[i]);
+
+					try {
+						console.info('Reload', allTabs[i]);
+						chrome.tabs.reload(allTabs[i].id);
+					} catch (ex) {
+						console.warn(ex);
 					}
-				},
-			});
+				}
+			}
 		});
-	};
+	},
 
-	addDial = function (addData, callback, hints) {
-		const that = this;
-		const { fvdSpeedDial } = this;
-		addData = that.prepareDataType('dial', addData);
+	getInstallVersion: function (fvdSpeedDial) {
+		return parseInt(String(fvdSpeedDial.localStorage.storage['installVersion']).split('.').join('')) || 8153;
+	},
 
-		hints = hints || [];
-		let storeThumb = null;
-		addData.thumb = addData.thumb || '';
-		addData.screen_delay =
-			addData.screen_delay || fvdSpeedDial.Prefs.get('sd.preview_creation_delay_default');
-		const screen_maked = 0;
-		let localFileData = null;
-		let res = null;
+	getCurrentVersion: function () {
+		return chrome.runtime.getManifest().version || 0;
+	},
+
+	releaseNotes: function (fvdSpeedDial, mode) {
+		const { Prefs } = fvdSpeedDial;
+
+		if (mode) {
+			chrome.action.setIcon({ path: 'images/icons/new-128x128.png' });
+			Prefs.set('sd.browser_action_mode', 'new');
+		} else {
+			chrome.action.setIcon({ path: 'images/icons/64x64.png' });
+			Prefs.set('sd.browser_action_mode', 'standard');
+		}
+	},
+
+	openReleaseNotes: function () {
+		let url;
+		let ru = false;
+		const acepted = ['ru', 'by', 'kz', 'uz', 'uk'];
+
+		chrome.i18n.getAcceptLanguages(locations => {
+			for (const loc of locations) {
+				for (const ac of acepted) {
+					if (loc.indexOf(ac) !== -1) {
+						ru = true;
+						break;
+					}
+				}
+			}
+
+			if (ru) {
+				url = 'https://everhelper.pro/release-notes-ru.php';
+			} else {
+				url = 'https://everhelper.pro/release-notes-en.php';
+			}
+
+			Utils.Opener.newTab(url);
+			Utils.releaseNotes(fvdSpeedDial, false);
+		});
+	},
+
+	browserAction: function (fvdSpeedDial) {
+		const { Prefs, StorageSD } = fvdSpeedDial;
+
+		chrome.action.onClicked.addListener(function (tab) {
+			if (Prefs.get('sd.browser_action_mode') === 'new') {
+				Utils.openReleaseNotes();
+			} else {
+				if (tab._ignore) {
+					return;
+				}
+
+				const action = Prefs.get('sd.main_button_action');
+
+				if (action === 'sd_in_new_tab') {
+					Utils.openSpeedDialSingle('newtab');
+				} else if (action === 'sd_in_active_tab') {
+					Utils.openSpeedDialSingle('active');
+				} else if (action === 'add_site_to_sd') {
+					StorageSD.groupsList(function (groups) {
+						let groupId = null;
+
+						for (let i = 0; i !== groups.length; i++) {
+							if (groups[i].global_id === 'default') {
+								groupId = groups[i].id;
+								break;
+							}
+						}
+
+						if (!groupId && groups.length) {
+							groupId = groups[0].id;
+							return;
+						}
+
+						if (!groupId) {
+							return;
+						}
+
+						chrome.tabs.query(
+							{
+								active: true,
+							},
+							function (tabs) {
+								fvdSpeedDial.ContextMenu.addTabToSpeedDial(tabs[0], groupId);
+							}
+						);
+					});
+				}
+			}
+		});
+	},
+
+	openSpeedDialSingle: function (tabPosition) {
+		let foundTabId = null;
+		let foundTabIndex;
 
 		Utils.Async.chain([
-			function (next) {
-				checkLocalFile(addData.url, addData.thumb_source_type, addData.thumb_url, function (lf) {
-					localFileData = lf;
-					next();
-				});
-			},
-			function (next) {
-				if (localFileData) {
-					for (const k in localFileData) {
-						addData[k] = localFileData[k];
-					}
-					next();
-				} else {
-					if (addData.thumb_source_type === 'screen') {
-						if (addData.thumb) {
-							addData.screen_maked = 1; // thumb specified for screen type
-						} else {
-						}
-					}
-
-					next();
-				}
-			},
-			function (next) {
-				if (addData.thumb) {
-					// store thumb separately
-					storeThumb = addData.thumb;
-					delete addData.thumb;
-				}
-
-				that.isDenyUrl(addData.url, function (deny) {
-					if (deny && hints.indexOf('ignore_deny') === -1) {
-						if (callback) {
-							callback({
-								result: false,
-								error: 'url_deny',
-							});
-						}
-					} else {
-						that.nextDialPosition(addData.group_id, function (position) {
-							if (!addData.position) {
-								addData.position = position;
-							}
-
-							addData.clicks = addData.clicks || 0;
-							addData.deny = addData.deny || 0;
-							addData.screen_maked = addData.screen_maked || 0;
-
-							if (!addData.global_id) {
-								addData.global_id = that._generateGUID();
-							}
-
-							const insertData = that._getInsertData(addData);
-
-							dbTransaction(function (tx) {
-								dbInsert(fvdSpeedDial, {
-									tx: tx,
-									table: 'dials',
-									set: insertData.dataObject,
-									success: function (tx, results) {
-										that._callDialsChangeCallbacks({
-											action: 'add',
-										});
-										res = {
-											id: insertData.dataObject.id,
-											result: true,
-										};
-										next();
-									},
-									error: function (tx, error) {
-										console.log('Error add dials', tx, error);
-									},
-								});
-							});
-						});
-					}
-				});
-			},
-			function (next) {
-				if (!storeThumb) {
-					return next();
-				}
-
-				// store thumb
-				fvdSpeedDial.StorageSD.updateDial(
-					res.id,
+			function (chainCallback) {
+				chrome.tabs.query(
 					{
-						thumb: storeThumb,
+						url: Config.NEWTAB_URL,
 					},
-					next
+					function (tabs) {
+						if (tabs.length > 0) {
+							foundTabId = tabs[0].id;
+							foundTabIndex = tabs[0].index;
+						}
+
+						chainCallback();
+					}
+				);
+			},
+			function (chainCallback) {
+				chrome.tabs.query(
+					{
+						url: chrome.runtime.getURL('newtab.html'),
+					},
+					function (tabs) {
+						if (tabs.length > 0) {
+							foundTabId = tabs[0].id;
+						}
+
+						chainCallback();
+					}
 				);
 			},
 			function () {
-				if (callback) {
-					callback(res);
+				if (!foundTabId) {
+					if (tabPosition === 'active') {
+						Utils.Opener.activeTab('newtab.html#force-display');
+					} else if (tabPosition === 'newtab') {
+						chrome.tabs.create({
+							url: 'newtab.html#force-display',
+							active: true,
+						});
+					}
+				} else {
+					chrome.tabs.update(foundTabId, {
+						active: true,
+					});
 				}
 			},
 		]);
+	},
+
+	getFavicon: function (url) {
+		let favicon = '';
+		try {
+			const parts = this.parseUrl(url);
+
+			if (parts && parts.host) {
+				favicon = `${Config.FAVICON_SERVICE}${parts.host}`;
+			}
+		} catch (ex) {}
+		return favicon;
+	},
+};
+
+export const DD = function () {};
+
+const _dragAndDropElem = function (params) {
+	const that = this;
+
+	let placeHolder = null;
+	const _preserveMargins = {
+		left: null,
+		top: null,
 	};
-	syncFixDialsPositions = function (groupId, callback) {
-		groupId = parseInt(groupId);
 
-		const { fvdSpeedDial } = this;
-		const that = this;
+	this._elem = params.elem;
+	this._ddTargets = params.targets;
+	this._initParams = params;
+	this._lastMousePos = null;
+	this._ddTargetsList = null;
+	this._lastMouseMoveEvent = null;
+	// to prevent dd when user mousedown and scroll without mouse move
+	this._mouseMoved = false;
 
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['id'],
-				order: 'position',
-				where: {
-					group_id: groupId,
-				},
-				success: function (tx, dialsResult) {
-					const dials = dialsResult.rows;
-					let position = 1;
+	function _elParent() {
+		return that._elem.parentNode;
+	}
 
-					Utils.Async.arrayProcess(
-						dials,
-						function (dial, arrayProcessCallback) {
-							dbUpdate(fvdSpeedDial, {
-								tx: tx,
-								table: 'dials',
-								//noResponse: true,
-								set: {
-									position: position,
-								},
-								where: {
-									key: 'id',
-									val: dial.id,
-								},
-								success: function (tx, results) {
-									position++;
-									arrayProcessCallback();
-								},
-								error: function (tx, error) {
-									console.error('Query failed', error);
-									arrayProcessCallback();
-								},
-							});
-						},
-						function () {
-							that.onDataChanged.dispatch();
-							callback();
-						}
-					);
-				},
-				error: function (tx, error) {
-					console.log('Fail get data syncFixDialsPositions', tx, error);
-					callback();
-				},
-			});
-		}, 1);
+	function _createPlaceHolder() {
+		placeHolder = document.createElement('div');
+		placeHolder.style.width = that._elem.offsetWidth + 'px';
+		placeHolder.style.height = that._elem.offsetHeight + 'px';
+		placeHolder.className = that._elem.className;
+
+		_elParent().insertBefore(placeHolder, that._elem);
+	}
+
+	function _removePlaceHolder() {
+		_elParent().removeChild(placeHolder);
+	}
+
+	// methods
+	this.event = function (type) {
+		const args = [];
+
+		for (let i = 1; i < arguments.length; i++) {
+			args.push(arguments[i]);
+		}
+
+		if (that._initParams['callback' + type]) {
+			that._initParams['callback' + type].apply(window, args);
+		}
 	};
-	syncDialData = function (globalId, fields, callback) {
-		const { fvdSpeedDial } = this;
 
-		fields = fields || ['rowid', '*'];
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: fields.join(','),
-				where: {
-					global_id: globalId,
-					//key: 'global_id', val: globalId
-				},
-				success: function (tx, results) {
-					if (results.rows.length >= 1) {
-						callback(results.rows[0]);
-					} else {
-						callback(null);
-					}
-				},
-				error: function (tx, error) {
-					console.log('Fail get syncDialData', arguments);
-				},
-			});
-		}, 1);
+	this.init = function () {
+		this._elem.addEventListener(
+			'mousedown',
+			function (event) {
+				if (event.button !== 0) {
+					return;
+				}
+
+				that._mouseMoved = false;
+				that._draggingStartCursorPosition = that._mousePos(event);
+				document.addEventListener('mousemove', that._mouseMove, false);
+				document.addEventListener('mouseup', that._mouseUp, false);
+				document.addEventListener('mouseout', that._cancelIfNoMove, false);
+				that.event('MouseDownReal');
+			},
+			false
+		);
 	};
-	syncRemoveDials = function (notRemoveDials, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-		const removeInfo = {
-			count: 0,
-			removedFromGroups: [],
-		}; // describes remove process info
 
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: { sync: '1' },
-				success: function (tx, gResults) {
-					const groupsIn = {
-						key: 'group_id',
-						arr: [],
-					};
+	this.adjustPos = function (mouse) {
+		let i;
 
-					for (const i in gResults.rows) groupsIn.arr.push(gResults.rows[i].id);
-					let whereNotIn = false;
+		mouse = mouse || that._lastMousePos;
+		that._lastMousePos = mouse;
 
-					if (notRemoveDials.length > 0) {
-						whereNotIn = {
-							key: 'global_id',
-							arr: notRemoveDials,
-						};
-					}
+		let marginLeft = mouse.x - that._draggingStartCursorPosition.x;
+		let marginTop = mouse.y - that._draggingStartCursorPosition.y;
 
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: 'dials',
-						whereIn: groupsIn,
-						whereNotIn: whereNotIn,
-						success: function (tx, dResults) {
-							const dials = dResults.rows;
+		that._elem.style.webkitTransition = 'none';
 
-							Utils.Async.arrayProcess(
-								dials,
-								function (dial, arrayProcessCallback) {
-									removeInfo.count++;
-									removeInfo.removedFromGroups.push(dial.group_id);
-									dbDelete(fvdSpeedDial, {
-										tx: tx,
-										from: 'dials',
-										where: {
-											key: 'id',
-											val: dial.id,
-										},
-										success: function (tx, results) {
-											that._callDialsChangeCallbacks({
-												action: 'remove',
-												data: {
-													id: dial.rowid,
-												},
-											});
-											arrayProcessCallback();
-										},
-										error: function (err) {
-											console.warn('Dial delete fail', err);
-										},
-									});
-								},
-								function () {
-									AppLog.info('sync remove dials not in list, removed', removeInfo.count);
-									callback(removeInfo);
-								}
-							);
-						},
-						error: function (tx, error) {
-							console.warn('Fail get dResults', error);
-						},
-					});
-				},
-				error: function (tx, error) {
-					console.warn('Fail get gResults', error);
-				},
-			});
-		}, 1);
+		const newMargins = that._initParams.changePos(marginLeft, marginTop, that);
+
+		marginLeft = newMargins.left;
+		marginTop = newMargins.top;
+
+		if (marginLeft !== false) {
+			that._elem.style.marginLeft = marginLeft + 'px';
+		}
+
+		if (marginTop !== false) {
+			that._elem.style.marginTop = marginTop + 'px';
+		}
+
+		const elemOffset = Utils.getOffset(that._elem);
+
+		const centerPos = {
+			left: elemOffset.left + that._elem.offsetWidth / 2,
+			top: elemOffset.top + that._elem.offsetHeight / 2,
+		};
+
+		const nowDraggedOn = [];
+		const nowDraggedOnElems = [];
+
+		for (i = 0; i !== that._ddTargetsList.length; i++) {
+			const targetOffset = Utils.getOffset(that._ddTargetsList[i]);
+
+			if (
+				centerPos.left >= targetOffset.left
+				&& centerPos.left <= targetOffset.left + that._ddTargetsList[i].offsetWidth
+				&& centerPos.top >= targetOffset.top
+				&& centerPos.top <= targetOffset.top + that._ddTargetsList[i].offsetHeight
+			) {
+				// save cursor position rel to dragged elem
+				const cursor = {
+					left: centerPos.left - targetOffset.left,
+					top: centerPos.top - targetOffset.top,
+				};
+
+				const draggedOnData = {
+					cursor: cursor,
+					el: that._ddTargetsList[i],
+					width: that._ddTargetsList[i].offsetWidth,
+					height: that._ddTargetsList[i].offsetHeight,
+				};
+
+				nowDraggedOn.push(draggedOnData);
+				nowDraggedOnElems.push(draggedOnData.el);
+			}
+		}
+
+		for (i = 0; i !== nowDraggedOn.length; i++) {
+			if (params.alwaysPropatateDragOn) {
+				that.event('Dragon', nowDraggedOn[i].el, nowDraggedOn[i]);
+			} else {
+				if (that._nowDraggedOn.indexOf(nowDraggedOn[i].el) === -1) {
+					that.event('Dragon', nowDraggedOn[i].el, nowDraggedOn[i]);
+				}
+			}
+		}
+
+		for (i = 0; i !== that._nowDraggedOn.length; i++) {
+			if (nowDraggedOnElems.indexOf(that._nowDraggedOn[i]) === -1) {
+				that.event('Dragleave', that._nowDraggedOn[i]);
+			}
+		}
+
+		that._nowDraggedOn = nowDraggedOnElems;
+		return {
+			left: marginLeft,
+			top: marginTop,
+		};
 	};
-	syncUpdateMass = function (globalIds, data, callback) {
+
+	this._mouseMove = function (event) {
+		that._mouseMoved = true;
+		event = event || that._lastMouseMoveEvent;
+		that._lastMouseMoveEvent = event;
+
+		if (params.usePlaceHolder) {
+			if (!that._startEventSent) {
+				_createPlaceHolder();
+				that._elem.style.position = 'absolute';
+
+				if (that._elem.style.marginTop) {
+					_preserveMargins.top = that._elem.style.marginTop;
+				}
+
+				if (that._elem.style.marginLeft) {
+					_preserveMargins.left = that._elem.style.marginLeft;
+				}
+
+				that._startEventSent = true;
+				that.event('Start');
+			}
+		}
+
+		if (!that._nowDragging) {
+			that._nowDragging = true;
+
+			that.event('MouseDown');
+		}
+
+		if (that._ddTargetsList === null) {
+			// search elements for drag
+			const targets = document.querySelectorAll('*[dd_class~=' + that._ddTargets + ']');
+
+			that._ddTargetsList = [];
+			for (let i = 0; i !== targets.length; i++) {
+				if (targets[i] === that._elem) {
+					continue;
+				}
+
+				that._ddTargetsList.push(targets[i]);
+			}
+		}
+
+		const mouse = that._mousePos(event);
+		const margins = that.adjustPos(mouse);
+
+		if (!params.usePlaceHolder) {
+			if (!that._startEventSent) {
+				if (margins.left !== 0 || margins.top !== 0) {
+					that._startEventSent = true;
+					that.event('Start');
+				}
+			}
+		}
+	};
+
+	this._cancelIfNoMove = function () {
+		if (!that._mouseMoved) {
+			that._mouseUp();
+		}
+	};
+
+	this._mouseUp = function () {
+		if (params.usePlaceHolder) {
+			_removePlaceHolder();
+			that._elem.style.position = '';
+		}
+
+		document.removeEventListener('mousemove', that._mouseMove, false);
+		document.removeEventListener('mouseup', that._mouseUp, false);
+		try {
+			document.removeEventListener('mouseout', that._cancelIfNoMove, false);
+		} catch (ex) {
+			console.warn(ex);
+		}
+
+		that._elem.style.webkitTransition = '';
+
+		if (_preserveMargins.top) {
+			that._elem.style.marginTop = _preserveMargins.top;
+		} else {
+			that._elem.style.marginTop = '';
+		}
+
+		if (_preserveMargins.left) {
+			that._elem.style.marginLeft = _preserveMargins.left;
+		} else {
+			that._elem.style.marginLeft = '';
+		}
+
+		if (params.constantStyle) {
+			for (const k in params.constantStyle) {
+				that._elem.style[k] = params.constantStyle[k];
+			}
+		}
+
+		that._nowDragging = false;
+		that._startEventSent = false;
+		that._ddTargetsList = null;
+
+		that.event('End', { elements: that._ddTargetsList });
+	};
+
+	this._mousePos = function (event) {
+		let scrollTop = document.body.scrollTop;
+
+		if (this._initParams.scrollingNotMean) {
+			scrollTop = 0;
+		}
+
+		return {
+			x: event.x,
+			y: event.y + scrollTop,
+		};
+	};
+
+	this.init();
+};
+
+_dragAndDropElem.prototype = {
+	// options
+	_initParams: null,
+	_elem: null,
+	_ddTargets: null,
+
+	// privates
+	_ddTargetsList: null,
+	_nowDragging: false,
+	_draggingStartCursorPosition: { x: null, y: null },
+	_nowDraggedOn: [],
+	_startEventSent: false,
+};
+
+DD.prototype = {
+	create: function (params) {
+		return new _dragAndDropElem(params);
+	},
+};
+
+export function getCleanUrl(url) {
+	url = String(url);
+
+	url = url.split('://').pop();
+	url = url.split('urllink=').pop();
+	url = url.split('http%3A%2F%2F').pop();
+	url = url.split('https%3A%2F%2F').pop();
+	url = url.split('s.click.').join('');
+	url = url.split('rover.').join('');
+	url = url.split('%2E').join('.');
+	url = url.split('%2F').join('/');
+	return url;
+}
+
+export function getDomainName(url) {
+	const urlObject = new URL(url);
+
+	return urlObject.host;
+}
+
+export function randomColor() {
+	let hex = Math.floor(Math.random()*16777215).toString(16);
+
+	/* sometimes the returned value does not have 
+	* the 6 digits needed, so we do it again until
+	* it does 
+	*/
+
+	while (hex.length<6) {
+		hex = Math.floor(Math.random()*16777215).toString(16);
+	}
+
+	let red = parseInt(hex.substring(0,2),16);
+	let green = parseInt(hex.substring(2,4),16);
+	let blue = parseInt(hex.substring(4,6),16);
+
+	while (red > 150) {
+		red = red - 40;
+	}
+
+	while (green > 120) {
+		green = green - 40;
+	}
+
+	while (blue > 120) {
+		blue = blue - 40;
+	}
+
+	const brightness = red*0.299 + green*0.587 + blue*0.114;
+
+	/* if (red*0.299 + green*0.587 + blue*0.114) > 180 
+		* use #000000 else use #ffffff 
+		*/
+
+	if (brightness > 180) {
+		return { 
+			backgroundColor: `rgb(${red}, ${green}, ${blue})`,
+			color: '#000000',
+		};
+	} else {
+		return {
+			backgroundColor: `rgb(${red}, ${green}, ${blue})`,
+			color: '#ffffff',
+		};
+	}
+}
 
 const affiliatedURLS = ['https://ww55.affinity.net/sssdomweb', 'kelkoogroup.net/permanentLinkGo'];
 
 export function isAffiliatedURL(url) {
 	return affiliatedURLS.some((affURL) => url.includes(affURL));
-}
-	};
-	syncUpdateMass = function (globalIds, data, callback) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-		let globalResult = false;
-
-		const { fvdSpeedDial } = this;
-		const self = this;
-		let globalResult = false;
-
-		dbTransaction(function (tx) {
-			Utils.Async.arrayProcess(
-				globalIds,
-				function (globalId, nextId) {
-					dbUpdate(fvdSpeedDial, {
-						tx: tx,
-						table: 'dials',
-						set: data,
-						where: {
-							key: 'global_id',
-							val: globalId,
-						},
-						success: function (tx, result) {
-							if (result && typeof result === 'object' && result.rowsAffected) {
-								globalResult = true;
-							}
-
-							nextId();
-						},
-						error: function (tx, error) {
-							console.warn('Update fail', globalId, error);
-							nextId();
-						},
-					});
-				},
-				function () {
-					self.onDataChanged.dispatch();
-
-					if (callback) {
-						callback({
-							result: globalResult,
-						});
-					}
-				}
-			);
-		}, 1);
-	};
-	syncSaveDial = function (dial, callback) {
-		const {
-			fvdSpeedDial: { ThumbMaker },
-		} = this;
-
-		const that = this;
-		let oldData = null;
-		let nullThumbSrc = false;
-		const saveInfo = {}; // describes dial info with it saves
-
-		this.dialExistsByGlobalId(dial.global_id, function (exists) {
-			that.syncGetGroupId(dial.group_global_id, function (groupId) {
-				if (groupId === 0) {
-					console.info('Cannot add dial, group not found', dial);
-					callback(saveInfo); // cannot add dial, group not found
-				} else {
-					dial.group_id = groupId;
-					saveInfo.group_id = groupId;
-					let deny = 0;
-
-					Utils.Async.chain([
-						function (chainCallback) {
-							that.isDenyUrl(dial.url, function (aDeny) {
-								deny = aDeny ? 1 : 0;
-								chainCallback();
-							});
-						},
-						function (chainCallback) {
-							if (exists) {
-								that.syncDialData(
-									dial.global_id,
-									[
-										'rowid',
-										'thumb_source_type',
-										'thumb_url',
-										'url',
-										'group_id',
-										'screen_maked',
-										'get_screen_method',
-									],
-									function (result) {
-										if (result) {
-											oldData = result;
-
-											// check if dials moved
-											if (oldData.group_id !== dial.group_id) {
-												saveInfo.move = {
-													from: oldData.group_id,
-													to: dial.group_id,
-												};
-											}
-
-											if (oldData.thumb_source_type !== dial.thumb_source_type) {
-												nullThumbSrc = true;
-											} else {
-												if (dial.thumb_source_type === 'screen') {
-													if (dial.url !== oldData.url) {
-														nullThumbSrc = true;
-													} else if (dial.get_screen_method !== oldData.get_screen_method) {
-														nullThumbSrc = true;
-													}
-												} else if (dial.thumb_source_type === 'url') {
-													if (dial.thumb_url !== oldData.thumb_url) {
-														nullThumbSrc = true;
-													}
-												} else if (dial.thumb_source_type === 'local_file') {
-													/*
-																 *
-																 * process local file here
-																 *
-																if( dial._previewContent ){
-																var newContentMd5 = fvd_speed_dial_Misc.md5( dial._previewContent );
-																var tmp = oldData.thumb_url.split( /[\/\\]/ );
-																var fileName = tmp[tmp.length - 1];
-																if( fileName.indexOf( newContentMd5 ) == -1 ){
-																	nullThumbSrc = true;
-																}
-																}
-																*/
-												}
-											}
-
-											if (nullThumbSrc) {
-												dial.screen_maked = 0;
-											} else {
-												dial.screen_maked = oldData.screen_maked;
-											}
-
-											chainCallback();
-										} else {
-											nullThumbSrc = true;
-											chainCallback();
-										}
-									}
-								);
-							} else {
-								nullThumbSrc = true;
-								chainCallback();
-							}
-						},
-
-						function (chainCallback) {
-							if (
-								(nullThumbSrc && dial.thumb_source_type === 'url') ||
-								(dial._previewUrl && dial.thumb_source_type === 'local_file') ||
-								(dial._previewUrl && dial.thumb_source_type === 'screen')
-							) {
-								// need to grab thumb from url
-								let loadContentUrl = dial.thumb_url;
-
-								if (
-									(dial._previewUrl && dial.thumb_source_type === 'local_file') ||
-									(dial._previewUrl && dial.thumb_source_type === 'screen')
-								) {
-									loadContentUrl = dial._previewUrl;
-								}
-
-								ThumbMaker.getImageDataPath(
-									{
-										imgUrl: loadContentUrl,
-										screenWidth: 364, // SpeedDial.getMaxCellWidth(),
-									},
-									function (dataUrl, thumbSize) {
-										delete dial._previewUrl;
-										dial.thumb = dataUrl;
-										chainCallback();
-									}
-								);
-							} else {
-								chainCallback();
-							}
-						},
-						function (chainCallback) {
-							const toDb = {
-								url: dial.url,
-								title: dial.title,
-								auto_title: dial.auto_title,
-								thumb_url: dial.thumb_url,
-								thumb_source_type: dial.thumb_source_type,
-								thumb_width: dial.thumb_width,
-								thumb_height: dial.thumb_height,
-								group_id: dial.group_id,
-								deny: deny,
-								position: dial.position,
-								global_id: dial.global_id,
-								screen_maked: dial.screen_maked,
-								update_interval: dial.update_interval || '',
-							};
-
-							if (dial.get_screen_method) {
-								toDb.get_screen_method = dial.get_screen_method;
-							}
-
-							if (dial.thumb) {
-								toDb.thumb = dial.thumb;
-							}
-
-							if (exists) {
-								that.updateDial(oldData.rowid, toDb, function () {
-									chainCallback();
-								});
-							} else {
-								that.addDial(
-									toDb,
-									function () {
-										chainCallback();
-									},
-									['ignore_deny']
-								);
-							}
-						},
-						function (chainCallback) {
-							if (dial.thumb_source_type === 'local_file') {
-								chainCallback();
-							} else {
-								chainCallback();
-							}
-						},
-						function () {
-							callback(saveInfo);
-						},
-					]);
-				}
-			});
-		});
-	};
-	deleteDial = function (dialId, callback) {
-		const that = this;
-
-		Utils.Async.chain([
-			function (next) {
-				fvdSpeedDial.StorageSD.getDial(dialId, function (d) {
-					if (!d || typeof d !== 'object') {
-						return next();
-					}
-
-					// GA dial remove event track
-					that.getGroupTitleById(d.group_id, (groupTitle) => {
-						const GADialAddParams = {
-							title: d.title,
-							url: getCleanUrl(d.url),
-							dial_id: d.id,
-							group: groupTitle,
-							group_id: d.group_id,
-						};
-						Analytics.fireRemoveDialEvent(GADialAddParams);
-					});
-
-					let thumb = String(d.thumb) || '';
-
-					if (thumb.indexOf('blob:') === 0) {
-						try {
-							window.URL.revokeObjectURL(thumb);
-						} catch (ex) {
-							console.warn(ex);
-						}
-					}
-
-					if (d.thumbSource && d.thumbSource.indexOf('filesystem:') === 0) {
-						thumb = String(d.thumbSource);
-					}
-
-					if (thumb.indexOf('filesystem:') !== 0) {
-						return next();
-					}
-
-					FileSystemSD.removeByURL(thumb, function () {
-						next();
-					});
-				});
-			},
-			function () {
-				dbTransaction(function (tx) {
-					dbDelete(fvdSpeedDial, {
-						tx: tx,
-						from: 'dials',
-						where: {
-							key: 'id',
-							val: dialId,
-						},
-						success: function (tx, results) {
-							if (callback) {
-								that._callDialsChangeCallbacks({
-									action: 'remove',
-									data: {
-										id: dialId,
-									},
-								});
-								callback({
-									result: results.rowsAffected === 1,
-								});
-							}
-						},
-					});
-				}, 1);
-			},
-		]);
-	};
-	clearDials = function (callback, where) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-		let whereIn = false;
-
-		if (where) {
-			if (where && typeof where === 'object' && where.key) {
-				whereIn = where;
-			} else {
-				console.error('Wrong where', where);
-			}
-		}
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['rowid', 'thumb', 'id'],
-				whereIn: whereIn,
-				success: function (tx, results) {
-					const r = [];
-					const ids = [];
-
-					for (let i = 0; i !== results.rows.length; i++) {
-						r.push(results.rows[i]);
-						ids.push(results.rows[i].id);
-					}
-					Utils.Async.arrayProcess(
-						r,
-						function (row, next) {
-							that._callDialsChangeCallbacks({
-								action: 'remove',
-								data: {
-									id: row.rowid,
-								},
-							});
-
-							if (
-								!row.thumb ||
-								typeof row.thumb !== 'string' ||
-								row.thumb.indexOf('filesystem:') !== 0
-							) {
-								return next();
-							}
-
-							FileSystemSD.removeByURL(row.thumb, function () {
-								next();
-							});
-						},
-						function () {
-							dbDelete(fvdSpeedDial, {
-								tx: tx,
-								from: 'dials',
-								whereIn: !ids ? false : { key: 'id', arr: ids },
-								force: true,
-								success: function () {
-									if (callback) {
-										Broadcaster.sendMessage({
-											action: 'storage:dialsCleared',
-										});
-										callback();
-									}
-								},
-							});
-						}
-					);
-				},
-			});
-		});
-	};
-	updateDial = function (dialId, data, callback) {
-		const {
-			fvdSpeedDial: { ThumbMaker, HiddenCaptureQueue },
-		} = this;
-
-		callback = callback || function () {};
-		const that = this;
-		let global_id;
-
-		try {
-			if (data.thumb_source_type === 'screen' && data.screen_maked === 0) {
-				HiddenCaptureQueue.removeFromQueueById(dialId);
-			}
-		} catch (ex) {
-			console.warn(ex);
-		}
-		Utils.Async.chain([
-			function (next) {
-				that.dialGlobalId(dialId, function (_guid) {
-					if (_guid) {
-						global_id = _guid;
-					}
-
-					next();
-				});
-			},
-			function (next) {
-				if (!data.thumb || typeof data.thumb !== 'string') {
-					return next();
-				}
-
-				if (data.thumb.indexOf('data:image/png;base64,https://') !== -1) {
-					data.thumb = data.thumb.replace('data:image/png;base64,https://', 'https://');
-				}
-
-				if (
-					data.thumb.indexOf('filesystem:') !== -1 ||
-					data.thumb.indexOf('blob:') !== -1 ||
-					data.thumb.indexOf('file:') !== -1 ||
-					data.thumb.indexOf('http') === 0
-					// || data.thumb.indexOf('data:') === 0
-				) {
-					return next(data.thumb);
-				}
-
-				const fname = global_id || dialId;
-
-				Utils.Async.chain([
-					function (next1) {
-						if (typeof document === 'undefined') {
-							console.info('document is undefined');
-							next1();
-						} else {
-							const img = document.createElement('img');
-							img.crossOrigin = 'anonymous';
-							img.setAttribute('src', data.thumb);
-							img.onerror = function (e) {
-								console.warn('Image error', e);
-							};
-							img.onload = function () {
-								if (img.width <= 320) {
-									next1();
-								} else {
-									ThumbMaker.resize(img, 320, function (imgUrl, size) {
-										data.thumb = imgUrl;
-										next1();
-									});
-								}
-							};
-						}
-					},
-					function (next1) {
-						// store thumb
-						const thumb = Utils.dataURIToBlob(data.thumb);
-						const ext = Utils.typeToExt(thumb.type);
-						const thumbName = '/' + Config.FS_DIALS_PREVIEW_DIR + '/' + fname + '.' + ext;
-
-						if (typeof webkitRequestFileSystem === 'undefined') {
-							console.info('webkitRequestFileSystem is undefined');
-							next();
-						} else {
-							FileSystemSD.write(thumbName, thumb, function (err, url) {
-								if (err) {
-									throw err;
-								}
-
-								data.thumb = url;
-								next();
-
-								if (FileSystemSD.hasOwnProperty('deleteBlobUrl')) {
-									FileSystemSD.deleteBlobUrl(thumbName);
-								}
-							});
-						}
-					},
-				]);
-			},
-			function () {
-				const tmp = that._getUpdateData(data);
-				const dataArray = tmp.dataArray;
-				const strings = tmp.strings;
-
-				dbTransaction(function (tx) {
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: 'dials',
-						where: {
-							key: 'id',
-							val: dialId,
-						},
-						success: function (tx, results) {
-							let setObj = {};
-
-							for (const k in strings) {
-								const v = String(strings[k]).split('`').join('').split(' ').shift();
-
-								setObj[v] = dataArray[k];
-							}
-
-							if (data.thumb) {
-								if (String(setObj.thumb).indexOf('blob:') === 0) {
-									delete setObj.thumb; // Remove blob thumbs
-								} else {
-									setObj['thumb_version'] = parseInt(results.thumb_version) || 1;
-								}
-							}
-
-							setObj = that.prepareDataType('dial', setObj);
-
-							dbUpdate(fvdSpeedDial, {
-								tx: tx,
-								table: 'dials',
-								set: setObj,
-								where: {
-									key: 'id',
-									val: dialId,
-								},
-								success: function (tx, results) {
-									that._callDialsChangeCallbacks({
-										action: 'update',
-										data: {
-											id: dialId,
-											data: data,
-										},
-									});
-
-									if (callback) {
-										callback({
-											result: results.rowsAffected === 1,
-											dial: data,
-										});
-									}
-								},
-							});
-						},
-					});
-				});
-			},
-		]);
-	};
-	moveDial = function (dialId, groupId, callback) {
-		groupId = parseInt(groupId);
-
-		const that = this;
-
-		this.nextDialPosition(groupId, function (newPosition) {
-			that.updateDial(
-				dialId,
-				{
-					group_id: groupId,
-					position: newPosition,
-				},
-				function (result) {
-					callback(result);
-				}
-			);
-		});
-	};
-	dialCanSync = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['id', 'group_id'],
-				where: { global_id: globalId },
-				success: function (tx, results_d) {
-					if (results_d.rows.length) {
-						dbSelect(fvdSpeedDial, {
-							tx: tx,
-							from: 'groups',
-							fields: ['id', 'sync'],
-							where: { id: results_d.rows[0]['group_id'] },
-							success: function (tx, results) {
-								try {
-									callback(results.rows[0].sync === 1);
-								} catch (ex) {
-									console.warn(ex);
-									callback(true);
-								}
-							},
-						});
-					}
-				},
-			});
-		}, 1);
-	};
-	insertDialUpdateStorage = function (dialId, sign, interval, newDialPosition, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		this.getDialDataList(dialId, ['group_id'], function (dial) {
-			dbTransaction(function (tx) {
-				//need check
-				const changedGlobalIds = [];
-				const positionGlobalIds = {};
-
-				Utils.Async.chain([
-					function (chainCallback) {
-						dbSelect(fvdSpeedDial, {
-							tx: tx,
-							from: 'dials',
-							fields: ['global_id', 'position'],
-							where: {
-								'group_id': dial.group_id,
-								'position >=': interval.start,
-								'position <=': interval.end,
-							},
-							success: function (tx, results) {
-								for (let i = 0; i !== results.rows.length; i++) {
-									changedGlobalIds.push(results.rows[i].global_id);
-									positionGlobalIds[results.rows[i].global_id] = results.rows[i].position;
-								}
-								chainCallback();
-							},
-						});
-					},
-					function (chainCallback) {
-						Utils.Async.arrayProcess(
-							changedGlobalIds,
-							function (globalID, arrayProcessCallback) {
-								let position = parseInt(positionGlobalIds[globalID]);
-
-								if (sign === '-') position--;
-								else position++;
-
-								dbUpdate(fvdSpeedDial, {
-									tx: tx,
-									table: 'dials',
-									set: {
-										position: position,
-									},
-									where: {
-										key: 'global_id',
-										val: globalID,
-									},
-									success: function (tx, results) {
-										position++;
-										arrayProcessCallback();
-									},
-									error: function (tx, error) {
-										console.error('Got and sql error', error);
-										arrayProcessCallback();
-									},
-								});
-							},
-							function () {
-								that.updateDial(
-									dialId,
-									{
-										position: newDialPosition,
-									},
-									function () {
-										chainCallback();
-									}
-								);
-							}
-						);
-					},
-					function () {
-						callback(changedGlobalIds);
-					},
-				]);
-			});
-		});
-	};
-	/**
-	 * params is url, excludeIds, finalCheck
-	 */
-	dialExists = function (params, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		params = params || {};
-		let additionalWhere = false;
-
-		if (params.excludeIds) {
-			additionalWhere = {
-				key: 'rowid',
-				arr: params.excludeIds,
-			};
-		}
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				where: {
-					url: params.url,
-				},
-				whereNotIn: additionalWhere,
-				success: function (tx, results) {
-					const exists = Boolean(results.rows.length);
-
-					if (exists) {
-						return callback(exists);
-					}
-
-					return callback(exists); // Task #1143
-				},
-			});
-		});
-	};
-	dialExistsByGlobalId = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-		//ff match results!
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				where: {
-					global_id: globalId,
-				},
-				success: function (tx, results) {
-					const exists = Boolean(results.rows.length);
-
-					callback(exists);
-				},
-			});
-		});
-	};
-	getDialByGroupId = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-		//ff match results!
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				where: {
-					global_id: globalId,
-				},
-				success: function (tx, results) {
-					callback(results.rows[0]);
-				},
-			});
-		});
-	};
-	getAllDialList = function (callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				success: function (tx, results) {
-					callback(results.rows);
-				},
-			});
-		});
-	};
-	getDialListByGroupId = function (groupId, callback) {
-		const { fvdSpeedDial } = this;
-		//ff match results!
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				where: {
-					group_id: groupId,
-				},
-				success: function (tx, results) {
-					callback(results.rows);
-				},
-			});
-		});
-	};
-	nextDialPositionCache = {};
-	nextDialPosition = function (group_id, callback) {
-		const { fvdSpeedDial } = this;
-		const ts = this;
-		let max = 0;
-
-		if (ts.nextDialPositionCache[group_id]) {
-			ts.nextDialPositionCache[group_id]++;
-			callback(parseInt(ts.nextDialPositionCache[group_id]));
-			return;
-		}
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				maxOf: {
-					field: 'position',
-					name: 'cnt',
-				},
-				where: {
-					group_id,
-				},
-				success: function (tx, results) {
-					try {
-						if (results.rows.length) {
-							max = results.rows[0].cnt;
-						}
-
-						ts.nextDialPositionCache[group_id] = ++max;
-					} catch (ex) {
-						console.warn('nextDialPosition:', ex);
-						max = 1;
-					}
-					callback(max);
-				},
-			});
-		});
-	};
-	countDials = function (params, callback) {
-		const { fvdSpeedDial } = this;
-
-		if (typeof params === 'function') {
-			callback = params;
-			params = {};
-		}
-
-		if (CACHE['countDials']) {
-			callback(CACHE['countDials']);
-			return true;
-		}
-
-		params = params || {};
-		let distinct = 'url';
-
-		if (params.uniqueUrl) distinct = 'url';
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['url'],
-				countAs: 'cnt',
-				distinct: distinct,
-				where: { deny: 0 },
-				success: function (tx, results) {
-					const count = results.rows.length ? results.rows[0].cnt : 0;
-
-					CACHE['countDials'] = count;
-					callback(count);
-				},
-			});
-		});
-	};
-	refreshDenyDials = function (callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-		// go away all dials and refresh its deny field
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'dials',
-				fields: ['id', 'rowid', 'url', 'deny'],
-				success: function (tx, results) {
-					for (let i = 0; i !== results.rows.length; i++) {
-						const dial = results.rows[i];
-
-						(function (i, dial) {
-							that.isDenyUrl(dial.url, function (deny) {
-								const newDeny = deny ? 1 : 0;
-
-								if (newDeny !== dial.deny) {
-									that.updateDial(
-										dial.rowid,
-										{
-											deny: newDeny,
-										},
-										function () {
-											if (i === results.rows.length - 1) {
-												if (callback) {
-													callback();
-												}
-											}
-										}
-									);
-								} else {
-									if (i === results.rows.length - 1) {
-										if (callback) {
-											callback();
-										}
-									}
-								}
-							});
-						})(i, dial);
-					}
-
-					if (results.rows.length === 0) {
-						if (callback) {
-							callback();
-						}
-					}
-				},
-			});
-		});
-	};
-	// deny functions
-	deny = function (type, sign, callback) {
-		const { fvdSpeedDial } = this;
-
-		if (!sign) {
-			throw 'deny_empty_sign';
-		}
-
-		const firstSign = sign;
-
-		if (type === 'host') {
-			if (Utils.isValidUrl(sign)) {
-				sign = Utils.parseUrl(sign, 'host');
-			}
-		} else if (type === 'url') {
-			if (!Utils.isValidUrl(sign)) {
-				throw 'deny_invalid_url';
-			}
-
-			sign = Utils.urlToCompareForm(sign);
-		} else {
-			throw 'deny_wrong_type';
-		}
-
-		const that = this;
-
-		this._denySignExists(type, sign, function (exists) {
-			if (!exists) {
-				dbTransaction(function (tx) {
-					dbInsert(fvdSpeedDial, {
-						tx: tx,
-						table: 'deny',
-						set: {
-							type: type,
-							sign: firstSign,
-							effective_sign: sign,
-						},
-						success: function (tx, results) {
-							if (callback) {
-								callback({
-									id: results.insertId,
-									result: results.rowsAffected === 1,
-								});
-							}
-
-							that._callDenyChangeCallbacks({
-								action: 'add',
-								type: type,
-								sign: sign,
-							});
-						},
-					});
-				});
-			} else {
-				callback({
-					result: false,
-					error: 'deny_already_exists',
-				});
-			}
-		});
-	};
-	editDeny = function (id, data, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		data.effective_sign = Utils.urlToCompareForm(data.sign);
-		this._denySignExists(
-			data.type,
-			data.effective_sign,
-			function (exists) {
-				if (exists) {
-					if (callback) {
-						callback({
-							result: false,
-							error: 'deny_already_exists',
-						});
-					}
-				} else {
-					const updateData = that._getUpdateData(data);
-
-					dbTransaction(function (tx) {
-						//need check
-						dbUpdate(fvdSpeedDial, {
-							tx: tx,
-							table: 'deny',
-							set: updateData.dataObject,
-							where: { key: 'rowid', val: id },
-							success: function (tx, results) {
-								if (callback) {
-									callback({
-										result: results.rowsAffected === 1,
-									});
-								}
-
-								that._callDenyChangeCallbacks({
-									action: 'edit',
-								});
-							},
-						});
-					});
-				}
-			},
-			id
-		);
-	};
-	denyList = function (callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'deny',
-				rename: { rowid: 'id' },
-				fields: ['id', 'rowid', 'effective_sign', 'sign', 'type'],
-				success: function (tx, results) {
-					const result = [];
-
-					for (let i = 0; i !== results.rows.length; i++) {
-						result.push(results.rows[i]);
-					}
-					callback(result);
-				},
-			});
-		});
-	};
-	removeDeny = function (id, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		dbTransaction(function (tx) {
-			dbDelete(fvdSpeedDial, {
-				tx: tx,
-				from: 'deny',
-				where: {
-					key: 'id',
-					val: id,
-				},
-				success: function (tx, results) {
-					if (callback) {
-						callback();
-					}
-
-					that._callDenyChangeCallbacks({
-						action: 'remove',
-					});
-				},
-			});
-		});
-	};
-	clearDeny = function (callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbDelete(fvdSpeedDial, {
-				tx: tx,
-				from: 'deny',
-				force: true,
-				success: function (tx, results) {
-					if (callback) {
-						callback();
-					}
-				},
-			});
-		});
-	};
-	isDenyUrl = function (url, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		url = url || '';
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'deny',
-				fields: ['effective_sign', 'type'],
-				success: function (tx, results) {
-					let result = false;
-					let denyDetails = null;
-
-					for (let i = 0, len = results.rows.length; i < len; i++) {
-						const item = results.rows[i];
-
-						switch (item.type) {
-							case 'url':
-								result = Utils.isIdenticalUrls(item.effective_sign, url);
-								break;
-							case 'host':
-								const host = Utils.parseUrl(url, 'host');
-
-								result = Utils.isIdenticalHosts(item.effective_sign, host, {
-									ignoreSubDomains: true,
-								});
-								break;
-						}
-
-						if (result) {
-							denyDetails = {
-								deny: item,
-							};
-							break;
-						}
-					}
-					callback(result, denyDetails);
-				},
-			});
-		});
-	};
-	/* Groups */
-	resetDefaultGroupId = function () {
-		const { fvdSpeedDial } = this;
-
-		this.groupsList(function (groups) {
-			const group = groups[0];
-			const newId = group.id;
-
-			fvdSpeedDial.Prefs.set('sd.default_group', newId);
-		});
-	};
-	groupIdByGlobalId = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				fields: ['id'],
-				where: { global_id: globalId },
-				success: function (tx, results) {
-					let id = null;
-
-					if (results.rows.length === 1) {
-						id = results.rows[0].id;
-					}
-
-					callback(id);
-				},
-			});
-		});
-	};
-	groupGlobalId = function (id, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				fields: ['id', 'global_id'],
-				where: { id: id },
-				success: function (tx, results) {
-					let globalId = null;
-
-					if (results.rows.length === 1) {
-						globalId = results.rows[0].global_id;
-					}
-
-					callback(globalId);
-				},
-			});
-		});
-	};
-	addDialsCallback = function (callback) {
-		if (this._dialsChangeCallbacks.indexOf(callback) !== -1) {
-			return;
-		}
-
-		this._dialsChangeCallbacks.push(callback);
-	};
-	removeDialsCallback = function (callback) {
-		const index = this._dialsChangeCallbacks.indexOf(callback);
-
-		if (index === -1) {
-			return;
-		}
-
-		this._dialsChangeCallbacks.splice(index, 1);
-	};
-	addGroupsCallback = function (callback) {
-		if (this._groupsChangeCallbacks.indexOf(callback) !== -1) {
-			return;
-		}
-
-		this._groupsChangeCallbacks.push(callback);
-	};
-	removeGroupsCallback = function (callback) {
-		const index = this._groupsChangeCallbacks.indexOf(callback);
-
-		if (index === -1) {
-			return;
-		}
-
-		this._groupsChangeCallbacks.splice(index, 1);
-	};
-	groupAdd = function (params, callback, forcePosition) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-		let position;
-
-		if (typeof params.sync === 'undefined') {
-			params.sync = 1;
-		}
-
-		if (params.hasOwnProperty('forcePosition')) {
-			forcePosition = params.forcePosition;
-			delete params.forcePosition;
-		}
-
-		Utils.Async.chain([
-			function (next) {
-				that.groupExists(
-					{
-						name: params.name,
-					},
-					function (exists) {
-						if (exists) {
-							throw 'group_exists';
-						}
-
-						next();
-					}
-				);
-			},
-			function (next) {
-				that.nextGroupPosition(function (nextPosition) {
-					position = nextPosition;
-					next();
-				});
-			},
-			function (next) {
-				if (forcePosition === 'top') {
-					position = 1;
-					dbTransaction(function (tx) {
-						dbSelect(fvdSpeedDial, {
-							tx: tx,
-							from: 'groups',
-							fields: ['id', 'position'],
-							success: function (tx, results) {
-								for (const key in results.rows) {
-									dbUpdate(fvdSpeedDial, {
-										tx: tx,
-										table: 'groups',
-										set: {
-											position: results.rows[key].position + 1,
-										},
-										where: {
-											key: 'id',
-											val: results.rows[key].id,
-										},
-									});
-								}
-								next();
-							},
-						});
-					});
-				} else {
-					if (!isNaN(forcePosition)) {
-						position = forcePosition;
-					}
-
-					next();
-				}
-			},
-			function () {
-				if (typeof params.position !== 'undefined') {
-					position = params.position;
-				}
-
-				if (!params.global_id) {
-					params.global_id = that._generateGUID();
-				}
-
-				dbTransaction(function (tx) {
-					dbInsert(fvdSpeedDial, {
-						tx: tx,
-						table: 'groups',
-						set: {
-							position: position,
-							name: params.name,
-							global_id: params.global_id,
-							sync: params.sync,
-						},
-						success: function (tx, results) {
-							if (callback) {
-								callback({
-									id: results.insertId,
-									result: results.rowsAffected === 1,
-								});
-							}
-
-							that._callGroupsChangeCallbacks({
-								action: 'add',
-							});
-						},
-					});
-				});
-			},
-		]);
-	};
-	syncFixGroupsPositions = function (callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-		const query = {
-			from: 'groups',
-			fields: ['id'],
-			order: 'position',
-		};
-
-		this._rawList(query, function (list) {
-			let position = 1;
-
-			Utils.Async.arrayProcess(
-				list,
-				function (group, arrayProcessCallback) {
-					dbTransaction(function (tx) {
-						dbUpdate(fvdSpeedDial, {
-							tx: tx,
-							table: 'groups',
-							set: {
-								position: position,
-							},
-							where: {
-								key: 'id',
-								val: group.id,
-							},
-							success: function (tx, results) {
-								position++;
-								arrayProcessCallback();
-							},
-							error: function (tx, error) {
-								console.error('Got and sql error', error);
-								arrayProcessCallback();
-							},
-						});
-					}, 1);
-				},
-				function () {
-					that.onDataChanged.dispatch();
-					callback();
-				}
-			);
-		});
-	};
-	getSafeGroupName = function (group) {
-		if (
-			group.global_id &&
-			group.global_id === 'default' &&
-			(typeof group.name === 'undefined' || !group.name || group.name === 'undefined')
-		) {
-			group.name = _('bg_default_group_name');
-		}
-
-		return group.name;
-	};
-	// save group for sync
-	syncSaveGroup = function (group, callback) {
-		const { fvdSpeedDial } = this;
-
-		callback = callback || function () {};
-		const that = this;
-
-		this.groupExistsByGlobalId(group.global_id, function (exists) {
-			if (exists) {
-				dbTransaction(function (tx) {
-					//need check
-					dbUpdate(fvdSpeedDial, {
-						tx: tx,
-						table: 'groups',
-						set: {
-							name: group.name, //that.getSafeGroupName(group),
-							position: group.position,
-							//sync : 1
-						},
-						where: {
-							key: 'global_id',
-							val: group.global_id,
-						},
-						success: function (tx, results) {
-							that.onDataChanged.dispatch();
-							callback();
-						},
-						error: function (tx, err) {
-							//that.onDataChanged.dispatch();
-							//callback();
-						},
-					});
-				}, 1);
-			} else {
-				dbTransaction(function (tx) {
-					dbInsert(fvdSpeedDial, {
-						tx: tx,
-						table: 'groups',
-						set: {
-							name: group.name, //that.getSafeGroupName(group),
-							position: group.position,
-							global_id: group.global_id,
-							sync: 1,
-						},
-						success: function (tx, results) {
-							that.onDataChanged.dispatch();
-							callback();
-						},
-						error: function (tx, err) {
-							//that.onDataChanged.dispatch();
-							//callback();
-						},
-					});
-				}, 1);
-			}
-		});
-	};
-	// get group id by global id
-	syncGetGroupId = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				fields: ['id'],
-				where: { global_id: globalId },
-				success: function (tx, results) {
-					let groupId = 0;
-
-					if (results.rows.length === 1) {
-						groupId = results.rows[0].id;
-					}
-
-					callback(groupId);
-				},
-			});
-		}, 1);
-	};
-	// remove groups that not in list
-	syncRemoveGroups = function (notRemoveIds, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-		const query = {
-			from: 'groups',
-			fields: ['id'],
-			where: { sync: 1 },
-			whereNotIn: notRemoveIds.length ? { key: 'global_id', arr: notRemoveIds } : false,
-		};
-
-		this._rawList(query, function (groups) {
-			Utils.Async.arrayProcess(
-				groups,
-				function (group, arrayProcessCallback) {
-					const groupId = group.id;
-
-					dbTransaction(function (tx) {
-						dbDelete(fvdSpeedDial, {
-							tx: tx,
-							from: 'dials',
-							where: { key: 'group_id', val: groupId },
-							success: function (tx, results) {
-								dbDelete(fvdSpeedDial, {
-									tx: tx,
-									from: 'groups',
-									where: { key: 'id', val: groupId },
-									success: function (tx, results) {
-										arrayProcessCallback();
-									},
-									error: function (tx, ex) {
-										console.warn(tx, ex);
-									},
-								});
-							},
-							error: function (tx, ex) {
-								console.warn(tx, ex);
-							},
-						});
-					}, 1);
-				},
-				function () {
-					AppLog.info('sync remove groups not in list, removed', groups.length);
-					that.onDataChanged.dispatch();
-					callback(groups.length);
-				}
-			);
-		});
-	};
-	getGroup = function (groupId, callback) {
-		const { fvdSpeedDial } = this;
-
-		const where = {};
-
-		if (!isNaN(groupId)) {
-			where.id = parseInt(groupId);
-		} else {
-			where.global_id = groupId;
-		}
-
-		dbSelect(fvdSpeedDial, {
-			tx: true,
-			from: 'groups',
-			fields: ['id', 'name', 'sync', 'global_id'],
-			where,
-			success: function (tx, results) {
-				if (!results.rows.length) {
-					callback(null);
-				} else {
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: 'dials',
-						countAs: 'cnt',
-						where: { group_id: results.rows[0].id },
-						success: function (tx, results_d) {
-							results.rows[0]['count_dials'] = results_d.rows.length ? results_d.rows[0].cnt : 0;
-							let group = null;
-
-							if (results.rows.length === 1) {
-								group = results.rows[0];
-							}
-
-							callback(group);
-						},
-					});
-				}
-			},
-		});
-	};
-	getGroupTitleById = function (groupId, callback) {
-		this.getGroup(groupId, (group) => {
-			let groupTitle = 'Popular';
-
-			if (group) {
-				switch (group.global_id) {
-					case defaultGroupTitles.recommend.key:
-						groupTitle = defaultGroupTitles.recommend.value;
-						break;
-					case defaultGroupTitles.sponsoredst.key:
-						groupTitle = defaultGroupTitles.sponsoredst.value;
-						break;
-					case defaultGroupTitles.default.key:
-						groupTitle = defaultGroupTitles.default.value;
-						break;
-					default:
-						groupTitle = 'Other';
-				}
-			}
-
-			callback(groupTitle, group);
-		});
-	};
-	groupsCount = function (callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			//need check
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				countAs: 'cnt',
-				success: function (tx, results) {
-					callback(results.rows.length ? results.rows[0].cnt : 0);
-				},
-			});
-		});
-	};
-	groupsList = function (callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				order: 'position',
-				success: function (tx, results_g) {
-					const data = [];
-
-					dbSelect(fvdSpeedDial, {
-						tx: tx,
-						from: 'dials',
-						success: function (tx, results) {
-							const counts = {};
-
-							for (let d = 0; d !== results.rows.length; d++) {
-								counts[results.rows[d].group_id] = 1 + (counts[results.rows[d].group_id] || 0);
-							}
-							for (let i = 0; i !== results_g.rows.length; i++) {
-								data[i] = results_g.rows[i];
-								data[i]['count_dials'] = counts[data[i].id] || 0;
-
-								if (
-									data[i].global_id === 'default' &&
-									(typeof data[i].name === 'undefined' ||
-										!data[i].name ||
-										data[i].name === 'undefined')
-								) {
-									data[i].name = _('bg_default_group_name');
-								}
-							}
-							AppLog.info('Groups list queried successully, count:', data.length);
-							callback(data);
-						},
-					});
-				},
-				error: function (tx, error) {
-					AppLog.err('Fail query groups list:', err.message);
-				},
-			});
-		});
-	};
-	groupsRawList = function (params, callback) {
-		params = params || {};
-		let whereSQL = false;
-
-		if (params.where) {
-			whereSQL = params.where;
-		}
-
-		const query = {
-			from: 'groups',
-			whereSQL: whereSQL,
-		};
-
-		this._rawList(query, callback);
-	};
-	groupUpdate = function (groupId, data, callback) {
-		groupId = parseInt(groupId);
-		const { fvdSpeedDial } = this;
-		const { Sync } = fvdSpeedDial;
-
-		const that = this;
-		const tmp = this._getUpdateData(data);
-		const dataArray = tmp.dataArray;
-		const strings = tmp.strings;
-
-		dataArray.push(groupId);
-		let syncChanged = false;
-
-		Utils.Async.chain([
-			function (chainCallback) {
-				if (typeof data.sync !== 'undefined') {
-					that.getGroup(groupId, function (group) {
-						if (group.sync !== data.sync) {
-							syncChanged = true;
-						}
-
-						chainCallback();
-					});
-				} else {
-					chainCallback();
-				}
-			},
-			function () {
-				const setObj = dbGenerateSet(strings, dataArray);
-
-				dbTransaction(function (tx) {
-					dbUpdate(fvdSpeedDial, {
-						tx: tx,
-						table: 'groups',
-						set: setObj,
-						where: { key: 'id', val: dataArray.pop() },
-						success: function (tx, results) {
-							if (syncChanged && Sync.groupSyncChanged) {
-								Sync.groupSyncChanged(groupId, function () {
-									if (callback) {
-										callback({
-											result: results.rowsAffected === 1,
-										});
-									}
-								});
-							} else {
-								if (callback) {
-									callback({
-										result: results.rowsAffected === 1,
-									});
-								}
-							}
-
-							that._callGroupsChangeCallbacks({
-								action: 'update',
-							});
-						},
-					});
-				});
-			},
-		]);
-	};
-	groupDelete = function (groupId, callback) {
-		groupId = parseInt(groupId);
-
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		dbTransaction(function (tx) {
-			dbDelete(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: {
-					key: 'id',
-					val: groupId,
-				},
-				success: function (tx, results) {
-					try {
-						callback({
-							result: results.rowsAffected === 1,
-						});
-						that._callGroupsChangeCallbacks({
-							action: 'remove',
-							groupId: groupId,
-						});
-					} catch (ex) {
-						console.warn('groupDelete:', ex);
-					}
-				},
-				error: function (tx, err) {
-					console.warn(tx, err);
-				},
-			});
-		});
-	};
-
-	groupDeleteByGlobalID = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-		const that = this;
-
-		dbTransaction(function (tx) {
-			dbDelete(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: {
-					key: 'global_id',
-					val: globalId,
-				},
-				success: function (tx, results) {
-					try {
-						callback({
-							result: results.rowsAffected === 1,
-						});
-						that._callGroupsChangeCallbacks({
-							action: 'remove',
-							global_id: globalId,
-						});
-					} catch (ex) {
-						console.warn('groupDelete:', ex);
-					}
-				},
-				error: function (tx, err) {
-					console.warn(tx, err);
-				},
-			});
-		});
-	};
-
-	clearGroups = function (callback, where) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-
-		where = where || false;
-
-		if (where && typeof where !== 'object') {
-			console.error('WHERE must not be a string', where);
-		}
-
-		dbTransaction(function (tx) {
-			dbDelete(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: where,
-				force: true,
-				success: function (tx, results) {
-					self.onDataChanged.dispatch();
-
-					if (callback) {
-						callback();
-					}
-				},
-				error: function (tx, ex) {
-					console.warn(tx, ex);
-				},
-			});
-		});
-	};
-	nextGroupPosition = function (callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				maxOf: {
-					field: 'position',
-					name: 'maxpos',
-				},
-				success: function (tx, results) {
-					try {
-						let max = 1;
-
-						if (results.rows.length) max = results.rows[0].maxpos + 1;
-
-						callback(max);
-					} catch (ex) {
-						console.warn('nextGroupPosition:', ex);
-					}
-				},
-			});
-		});
-	};
-	groupCanSyncById = function (id, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: { id: id },
-				fields: ['id', 'sync'],
-				success: function (tx, results) {
-					try {
-						callback(results.rows[0].sync === 1);
-					} catch (ex) {
-						console.warn(ex);
-						callback(true);
-					}
-				},
-			});
-		}, 1);
-	};
-	groupCanSync = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: { global_id: globalId },
-				fields: ['id', 'global_id', 'sync'],
-				success: function (tx, results) {
-					if (results.rows.length) {
-						callback(results.rows[0].sync === 1);
-					} else {
-						callback(true);
-					}
-					/*
-						try {
-							callback(results.rows[0].sync == 1);
-						} catch (ex) {
-							console.warn(ex);
-							callback(true);
-						}
-						*/
-				},
-			});
-		}, 1);
-	};
-	/**
-	 * check group exists
-	 * @param {String} name
-	 * @param {Array} [excludeIds=null]
-	 * @return {Boolean}
-	 */
-	groupExists = function (params, callback) {
-		const { fvdSpeedDial } = this;
-
-		params.excludeIds = params.excludeIds || null;
-		let additionalWhere = false;
-
-		if (params.excludeIds) {
-			additionalWhere = {
-				key: 'id',
-				arr: params.excludeIds,
-			};
-		}
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: {
-					name: params.name,
-				},
-				whereNotIn: additionalWhere,
-				success: function (tx, results) {
-					const exists = Boolean(results.rows.length);
-
-					try {
-						callback(exists);
-					} catch (ex) {
-						console.warn(ex);
-					}
-				},
-			});
-		});
-	};
-	groupExistsById = function (id, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: {
-					id: id,
-				},
-				success: function (tx, results) {
-					const exists = Boolean(results.rows.length);
-
-					try {
-						callback(exists);
-					} catch (ex) {
-						console.warn(ex);
-					}
-				},
-			});
-		});
-	};
-	groupExistsByGlobalId = function (globalId, callback) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'groups',
-				where: {
-					global_id: globalId,
-				},
-				success: function (tx, results) {
-					const exists = Boolean(results.rows.length);
-
-					try {
-						callback(exists);
-					} catch (ex) {
-						console.warn(ex);
-					}
-				},
-			});
-		});
-	};
-	getMisc = function (name, callback) {
-		const { fvdSpeedDial } = this;
-		// const start = Date.now();
-
-		dbTransaction(function (tx) {
-			dbSelect(fvdSpeedDial, {
-				tx: tx,
-				from: 'misc',
-				where: {
-					name: name,
-				},
-				success: function (tx, results) {
-					let v = null;
-
-					if (results.rows.length === 1) {
-						v = String(results.rows[0].value);
-					}
-
-					if (
-						name === 'sd.background' &&
-						v !== null &&
-						(v.indexOf('/') === 0 || v.indexOf('filesystem:') === 0) &&
-						v !== fvdSpeedDial.Prefs._themeDefaults['fancy']['sd.background_url'] &&
-						v !== fvdSpeedDial.Prefs._themeDefaults['standard']['sd.background_url']
-					) {
-						FileSystemSD.readAsDataURLbyURL(v, function (par, url) {
-							callback(url);
-						});
-					} else {
-						callback(v);
-					}
-				},
-			});
-		});
-	};
-	setMisc = function (name, value, callback) {
-		const { fvdSpeedDial } = this;
-
-		Utils.Async.chain([
-			function (next) {
-				if (name !== 'sd.background') {
-					return next();
-				}
-
-				if (
-					typeof value === 'string' &&
-					(value.indexOf('data:') === 0 || value.indexOf('filesystem:') === 0) &&
-					value !== fvdSpeedDial.Prefs._themeDefaults['fancy']['sd.background_url'] &&
-					value !== fvdSpeedDial.Prefs._themeDefaults['standard']['sd.background_url']
-				) {
-					// save to file
-					const img = Utils.dataURIToBlob(value);
-					const ext = Utils.typeToExt(img.type);
-
-					FileSystemSD.write(
-						'/' + Config.FS_MISC_DIR + '/background.' + ext,
-						img,
-						function (err, url) {
-							if (err) {
-								throw err;
-							}
-
-							value = url;
-							next();
-						}
-					);
-				} else {
-					next();
-				}
-			},
-			function () {
-				dbTransaction(function (tx) {
-					dbUpdate(fvdSpeedDial, {
-						tx: tx,
-						table: 'misc',
-						set: {
-							name: name,
-							value: value,
-						},
-						success: function () {
-							console.log('dbUpdate, success');
-							callback = callback || function () {};
-
-							if (fvdSpeedDial.hasOwnProperty('DatabaseBackup')) {
-								fvdSpeedDial.Backup.backgroundImageBackup(callback);
-							} else if (callback) {
-								callback();
-							}
-						},
-					});
-				});
-			},
-		]);
-	};
-	getDialsPreview = function (dials, callback, thumbsLimit, params) {
-		const list = dials;
-		const self = this;
-
-		params = params || {};
-
-		if (!list.length) {
-			if (callback) callback(list);
-
-			return;
-		}
-
-		let shortList = list;
-
-		if (typeof thumbsLimit === 'number' && false) {
-			shortList = list.slice(0, thumbsLimit || 50);
-		}
-
-		Utils.Async.each(
-			shortList,
-			function (dial, next) {
-				if (
-					dial.thumb &&
-					(String(dial.thumb).includes('/sd_previews') ||
-						String(dial.thumb).includes('filesystem:'))
-				) {
-					dial.thumbSource = dial.thumb;
-
-					if (typeof webkitRequestFileSystem === 'object') {
-						FileSystemSD.readAsDataURLbyURL(dial.thumb, function (par, blobURL) {
-							dial = blobURL;
-							next();
-						});
-					} else {
-						FileSystemSD.safeReadAsDataURLbyURL(dial.thumb, function (state, blobURL) {
-							dial.thumb = blobURL;
-							next();
-						});
-					}
-				} else {
-					next();
-				}
-			},
-			function () {
-				if (callback) callback(list);
-			}
-		);
-	};
-	_rawList = function (query, callback) {
-		const { fvdSpeedDial } = this;
-
-		if (!query && typeof query !== 'object') console.warn('Wrong query in _rawList', query);
-
-		dbTransaction(function (tx) {
-			query.tx = tx;
-			query.success = function (tx, results) {
-				const data = [];
-
-				for (let i = 0; i !== results.rows.length; i++) {
-					data.push(Utils.clone(results.rows[i]));
-				}
-				callback(data);
-			};
-			query.error = function (tx, error) {
-				console.log('Request error', { query, error });
-			};
-			dbSelect(fvdSpeedDial, query);
-		}, 1);
-	};
-	_prepareDialData = function (dial) {
-		dial.displayTitle = dial.title ? dial.title : dial.auto_title;
-	};
-	_callDialsChangeCallbacks = function (data) {
-		const toRemoveCallbacks = [];
-		let i;
-
-		for (i = 0; i < this._dialsChangeCallbacks.length; i++) {
-			try {
-				this._dialsChangeCallbacks[i](data);
-			} catch (ex) {
-				console.warn(ex);
-				toRemoveCallbacks.push(this._dialsChangeCallbacks[i]);
-			}
-		}
-		for (i = 0; i !== toRemoveCallbacks.length; i++) {
-			this.removeDialsCallback(toRemoveCallbacks[i]);
-		}
-		this.onDataChanged.dispatch();
-	};
-	_callGroupsChangeCallbacks = function (data) {
-		const toRemoveCallbacks = [];
-		let i;
-
-		for (i = 0; i !== this._groupsChangeCallbacks.length; i++) {
-			try {
-				this._groupsChangeCallbacks[i](data);
-			} catch (ex) {
-				console.warn(ex);
-				toRemoveCallbacks.push(this._groupsChangeCallbacks[i]);
-			}
-		}
-		for (i = 0; i !== toRemoveCallbacks.length; i++) {
-			this.removeGroupsCallback(toRemoveCallbacks[i]);
-		}
-		this.onDataChanged.dispatch();
-	};
-	_callDenyChangeCallbacks = function (data) {
-		Broadcaster.sendMessage({
-			action: 'deny:changed',
-			data: data,
-		});
-	};
-	_denySignExists = function (type, effective_sign, callback, except) {
-		const { fvdSpeedDial } = this;
-
-		dbTransaction(function (tx) {
-			const query = {
-				tx: tx,
-				from: 'deny',
-				where: {
-					type: type,
-					effective_sign: effective_sign,
-				},
-				success: function (tx, results) {
-					const exists = Boolean(results.rows.length);
-
-					callback(exists);
-				},
-			};
-
-			if (except) {
-				query.where['id !'] = except;
-			}
-
-			dbSelect(fvdSpeedDial, query);
-		});
-	};
-	_getInsertData = function (data) {
-		const dataArray = [];
-		const stringKeys = [];
-		const stringValues = [];
-
-		for (const k in data) {
-			stringKeys.push('`' + k + '`');
-			stringValues.push('?');
-			dataArray.push(data[k]);
-		}
-		return {
-			keys: stringKeys.join(','),
-			values: stringValues.join(','),
-			dataArray: dataArray,
-			dataObject: createObject(stringKeys.join(','), dataArray),
-		};
-	};
-	_getUpdateData = function (data) {
-		const dataArray = [];
-		const strings = [];
-
-		for (const k in data) {
-			strings.push('`' + k + '` = ?');
-			dataArray.push(data[k]);
-		}
-		return {
-			dataArray: dataArray,
-			strings: strings,
-			dataObject: data,
-		};
-	};
-	_resultsToArray = function (results) {
-		const data = [];
-
-		for (let i = 0; i !== results.rows.length; i++) {
-			data.push(results.rows[i]);
-		}
-		return data;
-	};
-	_getTables = function (tx, callback) {
-		const { fvdSpeedDial } = this;
-
-		if (typeof tx === 'function') {
-			callback = tx;
-			tx = null;
-		}
-
-		const self = this;
-		const data = [];
-
-		Utils.Async.chain([
-			function (next) {
-				if (tx) {
-					return next();
-				}
-
-				dbTransaction(function (_tx) {
-					tx = _tx;
-					next();
-				});
-			},
-			function () {
-				if (fvdSpeedDial.StorageSD.DB) {
-					for (const key in fvdSpeedDial.StorageSD.DB.tables)
-						data.push(fvdSpeedDial.StorageSD.DB.tables[key].name);
-				}
-
-				callback(data);
-			},
-		]);
-	};
-	_getIndexes = function (callback, _tx) {
-		return false;
-	};
-	_tableFields = function (table, callback, _tx) {
-		return false;
-	};
-	_generateGUID = function () {
-		const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
-		const string_length = 32;
-		let randomstring = '';
-
-		for (let i = 0; i < string_length; i++) {
-			const rnum = Math.floor(Math.random() * chars.length);
-
-			randomstring += chars.substring(rnum, rnum + 1);
-		}
-		return randomstring;
-	};
-	_createTables = function (callback) {
-		const { fvdSpeedDial } = this;
-		const self = this;
-
-		self._connection.transaction(
-			function (tx) {
-				initStorage(fvdSpeedDial, tx, null, callback);
-			},
-			function (err) {
-				console.error('Fail to get transaction for table creation', err);
-			}
-		);
-	};
-	checkState = function (callback) {
-		const state = { incognito: false, storageFail: false };
-
-		chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-			if (tabs[0]?.incognito) state.incognito = true;
-
-			const db = window.indexedDB.open('test');
-
-			db.onerror = function () {
-				state.storageFail = true;
-				state.DATABASE_TYPE = DATABASE_TYPE;
-				callback(state);
-			};
-			db.onsuccess = function () {
-				state.DATABASE_TYPE = DATABASE_TYPE;
-				callback(state);
-			};
-		});
-	};
-	checkIncognito = function (callback) {
-		const self = this;
-
-		chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
-			self.isIncognito =
-				tabs[0]?.incognito || String(tabs[0]?.cookieStoreId)?.indexOf('firefox-container-') !== -1;
-			callback(self.isIncognito);
-		});
-	};
-	dbSelect(from, where = {}, callback) {
-		dbTransaction(function (tx) {
-			const query = {
-				tx: tx,
-				from,
-				where,
-				success: (tx, results) => {
-					callback(results);
-				},
-			};
-
-			dbSelect(fvdSpeedDial, query);
-		});
-	}
-	dbUpdate(table, set = {}, where = {}, callback) {
-		dbTransaction(function (tx) {
-			dbUpdate(fvdSpeedDial, {
-				tx: tx,
-				table,
-				set,
-				where,
-				success: function (tx, results) {
-					callback && callback(results);
-				},
-				error: function (tx, error) {
-					console.warn('Query failed', error);
-				},
-			});
-		});
-	}
-}
-export default StorageSD;
-function openDatabase(dbName, version, opt, size) {
-	const db = new createDatabase();
-
-	db.init(dbName, version, opt, size);
-	return db;
-}
-function createDatabase() {
-	const self = this;
-
-	this.init = function (dbName, version, opt, size) {
-		if (LOG_STORAGE) {
-			console.info('openDatabase', 'init', dbName, version, opt, size);
-		}
-	};
-	this.transaction = function (cb) {
-		if (cb) cb(self);
-	};
-	this.executeSql = function (sql, data, success, error) {
-		console.warn(sql);
-	};
-}
-const db = function () {};
-
-db.prototype = {
-	CACHE: {},
-	get: function (table, mode) {
-		if (typeof this.CACHE[table] === 'object' && typeof this.CACHE[table][mode] === 'object') {
-			return this.clone(this.CACHE[table][mode]);
-		} else {
-			return false;
-		}
-	},
-	set: function (table, mode, data) {
-		if (typeof this.CACHE[table] !== 'object') this.CACHE[table] = {};
-
-		this.CACHE[table][mode] = this.clone(data);
-	},
-	clear: function (table) {
-		try {
-			if (table) {
-				this.CACHE[table] = {};
-			} else {
-				this.CACHE = {};
-			}
-		} catch (ex) {
-			console.warn(ex);
-		}
-	},
-	clone: function (oldObj) {
-		let newObj = oldObj;
-
-		if (oldObj && typeof oldObj === 'object') {
-			newObj = Object.prototype.toString.call(oldObj) === '[object Array]' ? [] : {};
-			for (const i in oldObj) {
-				newObj[i] = this.clone(oldObj[i]);
-			}
-		}
-
-		return newObj;
-	},
-	clone2: function (data) {
-		const str = JSON.stringify(data);
-
-		return JSON.parse(str);
-	},
-};
-// const dbCache = new db();
-const lastQueryTime = Date.now();
-
-function dbSelect(fvdSpeedDial, obj) {
-	const param = obj;
-
-	if (DATABASE_TYPE === 'storage.local') {
-		fvdSpeedDial.StorageLocal.get(obj);
-		return;
-	}
-
-	obj.start = Date.now();
-	const mode = String(param.order || 'default');
-
-	let Data = fvdSpeedDial.StorageSD.DB.table(param.from);
-
-	if (param.order) {
-		param.order = String(param.order).replace('ASC', '').split('`').join('').trim();
-		let reverse = false;
-
-		if (param.order.indexOf('!') !== -1 || param.order.indexOf('DESC') !== -1) {
-			reverse = true;
-			param.order = param.order.replace('!', '').replace('DESC', '');
-		}
-
-		Data = Data.toCollection();
-
-		if (reverse) Data = Data.reverse();
-
-		Data = Data.sortBy(param.order.trim());
-	} else {
-		Data = Data.orderBy(':id').toArray();
-	}
-
-	Data.then(function (arr) {
-		dbSelectProcess(obj, arr);
-	}).catch(function (error) {
-		console.warn('ERROR: ', error, param);
-
-		if (typeof param.error === 'function') {
-			param.error.call(true, error);
-		}
-	});
-}
-function dbSelectProcess(obj, arr) {
-	const param = obj;
-
-	if (param.whereSQL) {
-		if (typeof param.whereSQL === 'string') {
-			param.whereSQL = param.whereSQL.split('AND');
-		}
-
-		for (const key in param.whereSQL) {
-			const val = String(param.whereSQL[key]).trim();
-			const eq = val
-				.split('`.`')
-				.pop()
-				.replace(/[`'"]/g, '')
-				.replace(/(=|>|<|!=)/g, ' $1 ')
-				.trim()
-				.split(' ');
-
-			let field = eq.shift();
-
-			if (field.includes('rowid')) {
-				field = 'id';
-			}
-
-			let value = eq.pop();
-			const list = val
-				.split('(')
-				.pop()
-				.replace(/[\s`'"]/g, '')
-				.split(')')
-				.shift()
-				.trim()
-				.split(',');
-
-			if (field) {
-				if (val.indexOf(' NOT IN ') !== -1) {
-					param.whereNotIn = {
-						key: field,
-						arr: list,
-					};
-				} else if (val.indexOf(' IN ') !== -1) {
-					param.whereIn = {
-						key: field,
-						arr: list,
-					};
-				} else {
-					if (!param.where) {
-						param.where = {};
-					}
-
-					if (!isNaN(value)) {
-						value = parseInt(value);
-					}
-
-					if (val.indexOf(' IS NOT NULL') !== -1) {
-						param.where[field + '!'] = '';
-					} else if (val.indexOf('!=') !== -1) {
-						param.where[field + '!'] = value;
-					} else if (val.indexOf('>') !== -1) {
-						param.where[field + '>'] = value;
-					} else if (val.indexOf('<') !== -1) {
-						param.where[field + '<'] = value;
-					} else if (val.indexOf('=') !== -1) {
-						param.where[field] = value;
-					}
-				}
-			}
-		}
-	}
-
-	const results = {
-		rows: [],
-	};
-
-	for (const c in arr) {
-		if (typeof arr[c].id !== 'undefined') {
-			arr[c].rowid = arr[c].id;
-		}
-
-		if (typeof param.where === 'object' && param.where) {
-			let cont = false;
-
-			for (const w in param.where) {
-				if (w) {
-					if (w === 'OR' && typeof param.where[w] === 'object' && param.where[w]) {
-						let hit = false;
-
-						for (const o in param.where[w]) {
-							const test = dbWhereTest(o, param.where[w][o], arr[c]);
-
-							if (test) {
-								hit = true;
-								break;
-							}
-						}
-
-						if (!hit) {
-							cont = true;
-						}
-					} else {
-						const test = dbWhereTest(w, param.where[w], arr[c]);
-
-						if (!test) {
-							cont = true;
-						}
-					}
-				}
-			}
-
-			if (cont) {
-				continue;
-			}
-		}
-
-		if (param.whereIn) {
-			let cont = true;
-
-			for (const w in param.whereIn['arr'])
-				if (arr[c][param.whereIn['key']] === param.whereIn['arr'][w]) cont = false;
-
-			if (cont) continue;
-		}
-
-		if (param.whereNotIn) {
-			let cont = false;
-
-			for (const w in param.whereNotIn['arr'])
-				if (arr[c][param.whereNotIn['key']] === param.whereNotIn['arr'][w]) cont = true;
-
-			if (cont) continue;
-		}
-
-		results.rows[results.rows.length] = arr[c];
-	}
-
-	if (param.limit) {
-		results.rows = results.rows.slice(param.offset || 0, param.limit);
-	}
-
-	if (param.countAs) {
-		const count = results.rows.length;
-
-		for (const r in results.rows) {
-			results.rows[r][param.countAs] = count;
-		}
-	}
-
-	if (param.maxOf) {
-		//Max of item
-		let maxVal = 0;
-
-		if (typeof param.maxOf === 'string') param.maxOf = { field: param.maxOf, name: param.maxOf };
-
-		for (const r in results.rows) {
-			const val = parseInt(results.rows[r][param.maxOf.field]) || 1;
-
-			maxVal = Math.max(maxVal, val);
-		}
-		for (const r in results.rows) results.rows[r][param.maxOf.name] = maxVal;
-	}
-
-	//Fields
-	if (param.fields && typeof param.fields !== 'undefined')
-		if (typeof param.fields === 'string')
-			param.fields = String(param.fields).split('`').join('').split(',');
-
-	if (param.fields && typeof param.fields === 'object') {
-		for (const f in param.fields) param.fields[f] = String(param.fields[f]).trim();
-
-		if (param.countAs) param.fields.push(param.countAs);
-
-		if (param.fields.indexOf('*') === -1)
-			for (const r in results.rows) {
-				for (const f in results.rows[r]) {
-					if (param.fields.indexOf(f) === -1) delete results.rows[r][f];
-				}
-			}
-	}
-
-	//Rename fields
-	if (param.rename) {
-		for (const r in results.rows) {
-			for (const f in results.rows[r]) {
-				for (const i in param.rename) {
-					if (i === f) {
-						results.rows[r][param.rename[i]] = results.rows[r][f];
-						delete results.rows[r][f];
-					}
-				}
-			}
-		}
-	}
-
-	if (typeof param.success === 'function') {
-		param.success.call(true, param.tx, results);
-	}
-}
-function dbWhereTest(exp, val, line) {
-	exp = String(exp);
-
-	const equal = Boolean(exp.indexOf('=') > -1);
-	const more = Boolean(exp.indexOf('>') > -1);
-	const less = Boolean(exp.indexOf('<') > -1);
-	const not = Boolean(exp.indexOf('!') > -1);
-	const like = Boolean(exp.indexOf('~') > -1);
-
-	const wClean = exp
-		.replace('!', '')
-		.replace('=', '')
-		.replace('>', '')
-		.replace('<', '')
-		.replace('~', '')
-		.trim();
-
-	const exist = Boolean(typeof line[wClean] !== 'undefined');
-	const intLine = parseInt(line[wClean]);
-	const intVal = parseInt(val);
-
-	if (
-		(not && exist && line[wClean] === val) || // "!"
-		(more && // ">"
-			(!exist || intLine <= intVal) &&
-			(!equal || !exist || intLine !== intVal)) ||
-		(less && // "<"
-			(!exist || intLine >= intVal) &&
-			(!equal || !exist || intLine !== intVal)) ||
-		(like && // "~ LIKE"
-			(!exist || String(line[wClean]).indexOf(val) === -1)) ||
-		(wClean === exp && // "=="
-			(!exist || line[wClean] != val))
-	) {
-		return false;
-	} else {
-		return true;
-	}
-}
-function dbInsert(fvdSpeedDial, obj) {
-	if (obj.table === 'dials') {
-		CACHE['countDials'] = false;
-	}
-
-	if (DATABASE_TYPE === 'storage.local') {
-		fvdSpeedDial.StorageLocal.set(obj);
-		return;
-	}
-
-	const param = obj;
-
-	if (typeof tablesDefaultValues[param.table] !== undefined) {
-		for (const key in tablesDefaultValues[param.table]) {
-			const def = tablesDefaultValues[param.table].key;
-
-			if (typeof param.set[key] === 'undefined' || param.set[key] === '') {
-				param.set[key] = def;
-			}
-		}
-	}
-
-	fvdSpeedDial.StorageSD.DB[param.table]
-		.add(param.set)
-		.then(function (insertId) {
-			if (typeof param.success === 'function')
-				param.success.call(true, param.tx, {
-					insertId: insertId,
-					rowsAffected: insertId && insertId !== 0 ? 1 : 0,
-				});
-		})
-		.catch(function (error) {
-			console.error('dbInsert (ERROR): ', error, param);
-
-			if (typeof param.error === 'function') param.error.call(true, error);
-		});
-}
-function dbUpdate(fvdSpeedDial, obj) {
-	const param = obj;
-
-	if (DATABASE_TYPE === 'storage.local') {
-		fvdSpeedDial.StorageLocal.upd(obj);
-		return;
-	}
-
-	if (!param.where && param.set) {
-		if (typeof param.set.id !== 'undefined') param.where = { key: 'id', val: param.set.id };
-		else if (typeof param.set.name !== 'undefined')
-			param.where = { key: 'name', val: param.set.name };
-	}
-
-	if (param.where) {
-		if (param.where.key === 'rowid') {
-			param.where.key = 'id';
-		}
-
-		if (param.where.key === 'id') {
-			if (String(parseInt(param.where.val)) === String(param.where.val)) {
-				param.where.val = parseInt(param.where.val);
-			} else {
-				//console.warn("NOT EQUAL", param.where.val, obj);
-			}
-		}
-	}
-
-	let selWhere = {};
-
-	if (param.where) {
-		selWhere[param.where.key] = param.where.val;
-	} else {
-		selWhere = false;
-	}
-
-	dbSelect(fvdSpeedDial, {
-		tx: param.tx,
-		from: param.table,
-		where: selWhere,
-		success: function (tx, results) {
-			if (!results.rows.length) {
-				dbInsert(fvdSpeedDial, obj);
-			} else {
-				let Query = fvdSpeedDial.StorageSD.DB[param.table];
-
-				if (param.where) {
-					Query = Query.where(param.where.key).equals(param.where.val);
-				} else {
-					Query = Query.toCollection();
-				}
-
-				Query.modify(param.set)
-					.then(function (data) {
-						data = { rowsAffected: data };
-
-						if (typeof param.success === 'function') {
-							param.success.call(true, param.tx, data);
-						}
-					})
-					.catch(function (error) {
-						console.warn('dbUpdate (ERROR): ', error, param);
-
-						if (typeof param.error === 'function') param.error.call(true, error);
-					});
-			}
-		},
-		error: function (tx, error) {
-			console.warn('dbUpdate (ERROR): ', error, param);
-
-			if (typeof param.error === 'function') param.error.call(true, error);
-		},
-	});
-}
-function dbDelete(fvdSpeedDial, obj, successFunction, errorFunction) {
-	if (obj.table === 'dials' || obj.from === 'dials') {
-		CACHE['countDials'] = false;
-	}
-
-	if (DATABASE_TYPE === 'storage.local') {
-		fvdSpeedDial.StorageLocal.del(obj);
-		return;
-	}
-
-	if (!obj.force && (!obj.where || !obj.where.key)) {
-		return false;
-	}
-
-	const param = obj;
-	let Process = fvdSpeedDial.StorageSD.DB[param.from || param.table];
-
-	if (param.where) {
-		if (param.where.key === 'rowid') {
-			param.where.key = 'id';
-		}
-
-		if (param.where.key === 'id') param.where.val = parseInt(param.where.val);
-
-		Process = Process.where(param.where.key).equals(param.where.val);
-	} else if (param.whereIn) {
-		Process = Process.where(param.whereIn.key).anyOf(param.whereIn.arr);
-	} else {
-		Process = Process.toCollection();
-	}
-
-	Process.delete()
-		.then(function (data) {
-			if (typeof param.success === 'function')
-				param.success.call(true, param.tx, {
-					rowsAffected: data,
-				});
-		})
-		.catch(function (error) {
-			console.error('dbDelete (ERROR): ', error, param);
-
-			if (typeof param.error === 'function') param.error.call(true, error);
-		});
-}
-function dbClearAll(StorageSD, obj, really) {
-	const param = obj;
-
-	param.table = param.table || param.from || false;
-
-	if (!param.table || really !== 'really') {
-		return false;
-	}
-
-	const Process = StorageSD.DB[param.table];
-
-	Process.clear()
-		.then(function (response) {
-			if (typeof param.success === 'function')
-				param.success.call(true, param.tx, {
-					rowsAffected: response,
-				});
-		})
-		.catch(function (error) {
-			console.error('dbClearAll (ERROR): ', error, param);
-
-			if (typeof param.error === 'function') param.error.call(true, error);
-		});
-}
-function dbGenerateSet(fields, dataArr) {
-	const setObj = {};
-
-	if (typeof fields === 'string') fields = fields.split(',');
-
-	if (dataArr) {
-		for (const key in fields) {
-			const val = String(fields[key])
-				.split('`')
-				.join('')
-				.split('=')
-				.join('')
-				.split('?')
-				.join('')
-				.trim();
-
-			setObj[val] = dataArr[key];
-		}
-	} else {
-		console.warn('Required dataArr');
-	}
-
-	return setObj;
-}
-function dbTransaction(callback, wait) {
-	if (!wait) {
-		callback.call(true, true);
-	} else {
-		setTimeout(() => {
-			callback.call(true, true);
-		}, Math.min(1e3, parseInt(wait) || 1));
-	}
-}
-function createObject(keys, vals) {
-	const obj = {};
-
-	if (typeof keys === 'string') {
-		keys = String(keys).split('`').join('').split(',');
-	}
-
-	for (const i in keys) obj[keys[i]] = vals[i];
-	return obj;
 }
