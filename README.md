@@ -1,5 +1,7 @@
-# SpeedDial-FVD-Cleansed
+# Notice
+There will probably not be any updates for this. With Chrome's move to Manifest v3 (and subsequently disabling adblocking and many other extensions) I am no longer using Chrome. I may look into moving it over to Firefox but that is quite the undertaking. At least for now it works on Chrome and the injected ads are fairly well taken care of.
 
+# SpeedDial-FVD-Cleansed
 This is a "forked" version of the [Speed Dial [FVD] - New Tab Page](https://chrome.google.com/webstore/detail/speed-dial-fvd-new-tab-pa/llaficoajjainaijghjlofdfmbjpebpa?hl=en). Since the developer, nimbus had decided to start doing ad redirects I've decided to remove them. If they get their act together or Google removes/forces them to stop then I'll remove this.
 
 Currently based on version 81.8.1.
